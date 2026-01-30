@@ -265,7 +265,7 @@ export default function OurImpactStories() {
         >
           <div>
             <div className="inline-block mb-4">
-              <span className="text-sm font-semibold text-gray-500 uppercase tracking-widest">
+              <span className="text-sm font-semibold text-gray-500 capitalize tracking-widest">
                 Latest News
               </span>
               <div className="h-0.5 w-16 bg-[#EC601B] mt-2"></div>
