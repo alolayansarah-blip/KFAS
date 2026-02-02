@@ -120,7 +120,7 @@ function CardItem({ title, index }: Card & { index: number }) {
       className={`group relative ${bgColor} ${hoverBgColor} transition-all duration-300 cursor-pointer shadow-md hover:shadow-xl`}
     >
       <div className="flex flex-col h-full p-6 md:p-8 text-center justify-center items-center min-h-[160px] md:min-h-[200px]">
-        <h3 className="text-white text-base md:text-lg font-semibold leading-relaxed mb-4 max-w-xs">
+        <h3 className="text-white text-lg md:text-xl font-semibold leading-tight tracking-wide mb-4 max-w-xs">
           {title}
         </h3>
 

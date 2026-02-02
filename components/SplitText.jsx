@@ -6,6 +6,8 @@ import { motion, useInView } from "framer-motion";
  *  text: string,
  *  className?: string,
  *  style?: React.CSSProperties,
+ *  highlightChars?: number[],
+ *  highlightClassName?: string,
  *  delay?: number,
  *  duration?: number,
  *  ease?: string,
@@ -23,6 +25,8 @@ export default function SplitText({
   text,
   className,
   style = undefined,
+  highlightChars = [],
+  highlightClassName = "",
   delay = 50,
   duration = 0.6,
   ease = "easeOut",
@@ -61,6 +65,11 @@ export default function SplitText({
       {segments.map((segment, index) => (
         <motion.span
           key={`${segment}-${index}`}
+          className={
+            splitType === "chars" && highlightChars.includes(index)
+              ? highlightClassName
+              : undefined
+          }
           style={{ display: "inline-block", whiteSpace: "pre" }}
           initial={from}
           animate={isInView ? to : from}

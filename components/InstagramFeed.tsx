@@ -144,7 +144,7 @@ export default function InstagramFeed() {
             <div className="h-0.5 w-16 bg-gradient-to-r from-[#7DC0F1] to-[#EC601B] mx-auto mt-2"></div>
           </div>
           
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-light text-gray-900 mb-4 leading-tight tracking-wide">
             Connect With Us on Instagram
           </h2>
           

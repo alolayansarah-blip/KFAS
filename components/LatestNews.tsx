@@ -197,26 +197,22 @@ export default function OurImpactStories() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
       },
-      {
-        threshold: 0.1,
-        rootMargin: "0px",
-      }
+      { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -249,6 +245,26 @@ export default function OurImpactStories() {
     },
   ];
 
+  const sortedNews = [...news].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+
+  const ArrowIcon = ({ className }: { className?: string }) => (
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth={2.5}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17 8l4 4m0 0l-4 4m4-4H3"
+      />
+    </svg>
+  );
+
   return (
     <section
       ref={sectionRef}
@@ -264,14 +280,14 @@ export default function OurImpactStories() {
           className="mb-16 flex items-end justify-between"
         >
           <div>
-            <div className="inline-block mb-4">
-              <span className="text-sm font-semibold text-gray-500 capitalize tracking-widest">
+            {/* <div className="inline-block mb-4">
+              <span className="font-poppins text-sm font-semibold text-gray-500 uppercase tracking-widest">
                 Latest News
               </span>
-              <div className="h-0.5 w-16 bg-[#EC601B] mt-2"></div>
-            </div>
-            
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">
+              <div className="h-0.5 w-16 bg-[#EC601B] mt-2" />
+            </div> */}
+
+            <h2 className="font-poppins text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-900 leading-tight tracking-tight">
               Latest News
             </h2>
           </div>
@@ -279,138 +295,54 @@ export default function OurImpactStories() {
           {/* View All Link */}
           <a
             href="#"
-            className="inline-flex items-center gap-2 text-[#EC601B] font-semibold hover:text-[#D54E0F] transition-colors duration-300 group"
+            className="font-poppins inline-flex items-center gap-3 border border-gray-200 border-b-2 border-b-[#7DC0F1] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 group hover:text-gray-900"
           >
             <span>All News</span>
-            <svg
-              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
+            <ArrowIcon className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
           </a>
         </motion.div>
 
-        {/* News Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Featured story */}
-          <motion.article
-            initial={{ opacity: 0, y: 30 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="group"
-          >
-            <a href={news[0]?.link} className="block">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-2xl mb-6 bg-gray-200">
-                <img
-                  src={news[0]?.image}
-                  alt={news[0]?.title}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                {/* Date badge */}
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                  <span className="text-xs font-semibold text-gray-900">
-                    {news[0]?.date}
-                  </span>
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-[#EC601B] transition-colors duration-300">
-                {news[0]?.title}
-              </h3>
-              <p className="text-base text-gray-600 leading-relaxed mb-4 line-clamp-3">
-                {news[0]?.description}
-              </p>
-              <div className="inline-flex items-center gap-2 text-[#EC601B] font-semibold group-hover:gap-3 transition-all duration-300">
-                <span>Read More</span>
-                <svg
-                  className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+        {/* News Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {sortedNews.map((item, index) => (
+            <motion.article
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
+              className="group h-full p-4"
+            >
+              <a href={item.link} className="flex h-full flex-col">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-gray-200">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                </svg>
-              </div>
-            </a>
-          </motion.article>
-
-          {/* Side list */}
-          <div className="space-y-6">
-            {news.slice(1).map((item, index) => (
-              <motion.article
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={
-                  isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-                }
-                transition={{
-                  duration: 0.6,
-                  delay: 0.3 + index * 0.1,
-                }}
-                className="group"
-              >
-                <a href={item.link} className="block bg-white rounded-2xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-100">
-                  <div className="flex gap-6">
-                    <div className="flex-1">
-                      {/* Date */}
-                      <div className="text-xs font-semibold text-gray-400 mb-2">
-                        {item.date}
-                      </div>
-                      
-                      <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#EC601B] transition-colors duration-300 line-clamp-2">
-                        {item.title}
-                      </h4>
-                      
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-                        {item.description}
-                      </p>
-                      
-                      <div className="inline-flex items-center gap-2 text-sm text-[#EC601B] font-semibold group-hover:gap-3 transition-all duration-300">
-                        <span>Read More</span>
-                        <svg
-                          className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-300"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2.5}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    
-                    {/* Thumbnail */}
-                    <div className="w-32 h-32 shrink-0 overflow-hidden rounded-xl bg-gray-200">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                    <span className="font-poppins text-xs font-semibold text-gray-900">
+                      {item.date}
+                    </span>
                   </div>
-                </a>
-              </motion.article>
-            ))}
-          </div>
+                </div>
+
+                <div className="pt-5 flex flex-col flex-1">
+                  <h3 className="font-poppins text-lg lg:text-xl font-light text-gray-900 leading-tight mb-3 line-clamp-3 min-h-[3.75rem] group-hover:text-[#EC601B] transition-colors duration-300">
+                    {item.title}
+                  </h3>
+                  <p className="font-poppins text-sm text-gray-600 leading-relaxed line-clamp-3 min-h-[4.5rem] mb-4">
+                    {item.description}
+                  </p>
+                  <div className="mt-auto inline-flex items-center gap-2 text-sm text-[#EC601B] font-semibold group-hover:gap-3 transition-all duration-300">
+                    <span className="font-poppins">Read More</span>
+                    <ArrowIcon className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
+                </div>
+              </a>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>
   );
 }
-

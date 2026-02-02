@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, memo } from "react";
 import { motion } from "framer-motion";
+import SplitText from "./SplitText";
 
 function WhoWeAre() {
   const [isVisible, setIsVisible] = useState(false);
@@ -95,7 +96,7 @@ function WhoWeAre() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <div className="inline-block mb-2">
-                <span className="text-sm font-semibold text-gray-500 uppercase tracking-widest">
+                <span className="text-sm font-semibold text-gray-500 capitalize tracking-widest">
                   About Us
                 </span>
                 <div className="h-0.5 w-16 bg-[#EC601B] mt-2"></div>
@@ -113,7 +114,7 @@ function WhoWeAre() {
                         : { opacity: 1, y: 0 }
                     }
                     transition={{ duration: 0.5, delay: 0.6 }}
-                    className="absolute top-0 left-0 text-5xl lg:text-6xl font-bold text-orange-600 flex items-center gap-4"
+                    className="absolute top-0 left-0 text-5xl lg:text-6xl font-bold text-orange-600 leading-tight tracking-wide flex items-center gap-4"
                   >
                     <span>KFAS</span>
                   </motion.h2>
@@ -128,31 +129,35 @@ function WhoWeAre() {
                         isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                       }
                       transition={{ duration: 0.6, delay: 1 }}
-                      className="text-2xl lg:text-3xl font-bold text-gray-900 leading-[1.5] flex items-start gap-4"
+                      className="-mt-1 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 leading-tight tracking-tight flex items-start gap-4"
                     >
                       <span className="flex-1">
-                        <motion.span
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={
-                            isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }
-                          }
-                          transition={{ duration: 0.5, delay: 1.1 }}
+                        <SplitText
+                          text="Kuwait Foundation for the"
                           className="block whitespace-nowrap"
-                        >
-                          <span className="text-orange-600 font-bold">K</span>uwait{" "}
-                          <span className="text-orange-600 font-bold">F</span>oundation for the
-                        </motion.span>
-                        <motion.span
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={
-                            isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }
-                          }
-                          transition={{ duration: 0.5, delay: 1.3 }}
+                          highlightChars={[0, 7]}
+                          highlightClassName="text-orange-600 font-bold"
+                          delay={40}
+                          duration={1}
+                          ease="easeOut"
+                          splitType="chars"
+                          from={{ opacity: 0, y: 10 }}
+                          to={{ opacity: 1, y: 0 }}
+                          textAlign="left"
+                        />
+                        <SplitText
+                          text="Advancement of Sciences"
                           className="block whitespace-nowrap"
-                        >
-                          <span className="text-orange-600 font-bold">A</span>dvancement of{" "}
-                          <span className="text-orange-600 font-bold">S</span>ciences
-                        </motion.span>
+                          highlightChars={[0, 15]}
+                          highlightClassName="text-orange-600 font-bold"
+                          delay={40}
+                          duration={1}
+                          ease="easeOut"
+                          splitType="chars"
+                          from={{ opacity: 0, y: 10 }}
+                          to={{ opacity: 1, y: 0 }}
+                          textAlign="left"
+                        />
                       </span>
                       <img
                         src="/image/logo_c.png"
