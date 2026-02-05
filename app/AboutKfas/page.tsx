@@ -24,7 +24,7 @@ export default function AboutKfasPage() {
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-      <main className="min-h-screen bg-white pt-20">
+      <main className="min-h-screen bg-white pt-20 font-poppins">
         {/* Hero Section with Banner */}
         <motion.section
           className="relative overflow-hidden flex items-center"
@@ -101,66 +101,46 @@ export default function AboutKfasPage() {
               </TextBlock>
 
               {/* Vision and Mission Section */}
-              <div className="mt-10 rounded-2xl bg-gradient-to-br from-[#EC601B] via-[#E85818] to-[#D94A12] text-white p-10 sm:p-12 shadow-lg">
-                <div className="space-y-8">
-                  <div className="rounded-2xl bg-white/10 border border-white/15 p-8 sm:p-10 backdrop-blur-sm">
-                    <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-                      <div className="w-full sm:w-44 sm:shrink-0">
-                        <div className="rounded-2xl bg-white/20 border border-white/30 p-5 backdrop-blur-md">
-                          <img
-                            src="/image/1.png"
-                            alt="Vision graphic"
-                            className="w-full h-28 object-contain opacity-80"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <motion.h3
-                          initial={{ opacity: 0, y: 16 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6 }}
-                          className="font-montserrat text-2xl sm:text-3xl font-bold"
-                        >
-                          Our Vision
-                        </motion.h3>
-                        <p className="mt-4 text-white/90 leading-relaxed">
-                          To advance science, technology, and innovation for a
-                          resilient, thriving, and sustainable future.
-                        </p>
-                      </div>
-                    </div>
+              <div className="mt-10 grid gap-8 lg:grid-cols-2">
+                {/* Vision - Left */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="rounded-3xl border border-[#EC601B]/20 p-8"
+                >
+                  <div>
+                    <h3 className="font-montserrat text-2xl font-bold text-gray-900">
+                      Our Vision
+                    </h3>
+                    <div className="mt-2 h-1 w-12 rounded-full bg-[#EC601B]" />
                   </div>
-                  <div className="rounded-2xl bg-white/10 border border-white/15 p-8 sm:p-10 backdrop-blur-sm">
-                    <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:flex-row-reverse">
-                      <div className="w-full sm:w-44 sm:shrink-0">
-                        <div className="rounded-2xl bg-white/20 border border-white/30 p-5 backdrop-blur-md">
-                          <img
-                            src="/image/2.png"
-                            alt="Mission graphic"
-                            className="w-full h-28 object-contain opacity-80"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <motion.h3
-                          initial={{ opacity: 0, y: 16 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6, delay: 0.15 }}
-                          className="font-montserrat text-2xl sm:text-3xl font-bold"
-                        >
-                          Our Mission
-                        </motion.h3>
-                        <p className="mt-4 text-white/90 leading-relaxed">
-                          To pursue scientific excellence to tackle national
-                          challenges through a prominent science, technology,
-                          and innovation model.
-                        </p>
-                      </div>
-                    </div>
+                  <p className="mt-6 text-gray-600 leading-relaxed">
+                    To advance science, technology, and innovation for a resilient,
+                    thriving, and sustainable future.
+                  </p>
+                </motion.div>
+
+                {/* Mission - Right */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="rounded-3xl border border-[#EC601B]/20 p-8"
+                >
+                  <div>
+                    <h3 className="font-montserrat text-2xl font-bold text-gray-900">
+                      Our Mission
+                    </h3>
+                    <div className="mt-2 h-1 w-12 rounded-full bg-[#EC601B]" />
                   </div>
-                </div>
+                  <p className="mt-6 text-gray-600 leading-relaxed">
+                    To pursue scientific excellence to tackle national challenges
+                    through a prominent science, technology, and innovation model.
+                  </p>
+                </motion.div>
               </div>
 
               {/* Strategic Direction Section */}
