@@ -64,6 +64,7 @@ export default function InstagramFeed() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const ySecondary = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -157,7 +158,7 @@ export default function InstagramFeed() {
           className="absolute top-20 right-10 w-72 h-72 bg-[#7DC0F1]/10 rounded-full blur-3xl"
         />
         <motion.div
-          style={{ y: useTransform(scrollYProgress, [0, 1], [-30, 30]) }}
+          style={{ y: ySecondary }}
           className="absolute bottom-20 left-10 w-96 h-96 bg-[#EC601B]/10 rounded-full blur-3xl"
         />
       </div>
