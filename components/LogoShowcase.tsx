@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import SplitText from "./SplitText";
 
 const tiles = [
   {
@@ -96,7 +97,31 @@ export default function LogoShowcase() {
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-2xl lg:pl-6 xl:pl-10 text-left">
                 <h2 className="font-poppins text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-semibold text-white leading-tight tracking-tight drop-shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
-                  Building the Future Together
+                  <SplitText
+                    text="Building the Future"
+                    className="text-white"
+                    delay={40}
+                    duration={1}
+                    ease="easeOut"
+                    splitType="chars"
+                    from={{ opacity: 0, y: 10 }}
+                    to={{ opacity: 1, y: 0 }}
+                    textAlign="left"
+                  />{" "}
+                  <span className="relative inline-block">
+                    <SplitText
+                      text="Together"
+                      className="relative z-10 text-white"
+                      delay={40}
+                      duration={1}
+                      ease="easeOut"
+                      splitType="chars"
+                      from={{ opacity: 0, y: 10 }}
+                      to={{ opacity: 1, y: 0 }}
+                      textAlign="left"
+                    />
+                    <span className="absolute bottom-1 left-0 right-0 h-3 bg-white/20 -z-10" />
+                  </span>
                 </h2>
                 <div className="mt-5 grid w-full grid-cols-2 items-center justify-items-center gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:flex lg:flex-nowrap lg:justify-center lg:gap-10">
                   {tiles.map((tile, index) => (

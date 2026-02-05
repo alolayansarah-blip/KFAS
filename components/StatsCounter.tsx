@@ -97,17 +97,20 @@ export default function CounterSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="text-left max-w-4xl mb-16">
           <h2 className="font-poppins text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight text-left">
-            <SplitText
-              text="50 Years"
-              className="font-poppins font-bold text-3xl lg:text-4xl xl:text-5xl"
-              delay={40}
-              duration={1}
-              ease="easeOut"
-              splitType="chars"
-              from={{ opacity: 0, y: 10 }}
-              to={{ opacity: 1, y: 0 }}
-              textAlign="left"
-            />{" "}
+            <span className="relative inline-block">
+              <SplitText
+                text="50 Years"
+                className="font-poppins font-bold text-3xl lg:text-4xl xl:text-5xl relative z-10"
+                delay={40}
+                duration={1}
+                ease="easeOut"
+                splitType="chars"
+                from={{ opacity: 0, y: 10 }}
+                to={{ opacity: 1, y: 0 }}
+                textAlign="left"
+              />
+              <span className="absolute bottom-1 left-0 right-0 h-3 bg-white/20 -z-10" />
+            </span>{" "}
             Journey Supporting
             <br />
             Science, Technology, and Innovation
