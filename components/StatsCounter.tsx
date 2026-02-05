@@ -16,6 +16,7 @@ const stats = [
 
 export default function CounterSection() {
   const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const timersRef = useRef<NodeJS.Timeout[]>([]);
   const hasAnimatedRef = useRef(false);
@@ -28,6 +29,7 @@ export default function CounterSection() {
         return;
       }
       hasAnimatedRef.current = true;
+      setHasAnimated(true);
 
       // Start counting animation
       stats.forEach((stat, index) => {
@@ -128,7 +130,7 @@ export default function CounterSection() {
               key={index}
               initial={{ opacity: 0, y: 30 }}
               animate={
-                counts[index] > 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
               }
               transition={{
                 duration: 0.5,
