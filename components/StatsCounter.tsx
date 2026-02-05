@@ -4,63 +4,67 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import SplitText from "./SplitText";
 
+const stats = [
+  { value: 1124, label: "Profiles" },
+  { value: 111, label: "Organizations" },
+  { value: 3590, label: "Research Outputs" },
+  { value: 1673, label: "Projects" },
+  { value: 97, label: "Impacts" },
+  { value: 379, label: "Prizes" },
+  { value: 916, label: "Equipment" },
+];
+
 export default function CounterSection() {
   const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const timersRef = useRef<NodeJS.Timeout[]>([]);
-
-  const stats = [
-    { value: 1124, label: "Profiles" },
-    { value: 111, label: "Organizations" },
-    { value: 3590, label: "Research Outputs" },
-    { value: 1673, label: "Projects" },
-    { value: 97, label: "Impacts" },
-    { value: 379, label: "Prizes" },
-    { value: 916, label: "Equipment" },
-  ];
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
     const currentSection = sectionRef.current;
 
+    const startAnimation = () => {
+      if (hasAnimatedRef.current) {
+        return;
+      }
+      hasAnimatedRef.current = true;
+
+      // Start counting animation
+      stats.forEach((stat, index) => {
+        const duration = 2000;
+        const steps = 50;
+        const stepDuration = duration / steps;
+        const increment = stat.value / steps;
+
+        let currentCount = 0;
+
+        const timer = setInterval(() => {
+          currentCount += increment;
+
+          setCounts((prev) => {
+            const newCounts = [...prev];
+            newCounts[index] = Math.min(Math.round(currentCount), stat.value);
+            return newCounts;
+          });
+
+          if (currentCount >= stat.value) {
+            clearInterval(timer);
+            setCounts((prev) => {
+              const newCounts = [...prev];
+              newCounts[index] = stat.value;
+              return newCounts;
+            });
+          }
+        }, stepDuration);
+
+        timersRef.current.push(timer);
+      });
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true);
-
-          // Start counting animation
-          stats.forEach((stat, index) => {
-            const duration = 2000;
-            const steps = 50;
-            const stepDuration = duration / steps;
-            const increment = stat.value / steps;
-
-            let currentCount = 0;
-
-            const timer = setInterval(() => {
-              currentCount += increment;
-
-              setCounts((prev) => {
-                const newCounts = [...prev];
-                newCounts[index] = Math.min(
-                  Math.round(currentCount),
-                  stat.value
-                );
-                return newCounts;
-              });
-
-              if (currentCount >= stat.value) {
-                clearInterval(timer);
-                setCounts((prev) => {
-                  const newCounts = [...prev];
-                  newCounts[index] = stat.value;
-                  return newCounts;
-                });
-              }
-            }, stepDuration);
-
-            timersRef.current.push(timer);
-          });
+        if (entry.isIntersecting) {
+          startAnimation();
         }
       },
       { threshold: 0.1 }
@@ -78,7 +82,7 @@ export default function CounterSection() {
         observer.unobserve(currentSection);
       }
     };
-  }, [hasAnimated]);
+  }, []);
 
   const formatNumber = (num: number) => {
     return Math.round(num).toLocaleString();
@@ -124,7 +128,7 @@ export default function CounterSection() {
               key={index}
               initial={{ opacity: 0, y: 30 }}
               animate={
-                hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                counts[index] > 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
               }
               transition={{
                 duration: 0.5,
