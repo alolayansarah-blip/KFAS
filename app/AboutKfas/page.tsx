@@ -202,8 +202,13 @@ export default function AboutKfasPage() {
               transition={{ duration: 0.6 }}
               className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center"
             >
-              {[3, 4, 5, 6].map((num) => (
-                <LogoCard key={num} src={`/image/logo${num}.png`} />
+              {[
+                "/image/logo_sc.png",
+                "/image/logo4.png",
+                "/image/logo5.png",
+                "/image/logo6.png",
+              ].map((src) => (
+                <LogoCard key={src} src={src} />
               ))}
             </motion.div>
           </div>
@@ -337,15 +342,18 @@ function TimelineItem({
 function LogoCard({ src }: { src: string }) {
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ y: -6, scale: 1.03 }}
       transition={{ duration: 0.3 }}
-      className="bg-white/10 backdrop-blur-sm rounded-xl p-6 w-full flex items-center justify-center"
+      className="group relative w-full overflow-hidden rounded-2xl border border-white/30 bg-white/15 p-6 shadow-lg shadow-black/10 backdrop-blur-sm"
     >
-      <img
-        src={src}
-        alt="Partner Logo"
-        className="h-24 w-auto object-contain filter brightness-0 invert"
-      />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="relative flex items-center justify-center">
+        <img
+          src={src}
+          alt="Partner Logo"
+          className="h-20 w-auto object-contain filter brightness-0 invert opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+        />
+      </div>
     </motion.div>
   );
 }
