@@ -151,7 +151,7 @@ export default function AboutKfasPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="mt-12 space-y-6"
               >
-                <p className="text-gray-600 leading-[1.9] text-base">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   Driving our work is the premise that science creates
                   knowledge, technology accelerates progress, and innovation
                   shapes transformative solutions. During 2025–2029, we aim to
@@ -161,7 +161,7 @@ export default function AboutKfasPage() {
                   research, novel uses of technology, and expanded horizons in
                   knowledge transfers and human capacities.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   All of our work will be aligned with our three pillars—robust
                   research ecosystem, viable innovation, and human ingenuity—and
                   each pillar will complement and produce synergies with the
@@ -173,7 +173,7 @@ export default function AboutKfasPage() {
                   diffusing knowledge and developing human capabilities and
                   potential.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   We will pursue priority areas that address issues of
                   importance to Kuwait, particularly in the areas of
                   environment, energy, health, STEAM education, water and food
@@ -181,7 +181,7 @@ export default function AboutKfasPage() {
                   awareness of emerging trends and initiatives outside these
                   areas that could bring benefit to the nation.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   Specialized centers of excellence have been established in
                   Kuwait and continue to be funded as subsidiaries of the
                   foundation, providing the country with additional ways to
@@ -264,7 +264,9 @@ function TextBlock({
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
     >
-      <p className="text-gray-600 leading-[1.9] text-base">{children}</p>
+      <p className="text-gray-600 leading-[1.9] text-base text-justify">
+        {children}
+      </p>
     </motion.div>
   );
 }
@@ -333,7 +335,7 @@ function TimelineItem({
         <h3 className="font-montserrat text-xl font-bold text-[#EC601B] mb-3">
           {title}
         </h3>
-        <p className="text-gray-600 leading-relaxed">{content}</p>
+        <p className="text-gray-600 leading-relaxed text-justify">{content}</p>
       </div>
     </motion.div>
   );
