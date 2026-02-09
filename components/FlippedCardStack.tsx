@@ -105,8 +105,8 @@ type Card = (typeof cards)[number];
 
 function CardItem({ title, index }: Card & { index: number }) {
   // Use orange for all cards
-  const bgColor = "bg-[#EC601B]";
-  const hoverBgColor = "md:hover:bg-[#D54E0F]";
+  const bgColor = "bg-[#7DC0F1]";
+  const hoverBgColor = "md:hover:bg-[#56A0D7]";
 
   return (
     <motion.div

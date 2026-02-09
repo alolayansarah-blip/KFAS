@@ -333,9 +333,11 @@ export default function OurImpactStories() {
                   <p className="font-poppins text-sm text-gray-600 leading-relaxed line-clamp-3 min-h-[4.5rem] mb-4">
                     {item.description}
                   </p>
-                  <div className="mt-auto inline-flex items-center gap-2 text-sm text-[#EC601B] font-semibold group-hover:gap-3 transition-all duration-300">
-                    <span className="font-poppins">Read More</span>
-                    <ArrowIcon className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  <div className="mt-auto">
+                    <span className="font-poppins inline-flex items-center gap-3 border border-gray-200 border-b-2 border-b-[#7DC0F1] px-4 py-2 text-sm font-semibold text-gray-900 transition-all duration-300 group-hover:text-gray-900">
+                      Read More
+                      <ArrowIcon className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform duration-300" />
+                    </span>
                   </div>
                 </div>
               </a>
