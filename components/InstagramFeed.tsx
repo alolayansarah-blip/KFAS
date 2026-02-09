@@ -274,9 +274,9 @@ export default function InstagramFeed() {
             href="https://www.instagram.com/kfasinfo/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 px-8 py-4 bg-[#EC601B] text-white font-poppins font-semibold rounded-full hover:bg-[#D54E0F] hover:shadow-2xl hover:shadow-[#EC601B]/30 transition-all duration-300 relative overflow-hidden"
+            className="group inline-flex items-center gap-3 border border-gray-200 border-b-2 border-b-[#7DC0F1] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 font-poppins"
           >
-            <span className="relative z-10">Follow @kfasinfo</span>
+            <span>Follow @kfasinfo</span>
             <ArrowIcon />
           </a>
         </motion.div>
