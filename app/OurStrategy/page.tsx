@@ -103,8 +103,8 @@ export default function OurStrategyPage() {
               alt="KFAS strategy diagram"
               className="mt-8 w-full max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             />
           </div>

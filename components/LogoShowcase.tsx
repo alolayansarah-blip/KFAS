@@ -7,7 +7,7 @@ const tiles = [
   {
     title: "The Scientific Center",
     description:
-      "The Scientific Center of Kuwait is a leading destination for learning, discovery, and innovation, dedicated to making science accessible and engaging for everyone.",
+      "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness.",
     href: "https://tsck.org.kw/",
     image: "/image/sc.jpg",
     logo: "/image/logo_sc.png",
@@ -17,7 +17,7 @@ const tiles = [
     description:
       "A center dedicated to nurturing talent and creativity in young individuals under the Kuwait Foundation for the Advancement of Sciences.",
     href: "https://linktr.ee/sacgc_kw",
-    image: "/image/sabahAlahmad2.png",
+    image: "/image/sabahAlahmad.jpg",
     logo: "/image/logo6.png",
   },
   {
@@ -79,7 +79,7 @@ export default function LogoShowcase() {
           <img
             src={visibleImage}
             alt=""
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-center"
             style={{
               opacity: fadeIn ? 1 : 0,
               transition: "opacity 0.6s ease",
@@ -125,9 +125,11 @@ export default function LogoShowcase() {
                 </h2>
                 <div className="mt-5 grid w-full grid-cols-2 items-center justify-items-center gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:flex lg:flex-nowrap lg:justify-center lg:gap-10">
                   {tiles.map((tile, index) => (
-                    <button
+                    <a
                       key={tile.title}
-                      type="button"
+                      href={tile.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="rounded-full outline-none"
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
@@ -140,7 +142,7 @@ export default function LogoShowcase() {
                         className="h-24 sm:h-28 md:h-32 lg:h-36 w-auto object-contain brightness-0 invert opacity-0 animate-[fadeUp_0.8s_ease-out_forwards]"
                         style={{ animationDelay: `${index * 120}ms` }}
                       />
-                    </button>
+                    </a>
                   ))}
                 </div>
               </div>

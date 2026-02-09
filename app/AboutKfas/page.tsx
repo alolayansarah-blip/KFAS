@@ -56,6 +56,7 @@ export default function AboutKfasPage() {
               <h1 className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
                 Who We Are
               </h1>
+           
             </motion.div>
           </div>
 
@@ -193,29 +194,90 @@ export default function AboutKfasPage() {
         </section>
 
         {/* Logos Section */}
-        <section className="py-16 bg-[#EC601B]">
+        <section id="logos" className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center"
-            >
+            <div className="bg-[#BBDEFB] px-6 py-10 sm:px-8 lg:px-12">
               {[
-                "/image/logo_sc.png",
-                "/image/logo4.png",
-                "/image/logo5.png",
-                "/image/logo6.png",
-              ].map((src) => (
-                <LogoCard key={src} src={src} />
+                {
+                  title: "The Scientific Center",
+                  description:
+                    "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness.",
+                  image: "/image/sc3.jpg",
+                  href: "https://tsck.org.kw/",
+                },
+                {
+                  title: "Dasman Diabetes Institute",
+                  description:
+                    "Developing research projects, educational programs, and awareness-raising initiatives that improve society and combat diabetes.",
+                  image: "/image/DDI2.jpg",
+                  href: "https://www.dasmaninstitute.org/",
+                },
+                {
+                  title: "Sabah Al-Ahmad Center",
+                  description:
+                    "A center dedicated to nurturing talent and creativity in young individuals under the Kuwait Foundation for the Advancement of Sciences.",
+                  image: "/image/sabahAlahmad.jpg",
+                  href: "https://linktr.ee/sacgc_kw",
+                },
+                {
+                  title: "Advancement of Sciences",
+                  description:
+                    "An advanced research and development center focused on innovation, scientific excellence, and the dissemination of knowledge.",
+                  image: "/image/aspd.jpg",
+                  href: "https://www.aspdkw.com/",
+                },
+              ].map((item, index) => (
+                <div
+                  key={item.title}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-10 lg:py-14"
+                >
+                  <motion.div
+                    className={`relative overflow-hidden ${
+                      index % 2 === 1 ? "lg:order-2" : ""
+                    }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-72 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-[#1D2D44]/25" />
+                  </motion.div>
+                  <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                    <motion.h3
+                      className="font-montserrat text-2xl sm:text-3xl font-bold text-black"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.1 }}
+                    >
+                      {item.title}
+                    </motion.h3>
+                    <div className="mt-3 h-0.5 w-16 bg-[#BBDEFB]" />
+                    <p className="mt-4 text-base text-gray-800 leading-relaxed text-justify">
+                      {item.description}
+                    </p>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-5 inline-flex items-center gap-2 bg-[#EC601B] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white"
+                    >
+                      Read More →
+                    </a>
+                  </div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Back to Top Section */}
-        <div className="py-12 bg-gray-100 flex flex-col items-center justify-center">
+        <div className="py-12 bg-white flex flex-col items-center justify-center">
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -348,7 +410,6 @@ function LogoCard({ src }: { src: string }) {
       transition={{ duration: 0.3 }}
       className="group relative w-full overflow-hidden rounded-2xl border border-white/30 bg-white/15 p-6 shadow-lg shadow-black/10 backdrop-blur-sm"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-white/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="relative flex items-center justify-center">
         <img
           src={src}
