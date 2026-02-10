@@ -181,7 +181,7 @@ export default function InstagramFeed() {
             </div>
 
             <h2 className="font-poppins text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-900 leading-tight tracking-tight">
-              Join Us in{" "}
+              Join us on{" "}
               <span className="relative inline-block">
                 <span className="relative z-10 text-[#EC601B]">Instagram</span>
                 <motion.div
