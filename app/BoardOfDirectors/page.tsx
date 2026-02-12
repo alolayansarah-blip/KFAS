@@ -146,7 +146,7 @@ export default function BoardOfDirectorsPage() {
         >
           <div className="absolute inset-0">
             <img
-              src="/image/KFASBuilding2.png"
+              src="/image/KfasBuilding2.png"
               alt="Board of Directors"
               className="w-full h-full object-cover object-[center_15%]"
             />
