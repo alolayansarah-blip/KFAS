@@ -15,6 +15,7 @@ function ProfileCard({
   isInView,
   animationDelay = 0,
   borderPosition = "left",
+  layout = "horizontal",
 }: {
   imageSrc?: string;
   imageAlt: string;
@@ -24,9 +25,16 @@ function ProfileCard({
   isInView: boolean;
   animationDelay?: number;
   borderPosition?: "left" | "right";
+  layout?: "horizontal" | "vertical";
 }) {
+  const isVertical = layout === "vertical";
+
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+    <div
+      className={`flex items-center gap-6 sm:gap-8 ${
+        isVertical ? "flex-col" : "flex-col sm:flex-row"
+      }`}
+    >
       <motion.div
         className="relative shrink-0"
         initial={{ opacity: 0, x: -40 }}
@@ -39,7 +47,13 @@ function ProfileCard({
             aria-hidden
           />
         )}
-        <div className="relative w-56 h-56 sm:w-64 sm:h-64 bg-blue-50 p-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
+        <div
+          className={`relative bg-blue-50 p-4 ${
+            isVertical
+              ? "w-48 h-48 sm:w-52 sm:h-52 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
+              : "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
+          }`}
+        >
           {usePlaceholder ? (
             <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
               <User className="w-24 h-24" strokeWidth={1.5} />
@@ -54,24 +68,53 @@ function ProfileCard({
         </div>
       </motion.div>
       <motion.div
-        className={`flex-1 min-w-0 relative ${borderPosition === "right" ? "pr-8 pb-6" : ""}`}
-        initial={{ opacity: 0, x: 40 }}
-        animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
-        transition={{ duration: 0.6, delay: animationDelay + 0.15, ease: "easeOut" }}
+        className={`min-w-0 relative ${
+          isVertical
+            ? "w-[260px] h-[120px] sm:h-[125px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
+            : "text-left flex-1"
+        } ${borderPosition === "right" && !isVertical ? "pr-8 pb-6" : ""}`}
+        initial={{ opacity: 0, y: isVertical ? 16 : 0, x: isVertical ? 0 : 40 }}
+        animate={
+          isInView
+            ? { opacity: 1, y: 0, x: 0 }
+            : { opacity: 0, y: isVertical ? 16 : 0, x: isVertical ? 0 : 40 }
+        }
+        transition={{
+          duration: 0.6,
+          delay: animationDelay + 0.15,
+          ease: "easeOut",
+        }}
       >
-        {borderPosition === "right" && (
+        {borderPosition === "right" && !isVertical && (
           <div
             className="absolute bottom-0 right-0 w-20 h-20 border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/90 pointer-events-none"
             style={{ borderBottomRightRadius: "2px" }}
             aria-hidden
           />
         )}
-        <p className="font-montserrat text-base sm:text-lg font-bold text-gray-900 leading-tight tracking-tight">
+        {borderPosition === "right" && isVertical && (
+          <div
+            className="absolute bottom-3 right-3 w-14 h-14 border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/80 pointer-events-none"
+            style={{ borderBottomRightRadius: "3px" }}
+            aria-hidden
+          />
+        )}
+        <p
+          className={`font-montserrat font-bold text-gray-900 leading-tight ${
+            isVertical ? "text-[15px] sm:text-base tracking-wide" : "text-base sm:text-lg tracking-tight"
+          }`}
+        >
           {name}
         </p>
-        <ul className="mt-3 space-y-1.5 list-disc list-inside text-sm sm:text-base text-gray-700/95 leading-relaxed">
-          <li>{title}</li>
-        </ul>
+        <p
+          className={`leading-relaxed break-words ${
+            isVertical
+              ? "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
+              : "mt-3 text-sm sm:text-base text-gray-700/95"
+          }`}
+        >
+          {title}
+        </p>
       </motion.div>
     </div>
   );
@@ -80,8 +123,16 @@ function ProfileCard({
 export default function BoardOfDirectorsPage() {
   const profileRef = useRef(null);
   const deputiesRef = useRef(null);
+  const officersRef = useRef(null);
   const isInView = useInView(profileRef, { once: true, margin: "-80px" });
-  const isDeputiesInView = useInView(deputiesRef, { once: true, margin: "-80px" });
+  const isDeputiesInView = useInView(deputiesRef, {
+    once: true,
+    margin: "-80px",
+  });
+  const isOfficersInView = useInView(officersRef, {
+    once: true,
+    margin: "-80px",
+  });
 
   return (
     <>
@@ -157,6 +208,45 @@ export default function BoardOfDirectorsPage() {
                 isInView={isDeputiesInView}
                 animationDelay={0.1}
                 borderPosition="right"
+              />
+            </div>
+          </div>
+        </section>
+        <section ref={officersRef} className="bg-white pb-16">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
+              <ProfileCard
+                imageSrc="/image/AbdullahBuQmashah.png"
+                imageAlt="Abdullah Salem Abu Qumasha"
+                name="Abdullah Salem Abu Qumasha"
+                title="Chief Strategy Officer"
+                usePlaceholder={false}
+                isInView={isOfficersInView}
+                animationDelay={0}
+                borderPosition="right"
+                layout="vertical"
+              />
+              <ProfileCard
+                imageSrc="/image/DrBassam%20Alfeeli.png"
+                imageAlt="Bassam Abdulkareem Alfaili"
+                name="Bassam Abdulkareem Alfaili"
+                title="Chief Enterprise Development Officer"
+                usePlaceholder={false}
+                isInView={isOfficersInView}
+                animationDelay={0.1}
+                borderPosition="right"
+                layout="vertical"
+              />
+              <ProfileCard
+                imageSrc="/image/AliBuMjdad.png"
+                imageAlt="Ali Yahya Bo Mejdad"
+                name="Ali Yahya Bo Mejdad"
+                title="Chief Research & Technology Officer"
+                usePlaceholder={false}
+                isInView={isOfficersInView}
+                animationDelay={0.2}
+                borderPosition="right"
+                layout="vertical"
               />
             </div>
           </div>
