@@ -17,7 +17,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       { label: "Who We Are", href: "/AboutKfas" },
       { label: "Our History", href: "/OurHistory" },
       { label: "Our Strategy", href: "/OurStrategy" },
-      { label: "Board of Directors", href: "/about/board-of-directors" },
+      { label: "Board of Directors", href: "/BoardOfDirectors" },
       { label: "Executive Management", href: "/about/executive-management" },
     ],
   },
