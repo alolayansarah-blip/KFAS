@@ -55,39 +55,42 @@ export default function SplitText({
     }
   }, [onLetterAnimationComplete]);
 
+  const content =
+    splitType === "chars" && highlightChars.length > 0 ? (
+      segments.map((segment, index) => (
+        <span
+          key={`${segment}-${index}`}
+          className={
+            highlightChars.includes(index) ? highlightClassName : undefined
+          }
+          style={{ display: "inline-block", whiteSpace: "pre" }}
+        >
+          {segment}
+        </span>
+      ))
+    ) : (
+      text
+    );
+
   return (
-    <span
+    <motion.span
       ref={containerRef}
       className={className}
       style={{ textAlign, display: "inline-block", ...style }}
       aria-label={text}
+      initial={from}
+      animate={isInView ? to : from}
+      transition={{
+        duration,
+        ease,
+        delay: delay / 1000,
+      }}
+      onAnimationComplete={handleComplete}
     >
-      {segments.map((segment, index) => (
-        <motion.span
-          key={`${segment}-${index}`}
-          className={
-            splitType === "chars" && highlightChars.includes(index)
-              ? highlightClassName
-              : undefined
-          }
-          style={{ display: "inline-block", whiteSpace: "pre" }}
-          initial={from}
-          animate={isInView ? to : from}
-          transition={{
-            duration,
-            ease,
-            delay: (delay * index) / 1000,
-          }}
-          onAnimationComplete={
-            index === segments.length - 1 ? handleComplete : undefined
-          }
-        >
-          {segment}
-        </motion.span>
-      ))}
+      {content}
       {showCallback ? (
         <span className="sr-only">animation complete</span>
       ) : null}
-    </span>
+    </motion.span>
   );
 }

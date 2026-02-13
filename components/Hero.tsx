@@ -277,6 +277,7 @@ export default function Hero({
             loop
             muted
             playsInline
+            preload="metadata"
             poster={videoPoster}
             className="absolute inset-0 w-full h-full object-cover"
             onPlay={() => setIsPlaying(true)}
@@ -308,34 +309,34 @@ export default function Hero({
             </motion.div>
           )}
 
-          {/* English Title with Improved Typography */}
+          {/* English Title with Fade-up */}
           {titleEn && (
-            <h1 className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6">
+            <motion.h1
+              className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6"
+              style={{
+                textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6)'
+              }}
+              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: prefersReducedMotion ? 0 : 0.3,
+                ease: [0.25, 0.4, 0.25, 1],
+              }}
+            >
               {splitLines(titleEn).map((line, lineIndex) => (
                 <span key={`line-${lineIndex}`} className="block">
                   {splitWords(line.trim()).map((word, i) => (
-                    <motion.span
+                    <span
                       key={`en-${lineIndex}-${i}`}
                       className="inline-block mr-3 sm:mr-4"
-                      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.8,
-                        delay: prefersReducedMotion
-                          ? 0
-                          : 0.3 + lineIndex * 0.3 + i * 0.1,
-                        ease: [0.25, 0.4, 0.25, 1],
-                      }}
-                      style={{
-                        textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6)'
-                      }}
                     >
                       {word}
-                    </motion.span>
+                    </span>
                   ))}
                 </span>
               ))}
-            </h1>
+            </motion.h1>
           )}
 
           {/* Arabic Title with Better Styling */}

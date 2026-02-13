@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { memo, useState } from "react";
 
 interface FooterProps {
@@ -140,7 +141,7 @@ function Footer({
               className="inline-flex flex-col gap-0 mb-4 transition-transform hover:scale-105 duration-300"
             >
               {logo && (
-                <img
+                <Image
                   src={logo}
                   alt={logoText}
                   width={160}
