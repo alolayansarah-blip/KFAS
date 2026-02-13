@@ -104,7 +104,8 @@ export default function InstagramFeed() {
         }
 
         const data = await response.json();
-        setPosts(data.posts || []);
+        const fetchedPosts = data.posts || [];
+        setPosts(fetchedPosts.length > 0 ? fetchedPosts : placeholderPosts);
         setLoading(false);
       } catch (err: any) {
         console.error("Error fetching Instagram posts:", err);

@@ -119,7 +119,7 @@ export default function OurStrategyPage() {
         </section>
       </main>
       <Footer
-        logo="/image/logo_white.png"
+        logo="/image/logoFooter.png"
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
       />
     </>

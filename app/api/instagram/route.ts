@@ -5,10 +5,7 @@ export async function GET() {
     const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
 
     if (!accessToken) {
-      return NextResponse.json(
-        { error: "Instagram access token not configured" },
-        { status: 500 }
-      );
+      return NextResponse.json({ posts: [] });
     }
 
     // Fetch user media from Instagram Graph API
