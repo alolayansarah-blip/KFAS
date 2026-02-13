@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { memo } from "react";
 
@@ -10,7 +9,10 @@ interface FooterProps {
   logoText?: string;
 }
 
-function Footer({ logo = "/image/logo_white.png", logoText = "KFAS" }: FooterProps) {
+function Footer({
+  logo = "/image/logo_white.png",
+  logoText = "Kuwait Foundation for the Advancement of Sciences (KFAS)",
+}: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = [
@@ -84,32 +86,37 @@ function Footer({ logo = "/image/logo_white.png", logoText = "KFAS" }: FooterPro
   ];
 
   return (
-    <footer className="relative bg-gradient-to-b from-[#EC601B] via-[#F7911E] to-[#EC601B] text-white overflow-hidden">
-      {/* Decorative gradient effects */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-white/5 via-white/2 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-white/4 via-white/2 to-transparent rounded-full blur-3xl"></div>
-      </div>
-
+    <footer className="relative bg-[#EC601B] text-white overflow-hidden">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-12 lg:py-16">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
           {/* Brand Section */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-6">
-              <div className="flex items-center gap-3">
+            <Link href="/" className="inline-block mb-6 group">
+              <div className="flex flex-col items-start gap-1.5">
                 {logo && (
-                  <Image
-                    src={logo}
-                    alt={logoText}
-                    width={50}
-                    height={50}
-                    className="object-contain"
-                  />
+                  <div className="flex-shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={logo}
+                      alt={logoText}
+                      width={150}
+                      height={150}
+                      className="object-contain w-[150px] h-[150px] transition-transform duration-300 group-hover:scale-[1.02]"
+                    />
+                  </div>
                 )}
-                <span className="text-2xl font-bold text-white">
-                  {logoText}
-                </span>
+                <div className="flex flex-col gap-px pt-0.5">
+                  <span className="font-montserrat text-[15px] sm:text-[17px] font-medium text-white/95 tracking-[0.02em] leading-tight">
+                    Kuwait Foundation for the
+                  </span>
+                  <span className="font-montserrat text-[15px] sm:text-[17px] font-medium text-white/95 tracking-[0.02em] leading-tight">
+                    Advancement of Sciences
+                  </span>
+                  <span className="font-montserrat text-[13px] sm:text-[15px] font-medium text-white/80 tracking-[0.12em] uppercase mt-1.5">
+                    (KFAS)
+                  </span>
+                </div>
               </div>
             </Link>
             <p className="text-white/90 mb-6 leading-relaxed max-w-md">

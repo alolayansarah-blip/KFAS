@@ -8,7 +8,7 @@ const FlippedCardStack = dynamic(
   () => import("@/components/FlippedCardStack"),
   {
     loading: () => <div className="min-h-[400px]" />,
-  }
+  },
 );
 const WhoWeAre = dynamic(() => import("@/components/WhoWeAre"), {
   loading: () => <div className="min-h-[400px]" />,
@@ -54,7 +54,10 @@ export default function Home() {
 
         {/* <StatsCounter /> */}
       </main>
-      <Footer logo="/image/logo_white.png" logoText="KFAS" />
+      <Footer
+        logo="/image/logo_white.png"
+        logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
+      />
     </>
   );
 }
