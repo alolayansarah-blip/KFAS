@@ -185,7 +185,6 @@
 //   );
 // }
 
-
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -202,7 +201,7 @@ export default function OurImpactStories() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const currentRef = sectionRef.current;
@@ -246,7 +245,7 @@ export default function OurImpactStories() {
   ];
 
   const sortedNews = [...news].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 
   const ArrowIcon = ({ className }: { className?: string }) => (

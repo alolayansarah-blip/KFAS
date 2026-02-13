@@ -20,7 +20,7 @@ function WhoWeAre() {
       {
         threshold: 0.1,
         rootMargin: "0px",
-      }
+      },
     );
 
     if (sectionRef.current) {
@@ -45,11 +45,7 @@ function WhoWeAre() {
           {/* Left Column: Stacked Images */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
-            animate={
-              isVisible 
-                ? { opacity: 1, x: 0 }
-                : { opacity: 0, x: -30 }
-            }
+            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
@@ -109,9 +105,7 @@ function WhoWeAre() {
                   <motion.h2
                     initial={{ opacity: 1 }}
                     animate={
-                      isVisible
-                        ? { opacity: 0, y: -20 }
-                        : { opacity: 1, y: 0 }
+                      isVisible ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }
                     }
                     transition={{ duration: 0.5, delay: 0.6 }}
                     className="absolute top-0 left-0 text-5xl lg:text-6xl font-bold text-orange-600 leading-tight tracking-wide flex items-center gap-4"
@@ -174,38 +168,33 @@ function WhoWeAre() {
             {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
-              animate={
-                isVisible
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 20 }
-              }
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-base text-gray-600 leading-relaxed"
             >
-              Established in 1976, the Kuwait Foundation for the Advancement of Sciences (KFAS), is a private, non-profit organization that supports research, training, and development in STEAM innovation in alignment with Kuwait's national priorities.
+              Established in 1976, the Kuwait Foundation for the Advancement of
+              Sciences (KFAS), is a private, non-profit organization that
+              supports research, training, and development in STEAM innovation
+              in alignment with Kuwait's national priorities.
             </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
-              animate={
-                isVisible
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 20 }
-              }
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-base text-gray-600 leading-relaxed"
             >
-              Through its educational programs, cross-sector partnerships, public engagement initiatives, specialized centers, and prestigious prizes, KFAS rewards excellence, promotes impactful research, and inspires future generations in spreading knowledge and accelerating progress.
+              Through its educational programs, cross-sector partnerships,
+              public engagement initiatives, specialized centers, and
+              prestigious prizes, KFAS rewards excellence, promotes impactful
+              research, and inspires future generations in spreading knowledge
+              and accelerating progress.
             </motion.p>
 
             {/* Learn More Link */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={
-                isVisible
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 20 }
-              }
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
               <a

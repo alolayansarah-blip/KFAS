@@ -69,7 +69,7 @@ export default function CounterSection() {
           startAnimation();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (currentSection) {

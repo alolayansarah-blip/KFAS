@@ -73,7 +73,7 @@ export default function InstagramFeed() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const currentRef = sectionRef.current;
@@ -229,7 +229,9 @@ export default function InstagramFeed() {
                 rel="noopener noreferrer"
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 initial={{ opacity: 0, y: 30 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                animate={
+                  isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                }
                 transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
                 onHoverStart={() => setHoveredIndex(index)}
                 onHoverEnd={() => setHoveredIndex(null)}
@@ -252,7 +254,8 @@ export default function InstagramFeed() {
 
                 <div className="flex flex-1 flex-col gap-3 p-4">
                   <p className="font-poppins text-sm text-gray-700 line-clamp-3">
-                    {post.caption || "Follow our latest updates and highlights."}
+                    {post.caption ||
+                      "Follow our latest updates and highlights."}
                   </p>
                   <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-[#EC601B]">
                     <span>View on Instagram</span>
