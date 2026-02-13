@@ -142,6 +142,7 @@ export default function BoardOfDirectorsPage() {
   const officersRef = useRef(null);
   const directorsRef = useRef(null);
   const directors2Ref = useRef(null);
+  const directors3Ref = useRef(null);
   const isInView = useInView(profileRef, { once: true, margin: "-80px" });
   const isDeputiesInView = useInView(deputiesRef, {
     once: true,
@@ -156,6 +157,10 @@ export default function BoardOfDirectorsPage() {
     margin: "-80px",
   });
   const isDirectors2InView = useInView(directors2Ref, {
+    once: true,
+    margin: "-80px",
+  });
+  const isDirectors3InView = useInView(directors3Ref, {
     once: true,
     margin: "-80px",
   });
@@ -254,8 +259,8 @@ export default function BoardOfDirectorsPage() {
               />
               <ProfileCard
                 imageSrc="/image/DrBassam%20Alfeeli.png"
-                imageAlt="Bassam Abdulkareem Alfaili"
-                name="Bassam Abdulkareem Alfaili"
+                imageAlt="Dr.Bassam Abdulkareem Alfaili"
+                name="Dr.Bassam Abdulkareem Alfaili"
                 title="Chief Enterprise Development Officer"
                 usePlaceholder={false}
                 isInView={isOfficersInView}
@@ -423,6 +428,53 @@ export default function BoardOfDirectorsPage() {
                 borderPosition="right"
                 layout="vertical"
                 compact
+              />
+            </div>
+          </div>
+        </section>
+        <section ref={directors3Ref} className="bg-white pb-20">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+            {/* <motion.h2
+              className="font-montserrat text-2xl sm:text-3xl font-semibold text-gray-800 text-center mb-12 tracking-tight"
+              initial={{ opacity: 0, y: 10 }}
+              animate={isDirectors3InView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.5 }}
+            >
+              Directors
+            </motion.h2> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
+              <ProfileCard
+                imageSrc="/image/NouriaAlBader.png"
+                imageAlt="Nouria Ali AlBader"
+                name="Nouria Ali AlBader"
+                title="Director - Investment & Treasury"
+                usePlaceholder={false}
+                isInView={isDirectors3InView}
+                animationDelay={0}
+                borderPosition="right"
+                layout="vertical"
+              />
+              <ProfileCard
+                imageSrc="/image/AishaAlDuaij.png"
+                imageAlt="Aisha Hani AlDuaij"
+                name="Aisha Hani AlDuaij"
+                title="Director - Human Resources"
+                usePlaceholder={false}
+                isInView={isDirectors3InView}
+                animationDelay={0.1}
+                borderPosition="right"
+                layout="vertical"
+              />
+              <ProfileCard
+                imageSrc="/image/AbrarAlmosa.png"
+                imageAlt="Abrar Sulaiman Almoosa"
+                name="Abrar Sulaiman Almoosa"
+                title="Director - Research Capacity Building"
+                usePlaceholder={false}
+                isInView={isDirectors3InView}
+                animationDelay={0.2}
+                borderPosition="right"
+                layout="vertical"
               />
             </div>
           </div>
