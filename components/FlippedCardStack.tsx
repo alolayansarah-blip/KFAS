@@ -87,6 +87,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 const containerVariants = {
@@ -100,8 +101,9 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { y: 24 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: 0.5,
@@ -111,38 +113,39 @@ const cardVariants = {
 };
 
 const cards = [
-  {
-    title: "Research Grants",
-  },
-  {
-    title: "Learning and Development for Professionals",
-  },
-  {
-    title: "Our Publications",
-  },
+  { title: "Research Grants", href: "/Research" },
+  { title: "Learning and Development for Professionals", href: "/Learning-and-Development" },
+  { title: "Our Publications", href: "/Science-and-Society/Publications" },
 ];
 
 type Card = (typeof cards)[number];
 
-function CardItem({ title }: Card & { index: number }) {
+function CardItem({ title, href }: Card & { index: number }) {
   return (
     <motion.div
       variants={cardVariants}
-      className="group relative bg-[#7DC0F1] rounded-xl overflow-hidden h-full
-                 hover:bg-[#6BB5E8] hover:shadow-md transition-all duration-300 cursor-pointer"
+      className="h-full"
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
     >
-      <div className="flex flex-col h-full p-5 md:p-6 text-center justify-center items-center min-h-[120px] md:min-h-[140px]">
-        <h3 className="text-white text-sm md:text-base font-medium leading-snug tracking-tight mb-3">
+      <Link
+        href={href}
+        className="group relative flex flex-col justify-between p-6 sm:p-8 h-full min-h-[140px] rounded-xl bg-[#56A0D7] shadow-[0_4px_20px_rgba(86,160,215,0.25)] hover:shadow-[0_8px_32px_rgba(86,160,215,0.35)] hover:bg-[#4A8FC4] transition-all duration-300 overflow-hidden"
+      >
+        <div
+          className="absolute bottom-4 right-4 w-14 h-14 border-r border-b border-white/40 pointer-events-none"
+          style={{ borderBottomRightRadius: "2px" }}
+          aria-hidden
+        />
+        <p className="font-montserrat font-semibold text-white leading-snug text-base sm:text-lg tracking-tight pr-14 drop-shadow-sm">
           {title}
-        </h3>
-        <div className="flex items-center justify-center text-white/90 text-xs font-medium gap-1 group-hover:text-white transition-colors">
+        </p>
+        <div className="mt-4 flex items-center gap-2 text-sm text-white/90 font-medium group-hover:text-white group-hover:gap-3 transition-all duration-300">
           <span>Explore</span>
-          <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 }
@@ -150,20 +153,18 @@ function CardItem({ title }: Card & { index: number }) {
 export default function FlippedCardStack() {
   return (
     <motion.section
-      className="relative w-full bg-gray-50 py-12 md:py-14"
+      className="relative w-full bg-gray-50 py-16 md:py-20"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2, margin: "50px" }}
       variants={containerVariants}
     >
       <motion.div
-        className="mx-auto max-w-4xl px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4"
+        className="mx-auto max-w-5xl px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
         variants={containerVariants}
       >
         {cards.map((card, index) => (
-          <motion.div key={index} variants={cardVariants}>
-            <CardItem {...card} index={index} />
-          </motion.div>
+          <CardItem key={index} {...card} index={index} />
         ))}
       </motion.div>
     </motion.section>

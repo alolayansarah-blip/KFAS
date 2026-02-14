@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function AboutKfasPage() {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const visionMissionRef = useRef<HTMLDivElement>(null);
+  const isVisionMissionInView = useInView(visionMissionRef, { once: true, margin: "-60px" });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,42 +108,56 @@ export default function AboutKfasPage() {
               </TextBlock>
 
               {/* Vision and Mission Section */}
-              <div className="mt-10 grid gap-8 lg:grid-cols-2">
-                {/* Vision - Left */}
+              <div ref={visionMissionRef} className="mt-20 grid gap-8 lg:grid-cols-2">
+                {/* Vision */}
                 <motion.div
+                  className="relative flex flex-col p-8 bg-gradient-to-br from-blue-50 to-sky-50/80 rounded-lg shadow-[0_4px_20px_rgba(86,160,215,0.08)]"
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="rounded-3xl border border-[#EC601B]/20 p-8"
+                  animate={isVisionMissionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ duration: 0.6, delay: 0, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
-                  <div>
-                    <h3 className="font-montserrat text-2xl font-bold text-gray-900">
-                      Our Vision
+                  <div
+                    className="absolute bottom-4 right-4 w-12 h-12 border-r border-b border-[#56A0D7]/50 pointer-events-none"
+                    style={{ borderBottomRightRadius: "2px" }}
+                    aria-hidden
+                  />
+                  <div className="mb-4">
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
+                      Our
+                    </span>
+                    <h3 className="font-montserrat text-lg font-bold text-gray-900 tracking-tight mt-1">
+                      Vision
                     </h3>
-                    <div className="mt-2 h-1 w-12 rounded-full bg-[#EC601B]" />
+                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
                   </div>
-                  <p className="mt-6 text-gray-600 leading-relaxed capitalize">
+                  <p className="text-[15px] sm:text-base text-gray-600/90 leading-[1.75] font-light">
                     To advance science, technology, and innovation for a resilient,
                     thriving, and sustainable future.
                   </p>
                 </motion.div>
 
-                {/* Mission - Right */}
+                {/* Mission */}
                 <motion.div
+                  className="relative flex flex-col p-8 bg-gradient-to-br from-blue-50 to-sky-50/80 rounded-lg shadow-[0_4px_20px_rgba(86,160,215,0.08)]"
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="rounded-3xl border border-[#EC601B]/20 p-8"
+                  animate={isVisionMissionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
-                  <div>
-                    <h3 className="font-montserrat text-2xl font-bold text-gray-900">
-                      Our Mission
+                  <div
+                    className="absolute bottom-4 right-4 w-12 h-12 border-r border-b border-[#56A0D7]/50 pointer-events-none"
+                    style={{ borderBottomRightRadius: "2px" }}
+                    aria-hidden
+                  />
+                  <div className="mb-4">
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
+                      Our
+                    </span>
+                    <h3 className="font-montserrat text-lg font-bold text-gray-900 tracking-tight mt-1">
+                      Mission
                     </h3>
-                    <div className="mt-2 h-1 w-12 rounded-full bg-[#EC601B]" />
+                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
                   </div>
-                  <p className="mt-6 text-gray-600 leading-relaxed capitalize">
+                  <p className="text-[15px] sm:text-base text-gray-600/90 leading-[1.75] font-light">
                     To pursue scientific excellence to tackle national challenges
                     through a prominent science, technology, and innovation model.
                   </p>

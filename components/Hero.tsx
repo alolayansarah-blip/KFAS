@@ -194,12 +194,7 @@
 
 "use client";
 
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useReducedMotion,
-} from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useRef, useState } from "react";
 
 interface HeroProps {
@@ -226,17 +221,6 @@ export default function Hero({
   const [isPlaying, setIsPlaying] = useState(true);
   const prefersReducedMotion = useReducedMotion();
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const contentY = useTransform(
-    scrollYProgress,
-    [0, 0.5],
-    prefersReducedMotion ? [0, 0] : [0, 80]
-  );
-
   const splitWords = (text: string | undefined) => {
     if (!text) return [];
     return text.split(" ");
@@ -262,7 +246,7 @@ export default function Hero({
   return (
     <section
       ref={sectionRef}
-      className={`relative h-screen flex items-center justify-center overflow-hidden ${className}`}
+      className={`relative min-h-screen flex items-center justify-start pt-24 overflow-hidden ${className}`}
     >
       {/* Video Background with Improved Overlay */}
       <div className="absolute inset-0 z-0">
@@ -290,8 +274,7 @@ export default function Hero({
 
       {/* Content Container with Better Spacing */}
       <motion.div 
-        className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12"
-        style={{ y: contentY }}
+        className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-left"
       >
         <div className="max-w-4xl">
           {/* Subtitle Badge */}

@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
+import WhoWeAre from "@/components/WhoWeAre";
 
 // Lazy load components below the fold for better performance
 const FlippedCardStack = dynamic(
@@ -10,9 +11,6 @@ const FlippedCardStack = dynamic(
     loading: () => <div className="min-h-[400px]" />,
   },
 );
-const WhoWeAre = dynamic(() => import("@/components/WhoWeAre"), {
-  loading: () => <div className="min-h-[400px]" />,
-});
 const StatsCounter = dynamic(() => import("@/components/StatsCounter"), {
   loading: () => <div className="min-h-[200px]" />,
 });

@@ -187,34 +187,34 @@
 
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+
+const cardVariants = {
+  hidden: (i: number) => ({
+    opacity: 0,
+    y: 24,
+    x: i % 2 === 0 ? -16 : 16,
+  }),
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    x: 0,
+    transition: {
+      duration: 0.6,
+      delay: 0.15 + i * 0.1,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  }),
+};
 
 export default function OurImpactStories() {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
+  const isInView = useInView(sectionRef, {
+    once: true,
+    amount: 0.08,
+    margin: "0px 0px -60px 0px",
+  });
 
   const news = [
     {
@@ -265,17 +265,20 @@ export default function OurImpactStories() {
   );
 
   return (
-    <section
+    <motion.section
       ref={sectionRef}
       id="our-impact-stories"
-      className="relative bg-gray-50 py-20 lg:py-32"
+      className="relative bg-gray-50 py-20 lg:py-32 overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 0.5 }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="mb-16 flex items-end justify-between"
         >
           <div>
@@ -292,13 +295,15 @@ export default function OurImpactStories() {
           </div>
 
           {/* View All Link */}
-          <a
+          <motion.a
             href="#"
             className="font-poppins inline-flex items-center gap-3 border border-gray-200 border-b-2 border-b-[#7DC0F1] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 group hover:text-gray-900"
+            whileHover={{ x: 4 }}
+            transition={{ duration: 0.2 }}
           >
             <span>All News</span>
             <ArrowIcon className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
-          </a>
+          </motion.a>
         </motion.div>
 
         {/* News Grid */}
@@ -306,22 +311,32 @@ export default function OurImpactStories() {
           {sortedNews.map((item, index) => (
             <motion.article
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-              className="group h-full p-4"
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+              className="group h-full p-4 rounded-xl transition-shadow duration-300 hover:shadow-lg"
             >
               <a href={item.link} className="flex h-full flex-col">
-                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-gray-200">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                <div className="relative">
+                  <div
+                    className="absolute bottom-0 right-0 w-16 h-16 border-r border-b border-[#2563EB] pointer-events-none z-10"
+                    aria-hidden
                   />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                    <span className="font-poppins text-xs font-semibold text-gray-900">
-                      {item.date}
-                    </span>
+                  <div className="relative bg-blue-50 p-4 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                    <div className="aspect-[16/10] relative">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                        <span className="font-poppins text-xs font-semibold text-gray-900">
+                          {item.date}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -344,6 +359,6 @@ export default function OurImpactStories() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -9,6 +9,9 @@ function WhoWeAre() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const element = sectionRef.current;
+    if (!element) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -18,19 +21,15 @@ function WhoWeAre() {
         });
       },
       {
-        threshold: 0.1,
-        rootMargin: "0px",
+        threshold: 0.05,
+        rootMargin: "50px 0px",
       },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observer.observe(element);
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+      observer.unobserve(element);
     };
   }, []);
 
