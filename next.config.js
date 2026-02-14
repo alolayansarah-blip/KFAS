@@ -2,8 +2,7 @@
 const nextConfig = {
   // Removed static export for Heroku server deployment
   images: {
-    unoptimized: false, // Enable image optimization for better performance
-    formats: ["image/avif", "image/webp"],
+    unoptimized: true, // Required for deployment platforms that don't support sharp (e.g. DigitalOcean)
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
