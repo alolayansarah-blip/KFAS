@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -16,10 +17,13 @@ export default function OurStrategyPage() {
           transition={{ duration: 1, ease: "easeInOut" }}
         >
           <div className="absolute inset-0">
-            <img
+            <Image
               src="/image/benduluim.png"
               alt="Our Strategy"
-              className="w-full h-full object-cover object-center"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
           </div>
@@ -44,9 +48,10 @@ export default function OurStrategyPage() {
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </motion.section>
-        <section className="bg-white py-12 sm:py-16">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <p className="text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
+        <section className="bg-white py-20 sm:py-28">
+          <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="space-y-6">
+            <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
               With its strategy for 2025-2029, the Kuwait Foundation for the
               Advancement of Sciences seeks to enhance and demonstrate the
               potential value of science, technology, and innovation to
@@ -76,14 +81,14 @@ export default function OurStrategyPage() {
               around the world. We will focus our efforts on evolving dynamic
               priority areas supported in our preceding strategy.
             </p>
-            <p className="mt-4 text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
+            <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
               To catalyze{" "}
               <strong className="font-semibold"> viable innovation</strong>, we
               will continue to empower programs and practices that equip Kuwait
               to meet present and future challenges, converting research outputs
               into applied knowledge and technologies.
             </p>
-            <p className="mt-4 text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
+            <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
               To invest in Kuwait’s{" "}
               <strong className="font-semibold"> human ingenuity</strong>, we
               will facilitate knowledge transfers and develop people’s
@@ -92,7 +97,7 @@ export default function OurStrategyPage() {
               interest and curiosity, our programs will promote lifelong
               learning.
             </p>
-            <p className="mt-4 text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
+            <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
               Building on the momentum of recent initiatives to modernize our
               operations, we will increasingly distinguish KFAS as a model of
               organizational agility and proficiency. We will strive constantly
@@ -106,6 +111,7 @@ export default function OurStrategyPage() {
               proficiency, we will invest in optimizing our operations and
               developing a positive organizational culture.
             </p>
+            </div>
             <motion.img
               src="/image/KFAS_Strategy.png"
               alt="KFAS strategy diagram"

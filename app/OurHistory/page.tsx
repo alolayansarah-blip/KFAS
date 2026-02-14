@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Header from "@/components/Header";
@@ -245,10 +246,13 @@ export default function OurHistoryPage() {
         >
           {/* Background Image */}
           <div className="absolute inset-0">
-            <img
+            <Image
               src="/image/bannerHistory.jpg"
               alt="Our History"
-              className="w-full h-full object-cover object-center"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
             />
             {/* Dark black gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50"></div>

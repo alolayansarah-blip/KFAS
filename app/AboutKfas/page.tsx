@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -33,10 +34,13 @@ export default function AboutKfasPage() {
           transition={{ duration: 1, ease: "easeInOut" }}
         >
           <div className="absolute inset-0">
-            <img
+            <Image
               src="/image/AboutKFASBanner2.jpg"
               alt="Who We Are"
-              className="w-full h-full object-cover object-[center_80%]"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-[center_80%]"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
           </div>
@@ -48,7 +52,7 @@ export default function AboutKfasPage() {
               transition={{ duration: 0.8 }}
               className="text-left"
             >
-              <div className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
+              <div className="inline-flex items-center gap-2 text-xs sm:text-sm capitalize tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
                 <span className="text-white/40">/</span>
                 <span className="text-white">Who We Are</span>
@@ -117,7 +121,7 @@ export default function AboutKfasPage() {
                     </h3>
                     <div className="mt-2 h-1 w-12 rounded-full bg-[#EC601B]" />
                   </div>
-                  <p className="mt-6 text-gray-600 leading-relaxed">
+                  <p className="mt-6 text-gray-600 leading-relaxed capitalize">
                     To advance science, technology, and innovation for a resilient,
                     thriving, and sustainable future.
                   </p>
@@ -137,7 +141,7 @@ export default function AboutKfasPage() {
                     </h3>
                     <div className="mt-2 h-1 w-12 rounded-full bg-[#EC601B]" />
                   </div>
-                  <p className="mt-6 text-gray-600 leading-relaxed">
+                  <p className="mt-6 text-gray-600 leading-relaxed capitalize">
                     To pursue scientific excellence to tackle national challenges
                     through a prominent science, technology, and innovation model.
                   </p>
@@ -152,7 +156,7 @@ export default function AboutKfasPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="mt-12 space-y-6"
               >
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
                   Driving our work is the premise that science creates
                   knowledge, technology accelerates progress, and innovation
                   shapes transformative solutions. During 2025–2029, we aim to
@@ -162,7 +166,7 @@ export default function AboutKfasPage() {
                   research, novel uses of technology, and expanded horizons in
                   knowledge transfers and human capacities.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
                   All of our work will be aligned with our three pillars—robust
                   research ecosystem, viable innovation, and human ingenuity—and
                   each pillar will complement and produce synergies with the
@@ -174,7 +178,7 @@ export default function AboutKfasPage() {
                   diffusing knowledge and developing human capabilities and
                   potential.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
                   We will pursue priority areas that address issues of
                   importance to Kuwait, particularly in the areas of
                   environment, energy, health, STEAM education, water and food
@@ -182,7 +186,7 @@ export default function AboutKfasPage() {
                   awareness of emerging trends and initiatives outside these
                   areas that could bring benefit to the nation.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
                   Specialized centers of excellence have been established in
                   Kuwait and continue to be funded as subsidiaries of the
                   foundation, providing the country with additional ways to
@@ -258,7 +262,7 @@ export default function AboutKfasPage() {
                       {item.title}
                     </motion.h3>
                     <div className="mt-3 h-0.5 w-16 bg-[#BBDEFB]" />
-                    <p className="mt-4 text-base text-gray-800 leading-relaxed text-justify">
+                    <p className="mt-4 text-base text-gray-800 leading-relaxed text-justify capitalize">
                       {item.description}
                     </p>
                     <a
@@ -326,7 +330,7 @@ function TextBlock({
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
     >
-      <p className="text-gray-600 leading-[1.9] text-base text-justify">
+      <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
         {children}
       </p>
     </motion.div>
@@ -397,7 +401,7 @@ function TimelineItem({
         <h3 className="font-montserrat text-xl font-bold text-[#EC601B] mb-3">
           {title}
         </h3>
-        <p className="text-gray-600 leading-relaxed text-justify">{content}</p>
+        <p className="text-gray-600 leading-relaxed text-justify capitalize">{content}</p>
       </div>
     </motion.div>
   );
