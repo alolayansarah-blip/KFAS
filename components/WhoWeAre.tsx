@@ -56,7 +56,7 @@ function WhoWeAre() {
               {/* Main large image */}
               <div className="absolute top-0 left-0 w-[70%] h-[65%] rounded-2xl overflow-hidden shadow-xl z-10 group">
                 <img
-                  src="/image/Impactstory1.png"
+                  src="/image/WhoWeAre1.png"
                   alt="KFAS Team"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -65,7 +65,7 @@ function WhoWeAre() {
               {/* Second overlapping image */}
               <div className="absolute bottom-0 right-0 w-[65%] h-[55%] rounded-2xl overflow-hidden shadow-lg z-20 border-4 border-white group">
                 <img
-                  src="/image/banner3.webp"
+                  src="/image/WhoWeAre2.png"
                   alt="Scientific Research"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
