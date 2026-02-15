@@ -59,7 +59,7 @@ export default function AboutKfasPage() {
                 <span className="text-white/40">/</span>
                 <span className="text-white">Who We Are</span>
               </div>
-              <h1 className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
+              <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
                 Who We Are
               </h1>
            
@@ -125,7 +125,7 @@ export default function AboutKfasPage() {
                     <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
                       Our
                     </span>
-                    <h3 className="font-montserrat text-lg font-bold text-gray-900 tracking-tight mt-1">
+                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight mt-1">
                       Vision
                     </h3>
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
@@ -152,7 +152,7 @@ export default function AboutKfasPage() {
                     <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
                       Our
                     </span>
-                    <h3 className="font-montserrat text-lg font-bold text-gray-900 tracking-tight mt-1">
+                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight mt-1">
                       Mission
                     </h3>
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
@@ -269,7 +269,7 @@ export default function AboutKfasPage() {
                   </motion.div>
                   <div className={index % 2 === 1 ? "lg:order-1" : ""}>
                     <motion.h3
-                      className="font-montserrat text-2xl sm:text-3xl font-bold text-black"
+                      className="font-poppins text-2xl sm:text-3xl font-bold text-black"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -414,7 +414,7 @@ function TimelineItem({
         </div>
       </div>
       <div className="flex-1 pt-2">
-        <h3 className="font-montserrat text-xl font-bold text-[#EC601B] mb-3">
+        <h3 className="font-poppins text-xl font-bold text-[#EC601B] mb-3">
           {title}
         </h3>
         <p className="text-gray-600 leading-relaxed text-justify">{content}</p>

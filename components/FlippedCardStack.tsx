@@ -136,7 +136,7 @@ function CardItem({ title, href }: Card & { index: number }) {
           style={{ borderBottomRightRadius: "2px" }}
           aria-hidden
         />
-        <p className="font-montserrat font-semibold text-white leading-snug text-base sm:text-lg tracking-tight pr-14 drop-shadow-sm">
+        <p className="font-poppins font-semibold text-white leading-snug text-base sm:text-lg tracking-tight pr-14 drop-shadow-sm">
           {title}
         </p>
         <div className="mt-4 flex items-center gap-2 text-sm text-white/90 font-medium group-hover:text-white group-hover:gap-3 transition-all duration-300">

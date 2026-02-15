@@ -130,7 +130,7 @@
 //               />
 //             </div>
 //             <div className="mt-4">
-//               <h3 className="text-xl font-semibold text-gray-900 mb-2 font-montserrat">
+//               <h3 className="text-xl font-semibold text-gray-900 mb-2 font-poppins">
 //                 {news[0]?.title}
 //               </h3>
 //               <p className="text-sm text-gray-600 line-clamp-2">
@@ -159,7 +159,7 @@
 //                 }}
 //               >
 //                 <div className="flex-1">
-//                   <h4 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-gray-700 transition-colors font-montserrat">
+//                   <h4 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-gray-700 transition-colors font-poppins">
 //                     {item.title}
 //                   </h4>
 //                   <p className="text-xs text-gray-500 line-clamp-2">

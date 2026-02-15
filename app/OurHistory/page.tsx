@@ -275,7 +275,7 @@ export default function OurHistoryPage() {
               </div>
               {/* Title */}
               <div className="relative mb-6">
-                <h1 className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]">
+                <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]">
                   <span className="block">Our History</span>
                 </h1>
               </div>
@@ -375,13 +375,13 @@ export default function OurHistoryPage() {
                         {/* Content Column */}
                         <div className="lg:w-1/2 lg:px-8">
                           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300 p-6 sm:p-7">
-                            <div className="font-montserrat font-bold text-[#EC601B] text-5xl sm:text-6xl lg:text-7xl leading-none tracking-tight">
+                            <div className="font-poppins font-bold text-[#EC601B] text-5xl sm:text-6xl lg:text-7xl leading-none tracking-tight">
                               {milestone.year}
                             </div>
                             <div className="text-[11px] uppercase tracking-[0.25em] text-gray-400 mt-3">
                               Milestone
                             </div>
-                            <h4 className="font-montserrat text-lg sm:text-xl font-semibold text-gray-900 mt-3">
+                            <h4 className="font-poppins text-lg sm:text-xl font-semibold text-gray-900 mt-3">
                               {milestone.title}
                             </h4>
                             <p className="text-gray-600 leading-relaxed text-base sm:text-lg mt-3">

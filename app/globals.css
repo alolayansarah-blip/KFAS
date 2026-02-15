@@ -9,7 +9,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--font-montserrat), var(--font-poppins), sans-serif;
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {

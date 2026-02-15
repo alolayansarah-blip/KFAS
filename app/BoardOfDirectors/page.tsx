@@ -1,7 +1,7 @@
 "use client";
 
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { User } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,7 +20,7 @@ function ProfileCard({
 }: {
   imageSrc?: string;
   imageAlt: string;
-  name: string;
+  name: React.ReactNode;
   title: string;
   usePlaceholder?: boolean;
   isInView: boolean;
@@ -91,6 +91,15 @@ function ProfileCard({
           ease: "easeOut",
         }}
       >
+        {borderPosition === "right" && isVertical && (
+          <div
+            className={`absolute border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/80 pointer-events-none ${
+              compact ? "bottom-2 right-2 w-10 h-10" : "bottom-3 right-3 w-14 h-14"
+            }`}
+            style={{ borderBottomRightRadius: "2px" }}
+            aria-hidden
+          />
+        )}
         {borderPosition === "right" && !isVertical && (
           <div
             className="absolute bottom-0 right-0 w-20 h-20 border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/90 pointer-events-none"
@@ -98,19 +107,8 @@ function ProfileCard({
             aria-hidden
           />
         )}
-        {borderPosition === "right" && isVertical && (
-          <div
-            className={`absolute border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/80 pointer-events-none ${
-              compact
-                ? "bottom-2 right-2 w-10 h-10"
-                : "bottom-3 right-3 w-14 h-14"
-            }`}
-            style={{ borderBottomRightRadius: "2px" }}
-            aria-hidden
-          />
-        )}
         <p
-          className={`font-montserrat font-bold text-gray-900 leading-tight ${
+          className={`font-poppins font-bold text-gray-900 leading-tight ${
             isVertical
               ? compact
                 ? "text-[13px] sm:text-[14px] tracking-wide"
@@ -137,34 +135,12 @@ function ProfileCard({
 }
 
 export default function BoardOfDirectorsPage() {
-  const profileRef = useRef(null);
-  const deputiesRef = useRef(null);
-  const officersRef = useRef(null);
-  const directorsRef = useRef(null);
-  const directors2Ref = useRef(null);
-  const directors3Ref = useRef(null);
-  const isInView = useInView(profileRef, { once: true, margin: "-80px" });
-  const isDeputiesInView = useInView(deputiesRef, {
-    once: true,
-    margin: "-80px",
-  });
-  const isOfficersInView = useInView(officersRef, {
-    once: true,
-    margin: "-80px",
-  });
-  const isDirectorsInView = useInView(directorsRef, {
-    once: true,
-    margin: "-80px",
-  });
-  const isDirectors2InView = useInView(directors2Ref, {
-    once: true,
-    margin: "-80px",
-  });
-  const isDirectors3InView = useInView(directors3Ref, {
-    once: true,
-    margin: "-80px",
-  });
-
+  const chairmanRef = useRef(null);
+  const membersRef = useRef(null);
+  const members2Ref = useRef(null);
+  const isChairmanInView = useInView(chairmanRef, { once: true, margin: "-80px" });
+  const isMembersInView = useInView(membersRef, { once: true, margin: "-80px" });
+  const isMembers2InView = useInView(members2Ref, { once: true, margin: "-80px" });
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
@@ -196,7 +172,7 @@ export default function BoardOfDirectorsPage() {
                 <span className="text-white/40">/</span>
                 <span className="text-white">Board of Directors</span>
               </div>
-              <h1 className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
+              <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
                 Board of Directors
               </h1>
             </motion.div>
@@ -204,153 +180,70 @@ export default function BoardOfDirectorsPage() {
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </motion.section>
-        <section ref={profileRef} className="bg-white py-16">
+
+        <section ref={chairmanRef} className="bg-white py-16">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="max-w-2xl mx-auto">
               <ProfileCard
-                imageSrc="/image/DrAmeenah.png"
-                imageAlt="Ameenah Rajab Belal Farhan"
-                name="Dr. Ameenah Rajab Farhan"
-                title="Director General"
-                isInView={isInView}
+                imageSrc="/image/SHIEKH%20MESHAAL%20JABER%20AL%20SABAH-%20BM.png"
+                imageAlt="H.H. The Amir Sheikh Meshal Al-Ahmad Al-Jaber Al-Sabah"
+                name={
+                  <>
+                    H.H. The Amir
+                    <br />
+                    Sheikh Meshal Al-Ahmad Al-Jaber Al-Sabah
+                  </>
+                }
+                title="Chairman"
+                isInView={isChairmanInView}
               />
             </div>
           </div>
         </section>
-        <section ref={deputiesRef} className="bg-white pb-16">
+
+        <section ref={membersRef} className="bg-white pb-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 justify-items-center">
               <ProfileCard
-                imageSrc="/image/DrSalehAlqgeely.png"
-                imageAlt="Saleh Abdulmohsen Alaqely"
-                name="Dr. Saleh Abdulmohsen Alaqely"
-                title="Deputy Director General - Support Services"
-                usePlaceholder={false}
-                isInView={isDeputiesInView}
-                animationDelay={0}
-                borderPosition="right"
-              />
-              <ProfileCard
-                imageSrc="/image/DrFahadAlfadhli.png"
-                imageAlt="Fahad Mohammad Al-Fadhli"
-                name="Dr. Fahad Mohammad Al-Fadhli"
-                title="Deputy Director General - Scientific Programs"
-                usePlaceholder={false}
-                isInView={isDeputiesInView}
-                animationDelay={0.1}
-                borderPosition="right"
-              />
-            </div>
-          </div>
-        </section>
-        <section ref={officersRef} className="bg-white pb-16">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
-              <ProfileCard
-                imageSrc="/image/AbdullahBuQmashah.png"
-                imageAlt="Abdullah Salem Abu Qumasha"
-                name="Abdullah Salem Abu Qumasha"
-                title="Chief Strategy Officer"
-                usePlaceholder={false}
-                isInView={isOfficersInView}
-                animationDelay={0}
-                borderPosition="right"
-                layout="vertical"
-              />
-              <ProfileCard
-                imageSrc="/image/DrBassam%20Alfeeli.png"
-                imageAlt="Dr.Bassam Abdulkareem Alfaili"
-                name="Dr.Bassam Abdulkareem Alfaili"
-                title="Chief Enterprise Development Officer"
-                usePlaceholder={false}
-                isInView={isOfficersInView}
-                animationDelay={0.1}
-                borderPosition="right"
-                layout="vertical"
-              />
-              <ProfileCard
-                imageSrc="/image/AliBuMjdad.png"
-                imageAlt="Ali Yahya Bo Mejdad"
-                name="Ali Yahya Bo Mejdad"
-                title="Chief Research & Technology Officer"
-                usePlaceholder={false}
-                isInView={isOfficersInView}
-                animationDelay={0.2}
-                borderPosition="right"
-                layout="vertical"
-              />
-            </div>
-          </div>
-        </section>
-        <section ref={directorsRef} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            {/* <motion.h2
-              className="font-montserrat text-2xl sm:text-3xl font-semibold text-gray-800 text-center mb-12 tracking-tight"
-              initial={{ opacity: 0, y: 10 }}
-              animate={
-                isDirectorsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
-              }
-              transition={{ duration: 0.5 }}
-            >
-              Senior Directors & Board Secretary
-            </motion.h2> */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
-              <ProfileCard
-                imageSrc="/image/EmanHabib.png"
-                imageAlt="Eman Habeeb Hussain"
-                name="Eman Habeeb Hussain"
-                title="Board Secretary"
-                usePlaceholder={false}
-                isInView={isDirectorsInView}
+                imageSrc="/image/ShaikhAhmadAlsabah.png"
+                imageAlt="H.H the Prime Minister of Kuwait Sheikh Ahmad Abdullah Al-Ahmad Al-Sabah"
+                name="H.H the Prime Minister of Kuwait Sheikh Ahmad Abdullah Al-Ahmad Al-Sabah"
+                title="Board Member"
+                isInView={isMembersInView}
                 animationDelay={0}
                 borderPosition="right"
                 layout="vertical"
                 compact
               />
               <ProfileCard
-                imageSrc="/image/YousefAlmazeedi.png"
-                imageAlt="Yousef Mousa AlMazeedi"
-                name="Yousef Mousa AlMazeedi"
-                title="Senior Director - Communications"
-                usePlaceholder={false}
-                isInView={isDirectorsInView}
+                imageSrc="/image/AbdullahAlghunaim.png"
+                imageAlt="H.E. Dr. Abdullah Yousef Al-Ghunaim"
+                name="H.E. Dr. Abdullah Yousef Al-Ghunaim"
+                title="Board Member"
+                isInView={isMembersInView}
                 animationDelay={0.05}
                 borderPosition="right"
                 layout="vertical"
                 compact
               />
               <ProfileCard
-                imageSrc="/image/MubarakAlQuood.png"
-                imageAlt="Mubarak Abdurahman Al-Quoud"
-                name="Mubarak Abdurahman Al-Quoud"
-                title="Senior Director - Accounts"
-                usePlaceholder={false}
-                isInView={isDirectorsInView}
+                imageSrc="/image/DrMeshalJaberAlAhmed.png"
+                imageAlt="H.E. Sheikh Dr. Meshaal Jaber Al-Ahmed Al-Sabah"
+                name="H.E. Sheikh Dr. Meshaal Jaber Al-Ahmed Al-Sabah"
+                title="Board Member"
+                isInView={isMembersInView}
                 animationDelay={0.1}
                 borderPosition="right"
                 layout="vertical"
                 compact
               />
               <ProfileCard
-                imageSrc="/image/HasanAkbar.png"
-                imageAlt="Hasan Asad Akbar"
-                name="Hasan Asad Akbar"
-                title="Senior Director - Information Technology"
-                usePlaceholder={false}
-                isInView={isDirectorsInView}
+                imageSrc="/image/DrIbrahimAlRashdan.png"
+                imageAlt="Dr. Ibrahim Rashid Al Rashdan"
+                name="Dr. Ibrahim Rashid Al Rashdan"
+                title="Board Member"
+                isInView={isMembersInView}
                 animationDelay={0.15}
-                borderPosition="right"
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/ManarAlmousa.png"
-                imageAlt="Manar Abdulaziz AlMoussa"
-                name="Manar Abdulaziz AlMoussa"
-                title="Senior Director - Prizes"
-                usePlaceholder={false}
-                isInView={isDirectorsInView}
-                animationDelay={0.2}
                 borderPosition="right"
                 layout="vertical"
                 compact
@@ -358,73 +251,28 @@ export default function BoardOfDirectorsPage() {
             </div>
           </div>
         </section>
-        <section ref={directors2Ref} className="bg-white pb-20">
+
+        <section ref={members2Ref} className="bg-white pb-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            {/* <motion.h2
-              className="font-montserrat text-2xl sm:text-3xl font-semibold text-gray-800 text-center mb-12 tracking-tight"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isDirectors2InView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-              transition={{ duration: 0.5 }}
-            >
-              Directors
-            </motion.h2> */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 justify-items-center">
               <ProfileCard
-                imageSrc="/image/DinaAlnaqeeb.png"
-                imageAlt="Dina Nabil Al-Nakib"
-                name="Dina Nabil Al-Nakib"
-                title="Senior Director - Research & Technology Deployment"
-                usePlaceholder={false}
-                isInView={isDirectors2InView}
+                imageSrc="/image/MRAhmedAldhakheel.png"
+                imageAlt="Mr. Ahmad Aldekheel"
+                name="Mr. Ahmad Aldekheel"
+                title="Board Member"
+                isInView={isMembers2InView}
                 animationDelay={0}
                 borderPosition="right"
                 layout="vertical"
                 compact
               />
               <ProfileCard
-                imageSrc="/image/KhalodounHarmi.png"
-                imageAlt="Khaldoun Kamel Harmi"
-                name="Khaldoun Kamel Harmi"
-                title="Senior Director - Planning & Development"
-                usePlaceholder={false}
-                isInView={isDirectors2InView}
-                animationDelay={0.05}
-                borderPosition="right"
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/HananAlebrahim.png"
-                imageAlt="Hanan Ibrahim Alibrahim"
-                name="Hanan Ibrahim Alibrahim"
-                title="Senior Director - Monitoring & Evaluation"
-                usePlaceholder={false}
-                isInView={isDirectors2InView}
+                imageSrc="/image/DrKhaledAlfadhil.png"
+                imageAlt="H. E. Dr. Khaled Ali Al-Fadhel"
+                name="H. E. Dr. Khaled Ali Al-Fadhel"
+                title="Board Member"
+                isInView={isMembers2InView}
                 animationDelay={0.1}
-                borderPosition="right"
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/AbdulAziziAbduljalil.png"
-                imageAlt="Abdulaziz Sulaiman Alabduljalil"
-                name="Abdulaziz Sulaiman Alabduljalil"
-                title="Director - Engineering & Administration"
-                usePlaceholder={false}
-                isInView={isDirectors2InView}
-                animationDelay={0.15}
-                borderPosition="right"
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/YousefAlabdullah.png"
-                imageAlt="Yousef Abdulaziz Alabdullah"
-                name="Yousef Abdulaziz Alabdullah"
-                title="Director - Enterprise Learning & Development"
-                usePlaceholder={false}
-                isInView={isDirectors2InView}
-                animationDelay={0.2}
                 borderPosition="right"
                 layout="vertical"
                 compact
@@ -432,53 +280,7 @@ export default function BoardOfDirectorsPage() {
             </div>
           </div>
         </section>
-        <section ref={directors3Ref} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            {/* <motion.h2
-              className="font-montserrat text-2xl sm:text-3xl font-semibold text-gray-800 text-center mb-12 tracking-tight"
-              initial={{ opacity: 0, y: 10 }}
-              animate={isDirectors3InView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-              transition={{ duration: 0.5 }}
-            >
-              Directors
-            </motion.h2> */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
-              <ProfileCard
-                imageSrc="/image/NouriaAlBader.png"
-                imageAlt="Nouria Ali AlBader"
-                name="Nouria Ali AlBader"
-                title="Director - Investment & Treasury"
-                usePlaceholder={false}
-                isInView={isDirectors3InView}
-                animationDelay={0}
-                borderPosition="right"
-                layout="vertical"
-              />
-              <ProfileCard
-                imageSrc="/image/AishaAlDuaij.png"
-                imageAlt="Aisha Hani AlDuaij"
-                name="Aisha Hani AlDuaij"
-                title="Director - Human Resources"
-                usePlaceholder={false}
-                isInView={isDirectors3InView}
-                animationDelay={0.1}
-                borderPosition="right"
-                layout="vertical"
-              />
-              <ProfileCard
-                imageSrc="/image/AbrarAlmosa.png"
-                imageAlt="Abrar Sulaiman Almoosa"
-                name="Abrar Sulaiman Almoosa"
-                title="Director - Research Capacity Building"
-                usePlaceholder={false}
-                isInView={isDirectors3InView}
-                animationDelay={0.2}
-                borderPosition="right"
-                layout="vertical"
-              />
-            </div>
-          </div>
-        </section>
+
       </main>
       <Footer />
     </>

@@ -130,7 +130,7 @@
 //         )}
 //         {/* EN title – word by word */}
 //         {titleEn && (
-//           <h1 className="font-montserrat text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-[1.0] drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]">
+//           <h1 className="font-poppins text-5xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-[1.0] drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]">
 //             {splitLines(titleEn).map((line, lineIndex) => (
 //               <span key={`line-${lineIndex}`} className="block">
 //                 {splitWords(line.trim()).map((word, i) => (
@@ -298,7 +298,7 @@ export default function Hero({
           {/* English Title with Fade-up */}
           {titleEn && (
             <motion.h1
-              className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6"
+              className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6"
               style={{
                 textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6)'
               }}

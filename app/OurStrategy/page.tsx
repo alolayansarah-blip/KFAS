@@ -40,7 +40,7 @@ export default function OurStrategyPage() {
                 <span className="text-white/40">/</span>
                 <span className="text-white">Our Strategy</span>
               </div>
-              <h1 className="font-montserrat text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
+              <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
                 Our Strategy
               </h1>
             </motion.div>
