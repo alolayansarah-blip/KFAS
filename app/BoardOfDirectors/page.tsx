@@ -289,9 +289,11 @@ export default function BoardOfDirectorsPage() {
   const [isKhaledModalOpen, setIsKhaledModalOpen] = useState(false);
   const [isIbrahimModalOpen, setIsIbrahimModalOpen] = useState(false);
   const chairmanRef = useRef(null);
+  const directorGeneralRef = useRef(null);
   const membersRef = useRef(null);
   const members2Ref = useRef(null);
   const isChairmanInView = useInView(chairmanRef, { once: true, margin: "-80px" });
+  const isDirectorGeneralInView = useInView(directorGeneralRef, { once: true, margin: "-80px" });
   const isMembersInView = useInView(membersRef, { once: true, margin: "-80px" });
   const isMembers2InView = useInView(members2Ref, { once: true, margin: "-80px" });
 
@@ -457,6 +459,23 @@ export default function BoardOfDirectorsPage() {
                 layout="vertical"
                 compact
                 onClick={() => setIsKhaledModalOpen(true)}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section ref={directorGeneralRef} className="bg-white pb-20">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="grid grid-cols-1 justify-items-center">
+              <ProfileCard
+                imageSrc="/image/DrAmeenah.png"
+                imageAlt="Dr. Ameenah Rajab Farhan"
+                name="Dr. Ameenah Rajab Farhan"
+                title="Director General"
+                isInView={isDirectorGeneralInView}
+                borderPosition="right"
+                layout="vertical"
+                compact
               />
             </div>
           </div>
