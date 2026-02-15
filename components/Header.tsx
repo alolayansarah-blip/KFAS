@@ -26,20 +26,35 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     href: "/Research",
     children: [
       { label: "Grants", href: "/research/grants" },
-      { label: "Activities and Events", href: "/research/Activities-and-Events" },
+      {
+        label: "Activities and Events",
+        href: "/research/Activities-and-Events",
+      },
       { label: "Projects", href: "/research/projects" },
       { label: "Scientific Missions", href: "/research/Scientific-Missions" },
-      { label: "Scientific Conference Sponsorship", href: "/research/scientific-conference-sponsorship" },
+      {
+        label: "Scientific Conference Sponsorship",
+        href: "/research/scientific-conference-sponsorship",
+      },
     ],
   },
   {
     label: "Tech & Innovation",
     href: "/technology-and-innovation",
     children: [
-      { label: "Tech Deployment", href: "/technology-and-innovation/technology-deployment" },
-      { label: "R&D in Private Sector", href: "/technology-and-innovation/RD-in-Private-Sector" },
-      { label: "R&D in Public Sector", href: "/technology-and-innovation/RD-in-Public-Sector" },
-      { label: "Outcomes", href: "/technology-and-innovation/Outcomes2" },
+      {
+        label: "Tech Deployment",
+        href: "/technology-and-innovation/technology-deployment",
+      },
+      {
+        label: "R&D in Private Sector",
+        href: "/technology-and-innovation/RD-in-Private-Sector",
+      },
+      {
+        label: "R&D in Public Sector",
+        href: "/technology-and-innovation/RD-in-Public-Sector",
+      },
+      // { label: "Outcomes", href: "/technology-and-innovation/Outcomes2" },
     ],
   },
   {
@@ -47,9 +62,15 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     href: "/Learning-and-Development",
     children: [
       { label: "Researchers", href: "/Learning-and-Development/Researchers" },
-      { label: "Professionals", href: "/Learning-and-Development/Professionals" },
+      {
+        label: "Professionals",
+        href: "/Learning-and-Development/Professionals",
+      },
       { label: "Youth", href: "/Learning-and-Development/Youth" },
-      { label: "Special Needs", href: "/Learning-and-Development/Special-needs" },
+      {
+        label: "Special Needs",
+        href: "/Learning-and-Development/Special-needs",
+      },
       { label: "Outcomes", href: "/Learning-and-Development/Outcomes3" },
     ],
   },
@@ -57,8 +78,14 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     label: "Science & Society",
     href: "/Science-and-Society",
     children: [
-      { label: "Activity and Funding", href: "/Science-and-Society/Activity-and-Funding" },
-      { label: "Activities and Events", href: "/Science-and-Society/Activities-and-Events" },
+      {
+        label: "Activity and Funding",
+        href: "/Science-and-Society/Activity-and-Funding",
+      },
+      {
+        label: "Activities and Events",
+        href: "/Science-and-Society/Activities-and-Events",
+      },
       { label: "Publications", href: "/Science-and-Society/Publications" },
       { label: "Outcomes", href: "/Science-and-Society/Outcomes4" },
     ],
@@ -88,11 +115,7 @@ interface HeaderProps {
 }
 
 // Subcomponents
-const AnniversaryLogo = ({
-  isScrolled,
-}: {
-  isScrolled: boolean;
-}) => {
+const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => {
   const logoProps = {
     className: "absolute inset-0 w-full h-full object-contain",
     style: { filter: "drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2))" },
@@ -120,7 +143,13 @@ const AnniversaryLogo = ({
   );
 };
 
-const DropdownIcon = ({ isOpen, className = "" }: { isOpen?: boolean; className?: string }) => (
+const DropdownIcon = ({
+  isOpen,
+  className = "",
+}: {
+  isOpen?: boolean;
+  className?: string;
+}) => (
   <svg
     className={`transition-all duration-300 ${className} ${isOpen ? "rotate-180" : ""}`}
     fill="none"
@@ -148,17 +177,24 @@ const DesktopNavItem = ({
   onMouseLeave: () => void;
 }) => {
   const isOpen = openDropdown === item.href;
-  const baseStyles = "hover:bg-[#EC601B] font-normal transition-all duration-300 px-2 lg:px-2.5 py-1.5 whitespace-nowrap text-xs lg:text-sm";
+  const baseStyles =
+    "hover:bg-[#EC601B] font-normal transition-all duration-300 px-2 lg:px-2.5 py-1.5 whitespace-nowrap text-xs lg:text-sm";
   const colorStyles = isOpen
     ? "bg-[#EC601B] text-white"
     : isScrolled
-    ? "text-black hover:text-white"
-    : "text-white/90 hover:text-white";
+      ? "text-black hover:text-white"
+      : "text-white/90 hover:text-white";
 
   return (
-    <div className="relative" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <div
+      className="relative"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {item.children ? (
-        <span className={`${baseStyles} ${colorStyles} flex items-center cursor-pointer`}>
+        <span
+          className={`${baseStyles} ${colorStyles} flex items-center cursor-pointer`}
+        >
           {item.label}
           <DropdownIcon className="ml-0.5 w-3 h-3" />
         </span>
@@ -167,7 +203,7 @@ const DesktopNavItem = ({
           {item.label}
         </Link>
       )}
-      
+
       {item.children && isOpen && (
         // ✅ FIXED: Use static class name for min-w
         <div className="absolute top-full left-0 mt-0 bg-[#EC601B] shadow-lg py-4 min-w-[280px] z-50">
@@ -176,7 +212,9 @@ const DesktopNavItem = ({
               key={child.href}
               href={child.href}
               className={`block px-6 py-3 text-white hover:bg-white/20 transition-colors whitespace-nowrap ${
-                index < item.children!.length - 1 ? "border-b border-white/50" : ""
+                index < item.children!.length - 1
+                  ? "border-b border-white/50"
+                  : ""
               }`}
             >
               {child.label}
@@ -205,7 +243,9 @@ const LanguageSwitcher = ({
     <button
       onClick={onToggle}
       className={`flex items-center space-x-1 transition-colors px-2 py-1.5 ${
-        isScrolled ? "text-black hover:text-gray-700" : "text-white/90 hover:text-white"
+        isScrolled
+          ? "text-black hover:text-gray-700"
+          : "text-white/90 hover:text-white"
       }`}
       aria-label="Change language"
       aria-expanded={isOpen}
@@ -213,7 +253,7 @@ const LanguageSwitcher = ({
       <span className="uppercase text-xs lg:text-sm">{currentLanguage}</span>
       <DropdownIcon isOpen={isOpen} className="w-3 h-3" />
     </button>
-    
+
     {isOpen && (
       <div className="absolute right-0 top-full mt-0 bg-[#EC601B] shadow-lg py-4 min-w-[200px] z-50">
         {LANGUAGES.map((lang, index) => (
@@ -243,7 +283,9 @@ function Header({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(
+    null,
+  );
   const [currentLanguage, setCurrentLanguage] = useState("en");
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
@@ -252,10 +294,10 @@ function Header({
   // Effects
   useEffect(() => {
     let ticking = false;
-    
+
     const handleScroll = () => {
       if (ticking) return;
-      
+
       ticking = true;
       window.requestAnimationFrame(() => {
         setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -318,7 +360,9 @@ function Header({
             ) : (
               <span
                 className={`font-normal transition-all duration-300 ${
-                  shouldShowWhiteBg ? "text-xl text-black" : "text-2xl text-white"
+                  shouldShowWhiteBg
+                    ? "text-xl text-black"
+                    : "text-2xl text-white"
                 }`}
               >
                 {logoText}
@@ -336,7 +380,9 @@ function Header({
                   item={item}
                   isScrolled={shouldShowWhiteBg}
                   openDropdown={openDropdown}
-                  onMouseEnter={() => item.children && setOpenDropdown(item.href)}
+                  onMouseEnter={() =>
+                    item.children && setOpenDropdown(item.href)
+                  }
                   onMouseLeave={() => setOpenDropdown(null)}
                 />
               ))}
@@ -359,10 +405,21 @@ function Header({
           className="flex items-center justify-between px-5 py-4"
           style={{ paddingTop: "env(safe-area-inset-top)" }}
         >
-          <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-90">
-            <img src="/image/logo_c.png" alt={logoText} className="h-16 w-auto" />
+          <Link
+            href="/"
+            className="flex items-center gap-2 transition-opacity hover:opacity-90"
+          >
+            <img
+              src="/image/logo_c.png"
+              alt={logoText}
+              className="h-16 w-auto"
+            />
             <span className="h-6 w-px bg-gray-300" />
-            <img src="/image/50_gold.png" alt="50 Years" className="h-10 w-auto" />
+            <img
+              src="/image/50_gold.png"
+              alt="50 Years"
+              className="h-10 w-auto"
+            />
           </Link>
 
           <button
@@ -408,7 +465,9 @@ function Header({
                           className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
                           onClick={() =>
                             setOpenMobileDropdown(
-                              openMobileDropdown === item.href ? null : item.href
+                              openMobileDropdown === item.href
+                                ? null
+                                : item.href,
                             )
                           }
                           aria-expanded={openMobileDropdown === item.href}
@@ -420,11 +479,13 @@ function Header({
                           <DropdownIcon
                             isOpen={openMobileDropdown === item.href}
                             className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
-                              openMobileDropdown === item.href ? "text-[#EC601B]" : ""
+                              openMobileDropdown === item.href
+                                ? "text-[#EC601B]"
+                                : ""
                             }`}
                           />
                         </button>
-                        
+
                         {openMobileDropdown === item.href && (
                           <motion.div
                             initial={{ opacity: 0, height: 0 }}
@@ -473,7 +534,9 @@ function Header({
                   <span className="flex items-center gap-2">
                     <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
                     <span className="flex items-center space-x-2">
-                      <span className="uppercase text-sm">{currentLanguage}</span>
+                      <span className="uppercase text-sm">
+                        {currentLanguage}
+                      </span>
                       <span>Language</span>
                     </span>
                   </span>
@@ -484,7 +547,7 @@ function Header({
                     }`}
                   />
                 </button>
-                
+
                 {isLangDropdownOpen && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
@@ -498,7 +561,9 @@ function Header({
                         key={lang.code}
                         onClick={() => handleLanguageSelect(lang.code)}
                         className={`w-full text-left py-3 px-4 font-normal text-white hover:bg-white/20 rounded-md transition-all flex items-center space-x-2 ${
-                          index < LANGUAGES.length - 1 ? "border-b border-white/50" : ""
+                          index < LANGUAGES.length - 1
+                            ? "border-b border-white/50"
+                            : ""
                         }`}
                       >
                         <span className="text-lg">{lang.flag}</span>
