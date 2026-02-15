@@ -34,7 +34,7 @@ export default function OurHistoryPage() {
       {
         threshold: 0.1,
         rootMargin: "0px",
-      }
+      },
     );
 
     if (sectionRef.current) {
@@ -55,7 +55,7 @@ export default function OurHistoryPage() {
   const historyMilestones = [
     {
       year: "1976",
-      title: "Foundation ",
+      title: "Establishment ",
       description:
         "KFAS was established by Amiri Decree as a private, non-profit organization to build a national culture of science, technology, and innovation and to support long-term sustainable development.",
       image: "/image/ShaikhJaber.jpeg",
@@ -71,7 +71,7 @@ export default function OurHistoryPage() {
     },
     {
       year: "1984 ",
-      title: "Science Publishing and Public Engagement (ASPD)",
+      title: "Advancement of Sciences Publishing and Distribution Company",
       description:
         "KFAS established the Advancement of Sciences Publishing & Distribution Company (ASPD) to popularize science and strengthen science communication for public audiences, youth, and schools.",
       image: "/image/1984.png",
@@ -89,7 +89,7 @@ export default function OurHistoryPage() {
       year: "1987",
       title: "KFAS Headquarters",
       description:
-        "KFAS inaugurated its headquarters as an anchor for national science and innovation activity and convening.",
+        "KFAS inaugurated its headquarters as an anchor for national science and innovation activity.",
       image: "/image/1987.png",
       imageAlt: "KFAS Headquarters",
     },
@@ -105,7 +105,7 @@ export default function OurHistoryPage() {
       year: "2000",
       title: "The Scientific Center (TSCK)",
       description:
-        "KFAS established The Scientific Center as a major national platform for STEM learning and public engagement through interactive exhibits and science experiences.",
+        "KFAS established The Scientific Center as a major national platform for STEM learning and public engagement through interactive exhibits and scientific experiences.",
       image: "/image/2000.png",
       imageAlt: "The Scientific Center",
     },
@@ -320,9 +320,6 @@ export default function OurHistoryPage() {
                       Filter timeline entries by year.
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500">
-                    {filteredMilestones.length} results
-                  </div>
                 </div>
 
                 {/* Dropdown */}
@@ -333,7 +330,7 @@ export default function OurHistoryPage() {
                       setSelectedYear(
                         e.target.value === "all"
                           ? "all"
-                          : Number(e.target.value)
+                          : Number(e.target.value),
                       )
                     }
                     className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm sm:max-w-xs"
