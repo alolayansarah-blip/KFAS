@@ -435,7 +435,8 @@ export default function BoardOfDirectorsPage() {
 
         <section ref={members2Ref} className="bg-white pb-20">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 justify-items-center">
+              <div className="hidden lg:block" aria-hidden />
               <ProfileCard
                 imageSrc="/image/MRAhmedAldhakheel.png"
                 imageAlt="Mr. Ahmad Aldekheel"
@@ -460,6 +461,7 @@ export default function BoardOfDirectorsPage() {
                 compact
                 onClick={() => setIsKhaledModalOpen(true)}
               />
+              <div className="hidden lg:block" aria-hidden />
             </div>
           </div>
         </section>
