@@ -244,9 +244,12 @@ export default function Hero({
   };
 
   return (
-    <section
+    <motion.section
       ref={sectionRef}
       className={`relative min-h-screen flex items-center justify-start pt-24 overflow-hidden ${className}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* Video Background with Improved Overlay */}
       <div className="absolute inset-0 z-0">
@@ -401,6 +404,6 @@ export default function Hero({
           <motion.div className="w-1.5 h-1.5 bg-white/70 rounded-full" />
         </motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }

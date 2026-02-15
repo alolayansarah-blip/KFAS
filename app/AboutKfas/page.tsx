@@ -54,7 +54,7 @@ export default function AboutKfasPage() {
               transition={{ duration: 0.8 }}
               className="text-left"
             >
-              <div className="inline-flex items-center gap-2 text-xs sm:text-sm capitalize tracking-[0.3em] text-white/70 mb-4">
+              <div className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
                 <span className="text-white/40">/</span>
                 <span className="text-white">Who We Are</span>
@@ -172,7 +172,7 @@ export default function AboutKfasPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="mt-12 space-y-6"
               >
-                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   Driving our work is the premise that science creates
                   knowledge, technology accelerates progress, and innovation
                   shapes transformative solutions. During 2025–2029, we aim to
@@ -182,7 +182,7 @@ export default function AboutKfasPage() {
                   research, novel uses of technology, and expanded horizons in
                   knowledge transfers and human capacities.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   All of our work will be aligned with our three pillars—robust
                   research ecosystem, viable innovation, and human ingenuity—and
                   each pillar will complement and produce synergies with the
@@ -194,7 +194,7 @@ export default function AboutKfasPage() {
                   diffusing knowledge and developing human capabilities and
                   potential.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   We will pursue priority areas that address issues of
                   importance to Kuwait, particularly in the areas of
                   environment, energy, health, STEAM education, water and food
@@ -202,7 +202,7 @@ export default function AboutKfasPage() {
                   awareness of emerging trends and initiatives outside these
                   areas that could bring benefit to the nation.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
+                <p className="text-gray-600 leading-[1.9] text-base text-justify">
                   Specialized centers of excellence have been established in
                   Kuwait and continue to be funded as subsidiaries of the
                   foundation, providing the country with additional ways to
@@ -278,7 +278,7 @@ export default function AboutKfasPage() {
                       {item.title}
                     </motion.h3>
                     <div className="mt-3 h-0.5 w-16 bg-[#BBDEFB]" />
-                    <p className="mt-4 text-base text-gray-800 leading-relaxed text-justify capitalize">
+                    <p className="mt-4 text-base text-gray-800 leading-relaxed text-justify">
                       {item.description}
                     </p>
                     <a
@@ -346,7 +346,7 @@ function TextBlock({
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
     >
-      <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
+      <p className="text-gray-600 leading-[1.9] text-base text-justify">
         {children}
       </p>
     </motion.div>
@@ -417,7 +417,7 @@ function TimelineItem({
         <h3 className="font-montserrat text-xl font-bold text-[#EC601B] mb-3">
           {title}
         </h3>
-        <p className="text-gray-600 leading-relaxed text-justify capitalize">{content}</p>
+        <p className="text-gray-600 leading-relaxed text-justify">{content}</p>
       </div>
     </motion.div>
   );

@@ -34,10 +34,14 @@ function WhoWeAre() {
   }, []);
 
   return (
-    <section
+    <motion.section
       ref={sectionRef}
       id="who-we-are"
       className="relative bg-gray-50 overflow-hidden py-20 lg:py-32"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.05, margin: "-80px" }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
@@ -219,7 +223,7 @@ function WhoWeAre() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

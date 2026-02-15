@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import SplitText from "./SplitText";
 
 const tiles = [
@@ -40,6 +41,8 @@ const tiles = [
 
 export default function LogoShowcase() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.1, margin: "-60px" });
   const activeIndex = hoveredIndex ?? 0;
   const activeImage = tiles[activeIndex].image;
 
@@ -72,7 +75,14 @@ export default function LogoShowcase() {
   );
 
   return (
-    <section className="relative w-full overflow-hidden bg-white">
+    <motion.section
+      ref={sectionRef}
+      className="relative w-full overflow-hidden bg-white"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.05, margin: "-80px" }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
       {/* Hero */}
       <div className="relative min-h-[480px] sm:min-h-[520px] md:min-h-[620px]">
         <div className="absolute inset-0">
@@ -125,7 +135,7 @@ export default function LogoShowcase() {
                 </h2>
                 <div className="mt-5 grid w-full grid-cols-2 items-center justify-items-center gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:flex lg:flex-nowrap lg:justify-center lg:gap-10">
                   {tiles.map((tile, index) => (
-                    <a
+                    <motion.a
                       key={tile.title}
                       href={tile.href}
                       target="_blank"
@@ -135,19 +145,27 @@ export default function LogoShowcase() {
                       onMouseLeave={() => setHoveredIndex(null)}
                       onClick={() => setHoveredIndex(index)}
                       aria-label={tile.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                      transition={{ duration: 0.5, delay: 0.2 + index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      whileHover={{ scale: 1.05, y: -4 }}
                     >
                       <img
                         src={tile.logo}
                         alt={`${tile.title} logo`}
-                        className="h-24 sm:h-28 md:h-32 lg:h-36 w-auto object-contain brightness-0 invert opacity-0 animate-[fadeUp_0.8s_ease-out_forwards]"
-                        style={{ animationDelay: `${index * 120}ms` }}
+                        className="h-24 sm:h-28 md:h-32 lg:h-36 w-auto object-contain brightness-0 invert"
                       />
-                    </a>
+                    </motion.a>
                   ))}
                 </div>
               </div>
 
-              <div className="hidden lg:flex lg:w-[380px] xl:w-[420px]">
+              <motion.div
+                className="hidden lg:flex lg:w-[380px] xl:w-[420px]"
+                initial={{ opacity: 0, x: 30 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
                 <div className="w-full rounded-2xl bg-white/10 p-4 backdrop-blur-md ring-1 ring-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
                     <img
@@ -175,18 +193,12 @@ export default function LogoShowcase() {
                     </a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </div>
 
-      <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
-    </section>
+    </motion.section>
   );
 }

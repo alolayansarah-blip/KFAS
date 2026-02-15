@@ -91,9 +91,13 @@ export default function CounterSection() {
   };
 
   return (
-    <section
+    <motion.section
       ref={sectionRef}
       className="py-20 lg:py-32 relative overflow-hidden"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.1, margin: "-60px" }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* Background image */}
       <div className="absolute inset-0 bg-[url('/image/benduluim.png')] bg-cover bg-center bg-fixed" />
@@ -105,7 +109,7 @@ export default function CounterSection() {
           <h2 className="font-poppins text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight text-left">
             <span className="relative inline-block">
               <SplitText
-                text="50 Years"
+                text="50 Year"
                 className="font-poppins font-bold text-3xl lg:text-4xl xl:text-5xl relative z-10"
                 delay={40}
                 duration={1}
@@ -177,6 +181,6 @@ export default function CounterSection() {
           </div>
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

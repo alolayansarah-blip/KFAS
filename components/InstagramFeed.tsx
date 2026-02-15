@@ -147,10 +147,14 @@ export default function InstagramFeed() {
     });
 
   return (
-    <section
+    <motion.section
       ref={sectionRef}
       id="instagram-feed"
       className="relative py-20 lg:py-32 bg-gray-50 overflow-hidden"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.05, margin: "-80px" }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -285,6 +289,6 @@ export default function InstagramFeed() {
           </a>
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
