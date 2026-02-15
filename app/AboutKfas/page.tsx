@@ -9,7 +9,10 @@ import Footer from "@/components/Footer";
 export default function AboutKfasPage() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const visionMissionRef = useRef<HTMLDivElement>(null);
-  const isVisionMissionInView = useInView(visionMissionRef, { once: true, margin: "-60px" });
+  const isVisionMissionInView = useInView(visionMissionRef, {
+    once: true,
+    margin: "-60px",
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +40,7 @@ export default function AboutKfasPage() {
         >
           <div className="absolute inset-0">
             <Image
-              src="/image/AboutKFASBanner2.jpg"
+              src="/image/AboutUs.png"
               alt="Who We Are"
               fill
               priority
@@ -62,7 +65,6 @@ export default function AboutKfasPage() {
               <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
                 Who We Are
               </h1>
-           
             </motion.div>
           </div>
 
@@ -108,13 +110,24 @@ export default function AboutKfasPage() {
               </TextBlock>
 
               {/* Vision and Mission Section */}
-              <div ref={visionMissionRef} className="mt-20 grid gap-8 lg:grid-cols-2">
+              <div
+                ref={visionMissionRef}
+                className="mt-20 grid gap-8 lg:grid-cols-2"
+              >
                 {/* Vision */}
                 <motion.div
                   className="relative flex flex-col p-8 bg-gradient-to-br from-blue-50 to-sky-50/80 rounded-lg shadow-[0_4px_20px_rgba(86,160,215,0.08)]"
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isVisionMissionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.6, delay: 0, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  animate={
+                    isVisionMissionInView
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 20 }
+                  }
+                  transition={{
+                    duration: 0.6,
+                    delay: 0,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                  }}
                 >
                   <div
                     className="absolute bottom-4 right-4 w-12 h-12 border-r border-b border-[#56A0D7]/50 pointer-events-none"
@@ -131,8 +144,8 @@ export default function AboutKfasPage() {
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
                   </div>
                   <p className="text-[15px] sm:text-base text-gray-600/90 leading-[1.75] font-light">
-                    To advance science, technology, and innovation for a resilient,
-                    thriving, and sustainable future.
+                    To advance science, technology, and innovation for a
+                    resilient, thriving, and sustainable future.
                   </p>
                 </motion.div>
 
@@ -140,8 +153,16 @@ export default function AboutKfasPage() {
                 <motion.div
                   className="relative flex flex-col p-8 bg-gradient-to-br from-blue-50 to-sky-50/80 rounded-lg shadow-[0_4px_20px_rgba(86,160,215,0.08)]"
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isVisionMissionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  animate={
+                    isVisionMissionInView
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 20 }
+                  }
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.1,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                  }}
                 >
                   <div
                     className="absolute bottom-4 right-4 w-12 h-12 border-r border-b border-[#56A0D7]/50 pointer-events-none"
@@ -158,8 +179,9 @@ export default function AboutKfasPage() {
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
                   </div>
                   <p className="text-[15px] sm:text-base text-gray-600/90 leading-[1.75] font-light">
-                    To pursue scientific excellence to tackle national challenges
-                    through a prominent science, technology, and innovation model.
+                    To pursue scientific excellence to tackle national
+                    challenges through a prominent science, technology, and
+                    innovation model.
                   </p>
                 </motion.div>
               </div>
