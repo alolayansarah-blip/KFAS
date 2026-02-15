@@ -111,6 +111,13 @@ export default function OurStrategyPage() {
               proficiency, we will invest in optimizing our operations and
               developing a positive organizational culture.
             </p>
+            <a
+              href="/image/KFAS_Strategy_2025-2029_EN.pdf"
+              download="KFAS_Strategy_2025-2029_EN.pdf"
+              className="inline-flex items-center gap-2 mt-6 text-[#EC601B] font-semibold hover:text-[#D54E0F] transition-colors duration-300"
+            >
+              Download file
+            </a>
             </div>
             <motion.img
               src="/image/KFAS_Strategy.png"
