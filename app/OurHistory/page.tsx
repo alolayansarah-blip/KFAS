@@ -74,7 +74,7 @@ export default function OurHistoryPage() {
       title: "Advancement of Sciences Publishing and Distribution Company",
       description:
         "KFAS established the Advancement of Sciences Publishing & Distribution Company (ASPD) to popularize science and strengthen science communication for public audiences, youth, and schools.",
-      image: "/image/1984.png",
+      image: "/image/1984AspdPublications.png",
       imageAlt: "Science Publishing and Public Engagement",
     },
     {
@@ -106,7 +106,7 @@ export default function OurHistoryPage() {
       title: "The Scientific Center (TSCK)",
       description:
         "KFAS established The Scientific Center as a major national platform for STEM learning and public engagement through interactive exhibits and scientific experiences.",
-      image: "/image/2000.png",
+      image: "/image/2000tsck.jpg",
       imageAlt: "The Scientific Center",
     },
     {
@@ -114,6 +114,8 @@ export default function OurHistoryPage() {
       title: "Kuwait Program at Harvard Kennedy School",
       description:
         "KFAS launched the Kuwait Program at Harvard Kennedy School to support fellowships, research collaboration, and leadership development connected to Kuwait's policy priorities.",
+      image: "/image/2001.jpg",
+      imageAlt: "Kuwait Program at Harvard Kennedy School",
     },
     {
       year: "2005",
@@ -126,24 +128,32 @@ export default function OurHistoryPage() {
       title: "Dasman Diabetes Institute (DDI)",
       description:
         "KFAS established Dasman Diabetes Institute to reduce diabetes burden in Kuwait through research, training, education, and health awareness programs.",
+      image: "/image/2006Dasman.png",
+      imageAlt: "Dasman Diabetes Institute",
     },
     {
       year: "2010",
       title: "Sabah Al-Ahmad Center for Giftedness & Creativity (SACGC)",
       description:
         "KFAS launched SACGC to develop gifted students, support inventors, and strengthen innovation capability including pathways to patenting.",
+      image: "/image/2010.png",
+      imageAlt: "Sabah Al-Ahmad Center for Giftedness & Creativity",
     },
     {
       year: "2013",
       title: "KFAS Innovation Challenge",
       description:
         "KFAS launched the Innovation Challenge to help organizations build innovation capability through structured executive learning and project development.",
+      image: "/image/2013.png",
+      imageAlt: "KFAS Innovation Challenge",
     },
     {
       year: "2015",
       title: "Al-Sumait Prize for African Development",
       description:
         "KFAS expanded its international recognition footprint through the Al-Sumait Prize, honoring impactful development outcomes in Africa and linking science to tangible social progress.",
+      image: "/image/2015alsumait.png",
+      imageAlt: "Al-Sumait Prize for African Development",
     },
     {
       year: "2017",
@@ -168,12 +178,16 @@ export default function OurHistoryPage() {
       title: "KuwaitSat-1 Launch",
       description:
         "KuwaitSat-1 launched on 3 January 2023 as a Kuwait University project supported by KFAS, advancing national space capability and hands-on student training.",
+      image: "/image/2023.png",
+      imageAlt: "KuwaitSat-1 Launch",
     },
     {
       year: "2024",
       title: "PURE Research Portal",
       description:
         "KFAS launched the “PURE” portal to showcase funded projects and research outputs, and to enable discovery of expertise and collaboration opportunities.",
+      image: "/image/2024-pure.png",
+      imageAlt: "PURE Research Portal",
     },
     {
       year: "Sep 2024",
@@ -186,24 +200,32 @@ export default function OurHistoryPage() {
       title: "NASEM Precision & Personalized Medicine Workshops",
       description:
         "KFAS partnered with the U.S. National Academies on joint workshops to advance knowledge exchange in precision and personalized medicine.",
+      image: "/image/naseem.png",
+      imageAlt: "NASEM Precision & Personalized Medicine Workshops",
     },
     {
       year: "28 May 2025",
       title: "KFAS Strategy 2025–2029",
       description:
         "KFAS launched its 2025–2029 strategy to strengthen the national research ecosystem and leverage science, technology, and innovation to address national challenges and sustainable development.",
+      image: "/image/kfasStrategy.jpeg",
+      imageAlt: "KFAS Strategy 2025–2029",
     },
     {
       year: "30 Nov 2025",
       title: "KFAS–MBRSC MoU on Space Science",
       description:
         "KFAS and the Mohammed Bin Rashid Space Centre signed an MoU to advance space science cooperation, training, and joint research aligned with national priorities.",
+      image: "/image/mou.png",
+      imageAlt: "KFAS–MBRSC MoU on Space Science",
     },
     {
       year: "2025",
       title: "25 Years of KFAS–Harvard Executive Education",
       description:
         "KFAS marked 25 years of partnership with Harvard Kennedy School executive education, highlighting leadership development impact and outcomes.",
+      image: "/image/harvard.png",
+      imageAlt: "25 Years of KFAS–Harvard Executive Education",
     },
     {
       year: "2023–2025",
@@ -247,7 +269,7 @@ export default function OurHistoryPage() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
-              src="/image/bannerHistory.jpg"
+              src="/image/HistoryBanner.png"
               alt="Our History"
               fill
               priority
