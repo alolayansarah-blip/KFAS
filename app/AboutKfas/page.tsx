@@ -40,7 +40,7 @@ export default function AboutKfasPage() {
         >
           <div className="absolute inset-0">
             <Image
-              src="/image/AboutUs.png"
+              src="/image/AboutKFASBanner2.jpg"
               alt="Who We Are"
               fill
               priority
