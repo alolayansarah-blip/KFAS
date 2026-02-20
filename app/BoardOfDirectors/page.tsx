@@ -322,11 +322,8 @@ export default function BoardOfDirectorsPage() {
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
       <main className="min-h-screen bg-white pt-20 font-poppins">
-        <motion.section
-          className="relative overflow-hidden flex items-center"
-          initial={{ height: "70vh" }}
-          animate={{ height: "45vh" }}
-          transition={{ duration: 1, ease: "easeInOut" }}
+        <section
+          className="relative overflow-hidden flex items-center h-[55vh]"
         >
           <div className="absolute inset-0">
             <img
@@ -338,12 +335,7 @@ export default function BoardOfDirectorsPage() {
           </div>
 
           <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-left"
-            >
+            <div className="text-left">
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
                 <span className="text-white/40">/</span>
@@ -352,11 +344,11 @@ export default function BoardOfDirectorsPage() {
               <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6">
                 Board of Directors
               </h1>
-            </motion.div>
+            </div>
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
-        </motion.section>
+        </section>
 
         <section ref={chairmanRef} className="bg-white py-16">
           <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">

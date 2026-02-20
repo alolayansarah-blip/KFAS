@@ -4,99 +4,160 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import SplitText from "./SplitText";
 
-const stats = [
-  { value: 1124, label: "Profiles" },
-  { value: 111, label: "Organizations" },
-  { value: 3590, label: "Research Outputs" },
-  { value: 1673, label: "Projects" },
-  { value: 97, label: "Impacts" },
-  { value: 379, label: "Prizes" },
-  { value: 916, label: "Equipment" },
+interface Stat {
+  value: number;
+  label: string;
+}
+
+const FALLBACK_STATS: Stat[] = [
+  { value: 0, label: "Profiles" },
+  { value: 0, label: "Organizations" },
+  { value: 0, label: "Research Outputs" },
+  { value: 0, label: "Projects" },
+  { value: 0, label: "Impacts" },
+  { value: 0, label: "Prizes" },
+  { value: 0, label: "Equipment" },
 ];
 
 export default function CounterSection() {
-  const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [stats, setStats] = useState<Stat[]>(FALLBACK_STATS);
+  const [counts, setCounts] = useState<number[]>(
+    new Array(FALLBACK_STATS.length).fill(0),
+  );
+  const [loading, setLoading] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
   const timersRef = useRef<NodeJS.Timeout[]>([]);
   const hasAnimatedRef = useRef(false);
 
+  // Always fetch from API on mount
   useEffect(() => {
-    const currentSection = sectionRef.current;
+    async function fetchStats(retry = false) {
+      try {
+        const base =
+          typeof window !== "undefined" ? window.location.origin : "";
+        const url = `${base}/api/Counters${retry ? `?_=${Date.now()}` : ""}`;
+        const res = await fetch(url, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache", Pragma: "no-cache" },
+        });
+        if (!res.ok) throw new Error(`API ${res.status}`);
+        const data: unknown = await res.json();
+        const arr = Array.isArray(data) ? data : [];
+        if (arr.length > 0) {
+          const parsed = arr.map((item: unknown) => ({
+            value: Number((item as { value?: number })?.value) || 0,
+            label: String((item as { label?: string })?.label || ""),
+          }));
+          // Reset animation flag so it can re-run with fresh data
+          hasAnimatedRef.current = false;
+          setStats(parsed);
+          setCounts(new Array(parsed.length).fill(0));
+          // Retry once if all zeros (API may have returned cached/empty)
+          if (!retry && !parsed.some((s) => s.value > 0)) {
+            setTimeout(() => fetchStats(true), 2000);
+          }
+        } else {
+          // No data from API — fall back and still animate fallback stats
+          hasAnimatedRef.current = false;
+          setStats(FALLBACK_STATS);
+          setCounts(new Array(FALLBACK_STATS.length).fill(0));
+        }
+      } catch (err) {
+        console.error("Failed to fetch stats:", err);
+        // On error, reset so fallback stats can animate
+        hasAnimatedRef.current = false;
+        setStats(FALLBACK_STATS);
+        setCounts(new Array(FALLBACK_STATS.length).fill(0));
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStats();
+  }, []);
 
-    const startAnimation = () => {
-      if (hasAnimatedRef.current) {
+  // Count animation — triggers whenever stats change and haven't animated yet
+  useEffect(() => {
+    if (stats.length === 0) return;
+
+    // Only skip if every single value is 0
+    if (stats.every((s) => s.value === 0)) return;
+
+    // Guard to prevent double-animation
+    if (hasAnimatedRef.current) return;
+    hasAnimatedRef.current = true;
+
+    // Clear any previous timers
+    timersRef.current.forEach((t) => clearInterval(t));
+    timersRef.current = [];
+
+    stats.forEach((stat, index) => {
+      if (stat.value === 0) {
+        setCounts((prev) => {
+          const newCounts = [...prev];
+          newCounts[index] = 0;
+          return newCounts;
+        });
         return;
       }
-      hasAnimatedRef.current = true;
-      setHasAnimated(true);
 
-      // Start counting animation
-      stats.forEach((stat, index) => {
-        const duration = 2000;
-        const steps = 50;
-        const stepDuration = duration / steps;
-        const increment = stat.value / steps;
+      const duration = 2000;
+      const steps = 60;
+      const stepDuration = duration / steps;
+      const increment = stat.value / steps;
 
-        let currentCount = 0;
+      let currentCount = 0;
 
-        const timer = setInterval(() => {
-          currentCount += increment;
+      const timer = setInterval(() => {
+        currentCount += increment;
 
+        setCounts((prev) => {
+          const newCounts = [...prev];
+          newCounts[index] = Math.min(Math.round(currentCount), stat.value);
+          return newCounts;
+        });
+
+        if (currentCount >= stat.value) {
+          clearInterval(timer);
           setCounts((prev) => {
             const newCounts = [...prev];
-            newCounts[index] = Math.min(Math.round(currentCount), stat.value);
+            newCounts[index] = stat.value;
             return newCounts;
           });
-
-          if (currentCount >= stat.value) {
-            clearInterval(timer);
-            setCounts((prev) => {
-              const newCounts = [...prev];
-              newCounts[index] = stat.value;
-              return newCounts;
-            });
-          }
-        }, stepDuration);
-
-        timersRef.current.push(timer);
-      });
-    };
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          startAnimation();
         }
-      },
-      { threshold: 0.1 },
-    );
+      }, stepDuration);
 
-    if (currentSection) {
-      observer.observe(currentSection);
-    }
+      timersRef.current.push(timer);
+    });
 
     return () => {
       timersRef.current.forEach((timer) => clearInterval(timer));
       timersRef.current = [];
-
-      if (currentSection) {
-        observer.unobserve(currentSection);
-      }
     };
-  }, []);
+  }, [stats]);
 
   const formatNumber = (num: number) => {
-    return Math.round(num).toLocaleString();
+    const n = Math.round(Number(num) || 0);
+    return n.toLocaleString();
   };
+
+  if (loading) {
+    return (
+      <section className="py-20 lg:py-32 relative overflow-hidden min-h-[400px]">
+        <div className="absolute inset-0 bg-[url('/image/benduluim.png')] bg-cover bg-center bg-fixed" />
+        <div className="absolute inset-0 bg-[#EC601B]/90" />
+        <div className="relative z-10 flex items-center justify-center min-h-[300px]">
+          <p className="text-white font-poppins">Loading...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <motion.section
       ref={sectionRef}
       className="py-20 lg:py-32 relative overflow-hidden"
       initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.1, margin: "-60px" }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* Background image */}
@@ -132,13 +193,11 @@ export default function CounterSection() {
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              animate={
-                hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
-              }
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                duration: 0.5,
-                delay: index * 0.08,
+                duration: 0.4,
+                delay: index * 0.05,
                 ease: "easeOut",
               }}
               whileHover={{ y: -8, scale: 1.05 }}
@@ -148,8 +207,8 @@ export default function CounterSection() {
               <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white/30 rounded-tr-2xl group-hover:border-white/50 transition-colors duration-300" />
 
               {/* Number */}
-              <div className="font-poppins text-3xl lg:text-4xl font-bold text-white mb-3 group-hover:scale-110 transition-transform duration-300">
-                {formatNumber(counts[index])}
+              <div className="font-poppins text-3xl lg:text-4xl font-bold text-white mb-3 group-hover:scale-110 transition-transform duration-300 tabular-nums">
+                {formatNumber(counts[index] ?? stat.value)}
               </div>
 
               {/* Divider line */}

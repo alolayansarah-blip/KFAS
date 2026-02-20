@@ -71,7 +71,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         label: "Special Needs",
         href: "/Learning-and-Development/Special-needs",
       },
-      { label: "Outcomes", href: "/Learning-and-Development/Outcomes3" },
+      // { label: "Outcomes", href: "/Learning-and-Development/Outcomes3" },
     ],
   },
   {

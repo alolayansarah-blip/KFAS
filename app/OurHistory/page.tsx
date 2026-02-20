@@ -260,11 +260,8 @@ export default function OurHistoryPage() {
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
       <main className="min-h-screen bg-white pt-20">
         {/* Hero Section with Banner */}
-        <motion.section
-          className="relative overflow-hidden flex items-center"
-          initial={{ height: "70vh" }}
-          animate={{ height: "45vh" }}
-          transition={{ duration: 1, ease: "easeInOut" }}
+        <section
+          className="relative overflow-hidden flex items-center h-[55vh]"
         >
           {/* Background Image */}
           <div className="absolute inset-0">
@@ -282,13 +279,7 @@ export default function OurHistoryPage() {
 
           {/* Content */}
           <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-            <motion.div
-              ref={sectionRef}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-left"
-            >
+            <div ref={sectionRef} className="text-left">
               {/* Breadcrumb */}
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
@@ -301,12 +292,12 @@ export default function OurHistoryPage() {
                   <span className="block">Our History</span>
                 </h1>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Straight bottom */}
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white"></div>
-        </motion.section>
+        </section>
 
         {/* History Content Section */}
         <section className="py-20 sm:py-28 bg-white">
