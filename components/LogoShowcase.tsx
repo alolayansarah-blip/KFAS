@@ -225,7 +225,6 @@
 //   );
 // }
 
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -316,12 +315,25 @@ export default function LogoShowcase() {
 
         {/* Hero content */}
         <div className="absolute inset-0 z-10 flex items-center">
-          <div className="w-full h-full px-5 sm:px-6 lg:px-8 pt-10 pb-8 sm:pt-16 sm:pb-10 max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-stretch lg:gap-8">
-            <div className="flex flex-col gap-8 lg:flex-1 lg:justify-center lg:pl-6 xl:pl-10 text-left">
-                <h2 className="font-poppins text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-semibold text-white leading-tight tracking-tight">
+          <div className="w-full h-full px-5 sm:px-6 lg:px-8 py-8 sm:pt-16 sm:pb-10 max-w-7xl mx-auto flex flex-col justify-center lg:flex-row lg:items-stretch lg:gap-8">
+            <div className="flex flex-col gap-6 sm:gap-8 lg:flex-1 lg:justify-center lg:pl-6 xl:pl-10 text-left">
+              {/* Title */}
+              <h2 className="font-poppins text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-semibold text-white leading-tight tracking-tight">
+                <SplitText
+                  text="Building the Future"
+                  className="text-white"
+                  delay={40}
+                  duration={1}
+                  ease="easeOut"
+                  splitType="chars"
+                  from={{ opacity: 0, y: 10 }}
+                  to={{ opacity: 1, y: 0 }}
+                  textAlign="left"
+                />{" "}
+                <span className="relative inline-block">
                   <SplitText
-                    text="Building the Future"
-                    className="text-white"
+                    text="Together"
+                    className="relative z-10 text-white"
                     delay={40}
                     duration={1}
                     ease="easeOut"
@@ -329,47 +341,39 @@ export default function LogoShowcase() {
                     from={{ opacity: 0, y: 10 }}
                     to={{ opacity: 1, y: 0 }}
                     textAlign="left"
-                  />{" "}
-                  <span className="relative inline-block">
-                    <SplitText
-                      text="Together"
-                      className="relative z-10 text-white"
-                      delay={40}
-                      duration={1}
-                      ease="easeOut"
-                      splitType="chars"
-                      from={{ opacity: 0, y: 10 }}
-                      to={{ opacity: 1, y: 0 }}
-                      textAlign="left"
-                    />
-                    <span className="absolute bottom-1 left-0 right-0 h-3 bg-white/20 -z-10" />
-                  </span>
-                </h2>
-                <div className="mt-5 grid w-full grid-cols-2 items-center justify-items-start gap-6 sm:gap-8 md:grid-cols-2 md:gap-10 lg:flex lg:flex-nowrap lg:justify-start lg:gap-10">
-                  {tiles.map((tile, index) => (
-                    <motion.a
-                      key={tile.title}
-                      href={tile.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full outline-none"
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                      onClick={() => setHoveredIndex(index)}
-                      aria-label={tile.title}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={
-                        isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-                      }
-                      transition={{
-                        duration: 0.5,
-                        delay: 0.2 + index * 0.1,
-                        ease: [0.25, 0.46, 0.45, 0.94],
-                      }}
-                      whileHover={{ scale: 1.05, y: -4 }}
-                    >
+                  />
+                  <span className="absolute bottom-1 left-0 right-0 h-3 bg-white/20 -z-10" />
+                </span>
+              </h2>
+
+              {/* Logos — 2×2 on mobile, row on lg+ */}
+              <div className="grid grid-cols-2 gap-5 sm:gap-8 lg:flex lg:flex-nowrap lg:items-center lg:gap-10">
+                {tiles.map((tile, index) => (
+                  <motion.a
+                    key={tile.title}
+                    href={tile.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center outline-none lg:rounded-full"
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                    onClick={() => setHoveredIndex(index)}
+                    aria-label={tile.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={
+                      isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                    }
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.2 + index * 0.1,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                    }}
+                    whileHover={{ scale: 1.05, y: -4 }}
+                  >
+                    {/* Mobile: frosted pill backdrop for contrast; invisible on lg+ */}
+                    <span className="flex items-center justify-center w-full rounded-2xl bg-white/10 backdrop-blur-sm p-4 lg:contents lg:rounded-none lg:bg-transparent lg:backdrop-blur-none lg:p-0">
                       <span
-                        className="block h-16 sm:h-20 md:h-24 lg:h-28 min-w-[4rem] sm:min-w-[5rem] md:min-w-[6rem] lg:min-w-[7rem] bg-white"
+                        className="block h-16 w-full sm:h-20 lg:h-28 lg:w-36 bg-white"
                         style={{
                           WebkitMaskImage: `url(${tile.logo})`,
                           WebkitMaskSize: "contain",
@@ -383,59 +387,59 @@ export default function LogoShowcase() {
                         role="img"
                         aria-label={tile.title}
                       />
-                    </motion.a>
-                  ))}
-                </div>
+                    </span>
+                  </motion.a>
+                ))}
               </div>
+            </div>
 
-              <motion.div
-                className="hidden lg:block lg:w-[380px] xl:w-[420px] lg:flex-shrink-0 lg:self-stretch overflow-hidden rounded-2xl"
-                initial={{ opacity: 0, x: 30 }}
-                animate={
-                  isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }
-                }
-                transition={{
-                  duration: 0.6,
-                  delay: 0.4,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-              >
-                <div className="relative h-full w-full rounded-2xl overflow-hidden ring-1 ring-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-                  <img
-                    src={visibleImage}
-                    alt={tiles[activeIndex].title}
-                    className="h-full w-full object-cover object-center"
+            {/* Right card — desktop only */}
+            <motion.div
+              className="hidden lg:block lg:w-[380px] xl:w-[420px] lg:flex-shrink-0 lg:self-stretch overflow-hidden rounded-2xl"
+              initial={{ opacity: 0, x: 30 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.4,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+            >
+              <div className="relative h-full w-full rounded-2xl overflow-hidden ring-1 ring-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+                <img
+                  src={visibleImage}
+                  alt={tiles[activeIndex].title}
+                  className="h-full w-full object-cover object-center"
+                  style={{
+                    opacity: fadeIn ? 1 : 0,
+                    transition: "opacity 0.6s ease",
+                  }}
+                />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(29, 45, 68, 0.95) 0%, rgba(29, 45, 68, 0.5) 35%, transparent 70%)",
+                  }}
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-5 pt-16 pointer-events-none">
+                  <h3 className="font-poppins text-lg font-semibold text-white mb-2">
+                    {tiles[activeIndex].title}
+                  </h3>
+                  <p
+                    className="font-poppins text-sm text-white/90 leading-relaxed"
                     style={{
                       opacity: fadeIn ? 1 : 0,
                       transition: "opacity 0.6s ease",
                     }}
-                  />
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(29, 45, 68, 0.95) 0%, rgba(29, 45, 68, 0.5) 35%, transparent 70%)",
-                    }}
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-5 pt-16 pointer-events-none">
-                    <h3 className="font-poppins text-lg font-semibold text-white mb-2">
-                      {tiles[activeIndex].title}
-                    </h3>
-                    <p
-                      className="font-poppins text-sm text-white/90 leading-relaxed"
-                      style={{
-                        opacity: fadeIn ? 1 : 0,
-                        transition: "opacity 0.6s ease",
-                      }}
-                    >
-                      {tiles[activeIndex].description}
-                    </p>
-                  </div>
+                  >
+                    {tiles[activeIndex].description}
+                  </p>
                 </div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           </div>
         </div>
+      </div>
     </motion.section>
   );
 }
