@@ -17,6 +17,7 @@ function ProfileCard({
   borderPosition = "left",
   layout = "horizontal",
   compact = false,
+  large = false,
   onClick,
 }: {
   imageSrc?: string;
@@ -29,6 +30,7 @@ function ProfileCard({
   borderPosition?: "left" | "right";
   layout?: "horizontal" | "vertical";
   compact?: boolean;
+  large?: boolean;
   onClick?: () => void;
 }) {
   const isVertical = layout === "vertical";
@@ -53,11 +55,13 @@ function ProfileCard({
         )}
         <div
           className={`relative bg-blue-50 p-4 ${
-            isVertical
-              ? compact
-                ? "w-40 h-40 sm:w-44 sm:h-44 shadow-[0_6px_24px_rgba(86,160,215,0.1)]"
-                : "w-48 h-48 sm:w-52 sm:h-52 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
-              : "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
+            large
+              ? "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
+              : isVertical
+                ? compact
+                  ? "w-40 h-40 sm:w-44 sm:h-44 shadow-[0_6px_24px_rgba(86,160,215,0.1)]"
+                  : "w-48 h-48 sm:w-52 sm:h-52 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
+                : "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
           }`}
         >
           {usePlaceholder ? (
@@ -75,11 +79,13 @@ function ProfileCard({
       </motion.div>
       <motion.div
         className={`min-w-0 relative ${
-          isVertical
-            ? compact
-              ? "w-[200px] h-[100px] sm:h-[108px] flex flex-col justify-center px-4 py-4 text-center rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.04)] shrink-0"
-              : "w-[260px] h-[120px] sm:h-[125px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
-            : "text-left flex-1"
+          large
+            ? "w-[300px] h-[140px] sm:h-[150px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
+            : isVertical
+              ? compact
+                ? "w-[200px] h-[100px] sm:h-[108px] flex flex-col justify-center px-4 py-4 text-center rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.04)] shrink-0"
+                : "w-[260px] h-[120px] sm:h-[125px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
+              : "text-left flex-1"
         } ${borderPosition === "right" && !isVertical ? "pr-8 pb-6" : ""}`}
         initial={{ opacity: 0, y: isVertical ? 16 : 0, x: isVertical ? 0 : 40 }}
         animate={
@@ -96,7 +102,7 @@ function ProfileCard({
         {borderPosition === "right" && isVertical && (
           <div
             className={`absolute border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/80 pointer-events-none ${
-              compact ? "bottom-2 right-2 w-10 h-10" : "bottom-3 right-3 w-14 h-14"
+              large ? "bottom-3 right-3 w-14 h-14" : compact ? "bottom-2 right-2 w-10 h-10" : "bottom-3 right-3 w-14 h-14"
             }`}
             style={{ borderBottomRightRadius: "2px" }}
             aria-hidden
@@ -111,22 +117,26 @@ function ProfileCard({
         )}
         <p
           className={`font-poppins font-bold text-gray-900 leading-tight ${
-            isVertical
-              ? compact
-                ? "text-[13px] sm:text-[14px] tracking-wide"
-                : "text-[15px] sm:text-base tracking-wide"
-              : "text-base sm:text-lg tracking-tight"
+            large
+              ? "text-[15px] sm:text-base tracking-wide"
+              : isVertical
+                ? compact
+                  ? "text-[13px] sm:text-[14px] tracking-wide"
+                  : "text-[15px] sm:text-base tracking-wide"
+                : "text-base sm:text-lg tracking-tight"
           }`}
         >
           {name}
         </p>
         <p
           className={`leading-relaxed break-words ${
-            isVertical
-              ? compact
-                ? "mt-1.5 text-[11px] sm:text-xs text-gray-600/95 font-medium tracking-wide"
-                : "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
-              : "mt-3 text-sm sm:text-base text-gray-700/95"
+            large
+              ? "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
+              : isVertical
+                ? compact
+                  ? "mt-1.5 text-[11px] sm:text-xs text-gray-600/95 font-medium tracking-wide"
+                  : "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
+                : "mt-3 text-sm sm:text-base text-gray-700/95"
           }`}
         >
           {title}
@@ -136,7 +146,7 @@ function ProfileCard({
   );
 
   return onClick ? (
-    <button type="button" onClick={onClick} className="text-left w-full focus:outline-none focus:ring-2 focus:ring-[#56A0D7]/50 rounded-lg">
+    <button type="button" onClick={onClick} className="text-left w-fit focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#56A0D7]/50 rounded-lg">
       {content}
     </button>
   ) : (
@@ -271,6 +281,41 @@ const IBRAHIM_MODAL_CONTENT = {
   ],
 };
 
+const AMEENAH_MODAL_CONTENT = {
+  name: "Dr. Ameenah Rajab Farhan",
+  image: "/image/DrAmeenah.png",
+  sections: [
+    {
+      label: "Academic Positions",
+      items: [
+        "Associate Professor, Kuwait University, Physics Department Physics Department Chair (1999 - 2004) and (2018-present).",
+        "Vice Dean for Research and Laboratories Affairs, Faculty of Science (2004 - 2008).",
+      ],
+    },
+    {
+      label: "Scientific Positions",
+      items: [
+        "Senior Scientific Advisor, Kuwait Foundation for the Advancement of Sciences (KFAS) (2011 - 2018).",
+        "Acting Director for Research Directorate (KFAS) (2016 - 2018).",
+        "Program Manager for Research Program (KFAS) (2011- 2018).",
+        "Project Leader for Kuwait Nuclear Data Center (1986-2016).",
+        "Technical Advisor, Kuwait Environmental Remediation Program (KERP), Kuwait National Focal point (KNFP) (2009 - 2011).",
+        "Member & Convener of Jaber Al-Ahmed Center for Nuclear Medicine and Medical Imaging Board, (2013 - 2020).",
+        "Member of the Board of Trustees for American University of Kuwait (2004 - 2014).",
+        "Jury Member for L'OREAL UNESCO For Women in Science (FWIS) Middle East Fellowship Program. (2015 - Present).",
+      ],
+    },
+    {
+      label: "Associations",
+      items: [
+        "American Physical Society (APS).",
+        "Member of the International Network of Nuclear Structure and Decay Data (NSDD) Evaluators.",
+        "American Academy for the Advancement of Science (AAAS).",
+      ],
+    },
+  ],
+};
+
 const MESHAAL_MODAL_CONTENT = {
   name: "H.E. Sheikh Dr. Meshaal Jaber Al-Ahmed Al-Sabah",
   image: "/image/DrMeshalJaberAlAhmed.png",
@@ -288,6 +333,7 @@ export default function BoardOfDirectorsPage() {
   const [isAhmadAldekheelModalOpen, setIsAhmadAldekheelModalOpen] = useState(false);
   const [isKhaledModalOpen, setIsKhaledModalOpen] = useState(false);
   const [isIbrahimModalOpen, setIsIbrahimModalOpen] = useState(false);
+  const [isAmeenahModalOpen, setIsAmeenahModalOpen] = useState(false);
   const chairmanRef = useRef(null);
   const directorGeneralRef = useRef(null);
   const membersRef = useRef(null);
@@ -306,9 +352,10 @@ export default function BoardOfDirectorsPage() {
         setIsAhmadAldekheelModalOpen(false);
         setIsKhaledModalOpen(false);
         setIsIbrahimModalOpen(false);
+        setIsAmeenahModalOpen(false);
       }
     };
-    if (isAhmadModalOpen || isAbdullahModalOpen || isMeshaalModalOpen || isAhmadAldekheelModalOpen || isKhaledModalOpen || isIbrahimModalOpen) {
+    if (isAhmadModalOpen || isAbdullahModalOpen || isMeshaalModalOpen || isAhmadAldekheelModalOpen || isKhaledModalOpen || isIbrahimModalOpen || isAmeenahModalOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
     }
@@ -316,7 +363,7 @@ export default function BoardOfDirectorsPage() {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
     };
-  }, [isAhmadModalOpen, isAbdullahModalOpen, isMeshaalModalOpen, isAhmadAldekheelModalOpen, isKhaledModalOpen, isIbrahimModalOpen]);
+  }, [isAhmadModalOpen, isAbdullahModalOpen, isMeshaalModalOpen, isAhmadAldekheelModalOpen, isKhaledModalOpen, isIbrahimModalOpen, isAmeenahModalOpen]);
 
   return (
     <>
@@ -352,7 +399,7 @@ export default function BoardOfDirectorsPage() {
 
         <section ref={chairmanRef} className="bg-white py-16">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 justify-items-center">
               <ProfileCard
                 imageSrc="/image/SHIEKH%20MESHAAL%20JABER%20AL%20SABAH-%20BM.png"
                 imageAlt="H.H. The Amir Sheikh Meshal Al-Ahmad Al-Jaber Al-Sabah"
@@ -365,6 +412,10 @@ export default function BoardOfDirectorsPage() {
                 }
                 title="Chairman"
                 isInView={isChairmanInView}
+                borderPosition="right"
+                layout="vertical"
+                compact
+                large
               />
             </div>
           </div>
@@ -470,6 +521,8 @@ export default function BoardOfDirectorsPage() {
                 borderPosition="right"
                 layout="vertical"
                 compact
+                large
+                onClick={() => setIsAmeenahModalOpen(true)}
               />
             </div>
           </div>
@@ -477,6 +530,75 @@ export default function BoardOfDirectorsPage() {
 
       </main>
       <Footer />
+
+      <AnimatePresence>
+        {isAmeenahModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setIsAmeenahModalOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 24 }}
+              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
+                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
+                <div className="relative flex items-start gap-5 px-6 py-5">
+                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
+                    <img
+                      src={AMEENAH_MODAL_CONTENT.image}
+                      alt={AMEENAH_MODAL_CONTENT.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 pt-1">
+                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
+                      {AMEENAH_MODAL_CONTENT.name}
+                    </h3>
+                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsAmeenahModalOpen(false)}
+                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
+                    aria-label="Close"
+                  >
+                    <X className="w-5 h-5" strokeWidth={2} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
+                <div className="space-y-8">
+                  {AMEENAH_MODAL_CONTENT.sections.map((section) => (
+                    <div key={section.label} className="relative pl-6 border-l-2 border-[#56A0D7]/25">
+                      <h4 className="font-poppins text-[11px] font-semibold text-[#56A0D7] uppercase tracking-[0.2em] mb-3 ml-1">
+                        {section.label}
+                      </h4>
+                      <ul className="space-y-2.5">
+                        {section.items.map((item, i) => (
+                          <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
+                            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {isAhmadModalOpen && (

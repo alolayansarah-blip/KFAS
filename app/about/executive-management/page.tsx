@@ -17,6 +17,7 @@ function ProfileCard({
   borderPosition = "left",
   layout = "horizontal",
   compact = false,
+  large = false,
 }: {
   imageSrc?: string;
   imageAlt: string;
@@ -28,6 +29,7 @@ function ProfileCard({
   borderPosition?: "left" | "right";
   layout?: "horizontal" | "vertical";
   compact?: boolean;
+  large?: boolean;
 }) {
   const isVertical = layout === "vertical";
 
@@ -51,11 +53,13 @@ function ProfileCard({
         )}
         <div
           className={`relative bg-blue-50 p-4 ${
-            isVertical
-              ? compact
-                ? "w-40 h-40 sm:w-44 sm:h-44 shadow-[0_6px_24px_rgba(86,160,215,0.1)]"
-                : "w-48 h-48 sm:w-52 sm:h-52 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
-              : "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
+            large
+              ? "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
+              : isVertical
+                ? compact
+                  ? "w-40 h-40 sm:w-44 sm:h-44 shadow-[0_6px_24px_rgba(86,160,215,0.1)]"
+                  : "w-48 h-48 sm:w-52 sm:h-52 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
+                : "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
           }`}
         >
           {usePlaceholder ? (
@@ -73,11 +77,13 @@ function ProfileCard({
       </motion.div>
       <motion.div
         className={`min-w-0 relative ${
-          isVertical
-            ? compact
-              ? "w-[200px] h-[100px] sm:h-[108px] flex flex-col justify-center px-4 py-4 text-center rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.04)] shrink-0"
-              : "w-[260px] h-[120px] sm:h-[125px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
-            : "text-left flex-1"
+          large
+            ? "w-[300px] h-[140px] sm:h-[150px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
+            : isVertical
+              ? compact
+                ? "w-[200px] h-[100px] sm:h-[108px] flex flex-col justify-center px-4 py-4 text-center rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.04)] shrink-0"
+                : "w-[260px] h-[120px] sm:h-[125px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
+              : "text-left flex-1"
         } ${borderPosition === "right" && !isVertical ? "pr-8 pb-6" : ""}`}
         initial={{ opacity: 0, y: isVertical ? 16 : 0, x: isVertical ? 0 : 40 }}
         animate={
@@ -101,9 +107,11 @@ function ProfileCard({
         {borderPosition === "right" && isVertical && (
           <div
             className={`absolute border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/80 pointer-events-none ${
-              compact
-                ? "bottom-2 right-2 w-10 h-10"
-                : "bottom-3 right-3 w-14 h-14"
+              large
+                ? "bottom-3 right-3 w-14 h-14"
+                : compact
+                  ? "bottom-2 right-2 w-10 h-10"
+                  : "bottom-3 right-3 w-14 h-14"
             }`}
             style={{ borderBottomRightRadius: "2px" }}
             aria-hidden
@@ -111,22 +119,26 @@ function ProfileCard({
         )}
         <p
           className={`font-poppins font-bold text-gray-900 leading-tight ${
-            isVertical
-              ? compact
-                ? "text-[13px] sm:text-[14px] tracking-wide"
-                : "text-[15px] sm:text-base tracking-wide"
-              : "text-base sm:text-lg tracking-tight"
+            large
+              ? "text-[15px] sm:text-base tracking-wide"
+              : isVertical
+                ? compact
+                  ? "text-[13px] sm:text-[14px] tracking-wide"
+                  : "text-[15px] sm:text-base tracking-wide"
+                : "text-base sm:text-lg tracking-tight"
           }`}
         >
           {name}
         </p>
         <p
           className={`leading-relaxed break-words ${
-            isVertical
-              ? compact
-                ? "mt-1.5 text-[11px] sm:text-xs text-gray-600/95 font-medium tracking-wide"
-                : "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
-              : "mt-3 text-sm sm:text-base text-gray-700/95"
+            large
+              ? "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
+              : isVertical
+                ? compact
+                  ? "mt-1.5 text-[11px] sm:text-xs text-gray-600/95 font-medium tracking-wide"
+                  : "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
+                : "mt-3 text-sm sm:text-base text-gray-700/95"
           }`}
         >
           {title}
@@ -169,9 +181,7 @@ export default function ExecutiveManagementPage() {
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
       <main className="min-h-screen bg-white pt-20 font-poppins">
-        <section
-          className="relative overflow-hidden flex items-center h-[55vh]"
-        >
+        <section className="relative overflow-hidden flex items-center h-[55vh]">
           <div className="absolute inset-0">
             <img
               src="/image/KfasBuilding2.png"
@@ -198,13 +208,17 @@ export default function ExecutiveManagementPage() {
         </section>
         <section ref={profileRef} className="bg-white py-16">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 justify-items-center">
               <ProfileCard
                 imageSrc="/image/DrAmeenah.png"
-                imageAlt="Ameenah Rajab Belal Farhan"
-                name="Dr. Ameenah Rajab Farhan"
+                imageAlt="Ameenah R. Farhan"
+                name="Dr. Ameenah R. Farhan"
                 title="Director General"
                 isInView={isInView}
+                borderPosition="right"
+                layout="vertical"
+                compact
+                large
               />
             </div>
           </div>
@@ -214,8 +228,8 @@ export default function ExecutiveManagementPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
               <ProfileCard
                 imageSrc="/image/DrSalehAlqgeely.png"
-                imageAlt="Saleh Abdulmohsen Alaqely"
-                name="Dr. Saleh Abdulmohsen Alaqely"
+                imageAlt="Saleh A. Alaqely"
+                name="Dr. Saleh A. Alaqely"
                 title="Deputy Director General - Support Services"
                 usePlaceholder={false}
                 isInView={isDeputiesInView}
@@ -224,8 +238,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/DrFahadAlfadhli.png"
-                imageAlt="Fahad Mohammad Al-Fadhli"
-                name="Dr. Fahad Mohammad Al-Fadhli"
+                imageAlt="Fahad M. Al-Fadhli"
+                name="Dr. Fahad M. Al-Fadhli"
                 title="Deputy Director General - Scientific Programs"
                 usePlaceholder={false}
                 isInView={isDeputiesInView}
@@ -240,8 +254,8 @@ export default function ExecutiveManagementPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
               <ProfileCard
                 imageSrc="/image/AbdullahBuQmashah.png"
-                imageAlt="Abdullah Salem Abu Qumasha"
-                name="Abdullah Salem Abu Qumasha"
+                imageAlt="Abdullah S. Abu Qumasha"
+                name="Abdullah S. Abu Qumasha"
                 title="Chief Strategy Officer"
                 usePlaceholder={false}
                 isInView={isOfficersInView}
@@ -250,9 +264,9 @@ export default function ExecutiveManagementPage() {
                 layout="vertical"
               />
               <ProfileCard
-                imageSrc="/image/DrBassam%20Alfeeli.png"
-                imageAlt="Dr.Bassam Abdulkareem Alfaili"
-                name="Dr.Bassam Abdulkareem Alfaili"
+                imageSrc="/image/DrBassam.png"
+                imageAlt="Dr.Bassam A. Alfaili"
+                name="Dr.Bassam A. Alfaili"
                 title="Chief Enterprise Development Officer"
                 usePlaceholder={false}
                 isInView={isOfficersInView}
@@ -262,8 +276,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/AliBuMjdad.png"
-                imageAlt="Ali Yahya Bo Mejdad"
-                name="Ali Yahya Bo Mejdad"
+                imageAlt="Ali Y. Bumajdad"
+                name="Ali Y. Bumajdad"
                 title="Chief Research & Technology Officer"
                 usePlaceholder={false}
                 isInView={isOfficersInView}
@@ -279,8 +293,8 @@ export default function ExecutiveManagementPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
               <ProfileCard
                 imageSrc="/image/EmanHabib.png"
-                imageAlt="Eman Habeeb Hussain"
-                name="Eman Habeeb Hussain"
+                imageAlt="Eman H. Hussain"
+                name="Eman H. Hussain"
                 title="Board Secretary"
                 usePlaceholder={false}
                 isInView={isDirectorsInView}
@@ -291,8 +305,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/YousefAlmazeedi.png"
-                imageAlt="Yousef Mousa AlMazeedi"
-                name="Yousef Mousa AlMazeedi"
+                imageAlt="Yousef M. AlMazeedi"
+                name="Yousef M. AlMazeedi"
                 title="Senior Director - Communications"
                 usePlaceholder={false}
                 isInView={isDirectorsInView}
@@ -303,8 +317,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/MubarakAlQuood.png"
-                imageAlt="Mubarak Abdurahman Al-Quoud"
-                name="Mubarak Abdurahman Al-Quoud"
+                imageAlt="Mubarak A. Al-Quoud"
+                name="Mubarak A. Al-Quoud"
                 title="Senior Director - Accounts"
                 usePlaceholder={false}
                 isInView={isDirectorsInView}
@@ -315,8 +329,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/HasanAkbar.png"
-                imageAlt="Hasan Asad Akbar"
-                name="Hasan Asad Akbar"
+                imageAlt="Hasan A. Akbar"
+                name="Hasan A. Akbar"
                 title="Senior Director - Information Technology"
                 usePlaceholder={false}
                 isInView={isDirectorsInView}
@@ -327,8 +341,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/ManarAlmousa.png"
-                imageAlt="Manar Abdulaziz AlMoussa"
-                name="Manar Abdulaziz AlMoussa"
+                imageAlt="Manar A. AlMoussa"
+                name="Manar A. AlMoussa"
                 title="Senior Director - Prizes"
                 usePlaceholder={false}
                 isInView={isDirectorsInView}
@@ -345,8 +359,8 @@ export default function ExecutiveManagementPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
               <ProfileCard
                 imageSrc="/image/DinaAlnaqeeb.png"
-                imageAlt="Dina Nabil Al-Nakib"
-                name="Dina Nabil Al-Nakib"
+                imageAlt="Dina N. Alnakib"
+                name="Dina N. Alnakib"
                 title="Senior Director - Research & Technology Deployment"
                 usePlaceholder={false}
                 isInView={isDirectors2InView}
@@ -357,8 +371,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/KhalodounHarmi.png"
-                imageAlt="Khaldoun Kamel Harmi"
-                name="Khaldoun Kamel Harmi"
+                imageAlt="Khaldoun K. Harmi"
+                name="Khaldoun K. Harmi"
                 title="Senior Director - Planning & Development"
                 usePlaceholder={false}
                 isInView={isDirectors2InView}
@@ -369,8 +383,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/HananAlebrahim.png"
-                imageAlt="Hanan Ibrahim Alibrahim"
-                name="Hanan Ibrahim Alibrahim"
+                imageAlt="Hanan I. Alibrahim"
+                name="Hanan I. Alibrahim"
                 title="Senior Director - Monitoring & Evaluation"
                 usePlaceholder={false}
                 isInView={isDirectors2InView}
@@ -381,8 +395,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/AbdulAziziAbduljalil.png"
-                imageAlt="Abdulaziz Sulaiman Alabduljalil"
-                name="Abdulaziz Sulaiman Alabduljalil"
+                imageAlt="Abdulaziz S. Alabduljalil"
+                name="Abdulaziz S. Alabduljalil"
                 title="Director - Engineering & Administration"
                 usePlaceholder={false}
                 isInView={isDirectors2InView}
@@ -393,8 +407,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/YousefAlabdullah.png"
-                imageAlt="Yousef Abdulaziz Alabdullah"
-                name="Yousef Abdulaziz Alabdullah"
+                imageAlt="Yousef A. Alabdullah"
+                name="Yousef A. Alabdullah"
                 title="Director - Enterprise Learning & Development"
                 usePlaceholder={false}
                 isInView={isDirectors2InView}
@@ -411,8 +425,8 @@ export default function ExecutiveManagementPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
               <ProfileCard
                 imageSrc="/image/NouriaAlBader.png"
-                imageAlt="Nouria Ali AlBader"
-                name="Nouria Ali AlBader"
+                imageAlt="Nouria A. AlBader"
+                name="Nouria A. AlBader"
                 title="Director - Investment & Treasury"
                 usePlaceholder={false}
                 isInView={isDirectors3InView}
@@ -422,8 +436,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/AishaAlDuaij.png"
-                imageAlt="Aisha Hani AlDuaij"
-                name="Aisha Hani AlDuaij"
+                imageAlt="Aisha H. AlDuaij"
+                name="Aisha H. AlDuaij"
                 title="Director - Human Resources"
                 usePlaceholder={false}
                 isInView={isDirectors3InView}
@@ -433,8 +447,8 @@ export default function ExecutiveManagementPage() {
               />
               <ProfileCard
                 imageSrc="/image/AbrarAlmosa.png"
-                imageAlt="Abrar Sulaiman Almoosa"
-                name="Abrar Sulaiman Almoosa"
+                imageAlt="Abrar S. Almoosa"
+                name="Abrar S. Almoosa"
                 title="Director - Research Capacity Building"
                 usePlaceholder={false}
                 isInView={isDirectors3InView}
