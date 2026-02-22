@@ -212,8 +212,8 @@ export default function OurImpactStories() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
-    amount: 0.08,
-    margin: "0px 0px -60px 0px",
+    amount: 0.25,
+    margin: "0px 0px -80px 0px",
   });
 
   const news = [

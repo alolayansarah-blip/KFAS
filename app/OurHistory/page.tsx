@@ -278,7 +278,7 @@ export default function OurHistoryPage() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8">
             <div ref={sectionRef} className="text-left">
               {/* Breadcrumb */}
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
@@ -301,7 +301,7 @@ export default function OurHistoryPage() {
 
         {/* History Content Section */}
         <section className="py-20 sm:py-28 bg-white">
-          <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="space-y-12">
               {/* Introduction Text */}
               <motion.div

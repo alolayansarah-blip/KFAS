@@ -25,7 +25,7 @@ export default function OurStrategyPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
           </div>
 
-          <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="text-left">
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
@@ -41,7 +41,7 @@ export default function OurStrategyPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
         <section className="bg-white py-20 sm:py-28">
-          <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="space-y-6">
             <p className="text-gray-600 leading-[1.9] text-base text-justify capitalize">
               With its strategy for 2025-2029, the Kuwait Foundation for the
@@ -114,7 +114,7 @@ export default function OurStrategyPage() {
             <motion.img
               src="/image/KFAS_Strategy.png"
               alt="KFAS strategy diagram"
-              className="mt-8 w-full max-w-2xl mx-auto"
+              className="mt-8 w-full max-w-7xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

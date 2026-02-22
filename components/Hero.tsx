@@ -279,7 +279,7 @@ export default function Hero({
       <motion.div 
         className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-left"
       >
-        <div className="max-w-4xl">
+        <div className="max-w-7xl">
           {/* Subtitle Badge */}
           {subtitle && (
             <motion.div
@@ -349,7 +349,7 @@ export default function Hero({
               transition={{ duration: 0.8, delay: 0.8 }}
               className="relative"
             >
-              <p className="text-base sm:text-lg text-white/90 max-w-2xl leading-relaxed backdrop-blur-sm bg-black/20 p-6 rounded-2xl border border-white/10">
+              <p className="text-base sm:text-lg text-white/90 max-w-7xl leading-relaxed backdrop-blur-sm bg-black/20 p-6 rounded-2xl border border-white/10">
                 {description}
               </p>
             </motion.div>

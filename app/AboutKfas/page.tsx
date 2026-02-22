@@ -47,7 +47,7 @@ export default function AboutKfasPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
           </div>
 
-          <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="text-left">
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
@@ -65,7 +65,7 @@ export default function AboutKfasPage() {
 
         {/* About KFAS Text Sections */}
         <section className="py-20 sm:py-28 bg-white">
-          <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="space-y-12">
               <TextBlock delay={0}>
                 The Kuwait Foundation for the Advancement of Sciences (KFAS) is
@@ -229,7 +229,7 @@ export default function AboutKfasPage() {
 
         {/* Logos Section */}
         <section id="logos" className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="bg-[#BBDEFB] px-6 py-10 sm:px-8 lg:px-12">
               {[
                 {

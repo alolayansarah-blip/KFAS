@@ -129,14 +129,14 @@ function CardItem({ title, href }: Card & { index: number }) {
     >
       <Link
         href={href}
-        className="group relative flex flex-col justify-between p-6 sm:p-8 h-full min-h-[140px] rounded-xl bg-[#56A0D7] shadow-[0_4px_20px_rgba(86,160,215,0.25)] hover:shadow-[0_8px_32px_rgba(86,160,215,0.35)] hover:bg-[#4A8FC4] transition-all duration-300 overflow-hidden"
+        className="group relative flex flex-col justify-between p-6 sm:p-8 h-full min-h-[140px] rounded-xl bg-[#EC601B] shadow-[0_4px_20px_rgba(236,96,27,0.5)] hover:shadow-[0_8px_32px_rgba(236,96,27,0.6)] hover:bg-[#F07A3F] transition-all duration-300 overflow-hidden"
       >
         <div
-          className="absolute bottom-4 right-4 w-14 h-14 border-r border-b border-white/40 pointer-events-none"
+          className="absolute bottom-4 right-4 w-14 h-14 border-r border-b border-white/30 pointer-events-none"
           style={{ borderBottomRightRadius: "2px" }}
           aria-hidden
         />
-        <p className="font-poppins font-semibold text-white leading-snug text-base sm:text-lg tracking-tight pr-14 drop-shadow-sm">
+        <p className="font-poppins font-semibold text-white leading-snug text-lg sm:text-xl tracking-tight pr-14">
           {title}
         </p>
         <div className="mt-4 flex items-center gap-2 text-sm text-white/90 font-medium group-hover:text-white group-hover:gap-3 transition-all duration-300">
@@ -156,11 +156,11 @@ export default function FlippedCardStack() {
       className="relative w-full bg-gray-50 py-16 md:py-20"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.2, margin: "50px" }}
+      viewport={{ once: true, amount: 0.25, margin: "0px 0px -80px 0px" }}
       variants={containerVariants}
     >
       <motion.div
-        className="mx-auto max-w-5xl px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
+        className="mx-auto max-w-7xl px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
         variants={containerVariants}
       >
         {cards.map((card, index) => (

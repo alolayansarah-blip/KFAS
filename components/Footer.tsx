@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { memo, useState } from "react";
+import { motion } from "framer-motion";
 
 interface FooterProps {
   logo?: string;
@@ -108,6 +109,22 @@ function Footer({
     }
   };
 
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+    },
+  };
+
   return (
     <footer className="relative overflow-hidden">
       {/* Background Image */}
@@ -134,9 +151,15 @@ function Footer({
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.2)_100%)]" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-10 lg:pt-12 pb-6 lg:pb-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.25, margin: "0px 0px -80px 0px" }}
+          variants={containerVariants}
+        >
           {/* Brand Column */}
-          <div className="flex flex-col">
+          <motion.div className="flex flex-col" variants={itemVariants}>
             <Link
               href="/"
               className="inline-flex flex-col gap-0 mb-4 transition-transform hover:scale-105 duration-300"
@@ -174,10 +197,10 @@ function Footer({
                 </a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Navigation Column */}
-          <nav>
+          <motion.nav variants={itemVariants}>
             <h3 className="text-white font-bold text-lg tracking-[0.15em] mb-3">
               Explore
             </h3>
@@ -197,10 +220,10 @@ function Footer({
                 </li>
               ))}
             </ul>
-          </nav>
+          </motion.nav>
 
           {/* Newsletter Column */}
-          <div>
+          <motion.div variants={itemVariants}>
             <h3 className="text-white font-bold text-lg tracking-[0.15em] mb-3">
               Subscribe
             </h3>
@@ -246,10 +269,10 @@ function Footer({
                 {message}
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Map Column */}
-          <div>
+          <motion.div variants={itemVariants}>
             <a
               href={CONTACT_INFO.mapUrl}
               target="_blank"
@@ -285,15 +308,21 @@ function Footer({
                 →
               </span>
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Bottom Bar */}
-        <div className="mt-6 pt-4 border-t border-white/15">
+        <motion.div
+          className="mt-6 pt-4 border-t border-white/15"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <p className="text-white/60 text-xs text-center sm:text-left">
             © {currentYear} Kuwait Foundation for the Advancement of Sciences
           </p>
-        </div>
+        </motion.div>
       </div>
 
       <style jsx>{`

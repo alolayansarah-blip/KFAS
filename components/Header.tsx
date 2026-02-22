@@ -87,7 +87,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         href: "/Science-and-Society/Activities-and-Events",
       },
       { label: "Publications", href: "/Science-and-Society/Publications" },
-      { label: "Outcomes", href: "/Science-and-Society/Outcomes4" },
+      // { label: "Outcomes", href: "/Science-and-Society/Outcomes4" },
     ],
   },
   {
@@ -344,7 +344,7 @@ function Header({
     >
       {/* Desktop Header */}
       <nav
-        className={`hidden md:block w-full max-w-[1600px] mx-auto px-4 lg:px-6 xl:px-8 transition-all duration-300 ${
+        className={`hidden md:block w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 transition-all duration-300 ${
           shouldShowWhiteBg ? "py-0.5" : "py-3"
         }`}
       >

@@ -334,7 +334,7 @@ export default function BoardOfDirectorsPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
           </div>
 
-          <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="text-left">
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
@@ -351,8 +351,8 @@ export default function BoardOfDirectorsPage() {
         </section>
 
         <section ref={chairmanRef} className="bg-white py-16">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="max-w-2xl mx-auto">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="max-w-7xl mx-auto">
               <ProfileCard
                 imageSrc="/image/SHIEKH%20MESHAAL%20JABER%20AL%20SABAH-%20BM.png"
                 imageAlt="H.H. The Amir Sheikh Meshal Al-Ahmad Al-Jaber Al-Sabah"
@@ -371,7 +371,7 @@ export default function BoardOfDirectorsPage() {
         </section>
 
         <section ref={membersRef} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 justify-items-center">
               <ProfileCard
                 imageSrc="/image/ShaikhAhmadAlsabah.png"
@@ -426,7 +426,7 @@ export default function BoardOfDirectorsPage() {
         </section>
 
         <section ref={members2Ref} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 justify-items-center">
               <div className="hidden lg:block" aria-hidden />
               <ProfileCard
@@ -459,7 +459,7 @@ export default function BoardOfDirectorsPage() {
         </section>
 
         <section ref={directorGeneralRef} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 justify-items-center">
               <ProfileCard
                 imageSrc="/image/DrAmeenah.png"

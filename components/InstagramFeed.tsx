@@ -153,7 +153,7 @@ export default function InstagramFeed() {
       className="relative py-20 lg:py-32 bg-gray-50 overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.05, margin: "-80px" }}
+      viewport={{ once: true, amount: 0.25, margin: "0px 0px -100px 0px" }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {/* Decorative background elements */}

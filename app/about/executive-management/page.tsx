@@ -181,7 +181,7 @@ export default function ExecutiveManagementPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
           </div>
 
-          <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="text-left">
               <div className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
                 <span className="text-white/60">About</span>
@@ -197,8 +197,8 @@ export default function ExecutiveManagementPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
         <section ref={profileRef} className="bg-white py-16">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="max-w-2xl mx-auto">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="max-w-7xl mx-auto">
               <ProfileCard
                 imageSrc="/image/DrAmeenah.png"
                 imageAlt="Ameenah Rajab Belal Farhan"
@@ -210,7 +210,7 @@ export default function ExecutiveManagementPage() {
           </div>
         </section>
         <section ref={deputiesRef} className="bg-white pb-16">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
               <ProfileCard
                 imageSrc="/image/DrSalehAlqgeely.png"
@@ -236,7 +236,7 @@ export default function ExecutiveManagementPage() {
           </div>
         </section>
         <section ref={officersRef} className="bg-white pb-16">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
               <ProfileCard
                 imageSrc="/image/AbdullahBuQmashah.png"
@@ -275,7 +275,7 @@ export default function ExecutiveManagementPage() {
           </div>
         </section>
         <section ref={directorsRef} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
               <ProfileCard
                 imageSrc="/image/EmanHabib.png"
@@ -341,7 +341,7 @@ export default function ExecutiveManagementPage() {
           </div>
         </section>
         <section ref={directors2Ref} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
               <ProfileCard
                 imageSrc="/image/DinaAlnaqeeb.png"
@@ -407,7 +407,7 @@ export default function ExecutiveManagementPage() {
           </div>
         </section>
         <section ref={directors3Ref} className="bg-white pb-20">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
               <ProfileCard
                 imageSrc="/image/NouriaAlBader.png"
