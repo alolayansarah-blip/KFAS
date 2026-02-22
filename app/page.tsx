@@ -1,4 +1,4 @@
-import dynamicImport from "next/dynamic";
+import nextDynamic from "next/dynamic";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -7,28 +7,28 @@ import WhoWeAre from "@/components/WhoWeAre";
 // Lazy load components below the fold for better performance
 export const dynamic = "force-dynamic";
 
-const FlippedCardStack = dynamicImport(
+const FlippedCardStack = nextDynamic(
   () => import("@/components/FlippedCardStack"),
   {
     loading: () => <div className="min-h-[400px]" />,
   },
 );
-const StatsCounter = dynamicImport(() => import("@/components/StatsCounter"), {
+const StatsCounter = nextDynamic(() => import("@/components/StatsCounter"), {
   loading: () => <div className="min-h-[400px]" />,
 });
 // const ExploreOurWork = dynamic(() => import("@/components/ExploreOurWork"), {
 //   loading: () => <div className="min-h-[400px]" />,
 // });
-const LogoShowcase = dynamicImport(() => import("@/components/LogoShowcase"), {
+const LogoShowcase = nextDynamic(() => import("@/components/LogoShowcase"), {
   loading: () => <div className="min-h-[200px]" />,
 });
-const LatestNews = dynamicImport(() => import("@/components/LatestNews"), {
+const LatestNews = nextDynamic(() => import("@/components/LatestNews"), {
   loading: () => <div className="min-h-[400px]" />,
 });
-const InstagramFeed = dynamicImport(() => import("@/components/InstagramFeed"), {
+const InstagramFeed = nextDynamic(() => import("@/components/InstagramFeed"), {
   loading: () => <div className="min-h-[400px]" />,
 });
-const SocialShareMenu = dynamicImport(() => import("@/components/SocialShareMenu"));
+const SocialShareMenu = nextDynamic(() => import("@/components/SocialShareMenu"));
 
 export default function Home() {
   return (
