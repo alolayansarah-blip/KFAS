@@ -126,29 +126,7 @@ function Footer({
   };
 
   return (
-    <footer className="relative overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-right bg-no-repeat"
-        style={{ backgroundImage: "url(/image/KFASFooter.png)" }}
-      />
-
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#EC601B] via-[#EC601B]/80 via-[#EC601B]/50 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#D64E10]/60 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#C23D08]/40 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,200,100,0.2),transparent_40%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(200,80,40,0.3),transparent_50%)]" />
-
-      {/* Animated Orbs */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-gradient-to-br from-yellow-400/15 to-orange-500/10 rounded-full blur-3xl animate-pulse" />
-      <div
-        className="absolute bottom-10 left-1/3 w-80 h-80 bg-gradient-to-tl from-red-500/10 to-orange-400/10 rounded-full blur-3xl animate-pulse"
-        style={{ animationDelay: "1s" }}
-      />
-
-      {/* Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.2)_100%)]" />
+    <footer className="relative overflow-hidden bg-[#1D2D44]">
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-10 lg:pt-12 pb-6 lg:pb-8">
         <motion.div
