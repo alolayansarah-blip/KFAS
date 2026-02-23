@@ -278,7 +278,7 @@ export default function OurHistoryPage() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 w-full max-w-7xl mr-auto px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8">
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8">
             <div ref={sectionRef} className="text-left">
               {/* Breadcrumb */}
               <motion.div
