@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { MOTION } from "@/lib/motion";
 
 interface InstagramPost {
   id: string;
@@ -53,11 +54,11 @@ const placeholderPosts: InstagramPost[] = [
 ];
 
 export default function InstagramFeed() {
-  const [isVisible, setIsVisible] = useState(false);
   const [posts, setPosts] = useState<InstagramPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, MOTION.viewport);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -65,28 +66,6 @@ export default function InstagramFeed() {
 
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const ySecondary = useTransform(scrollYProgress, [0, 1], [-30, 30]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     const checkTokenAndFetch = async () => {
@@ -151,10 +130,10 @@ export default function InstagramFeed() {
       ref={sectionRef}
       id="instagram-feed"
       className="relative py-20 lg:py-32 bg-gray-50 overflow-hidden"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.25, margin: "0px 0px -100px 0px" }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={MOTION.viewport}
+      transition={{ duration: MOTION.duration, ease: MOTION.ease }}
     >
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -172,9 +151,9 @@ export default function InstagramFeed() {
         {/* Header */}
         <motion.div
           className="mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          variants={MOTION.fadeUpDelay(0.1)}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
         >
           <div>
             <div className="inline-block mb-4">
@@ -192,8 +171,8 @@ export default function InstagramFeed() {
                 <motion.div
                   className="absolute bottom-2 left-0 right-0 h-3 bg-[#EC601B]/20 -z-10"
                   initial={{ scaleX: 0 }}
-                  animate={isVisible ? { scaleX: 1 } : { scaleX: 0 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
+                  animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+                  transition={{ duration: MOTION.duration, delay: 0.3, ease: MOTION.ease }}
                 />
               </span>
             </h2>
@@ -231,12 +210,10 @@ export default function InstagramFeed() {
                 href={post.permalink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                initial={{ opacity: 0, y: 30 }}
-                animate={
-                  isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
-                }
-                transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl"
+                variants={MOTION.fadeUpDelay(0.1 + index * 0.08)}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
                 onHoverStart={() => setHoveredIndex(index)}
                 onHoverEnd={() => setHoveredIndex(null)}
               >
@@ -274,9 +251,9 @@ export default function InstagramFeed() {
         {/* Follow Button */}
         <motion.div
           className="text-center mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          variants={MOTION.fadeUpDelay(0.5)}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
         >
           <a
             href="https://www.instagram.com/kfasinfo/"

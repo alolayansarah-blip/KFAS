@@ -86,35 +86,20 @@
 // }
 "use client";
 
-import React from "react";
+// import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { MOTION } from "@/lib/motion";
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.55,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-    },
-  },
-};
+const containerVariants = MOTION.container;
+const cardVariants = MOTION.item;
 
 const cards = [
   { title: "Research Grants", href: "/Research" },
-  { title: "Learning and Development for Professionals", href: "/Learning-and-Development" },
+  {
+    title: "Learning and Development for Professionals",
+    href: "/Learning-and-Development",
+  },
   { title: "Our Publications", href: "/Science-and-Society/Publications" },
 ];
 
@@ -125,25 +110,23 @@ function CardItem({ title, href }: Card & { index: number }) {
     <motion.div
       variants={cardVariants}
       className="h-full"
-      whileHover={{ y: -2, transition: { duration: 0.2 } }}
+      whileHover={MOTION.whileHover}
     >
       <Link
         href={href}
-        className="group relative flex flex-col justify-between p-6 sm:p-8 h-full min-h-[140px] rounded-xl bg-[#EC601B] shadow-[0_4px_20px_rgba(236,96,27,0.5)] hover:shadow-[0_8px_32px_rgba(236,96,27,0.6)] hover:bg-[#F07A3F] transition-all duration-300 overflow-hidden"
+        className="group block h-full rounded-xl transition-shadow duration-300 hover:shadow-lg"
       >
-        <div
-          className="absolute bottom-4 right-4 w-14 h-14 border-r border-b border-white/30 pointer-events-none"
-          style={{ borderBottomRightRadius: "2px" }}
-          aria-hidden
-        />
-        <p className="font-poppins font-semibold text-white leading-snug text-lg sm:text-xl tracking-tight pr-14">
-          {title}
-        </p>
-        <div className="mt-4 flex items-center gap-2 text-sm text-white/90 font-medium group-hover:text-white group-hover:gap-3 transition-all duration-300">
-          <span>Explore</span>
-          <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
+        <div className="relative h-full">
+          {/* Decorative corner — like WhoWeAre image */}
+          <div
+            className="absolute bottom-0 right-0 w-16 h-16 border-r border-b border-[#2563EB] pointer-events-none z-10"
+            aria-hidden
+          />
+          <div className="relative h-full bg-blue-50 p-4 sm:p-5 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] min-h-[100px] flex flex-col justify-center items-center text-center gap-3 transition-colors duration-300 group-hover:bg-blue-100">
+            <p className="font-poppins font-semibold text-[#1D2D44] leading-snug text-base sm:text-lg tracking-tight group-hover:text-[#EC601B] transition-colors duration-300">
+              {title}
+            </p>
+          </div>
         </div>
       </Link>
     </motion.div>
@@ -153,20 +136,22 @@ function CardItem({ title, href }: Card & { index: number }) {
 export default function FlippedCardStack() {
   return (
     <motion.section
-      className="relative w-full bg-gray-50 py-16 md:py-20"
+      className="relative w-full bg-white py-12 lg:py-20"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.25, margin: "0px 0px -80px 0px" }}
+      viewport={MOTION.viewport}
       variants={containerVariants}
     >
-      <motion.div
-        className="mx-auto max-w-7xl px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
-        variants={containerVariants}
-      >
-        {cards.map((card, index) => (
-          <CardItem key={index} {...card} index={index} />
-        ))}
-      </motion.div>
+      <div className="mx-auto max-w-[800px] px-6 lg:px-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
+          variants={containerVariants}
+        >
+          {cards.map((card, index) => (
+            <CardItem key={index} {...card} index={index} />
+          ))}
+        </motion.div>
+      </div>
     </motion.section>
   );
 }

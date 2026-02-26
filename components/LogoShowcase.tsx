@@ -230,6 +230,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import SplitText from "./SplitText";
+import { MOTION } from "@/lib/motion";
 
 const tiles = [
   {
@@ -271,8 +272,8 @@ export default function LogoShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
-    amount: 0.25,
-    margin: "0px 0px -100px 0px",
+    amount: 0.2,
+    margin: "0px 0px -80px 0px" as const,
   });
   const activeIndex = hoveredIndex ?? 0;
   const activeImage = tiles[activeIndex].image;
@@ -293,10 +294,10 @@ export default function LogoShowcase() {
     <motion.section
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-white"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.25, margin: "0px 0px -100px 0px" }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={MOTION.viewport}
+      transition={{ duration: MOTION.duration, ease: MOTION.ease }}
     >
       {/* Hero */}
       <div className="relative min-h-[480px] sm:min-h-[520px] md:min-h-[620px]">
@@ -359,16 +360,10 @@ export default function LogoShowcase() {
                     onMouseLeave={() => setHoveredIndex(null)}
                     onClick={() => setHoveredIndex(index)}
                     aria-label={tile.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={
-                      isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-                    }
-                    transition={{
-                      duration: 0.5,
-                      delay: 0.2 + index * 0.1,
-                      ease: [0.25, 0.46, 0.45, 0.94],
-                    }}
-                    whileHover={{ scale: 1.05, y: -4 }}
+                    variants={MOTION.fadeUpDelay(0.1 + index * 0.08)}
+                    initial="hidden"
+                    animate={isInView ? "visible" : "hidden"}
+                    whileHover={MOTION.whileHover}
                   >
                     {/* Mobile: frosted pill backdrop for contrast; invisible on lg+ */}
                     <span className="flex items-center justify-center w-full rounded-2xl bg-white/10 backdrop-blur-sm p-4 lg:contents lg:rounded-none lg:bg-transparent lg:backdrop-blur-none lg:p-0">
@@ -393,47 +388,56 @@ export default function LogoShowcase() {
               </div>
             </div>
 
-            {/* Right card — desktop only */}
+            {/* Right card — desktop only, LatestNews style, full height */}
             <motion.div
-              className="hidden lg:block lg:w-[380px] xl:w-[420px] lg:flex-shrink-0 lg:self-stretch overflow-hidden rounded-2xl"
-              initial={{ opacity: 0, x: 30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+              className="group hidden lg:block lg:w-[380px] xl:w-[420px] lg:flex-shrink-0 lg:self-stretch"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{
-                duration: 0.6,
-                delay: 0.4,
-                ease: [0.25, 0.46, 0.45, 0.94],
+                duration: MOTION.duration,
+                delay: 0.3,
+                ease: MOTION.ease,
               }}
             >
-              <div className="relative h-full w-full rounded-2xl overflow-hidden ring-1 ring-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-                <img
-                  src={visibleImage}
-                  alt={tiles[activeIndex].title}
-                  className="h-full w-full object-cover object-center"
-                  style={{
-                    opacity: fadeIn ? 1 : 0,
-                    transition: "opacity 0.6s ease",
-                  }}
-                />
+              <div className="relative h-full">
+                {/* Decorative corner — orange, thick */}
                 <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background:
-                      "linear-gradient(to top, rgba(29, 45, 68, 0.95) 0%, rgba(29, 45, 68, 0.5) 35%, transparent 70%)",
-                  }}
+                  className="absolute bottom-0 right-0 w-16 h-16 border-r-4 border-b-4 border-[#EC601B] pointer-events-none z-10"
+                  aria-hidden
                 />
-                <div className="absolute bottom-0 left-0 right-0 p-5 pt-16 pointer-events-none">
-                  <h3 className="font-poppins text-lg font-semibold text-white mb-2">
-                    {tiles[activeIndex].title}
-                  </h3>
-                  <p
-                    className="font-poppins text-sm text-white/90 leading-relaxed"
-                    style={{
-                      opacity: fadeIn ? 1 : 0,
-                      transition: "opacity 0.6s ease",
-                    }}
-                  >
-                    {tiles[activeIndex].description}
-                  </p>
+                <div className="relative h-full bg-blue-50 p-4 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                  <div className="relative h-full min-h-[280px] overflow-hidden">
+                    <img
+                      src={visibleImage}
+                      alt={tiles[activeIndex].title}
+                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      style={{
+                        opacity: fadeIn ? 1 : 0,
+                        transition: "opacity 0.6s ease",
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(29, 45, 68, 0.95) 0%, rgba(29, 45, 68, 0.5) 35%, transparent 70%)",
+                      }}
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 p-5 pt-16 pointer-events-none">
+                      <h3 className="font-poppins text-lg font-semibold text-white mb-2">
+                        {tiles[activeIndex].title}
+                      </h3>
+                      <p
+                        className="font-poppins text-sm text-white/90 leading-relaxed"
+                        style={{
+                          opacity: fadeIn ? 1 : 0,
+                          transition: "opacity 0.6s ease",
+                        }}
+                      >
+                        {tiles[activeIndex].description}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>

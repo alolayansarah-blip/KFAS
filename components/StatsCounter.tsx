@@ -201,10 +201,10 @@ export default function CounterSection() {
                 ease: "easeOut",
               }}
               whileHover={{ y: -8, scale: 1.05 }}
-              className="group relative bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center transition-all duration-300 border border-white/20 hover:bg-white/15 hover:border-white/40 cursor-default"
+              className="group relative bg-white/10 backdrop-blur-md p-6 text-center transition-all duration-300 border border-white/20 hover:bg-white/15 hover:border-white/40 cursor-default"
             >
               {/* Decorative corner element */}
-              <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white/30 rounded-tr-2xl group-hover:border-white/50 transition-colors duration-300" />
+              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/30 group-hover:border-white/50 transition-colors duration-300" />
 
               {/* Number */}
               <div className="font-poppins text-3xl lg:text-4xl font-bold text-white mb-3 group-hover:scale-110 transition-transform duration-300 tabular-nums">
@@ -220,7 +220,7 @@ export default function CounterSection() {
               </p>
 
               {/* Glow effect on hover */}
-              <div className="absolute inset-0 rounded-2xl bg-white/0 group-hover:bg-white/5 transition-colors duration-300" />
+              <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-300" />
             </motion.div>
           ))}
         </div>

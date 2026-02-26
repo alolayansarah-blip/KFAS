@@ -247,15 +247,23 @@ export default function Hero({
     <motion.section
       ref={sectionRef}
       className={`relative min-h-screen flex items-center justify-start pt-24 overflow-hidden ${className}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
-      {/* Video Background with Improved Overlay */}
+      {/* Video Background with Brand Overlay */}
       <div className="absolute inset-0 z-0">
-        {/* Cleaner gradient overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent z-10" />
+        {/* Brand gradient: navy tint for cohesion with site */}
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background:
+              "linear-gradient(105deg, rgba(29,45,68,0.75) 0%, rgba(29,45,68,0.45) 40%, rgba(29,45,68,0.25) 70%, transparent 100%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1D2D44]/50 via-transparent to-[#1D2D44]/60 z-10" />
+        {/* Subtle brand blue accent */}
+        <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-[#56A0D7]/15 blur-3xl z-10 pointer-events-none" />
         
         {video && (
           <video
@@ -285,11 +293,11 @@ export default function Hero({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="inline-flex items-center gap-3 mb-8"
             >
-              <div className="h-[2px] w-12 bg-gradient-to-r from-[#7DC0F1] to-[#EC601B]"></div>
-              <span className="text-sm font-semibold text-white/90 uppercase tracking-widest">
+              <div className="h-[2px] w-12 bg-gradient-to-r from-[#56A0D7] to-[#EC601B]" />
+              <span className="text-xs font-semibold text-white/80 uppercase tracking-[0.25em]">
                 {subtitle}
               </span>
             </motion.div>
@@ -297,32 +305,37 @@ export default function Hero({
 
           {/* English Title with Fade-up */}
           {titleEn && (
-            <motion.h1
-              className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6"
-              style={{
-                textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6)'
-              }}
-              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: prefersReducedMotion ? 0 : 0.3,
-                ease: [0.25, 0.4, 0.25, 1],
-              }}
-            >
-              {splitLines(titleEn).map((line, lineIndex) => (
-                <span key={`line-${lineIndex}`} className="block">
-                  {splitWords(line.trim()).map((word, i) => (
-                    <span
-                      key={`en-${lineIndex}-${i}`}
-                      className="inline-block mr-3 sm:mr-4"
-                    >
-                      {word}
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </motion.h1>
+            <>
+              <motion.h1
+                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-[1.1] drop-shadow-2xl [text-shadow:_2px_2px_12px_rgba(0,0,0,0.6)]"
+                initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: prefersReducedMotion ? 0 : 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+              >
+                {splitLines(titleEn).map((line, lineIndex) => (
+                  <span key={`line-${lineIndex}`} className="block">
+                    {splitWords(line.trim()).map((word, i) => (
+                      <span
+                        key={`en-${lineIndex}-${i}`}
+                        className="inline-block mr-3 sm:mr-4"
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </span>
+                ))}
+              </motion.h1>
+              <motion.div
+                className="h-1 w-20 bg-[#EC601B] mt-6 mb-6 origin-left"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              />
+            </>
           )}
 
           {/* Arabic Title with Better Styling */}
@@ -331,7 +344,7 @@ export default function Hero({
               dir="rtl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-white/95 text-2xl sm:text-3xl lg:text-4xl font-light tracking-wide mb-6"
               style={{
                 textShadow: '0 2px 12px rgba(0, 0, 0, 0.7)'
@@ -346,10 +359,10 @@ export default function Hero({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="relative"
             >
-              <p className="text-base sm:text-lg text-white/90 max-w-7xl leading-relaxed backdrop-blur-sm bg-black/20 p-6 rounded-2xl border border-white/10">
+              <p className="text-base sm:text-lg text-white/90 max-w-2xl leading-relaxed backdrop-blur-sm bg-[#1D2D44]/30 p-6 rounded-xl border border-[#56A0D7]/20">
                 {description}
               </p>
             </motion.div>
@@ -365,7 +378,7 @@ export default function Hero({
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 1.2 }}
           onClick={togglePlayPause}
-          className="absolute right-6 sm:right-8 lg:right-12 bottom-8 sm:bottom-12 z-30 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center bg-white/15 hover:bg-white/25 backdrop-blur-md rounded-full transition-all duration-300 group border border-white/20 hover:border-white/40"
+          className="absolute right-6 sm:right-8 lg:right-12 bottom-8 sm:bottom-12 z-30 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center bg-[#1D2D44]/40 hover:bg-[#1D2D44]/60 backdrop-blur-md rounded-full transition-all duration-300 group border border-white/25 hover:border-[#EC601B]/60"
           aria-label={isPlaying ? "Pause video" : "Play video"}
         >
           {isPlaying ? (
@@ -390,18 +403,18 @@ export default function Hero({
 
       {/* Scroll Indicator */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 hidden sm:flex flex-col items-center gap-2"
       >
-        <span className="text-xs text-white/70 uppercase tracking-widest">Scroll</span>
+        <span className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.25em]">Scroll</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2"
+          className="w-6 h-10 rounded-full border-2 border-[#56A0D7]/40 flex items-start justify-center p-2"
         >
-          <motion.div className="w-1.5 h-1.5 bg-white/70 rounded-full" />
+          <motion.div className="w-1.5 h-1.5 bg-[#EC601B] rounded-full" />
         </motion.div>
       </motion.div>
     </motion.section>

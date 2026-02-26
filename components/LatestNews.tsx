@@ -189,32 +189,11 @@
 
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-
-const cardVariants = {
-  hidden: (i: number) => ({
-    opacity: 0,
-    y: 24,
-    x: i % 2 === 0 ? -16 : 16,
-  }),
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    x: 0,
-    transition: {
-      duration: 0.6,
-      delay: 0.15 + i * 0.1,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-    },
-  }),
-};
+import { MOTION } from "@/lib/motion";
 
 export default function OurImpactStories() {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, {
-    once: true,
-    amount: 0.25,
-    margin: "0px 0px -80px 0px",
-  });
+  const isInView = useInView(sectionRef, MOTION.viewport);
 
   const news = [
     {
@@ -276,9 +255,9 @@ export default function OurImpactStories() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+          variants={MOTION.fadeUpDelay(0.1)}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
           className="mb-16 flex items-end justify-between"
         >
           <div>
@@ -307,15 +286,19 @@ export default function OurImpactStories() {
         </motion.div>
 
         {/* News Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={MOTION.container}
+        >
           {sortedNews.map((item, index) => (
             <motion.article
               key={index}
-              custom={index}
-              variants={cardVariants}
+              variants={MOTION.item}
               initial="hidden"
               animate={isInView ? "visible" : "hidden"}
-              whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+              whileHover={MOTION.whileHover}
               className="group h-full p-4 rounded-xl transition-shadow duration-300 hover:shadow-lg"
             >
               <a href={item.link} className="flex h-full flex-col">
@@ -357,7 +340,7 @@ export default function OurImpactStories() {
               </a>
             </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </motion.section>
   );
