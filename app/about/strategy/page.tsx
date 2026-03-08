@@ -1,4 +1,4 @@
-import OurStrategyPage from "@/app/OurStrategy/page";
+import OurStrategyPage from "@/app/about/OurStrategy/page";
 
 export default OurStrategyPage;
 
