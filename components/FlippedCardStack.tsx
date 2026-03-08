@@ -86,9 +86,9 @@
 // }
 "use client";
 
-// import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { MOTION } from "@/lib/motion";
 
 const containerVariants = MOTION.container;
@@ -122,10 +122,16 @@ function CardItem({ title, href }: Card & { index: number }) {
             className="absolute bottom-0 right-0 w-16 h-16 border-r border-b border-[#2563EB] pointer-events-none z-10"
             aria-hidden
           />
-          <div className="relative h-full bg-blue-50 p-4 sm:p-5 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] min-h-[100px] flex flex-col justify-center items-center text-center gap-3 transition-colors duration-300 group-hover:bg-blue-100">
-            <p className="font-poppins font-semibold text-[#1D2D44] leading-snug text-base sm:text-lg tracking-tight group-hover:text-[#EC601B] transition-colors duration-300">
+          <div className="relative h-full bg-blue-50 p-4 sm:p-5 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] min-h-[100px] flex flex-col justify-between items-center text-center transition-colors duration-300 group-hover:bg-blue-100">
+            <p className="font-poppins font-semibold text-[#1D2D44] leading-snug text-base sm:text-lg tracking-tight transition-colors duration-300">
               {title}
             </p>
+            <div className="flex items-center justify-center gap-2 text-[11px] sm:text-xs font-semibold capitalize text-[#1D2D44]/80 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:gap-3 mt-auto">
+              <span>Read more</span>
+              <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </div>
           </div>
         </div>
       </Link>
@@ -134,15 +140,28 @@ function CardItem({ title, href }: Card & { index: number }) {
 }
 
 export default function FlippedCardStack() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const cardsY = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    prefersReducedMotion ? [0, 0, 0, 0] : [30, 0, 0, -30]
+  );
+
   return (
     <motion.section
+      ref={sectionRef}
       className="relative w-full bg-white py-12 lg:py-20"
       initial="hidden"
       whileInView="visible"
       viewport={MOTION.viewport}
       variants={containerVariants}
     >
-      <div className="mx-auto max-w-[800px] px-6 lg:px-8">
+      <motion.div className="mx-auto max-w-[800px] px-6 lg:px-8" style={{ y: cardsY }}>
         <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
           variants={containerVariants}
@@ -151,7 +170,7 @@ export default function FlippedCardStack() {
             <CardItem key={index} {...card} index={index} />
           ))}
         </motion.div>
-      </div>
+      </motion.div>
     </motion.section>
   );
 }

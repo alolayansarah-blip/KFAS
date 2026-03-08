@@ -2,7 +2,7 @@
 
 import React, { memo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { MOTION } from "@/lib/motion";
 
 function WhoWeAre() {
@@ -10,6 +10,17 @@ function WhoWeAre() {
   const [showFullName, setShowFullName] = useState(false);
 
   const isVisible = useInView(sectionRef, MOTION.viewport);
+
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const imageY = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    prefersReducedMotion ? [0, 0, 0] : [40, 0, -40]
+  );
 
   // Trigger full name when section is 50% in view
   const isMidVisible = useInView(sectionRef, {
@@ -46,11 +57,12 @@ function WhoWeAre() {
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
-          {/* ── Image ── */}
+          {/* ── Image (parallax) ── */}
           <motion.div
             variants={fadeUp(0.1)}
             initial="hidden"
             animate={isVisible ? "visible" : "hidden"}
+            style={{ y: imageY }}
             className="group relative w-full"
           >
             <div className="relative">

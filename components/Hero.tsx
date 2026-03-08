@@ -194,7 +194,7 @@
 
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 
 interface HeroProps {
@@ -221,6 +221,17 @@ export default function Hero({
   const [isPlaying, setIsPlaying] = useState(true);
   const prefersReducedMotion = useReducedMotion();
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const videoY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    prefersReducedMotion ? [0, 0] : [0, "25%"]
+  );
+
   const splitWords = (text: string | undefined) => {
     if (!text) return [];
     return text.split(" ");
@@ -246,13 +257,13 @@ export default function Hero({
   return (
     <motion.section
       ref={sectionRef}
-      className={`relative min-h-screen flex items-center justify-start pt-24 overflow-hidden ${className}`}
+      className={`relative h-[100vh] min-h-[600px] flex items-center justify-start pt-24 overflow-hidden ${className}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
-      {/* Video Background with Brand Overlay */}
-      <div className="absolute inset-0 z-0">
+      {/* Video Background with Brand Overlay — parallax */}
+      <motion.div className="absolute inset-0 z-0" style={{ y: videoY }}>
         {/* Brand gradient: navy tint for cohesion with site */}
         <div
           className="absolute inset-0 z-10"
@@ -274,14 +285,14 @@ export default function Hero({
             playsInline
             preload="metadata"
             poster={videoPoster}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover scale-110"
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
           >
             <source src={video} type="video/mp4" />
           </video>
         )}
-      </div>
+      </motion.div>
 
       {/* Content Container with Better Spacing */}
       <motion.div 
