@@ -32,7 +32,7 @@ export default function AboutKfasPage() {
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
       <main className="min-h-screen bg-white pt-20 font-poppins">
         {/* Hero Section with Banner */}
-        <section className="relative overflow-hidden flex items-center justify-start h-[55vh]">
+        <section className="relative overflow-hidden flex items-end justify-start h-[55vh]">
           <div className="absolute inset-0">
             <Image
               src="/image/AboutKFASBanner2.jpg"
@@ -42,10 +42,10 @@ export default function AboutKfasPage() {
               sizes="100vw"
               className="object-cover object-[center_80%]"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#1D2D44]/30 via-[#1D2D44]/40 to-[#1D2D44]/50" />
           </div>
 
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-16">
             <div className="text-left">
               <motion.div
                 className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4"
@@ -55,7 +55,7 @@ export default function AboutKfasPage() {
               >
                 <span className="text-white/60">About</span>
                 <span className="text-white/40">/</span>
-                <span className="text-white">Who We Are</span>
+                {/* <span className="text-white">Who We Are</span> */}
               </motion.div>
               <motion.h1
                 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] mb-6 text-left"
@@ -142,7 +142,7 @@ export default function AboutKfasPage() {
                     <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
                       Our
                     </span>
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight mt-1">
+                    <h3 className="font-poppins text-2xl sm:text-3xl font-bold text-[#1D2D44] tracking-tight mt-1">
                       Vision
                     </h3>
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
@@ -177,7 +177,7 @@ export default function AboutKfasPage() {
                     <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
                       Our
                     </span>
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight mt-1">
+                    <h3 className="font-poppins text-2xl sm:text-3xl font-bold text-[#1D2D44] tracking-tight mt-1">
                       Mission
                     </h3>
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
@@ -295,7 +295,7 @@ export default function AboutKfasPage() {
                   </motion.div>
                   <div className={index % 2 === 1 ? "lg:order-1" : ""}>
                     <motion.h3
-                      className="font-poppins text-2xl sm:text-3xl font-bold text-black"
+                      className="font-poppins text-2xl sm:text-3xl font-bold text-[#1D2D44]"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
