@@ -783,13 +783,13 @@ function SectionHeading({
       <h2 className="font-poppins text-2xl sm:text-3xl font-semibold text-[#1D2D44] tracking-tight">
         {children}
       </h2>
-      {/* Animated underline */}
+      {/* Animated underline
       <motion.div
         className="h-0.5 bg-[#EC601B] rounded-full mt-3"
         initial={{ width: 0 }}
         animate={isInView ? { width: 48 } : { width: 0 }}
         transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      />
+      /> */}
     </motion.div>
   );
 }
@@ -854,7 +854,13 @@ export default function ProfessionalsPage() {
               sizes="100vw"
               className="object-cover object-center scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1D2D44]/30 via-[#1D2D44]/40 to-[#1D2D44]/55" />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)",
+              }}
+            />
           </motion.div>
 
           {/* Hero text */}
@@ -868,7 +874,7 @@ export default function ProfessionalsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <span className="text-white/60">Learning & Development</span>
+              <span className="text-white/60">Learning & Development / </span>
             </motion.div>
 
             <div className="overflow-hidden">
