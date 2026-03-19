@@ -783,13 +783,6 @@ function SectionHeading({
       <h2 className="font-poppins text-2xl sm:text-3xl font-semibold text-[#1D2D44] tracking-tight">
         {children}
       </h2>
-      {/* Animated underline
-      <motion.div
-        className="h-0.5 bg-[#EC601B] rounded-full mt-3"
-        initial={{ width: 0 }}
-        animate={isInView ? { width: 48 } : { width: 0 }}
-        transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      /> */}
     </motion.div>
   );
 }
