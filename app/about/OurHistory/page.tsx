@@ -258,11 +258,9 @@ export default function OurHistoryPage() {
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-      <main className="min-h-screen bg-white pt-20">
+      <main className="min-h-screen bg-white pt-20 font-poppins">
         {/* Hero Section with Banner */}
-        <section
-          className="relative overflow-hidden flex items-center justify-start h-[55vh]"
-        >
+        <section className="relative overflow-hidden flex items-end justify-start h-[55vh]">
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
@@ -274,29 +272,33 @@ export default function OurHistoryPage() {
               className="object-cover object-center"
             />
             {/* Dark black gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-[#1D2D44]/30 via-[#1D2D44]/40 to-[#1D2D44]/50"></div>
           </div>
 
           {/* Content */}
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8">
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-16">
             <div ref={sectionRef} className="text-left">
               {/* Breadcrumb */}
               <motion.div
-                className="inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-white/70 mb-4"
+                className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 <span className="text-white/60">About</span>
                 <span className="text-white/40">/</span>
-                <span className="text-white">Our History</span>
+                {/* <span className="text-white">Our History</span> */}
               </motion.div>
               {/* Title */}
               <motion.div
                 className="relative mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.15,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
               >
                 <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] text-left">
                   <span className="block">Our History</span>
@@ -404,7 +406,7 @@ export default function OurHistoryPage() {
                             <div className="text-[11px] uppercase tracking-[0.25em] text-gray-400 mt-3">
                               Milestone
                             </div>
-                            <h4 className="font-poppins text-lg sm:text-xl font-semibold text-gray-900 mt-3">
+                            <h4 className="font-poppins text-lg sm:text-xl font-semibold text-[#1D2D44] mt-3">
                               {milestone.title}
                             </h4>
                             <p className="text-gray-600 leading-relaxed text-base sm:text-lg mt-3">

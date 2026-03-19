@@ -194,7 +194,12 @@
 
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { useRef, useState } from "react";
 
 interface HeroProps {
@@ -229,7 +234,7 @@ export default function Hero({
   const videoY = useTransform(
     scrollYProgress,
     [0, 1],
-    prefersReducedMotion ? [0, 0] : [0, "25%"]
+    prefersReducedMotion ? [0, 0] : [0, "25%"],
   );
 
   const splitWords = (text: string | undefined) => {
@@ -275,7 +280,7 @@ export default function Hero({
         <div className="absolute inset-0 bg-gradient-to-b from-[#1D2D44]/50 via-transparent to-[#1D2D44]/60 z-10" />
         {/* Subtle brand blue accent */}
         <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-[#56A0D7]/15 blur-3xl z-10 pointer-events-none" />
-        
+
         {video && (
           <video
             ref={videoRef}
@@ -295,16 +300,18 @@ export default function Hero({
       </motion.div>
 
       {/* Content Container with Better Spacing */}
-      <motion.div 
-        className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-left"
-      >
+      <motion.div className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-left">
         <div className="max-w-7xl">
           {/* Subtitle Badge */}
           {subtitle && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{
+                duration: 0.6,
+                delay: 0.1,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
               className="inline-flex items-center gap-3 mb-8"
             >
               <div className="h-[2px] w-12 bg-gradient-to-r from-[#56A0D7] to-[#EC601B]" />
@@ -344,7 +351,11 @@ export default function Hero({
                 className="h-1 w-20 bg-[#EC601B] mt-6 mb-6 origin-left"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 0.6, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.35,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
               />
             </>
           )}
@@ -355,10 +366,14 @@ export default function Hero({
               dir="rtl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{
+                duration: 0.6,
+                delay: 0.4,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
               className="text-white/95 text-2xl sm:text-3xl lg:text-4xl font-light tracking-wide mb-6"
               style={{
-                textShadow: '0 2px 12px rgba(0, 0, 0, 0.7)'
+                textShadow: "0 2px 12px rgba(0, 0, 0, 0.7)",
               }}
             >
               {titleAr}
@@ -370,7 +385,11 @@ export default function Hero({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{
+                duration: 0.6,
+                delay: 0.5,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
               className="relative"
             >
               <p className="text-base sm:text-lg text-white/90 max-w-2xl leading-relaxed backdrop-blur-sm bg-[#1D2D44]/30 p-6 rounded-xl border border-[#56A0D7]/20">
@@ -378,7 +397,6 @@ export default function Hero({
               </p>
             </motion.div>
           )}
-
         </div>
       </motion.div>
 
@@ -416,10 +434,16 @@ export default function Hero({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{
+          duration: 0.6,
+          delay: 0.7,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 hidden sm:flex flex-col items-center gap-2"
       >
-        <span className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.25em]">Scroll</span>
+        <span className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.25em]">
+          Scroll
+        </span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

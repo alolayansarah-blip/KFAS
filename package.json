@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 3007",
+    "dev:alt": "next dev -H 0.0.0.0 -p 3009",
     "dev:tunnel": "lt --port 3000",
     "dev:share": "ngrok http 3001",
     "build": "next build",
