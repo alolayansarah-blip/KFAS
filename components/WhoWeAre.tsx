@@ -2,12 +2,31 @@
 
 import React, { memo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  useMotionValueEvent,
+} from "framer-motion";
 import { MOTION } from "@/lib/motion";
+
+/** How long to keep the short "KFAS" title visible after scroll passes the reveal threshold (ms) */
+const FULL_NAME_REVEAL_DELAY_MS = 500;
 
 function WhoWeAre() {
   const sectionRef = useRef<HTMLElement>(null);
   const [showFullName, setShowFullName] = useState(false);
+  const revealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wasPastThresholdRef = useRef(false);
+
+  const clearRevealTimer = () => {
+    if (revealTimerRef.current) {
+      clearTimeout(revealTimerRef.current);
+      revealTimerRef.current = null;
+    }
+  };
 
   const isVisible = useInView(sectionRef, MOTION.viewport);
 
@@ -22,18 +41,49 @@ function WhoWeAre() {
     prefersReducedMotion ? [0, 0, 0] : [40, 0, -40]
   );
 
-  // Trigger full name when section is 50% in view
-  const isMidVisible = useInView(sectionRef, {
-    once: true,
-    amount: 0.5,
-  });
-
+  /** Short "KFAS" first; after delay once scroll passes threshold, show full name */
   useEffect(() => {
-    if (isMidVisible) {
-      const timer = setTimeout(() => setShowFullName(true), 200);
-      return () => clearTimeout(timer);
+    if (prefersReducedMotion) {
+      clearRevealTimer();
+      setShowFullName(true);
+      return;
     }
-  }, [isMidVisible]);
+    const past = scrollYProgress.get() > 0.28;
+    if (past) {
+      if (!wasPastThresholdRef.current) {
+        wasPastThresholdRef.current = true;
+        clearRevealTimer();
+        revealTimerRef.current = setTimeout(() => {
+          setShowFullName(true);
+          revealTimerRef.current = null;
+        }, FULL_NAME_REVEAL_DELAY_MS);
+      }
+    } else {
+      wasPastThresholdRef.current = false;
+      clearRevealTimer();
+      setShowFullName(false);
+    }
+    return () => clearRevealTimer();
+  }, [prefersReducedMotion, scrollYProgress]);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (prefersReducedMotion) return;
+    const past = latest > 0.28;
+    if (past) {
+      if (!wasPastThresholdRef.current) {
+        wasPastThresholdRef.current = true;
+        clearRevealTimer();
+        revealTimerRef.current = setTimeout(() => {
+          setShowFullName(true);
+          revealTimerRef.current = null;
+        }, FULL_NAME_REVEAL_DELAY_MS);
+      }
+    } else {
+      wasPastThresholdRef.current = false;
+      clearRevealTimer();
+      setShowFullName(false);
+    }
+  });
 
   const fadeUp = (delay = 0) => MOTION.fadeUpDelay(delay);
 
@@ -98,16 +148,10 @@ function WhoWeAre() {
               About Us
             </motion.span>
 
-            {/* ── Title Block ── */}
-            <motion.div
-              variants={fadeUp(0.25)}
-              initial="hidden"
-              animate={isVisible ? "visible" : "hidden"}
-              className="mt-3 flex items-start gap-4"
-            >
-              {/* KFAS acronym — always visible, fades out when full name shows */}
+            {/* ── Title Block (no fade-up; scroll reveals full name) ── */}
+            <div className="mt-3 flex items-start gap-4">
               <div className="relative flex-1 min-w-0">
-                {/* SHORT: "KFAS" — shown first, hidden when expanded */}
+                {/* SHORT: "KFAS" — visible until user scrolls down */}
                 <motion.h2
                   key="short"
                   animate={
@@ -115,21 +159,11 @@ function WhoWeAre() {
                       ? { opacity: 0, y: -8, position: "absolute" }
                       : { opacity: 1, y: 0, position: "relative" }
                   }
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-bold leading-none tracking-tight"
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-bold leading-none tracking-tight text-[#EC601B]"
                   aria-hidden={showFullName}
                 >
-                  {["K", "F", "A", "S"].map((letter, i) => (
-                    <motion.span
-                      key={letter}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                      transition={{ duration: 0.4, delay: 0.3 + i * 0.07 }}
-                      className="text-[#EC601B]"
-                    >
-                      {letter}
-                    </motion.span>
-                  ))}
+                  KFAS
                 </motion.h2>
 
                 {/* FULL: "Kuwait Foundation..." — shown after scroll */}
@@ -166,7 +200,7 @@ function WhoWeAre() {
                   className="h-14 w-auto sm:h-16 lg:h-20"
                 />
               </div>
-            </motion.div>
+            </div>
 
             {/* Body text */}
             <motion.div

@@ -254,7 +254,7 @@ const tiles = [
     description:
       "An advanced research and development center focused on innovation, scientific excellence, and the dissemination of knowledge.",
     href: "https://www.aspdkw.com/",
-    image: "/image/aspd.jpg",
+    image: "/image/aspd.png",
     logo: "/image/logo4.png",
   },
   {
@@ -314,9 +314,9 @@ export default function LogoShowcase() {
           <div className="absolute inset-0 bg-[#1D2D44]/95" />
         </div>
 
-        {/* Hero content */}
-        <div className="absolute inset-0 z-10 flex items-center">
-          <div className="w-full h-full px-5 sm:px-6 lg:px-8 py-8 sm:pt-16 sm:pb-10 max-w-7xl mx-auto flex flex-col justify-center lg:flex-row lg:items-stretch lg:gap-8">
+        {/* Hero content — stretch so right column matches full section height */}
+        <div className="absolute inset-0 z-10 flex items-stretch">
+          <div className="w-full min-h-0 flex-1 px-5 sm:px-6 lg:px-8 py-8 sm:pt-16 sm:pb-10 max-w-7xl mx-auto flex h-full min-h-full flex-col justify-center lg:min-h-0 lg:h-full lg:flex-row lg:items-stretch lg:gap-8">
             <div className="flex flex-col gap-6 sm:gap-8 lg:flex-1 lg:justify-center lg:pl-6 xl:pl-10 text-left">
               {/* Title */}
               <h2 className="font-poppins text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-semibold text-white leading-tight tracking-tight">
@@ -388,9 +388,9 @@ export default function LogoShowcase() {
               </div>
             </div>
 
-            {/* Right card — desktop only, LatestNews style, full height */}
+            {/* Right card — desktop only; image fills full section height */}
             <motion.div
-              className="group hidden lg:block lg:w-[380px] xl:w-[420px] lg:flex-shrink-0 lg:self-stretch"
+              className="group hidden lg:flex lg:w-[380px] xl:w-[420px] lg:flex-shrink-0 lg:self-stretch lg:min-h-0 lg:h-full"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{
@@ -399,14 +399,14 @@ export default function LogoShowcase() {
                 ease: MOTION.ease,
               }}
             >
-              <div className="relative h-full">
+              <div className="relative flex min-h-0 h-full w-full flex-1 flex-col">
                 {/* Decorative corner — orange, thick */}
                 <div
                   className="absolute bottom-0 right-0 w-16 h-16 border-r-4 border-b-4 border-[#EC601B] pointer-events-none z-10"
                   aria-hidden
                 />
-                <div className="relative h-full bg-blue-50 p-4 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                  <div className="relative h-full min-h-[280px] overflow-hidden">
+                <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+                  <div className="relative min-h-0 h-full flex-1 overflow-hidden">
                     <img
                       src={visibleImage}
                       alt={tiles[activeIndex].title}

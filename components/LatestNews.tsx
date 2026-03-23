@@ -188,12 +188,29 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import { MOTION } from "@/lib/motion";
 
 export default function OurImpactStories() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, MOTION.viewport);
+  const prefersReducedMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const headerY = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    prefersReducedMotion ? [0, 0, 0] : [18, 0, -12],
+  );
 
   const news = [
     {
@@ -248,36 +265,54 @@ export default function OurImpactStories() {
       ref={sectionRef}
       id="our-impact-stories"
       className="relative bg-gray-50 py-20 lg:py-32 overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={MOTION.viewport}
+      transition={{ duration: MOTION.duration, ease: MOTION.ease }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header */}
+      {/* Soft brand accents — fade in with section */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.8, delay: 0.15, ease: MOTION.ease }}
+      >
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#EC601B]/[0.07] blur-3xl" />
+        <div className="absolute bottom-0 left-0 h-56 w-56 rounded-full bg-[#7DC0F1]/10 blur-3xl" />
+      </motion.div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Header — subtle parallax + underline draw */}
         <motion.div
-          variants={MOTION.fadeUpDelay(0.1)}
+          style={{ y: headerY }}
+          variants={MOTION.fadeUpDelay(0.08)}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="mb-16 flex items-end justify-between"
+          className="mb-16 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between"
         >
           <div>
-            {/* <div className="inline-block mb-4">
-              <span className="font-poppins text-sm font-semibold text-gray-500 uppercase tracking-widest">
-                Latest News
-              </span>
-              <div className="h-0.5 w-16 bg-[#EC601B] mt-2" />
-            </div> */}
-
             <h2 className="font-poppins text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-900 leading-tight tracking-tight">
               Latest News
             </h2>
+            <motion.div
+              className="mt-4 h-[3px] max-w-20 origin-left rounded-full bg-[#EC601B]"
+              initial={{ scaleX: 0 }}
+              animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{
+                duration: 0.65,
+                delay: 0.2,
+                ease: MOTION.ease,
+              }}
+            />
           </div>
 
           {/* View All Link */}
           <motion.a
             href="#"
-            className="font-poppins inline-flex items-center gap-3 border border-gray-200 border-b-2 border-b-[#7DC0F1] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 group hover:text-gray-900"
-            whileHover={{ x: 4 }}
+            className="font-poppins inline-flex shrink-0 items-center gap-3 self-start border border-gray-200 border-b-2 border-b-[#7DC0F1] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 group hover:text-gray-900 sm:self-auto"
+            whileHover={{ x: 4, boxShadow: "0 8px 24px rgba(29,45,68,0.08)" }}
+            whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.2 }}
           >
             <span>All News</span>
@@ -285,40 +320,81 @@ export default function OurImpactStories() {
           </motion.a>
         </motion.div>
 
-        {/* News Grid */}
+        {/* News Grid — staggered cards */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          variants={MOTION.container}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.12,
+                delayChildren: 0.12,
+              },
+            },
+          }}
         >
           {sortedNews.map((item, index) => (
             <motion.article
               key={index}
-              variants={MOTION.item}
+              variants={{
+                hidden: { opacity: 0, y: 28 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: MOTION.duration,
+                    ease: MOTION.ease,
+                  },
+                },
+              }}
               initial="hidden"
               animate={isInView ? "visible" : "hidden"}
-              whileHover={MOTION.whileHover}
-              className="group h-full p-4 rounded-xl transition-shadow duration-300 hover:shadow-lg"
+              whileHover={{
+                y: -6,
+                transition: { duration: 0.25, ease: "easeOut" },
+              }}
+              className="group h-full rounded-xl p-4 transition-shadow duration-300 hover:shadow-[0_20px_40px_-12px_rgba(29,45,68,0.15)]"
             >
               <a href={item.link} className="flex h-full flex-col">
-                <div className="relative">
+                <div className="relative overflow-hidden rounded-lg">
                   <div
-                    className="absolute bottom-0 right-0 w-16 h-16 border-r border-b border-[#2563EB] pointer-events-none z-10"
+                    className="absolute bottom-0 right-0 z-10 w-16 h-16 border-r border-b border-[#2563EB] pointer-events-none"
                     aria-hidden
                   />
-                  <div className="relative bg-blue-50 p-4 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                    <div className="aspect-[16/10] relative">
-                      <img
+                  <div className="relative bg-blue-50 p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <motion.img
                         src={item.image}
                         alt={item.title}
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="absolute inset-0 h-full w-full object-cover"
+                        initial={{ scale: 1.08 }}
+                        animate={isInView ? { scale: 1 } : { scale: 1.08 }}
+                        transition={{
+                          duration: 0.85,
+                          delay: 0.08 + index * 0.06,
+                          ease: MOTION.ease,
+                        }}
+                        whileHover={{
+                          scale: 1.06,
+                          transition: { duration: 0.45, ease: "easeOut" },
+                        }}
                       />
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                      <motion.div
+                        className="absolute top-4 left-4 rounded-full bg-white/90 px-4 py-2 backdrop-blur-sm"
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{
+                          delay: 0.25 + index * 0.08,
+                          duration: 0.45,
+                          ease: MOTION.ease,
+                        }}
+                      >
                         <span className="font-poppins text-xs font-semibold text-gray-900">
                           {item.date}
                         </span>
-                      </div>
+                      </motion.div>
                     </div>
                   </div>
                 </div>
