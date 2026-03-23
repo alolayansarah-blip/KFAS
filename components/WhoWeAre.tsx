@@ -219,7 +219,7 @@ function WhoWeAre() {
                 rewards excellence, promotes impactful research, and inspires
                 future generations in spreading knowledge and accelerating progress.{" "}
                 <motion.a
-                  href="/AboutKfas"
+                  href="/about/AboutKfas"
                   className="group inline-flex items-center gap-1.5 text-[#EC601B] font-poppins text-sm font-medium hover:text-[#d95518] transition-colors duration-300"
                 >
                   <span>Read more</span>
