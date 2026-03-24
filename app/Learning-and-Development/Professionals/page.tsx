@@ -642,7 +642,7 @@ function ProgramCard({
   return (
     <motion.article
       ref={ref as React.Ref<HTMLElement>}
-      className="group relative flex flex-col overflow-hidden bg-white border border-[#1D2D44]/08 cursor-default"
+      className="group relative flex h-full min-h-0 flex-col overflow-hidden bg-white border border-[#1D2D44]/08 cursor-default"
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       style={{ transformStyle: "preserve-3d" }}
@@ -657,7 +657,7 @@ function ProgramCard({
       {/* Shimmer accent bar */}
       <AccentBar color={color} />
 
-      <div className="flex flex-col flex-1 p-8 sm:p-10">
+      <div className="flex h-full min-h-0 flex-col flex-1 p-8 sm:p-10">
         {/* Image */}
         {imageSrc && (
           <div className="relative aspect-[16/10] overflow-hidden -mx-8 -mt-8 mb-0">
@@ -677,9 +677,9 @@ function ProgramCard({
           </div>
         )}
 
-        {/* Title bar */}
+        {/* Title bar — min height so paired cards align when titles wrap differently */}
         <div
-          className="-mx-8 px-8 py-4 flex items-center transition-colors duration-300"
+          className="-mx-8 flex min-h-[5rem] items-center px-8 py-4 transition-colors duration-300 sm:min-h-[5.5rem]"
           style={{ backgroundColor: color }}
         >
           <TitleTag className="font-poppins text-xl font-semibold text-white leading-snug">
@@ -723,7 +723,7 @@ function SubProgramCard({
   return (
     <motion.article
       ref={ref as React.Ref<HTMLElement>}
-      className="group relative flex flex-col overflow-hidden bg-white border border-[#1D2D44]/08 cursor-default"
+      className="group relative flex h-full min-h-0 flex-col overflow-hidden bg-white border border-[#1D2D44]/08 cursor-default"
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       style={{ transformStyle: "preserve-3d" }}
@@ -737,7 +737,7 @@ function SubProgramCard({
     >
       <AccentBar color="#7DC0F1" />
 
-      <div className="flex flex-col flex-1 p-6 sm:p-8">
+      <div className="flex h-full min-h-0 flex-col flex-1 p-6 sm:p-8">
         {imageSrc && (
           <div className="relative aspect-[16/10] overflow-hidden -mx-6 -mt-6 sm:-mx-8 sm:-mt-8 mb-0">
             <Image
@@ -750,8 +750,8 @@ function SubProgramCard({
           </div>
         )}
 
-        {/* Blue title bar */}
-        <div className="-mx-6 sm:-mx-8 px-6 sm:px-8 py-3 flex items-center bg-[#7DC0F1]">
+        {/* Blue title bar — min height so paired cards align when titles wrap differently */}
+        <div className="-mx-6 flex min-h-[4.75rem] items-center bg-[#7DC0F1] px-6 py-3 sm:-mx-8 sm:min-h-[5.25rem] sm:px-8">
           <h4 className="font-poppins text-lg font-semibold text-white leading-snug">
             {title}
           </h4>
@@ -909,8 +909,8 @@ export default function ProfessionalsPage() {
               Professional Development Learning
             </SectionHeading>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div ref={openEnrollmentRef}>
+            <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2">
+              <div ref={openEnrollmentRef} className="h-full min-h-0">
                 <ProgramCard
                   title="Open enrollment courses"
                   body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in courses by subject matter expert practitioners. This activity would focus on developing specific skills needed for organizational development. Short-courses (up to 5 days) are offered to all employee levels in open enrollment style. Courses are delivered with latest and highest standard of learning delivery. Seats are open to all Kuwaiti citizens, targeting the entire workforce population."
@@ -922,7 +922,7 @@ export default function ProfessionalsPage() {
                   isInView={isOpenEnrollmentInView}
                 />
               </div>
-              <div ref={professionalCertRef}>
+              <div ref={professionalCertRef} className="h-full min-h-0">
                 <ProgramCard
                   title="Professional Certificate Incentive Scheme"
                   body="KFAS offer grants to enhance the capabilities of the Kuwaiti human capital and sharpen their professional skills by a scheme to encourage individuals to obtain their professional credentials. An attractive monetary reward is given upon successfully obtaining the professional certificate. The amount of the reward will be determined based on KFAS policies and procedures for rewards."
@@ -944,25 +944,29 @@ export default function ProfessionalsPage() {
               Executive Education
             </SectionHeading>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-              <ProgramCard
-                title="Local courses"
-                body="KFAS bring executive education short-courses offered by international academic institutions on selected topics (in line with KFAS strategic direction) to Kuwait to offer seats locally and would be available to all Kuwaiti citizens."
-                imageSrc="/image/InstagramPost.png"
-                applyHref="#"
-                delay={0}
-                accent="orange"
-                isInView={isSection2InView}
-              />
-              <ProgramCard
-                title="Aboard courses (international open enrollment programs)"
-                body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in programs already offered by academic institutions. This would allow participants to interact and exchange knowledge with other participants from around the world."
-                imageSrc="/image/KfasBuilding2.png"
-                applyHref="#"
-                delay={0.1}
-                accent="blue"
-                isInView={isSection2InView}
-              />
+            <div className="mb-12 grid grid-cols-1 items-stretch gap-8 md:grid-cols-2">
+              <div className="h-full min-h-0">
+                <ProgramCard
+                  title="Local courses"
+                  body="KFAS bring executive education short-courses offered by international academic institutions on selected topics (in line with KFAS strategic direction) to Kuwait to offer seats locally and would be available to all Kuwaiti citizens."
+                  imageSrc="/image/InstagramPost.png"
+                  applyHref="#"
+                  delay={0}
+                  accent="orange"
+                  isInView={isSection2InView}
+                />
+              </div>
+              <div className="h-full min-h-0">
+                <ProgramCard
+                  title="Aboard courses (international open enrollment programs)"
+                  body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in programs already offered by academic institutions. This would allow participants to interact and exchange knowledge with other participants from around the world."
+                  imageSrc="/image/KfasBuilding2.png"
+                  applyHref="#"
+                  delay={0.1}
+                  accent="blue"
+                  isInView={isSection2InView}
+                />
+              </div>
             </div>
 
             {/* ── Customized Programs ── */}
@@ -1000,32 +1004,38 @@ export default function ProfessionalsPage() {
 
               <ApplyLink href="#" />
 
-              {/* Sub-cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 pt-10 border-t border-[#1D2D44]/08">
-                <SubProgramCard
-                  title="KFAS Innovation Challenge"
-                  imageSrc="/image/KFASInnovation.jpg"
-                  body="One of our standout executive education programs is the annual KFAS Innovation Challenge, in which a small group of selected companies work with prestigious business schools to develop new initiatives and projects that advance a culture of innovation. After a competitive application process, executives and business leaders spend three to four months in structured learning and training, tackling a company-specific challenge."
-                  applyHref="#"
-                  delay={0}
-                  isInView={isCustomizedInView}
-                />
-                <SubProgramCard
-                  title="Harvard Kennedy School Program"
-                  imageSrc="/image/Harvard.jpg"
-                  body="A custom executive education program targeting the needs of the Kuwait private sector. Led by Professor Kessely Hong, the Harvard Kennedy School faculty team designed an impactful curriculum tailored to address the challenges and opportunities presented to managers — equipping them with collaborative and innovative tools for today's reality."
-                  applyHref="#"
-                  delay={0.08}
-                  isInView={isCustomizedInView}
-                />
-                <SubProgramCard
-                  title="KFAS High Potential Leadership Program"
-                  imageSrc="/image/kfas-hipo.jpg"
-                  body="The vitality of every organization is dependent on the strength of its future leaders. By identifying high potential (Hi-Po) leadership candidates early and supporting their development, organizations drive significant returns on their human capital investments — maximizing strategic initiative, market competitiveness, and overall growth."
-                  applyHref="#"
-                  delay={0.16}
-                  isInView={isCustomizedInView}
-                />
+              {/* Sub-cards — equal height in row */}
+              <div className="mt-10 grid grid-cols-1 items-stretch gap-6 border-t border-[#1D2D44]/08 pt-10 md:grid-cols-3">
+                <div className="h-full min-h-0">
+                  <SubProgramCard
+                    title="KFAS Innovation Challenge"
+                    imageSrc="/image/KFASInnovation.jpg"
+                    body="One of our standout executive education programs is the annual KFAS Innovation Challenge, in which a small group of selected companies work with prestigious business schools to develop new initiatives and projects that advance a culture of innovation. After a competitive application process, executives and business leaders spend three to four months in structured learning and training, tackling a company-specific challenge."
+                    applyHref="#"
+                    delay={0}
+                    isInView={isCustomizedInView}
+                  />
+                </div>
+                <div className="h-full min-h-0">
+                  <SubProgramCard
+                    title="Harvard Kennedy School Program"
+                    imageSrc="/image/Harvard.jpg"
+                    body="A custom executive education program targeting the needs of the Kuwait private sector. Led by Professor Kessely Hong, the Harvard Kennedy School faculty team designed an impactful curriculum tailored to address the challenges and opportunities presented to managers — equipping them with collaborative and innovative tools for today's reality."
+                    applyHref="#"
+                    delay={0.08}
+                    isInView={isCustomizedInView}
+                  />
+                </div>
+                <div className="h-full min-h-0">
+                  <SubProgramCard
+                    title="KFAS High Potential Leadership Program"
+                    imageSrc="/image/kfas-hipo.jpg"
+                    body="The vitality of every organization is dependent on the strength of its future leaders. By identifying high potential (Hi-Po) leadership candidates early and supporting their development, organizations drive significant returns on their human capital investments — maximizing strategic initiative, market competitiveness, and overall growth."
+                    applyHref="#"
+                    delay={0.16}
+                    isInView={isCustomizedInView}
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
