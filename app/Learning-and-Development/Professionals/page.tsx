@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useRef, useState, useCallback } from "react";
@@ -121,7 +119,7 @@ function ApplyLink({ href = "#" }: { href?: string }) {
       href={href}
       className="mt-6 w-fit inline-flex items-center gap-3 border border-gray-200 border-b-2 border-b-[#EC601B] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 hover:text-gray-900 group/btn font-poppins"
     >
-      <span>To Apply, click here</span>
+      <span>Click here, to apply</span>
       <svg
         className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1"
         fill="none"
@@ -375,11 +373,14 @@ export default function ProfessionalsPage() {
               sizes="100vw"
               className="object-cover object-center scale-110"
             />
+            {/* Brand blue (#488FCC) wash + navy depth */}
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 pointer-events-none"
               style={{
-                background:
-                  "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)",
+                background: [
+                  "linear-gradient(118deg, rgba(72,143,204,0.42) 0%, rgba(72,143,204,0.14) 48%, transparent 72%)",
+                  "linear-gradient(to bottom, rgba(29,45,68,0.28) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.52) 100%)",
+                ].join(", "),
               }}
             />
           </motion.div>
@@ -443,7 +444,7 @@ export default function ProfessionalsPage() {
                   title="Open enrollment courses"
                   body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in courses by subject matter expert practitioners. This activity would focus on developing specific skills needed for organizational development. Short-courses (up to 5 days) are offered to all employee levels in open enrollment style. Courses are delivered with latest and highest standard of learning delivery. Seats are open to all Kuwaiti citizens, targeting the entire workforce population."
                   imageSrc="/image/OE.jpg"
-                  applyHref="#"
+                  applyHref="https://learn.kfas.org.kw/"
                   delay={0}
                   accent="orange"
                   titleAsH2
@@ -455,7 +456,7 @@ export default function ProfessionalsPage() {
                   title="Professional Certificate Incentive Scheme"
                   body="KFAS offer grants to enhance the capabilities of the Kuwaiti human capital and sharpen their professional skills by a scheme to encourage individuals to obtain their professional credentials. An attractive monetary reward is given upon successfully obtaining the professional certificate. The amount of the reward will be determined based on KFAS policies and procedures for rewards."
                   imageSrc="/image/back4.webp"
-                  applyHref="#"
+                  applyHref="https://learn.kfas.org.kw/"
                   delay={0}
                   accent="orange"
                   isInView={isProfessionalCertInView}
@@ -478,7 +479,7 @@ export default function ProfessionalsPage() {
                   title="Local courses"
                   body="KFAS bring executive education short-courses offered by international academic institutions on selected topics (in line with KFAS strategic direction) to Kuwait to offer seats locally and would be available to all Kuwaiti citizens."
                   imageSrc="/image/InstagramPost.png"
-                  applyHref="#"
+                  applyHref="https://learn.kfas.org.kw/"
                   delay={0}
                   accent="orange"
                   isInView={isSection2InView}
@@ -489,7 +490,7 @@ export default function ProfessionalsPage() {
                   title="Aboard courses (international open enrollment programs)"
                   body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in programs already offered by academic institutions. This would allow participants to interact and exchange knowledge with other participants from around the world."
                   imageSrc="/image/KfasBuilding2.png"
-                  applyHref="#"
+                  applyHref="https://learn.kfas.org.kw/"
                   delay={0.1}
                   accent="orange"
                   isInView={isSection2InView}
@@ -530,7 +531,7 @@ export default function ProfessionalsPage() {
                 period of months.
               </p>
 
-              <ApplyLink href="#" />
+              <ApplyLink href="https://learn.kfas.org.kw/" />
 
               {/* Sub-cards — equal height in row */}
               <div className="mt-10 grid grid-cols-1 items-stretch gap-6 border-t border-[#1D2D44]/08 pt-10 md:grid-cols-3">
@@ -539,7 +540,7 @@ export default function ProfessionalsPage() {
                     title="KFAS Innovation Challenge"
                     imageSrc="/image/KFASInnovation.jpg"
                     body="One of our standout executive education programs is the annual KFAS Innovation Challenge, in which a small group of selected companies work with prestigious business schools to develop new initiatives and projects that advance a culture of innovation. After a competitive application process, executives and business leaders spend three to four months in structured learning and training, tackling a company-specific challenge."
-                    applyHref="#"
+                    applyHref="https://learn.kfas.org.kw/"
                     delay={0}
                     isInView={isCustomizedInView}
                   />
@@ -549,7 +550,7 @@ export default function ProfessionalsPage() {
                     title="Harvard Kennedy School Program"
                     imageSrc="/image/Harvard.jpg"
                     body="A custom executive education program targeting the needs of the Kuwait private sector. Led by Professor Kessely Hong, the Harvard Kennedy School faculty team designed an impactful curriculum tailored to address the challenges and opportunities presented to managers — equipping them with collaborative and innovative tools for today's reality."
-                    applyHref="#"
+                    applyHref="https://learn.kfas.org.kw/"
                     delay={0.08}
                     isInView={isCustomizedInView}
                   />
@@ -559,7 +560,7 @@ export default function ProfessionalsPage() {
                     title="KFAS High Potential Leadership Program"
                     imageSrc="/image/kfas-hipo.jpg"
                     body="The vitality of every organization is dependent on the strength of its future leaders. By identifying high potential (Hi-Po) leadership candidates early and supporting their development, organizations drive significant returns on their human capital investments — maximizing strategic initiative, market competitiveness, and overall growth."
-                    applyHref="#"
+                    applyHref="https://learn.kfas.org.kw/"
                     delay={0.16}
                     isInView={isCustomizedInView}
                   />
