@@ -88,89 +88,130 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { MOTION } from "@/lib/motion";
+import { motion, useInView } from "framer-motion";
 
-const containerVariants = MOTION.container;
-const cardVariants = MOTION.item;
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
-const cards = [
-  { title: "Research Grants", href: "/Research" },
+const CARDS = [
+  {
+    title: "Research Grants",
+    href: "/Research",
+    label: "Explore",
+    image: "/image/Grants.jpg",
+  },
   {
     title: "Learning and Development for Professionals",
     href: "/Learning-and-Development",
+    label: "Discover",
+    image: "/image/OE.jpg",
   },
-  { title: "Our Publications", href: "/Science-and-Society/Publications" },
+  {
+    title: "Our Publications",
+    href: "/Science-and-Society/Publications",
+    label: "Browse",
+    image: "/image/back4.webp",
+  },
 ];
 
-type Card = (typeof cards)[number];
+// ─── Motion ───────────────────────────────────────────────────────────────────
 
-function CardItem({ title, href }: Card & { index: number }) {
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.13, delayChildren: 0.1 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+// ─── Card ─────────────────────────────────────────────────────────────────────
+
+function Card({ title, href, label, image }: (typeof CARDS)[number]) {
   return (
-    <motion.div
-      variants={cardVariants}
-      className="h-full"
-      whileHover={MOTION.whileHover}
-    >
-      <Link
-        href={href}
-        className="group block h-full rounded-xl transition-shadow duration-300 hover:shadow-lg"
-      >
-        <div className="relative h-full">
-          {/* Decorative corner — like WhoWeAre image */}
+    <motion.div variants={cardVariants} className="h-full">
+      <Link href={href} className="group block h-full">
+        <div className="relative h-full min-h-[200px] overflow-hidden border border-white/15 bg-[#EC601B]">
+          {/* Image — fades in on hover */}
           <div
-            className="absolute bottom-0 right-0 w-16 h-16 border-r border-b border-[#2563EB] pointer-events-none z-10"
-            aria-hidden
+            className="absolute inset-0 bg-cover bg-center opacity-0 scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-100"
+            style={{ backgroundImage: `url(${image})` }}
           />
-          <div className="relative h-full bg-blue-50 p-4 sm:p-5 overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] min-h-[100px] flex flex-col justify-between items-center text-center transition-colors duration-300 group-hover:bg-blue-100">
-            <p className="font-poppins font-semibold text-[#1D2D44] leading-snug text-base sm:text-lg tracking-tight transition-colors duration-300">
-              {title}
-            </p>
-            <div className="flex items-center justify-center gap-2 text-[11px] sm:text-xs font-semibold capitalize text-[#1D2D44]/80 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:gap-3 mt-auto">
-              <span>Read more</span>
-              <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+
+          {/* Darken photo on hover for readable white text */}
+          <div className="absolute inset-0 z-[1] bg-[#1D2D44]/50 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+
+          {/* Left accent */}
+          <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/25 transition-opacity duration-300 group-hover:opacity-60" />
+
+          {/* Content — title centered; "Read more" fades in at bottom on hover */}
+          <div className="relative z-10 flex h-full min-h-[200px] flex-col items-center justify-center px-7 py-10 text-center">
+            <div className="flex max-w-[95%] flex-col items-center">
+              <p className="font-poppins text-[15px] font-semibold leading-snug tracking-tight text-white [text-shadow:_0_1px_12px_rgba(0,0,0,0.12)] transition-colors duration-300 sm:text-base">
+                {title}
+              </p>
+              <div className="mx-auto mt-3 h-px w-0 bg-white/80 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-14" />
+            </div>
+
+            <div className="pointer-events-none absolute bottom-7 left-1/2 flex -translate-x-1/2 translate-y-2 items-center gap-2 whitespace-nowrap opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+              <span className="text-sm font-medium text-white drop-shadow-sm">
+                Read more
+              </span>
+              <svg
+                className="h-3.5 w-3.5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
               </svg>
             </div>
+
+            <span className="sr-only">{label}</span>
           </div>
+
+          {/* Top-right dot */}
+          <div className="absolute top-6 right-6 z-10 h-2 w-2 rounded-full bg-white/35 transition-all duration-300 group-hover:bg-white group-hover:shadow-[0_0_10px_rgba(255,255,255,0.6)]" />
         </div>
       </Link>
     </motion.div>
   );
 }
 
+// ─── Section ─────────────────────────────────────────────────────────────────
+
 export default function FlippedCardStack() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const prefersReducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const cardsY = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.7, 1],
-    prefersReducedMotion ? [0, 0, 0, 0] : [30, 0, 0, -30]
-  );
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <motion.section
-      ref={sectionRef}
-      className="relative w-full bg-white py-12 lg:py-20"
-      initial="hidden"
-      whileInView="visible"
-      viewport={MOTION.viewport}
-      variants={containerVariants}
-    >
-      <motion.div className="mx-auto max-w-[800px] px-6 lg:px-8" style={{ y: cardsY }}>
+    <section className="relative w-full bg-white py-12 lg:py-20">
+      <div ref={ref} className="mx-auto max-w-[800px] px-6 lg:px-8">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
+          className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6"
           variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
         >
-          {cards.map((card, index) => (
-            <CardItem key={index} {...card} index={index} />
+          {CARDS.map((card) => (
+            <Card key={card.href} {...card} />
           ))}
         </motion.div>
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 }
