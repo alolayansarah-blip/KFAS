@@ -347,7 +347,7 @@ export default function OurHistoryPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                <p className="text-gray-600 leading-[1.9] text-base">
+                <p className="text-base font-light leading-[1.9] text-[#1D2D44]/65">
                   Founded in 1976 by Amiri Decree, the Kuwait Foundation for the
                   Advancement of Sciences (KFAS) is a private, non-profit
                   organization that advances science, technology, and innovation
@@ -431,10 +431,10 @@ export default function OurHistoryPage() {
                             <div className="text-[11px] uppercase tracking-[0.25em] text-gray-400 mt-3">
                               Milestone
                             </div>
-                            <h4 className="font-poppins text-lg sm:text-xl font-semibold text-[#1D2D44] mt-3">
+                            <h4 className="mt-3 font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
                               {milestone.title}
                             </h4>
-                            <p className="text-gray-600 leading-relaxed text-base sm:text-lg mt-3">
+                            <p className="mt-3 text-base font-light leading-[1.9] text-[#1D2D44]/65">
                               {milestone.description}
                             </p>
                           </div>

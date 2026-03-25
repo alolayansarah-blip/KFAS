@@ -178,12 +178,12 @@ export default function AboutKfasPage() {
                     <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
                       Our
                     </span>
-                    <h3 className="font-poppins text-2xl sm:text-3xl font-bold text-[#1D2D44] tracking-tight mt-1">
+                    <h3 className="mt-1 font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
                       Vision
                     </h3>
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
                   </div>
-                  <p className="text-[15px] sm:text-base text-gray-600/90 leading-[1.75] font-light">
+                  <p className="text-[15px] sm:text-base text-[#1D2D44]/65 leading-[1.75] font-light">
                     To advance science, technology, and innovation for a
                     resilient, thriving, and sustainable future.
                   </p>
@@ -213,12 +213,12 @@ export default function AboutKfasPage() {
                     <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#56A0D7] uppercase">
                       Our
                     </span>
-                    <h3 className="font-poppins text-2xl sm:text-3xl font-bold text-[#1D2D44] tracking-tight mt-1">
+                    <h3 className="mt-1 font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
                       Mission
                     </h3>
                     <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
                   </div>
-                  <p className="text-[15px] sm:text-base text-gray-600/90 leading-[1.75] font-light">
+                  <p className="text-[15px] sm:text-base text-[#1D2D44]/65 leading-[1.75] font-light">
                     To pursue scientific excellence to tackle national
                     challenges through a prominent science, technology, and
                     innovation model.
@@ -234,7 +234,7 @@ export default function AboutKfasPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="mt-12 space-y-6"
               >
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65">
                   Driving our work is the premise that science creates
                   knowledge, technology accelerates progress, and innovation
                   shapes transformative solutions. During 2025–2029, we aim to
@@ -244,7 +244,7 @@ export default function AboutKfasPage() {
                   research, novel uses of technology, and expanded horizons in
                   knowledge transfers and human capacities.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65">
                   All of our work will be aligned with our three pillars—robust
                   research ecosystem, viable innovation, and human ingenuity—and
                   each pillar will complement and produce synergies with the
@@ -256,7 +256,7 @@ export default function AboutKfasPage() {
                   diffusing knowledge and developing human capabilities and
                   potential.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65">
                   We will pursue priority areas that address issues of
                   importance to Kuwait, particularly in the areas of
                   environment, energy, health, STEAM education, water and food
@@ -264,7 +264,7 @@ export default function AboutKfasPage() {
                   awareness of emerging trends and initiatives outside these
                   areas that could bring benefit to the nation.
                 </p>
-                <p className="text-gray-600 leading-[1.9] text-base text-justify">
+                <p className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65">
                   Specialized centers of excellence have been established in
                   Kuwait and continue to be funded as subsidiaries of the
                   foundation, providing the country with additional ways to
@@ -331,7 +331,7 @@ export default function AboutKfasPage() {
                   </motion.div>
                   <div className={index % 2 === 1 ? "lg:order-1" : ""}>
                     <motion.h3
-                      className="font-poppins text-2xl sm:text-3xl font-bold text-[#1D2D44]"
+                      className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -340,7 +340,7 @@ export default function AboutKfasPage() {
                       {item.title}
                     </motion.h3>
                     <div className="mt-3 h-0.5 w-16 bg-[#BBDEFB]" />
-                    <p className="mt-4 text-base text-gray-800 leading-relaxed text-justify">
+                    <p className="mt-4 text-base text-justify font-light leading-relaxed text-[#1D2D44]/65">
                       {item.description}
                     </p>
                     <a
@@ -408,7 +408,7 @@ function TextBlock({
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
     >
-      <p className="text-gray-600 leading-[1.9] text-base text-justify">
+      <p className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65">
         {children}
       </p>
     </motion.div>
@@ -479,7 +479,7 @@ function TimelineItem({
         <h3 className="font-poppins text-xl font-bold text-[#EC601B] mb-3">
           {title}
         </h3>
-        <p className="text-gray-600 leading-relaxed text-justify">{content}</p>
+        <p className="text-justify font-light leading-relaxed text-[#1D2D44]/65">{content}</p>
       </div>
     </motion.div>
   );
