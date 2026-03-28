@@ -94,7 +94,7 @@
 //     label: "Prizes",
 //     href: "/Prizes",
 //     children: [
-//       { label: "Kuwait Prize", href: "/Prizes/Kuwait-Prize" },
+//       { label: "Kuwait Prize", href: "/KuwaitPrizes" },
 //       { label: "Jaber Al-Ahmed Prize", href: "/Prizes/Jaber-Al-Ahmed-Prize" },
 //       { label: "Al Sumait Prize", href: "/Prizes/Al-Sumait-Prize" },
 //       { label: "Laureates", href: "/Prizes/Laureates" },
@@ -676,7 +676,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     label: "Prizes",
     href: "/Prizes",
     children: [
-      { label: "Kuwait Prize", href: "/Prizes/Kuwait-Prize" },
+      { label: "Kuwait Prize", href: "/prizes/KuwaitPrize" },
       { label: "Jaber Al-Ahmed Prize", href: "/Prizes/Jaber-Al-Ahmed-Prize" },
       { label: "Al Sumait Prize", href: "/Prizes/Al-Sumait-Prize" },
       { label: "Laureates", href: "/Prizes/Laureates" },
@@ -1038,111 +1038,107 @@ function Header({
 
         {isMenuOpen && (
           <div className="overflow-hidden border-t border-gray-100 bg-white shadow-lg">
-              <div className="px-5 py-4 space-y-1">
-                {navItemsList.map((item) => (
-                  <div key={item.href}>
-                    {item.children ? (
-                      <>
-                        <button
-                          className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-                          onClick={() =>
-                            setOpenMobileDropdown(
-                              openMobileDropdown === item.href
-                                ? null
-                                : item.href,
-                            )
-                          }
-                          aria-expanded={openMobileDropdown === item.href}
-                        >
-                          <span className="flex items-center gap-2">
-                            <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-                            <span>{item.label}</span>
-                          </span>
-                          <DropdownIcon
-                            isOpen={openMobileDropdown === item.href}
-                            className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
-                              openMobileDropdown === item.href
-                                ? "text-[#EC601B]"
-                                : ""
-                            }`}
-                          />
-                        </button>
-
-                        {openMobileDropdown === item.href && (
-                          <div className="ml-4 mt-1 space-y-0.5 overflow-hidden rounded-lg border-l-2 border-[#EC601B]/30 bg-gray-50/50 py-2">
-                            {item.children.map((child) => (
-                              <Link
-                                key={child.href}
-                                href={child.href}
-                                className="block rounded-md px-4 py-2.5 font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
-                                onClick={closeMobileMenu}
-                              >
-                                {child.label}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className="block py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-                        onClick={closeMobileMenu}
+            <div className="px-5 py-4 space-y-1">
+              {navItemsList.map((item) => (
+                <div key={item.href}>
+                  {item.children ? (
+                    <>
+                      <button
+                        className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
+                        onClick={() =>
+                          setOpenMobileDropdown(
+                            openMobileDropdown === item.href ? null : item.href,
+                          )
+                        }
+                        aria-expanded={openMobileDropdown === item.href}
                       >
                         <span className="flex items-center gap-2">
                           <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
                           <span>{item.label}</span>
                         </span>
-                      </Link>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Language Switcher - Mobile */}
-              <div className="mt-2 pt-4 border-t border-gray-100 px-5 pb-4">
-                <button
-                  onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                  className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-                  aria-label="Change language"
-                  aria-expanded={isLangDropdownOpen}
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-                    <span className="flex items-center space-x-2">
-                      <span className="uppercase text-sm">
-                        {currentLanguage}
-                      </span>
-                      <span>Language</span>
-                    </span>
-                  </span>
-                  <DropdownIcon
-                    isOpen={isLangDropdownOpen}
-                    className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
-                      isLangDropdownOpen ? "text-[#EC601B]" : ""
-                    }`}
-                  />
-                </button>
-
-                {isLangDropdownOpen && (
-                  <div className="ml-4 mt-2 space-y-0.5 overflow-hidden rounded-lg border-l-2 border-white/30 bg-[#EC601B] py-2">
-                    {LANGUAGES.map((lang, index) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => handleLanguageSelect(lang.code)}
-                        className={`flex w-full items-center space-x-2 rounded-md px-4 py-3 text-left font-normal text-white transition-all hover:bg-white/20 ${
-                          index < LANGUAGES.length - 1
-                            ? "border-b border-white/50"
-                            : ""
-                        }`}
-                      >
-                        <span className="text-lg">{lang.flag}</span>
-                        <span>{lang.label}</span>
+                        <DropdownIcon
+                          isOpen={openMobileDropdown === item.href}
+                          className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
+                            openMobileDropdown === item.href
+                              ? "text-[#EC601B]"
+                              : ""
+                          }`}
+                        />
                       </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+
+                      {openMobileDropdown === item.href && (
+                        <div className="ml-4 mt-1 space-y-0.5 overflow-hidden rounded-lg border-l-2 border-[#EC601B]/30 bg-gray-50/50 py-2">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="block rounded-md px-4 py-2.5 font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
+                              onClick={closeMobileMenu}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="block py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
+                      onClick={closeMobileMenu}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
+                        <span>{item.label}</span>
+                      </span>
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Language Switcher - Mobile */}
+            <div className="mt-2 pt-4 border-t border-gray-100 px-5 pb-4">
+              <button
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
+                aria-label="Change language"
+                aria-expanded={isLangDropdownOpen}
+              >
+                <span className="flex items-center gap-2">
+                  <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
+                  <span className="flex items-center space-x-2">
+                    <span className="uppercase text-sm">{currentLanguage}</span>
+                    <span>Language</span>
+                  </span>
+                </span>
+                <DropdownIcon
+                  isOpen={isLangDropdownOpen}
+                  className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
+                    isLangDropdownOpen ? "text-[#EC601B]" : ""
+                  }`}
+                />
+              </button>
+
+              {isLangDropdownOpen && (
+                <div className="ml-4 mt-2 space-y-0.5 overflow-hidden rounded-lg border-l-2 border-white/30 bg-[#EC601B] py-2">
+                  {LANGUAGES.map((lang, index) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => handleLanguageSelect(lang.code)}
+                      className={`flex w-full items-center space-x-2 rounded-md px-4 py-3 text-left font-normal text-white transition-all hover:bg-white/20 ${
+                        index < LANGUAGES.length - 1
+                          ? "border-b border-white/50"
+                          : ""
+                      }`}
+                    >
+                      <span className="text-lg">{lang.flag}</span>
+                      <span>{lang.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </nav>
