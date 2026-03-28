@@ -874,8 +874,8 @@ export default function ProfessionalsPage() {
               className="absolute inset-0 pointer-events-none"
               style={{
                 background: [
-                  "linear-gradient(118deg, rgba(72,143,204,0.42) 0%, rgba(72,143,204,0.14) 48%, transparent 72%)",
-                  "linear-gradient(to bottom, rgba(29,45,68,0.28) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.52) 100%)",
+                  "linear-gradient(to bottom, rgba(29,45,68,0.15) 0%, rgba(29,45,68,0.5) 60%, rgba(29,45,68,0.85) 100%)",
+                  "linear-gradient(to right, rgba(29,45,68,0.6) 0%, rgba(29,45,68,0.2) 60%, transparent 100%)",
                 ].join(", "),
               }}
             />
