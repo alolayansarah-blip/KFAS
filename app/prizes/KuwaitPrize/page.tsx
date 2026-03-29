@@ -509,7 +509,6 @@ export default function KuwaitPrizesPage() {
             {/* left — sticky heading */}
             <div className="lg:sticky lg:top-32">
               <FadeUp>
-                <p className="text-xs tracking-[0.35em] uppercase text-[#EC601B] font-semibold mb-4">Requirements</p>
                 <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
                   Eligibility and Conditions
                 </h2>

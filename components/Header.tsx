@@ -95,7 +95,7 @@
 //     href: "/Prizes",
 //     children: [
 //       { label: "Kuwait Prize", href: "/KuwaitPrizes" },
-//       { label: "Jaber Al-Ahmed Prize", href: "/Prizes/Jaber-Al-Ahmed-Prize" },
+//       { label: "Jaber Al-Ahmed Prize", href: "/prizes/Jaber-AlAhmadPrize" },
 //       { label: "Al Sumait Prize", href: "/Prizes/Al-Sumait-Prize" },
 //       { label: "Laureates", href: "/Prizes/Laureates" },
 //     ],
@@ -674,10 +674,10 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Prizes",
-    href: "/Prizes",
+    href: "/prizes",
     children: [
       { label: "Kuwait Prize", href: "/prizes/KuwaitPrize" },
-      { label: "Jaber Al-Ahmed Prize", href: "/Prizes/Jaber-Al-Ahmed-Prize" },
+      { label: "Jaber Al-Ahmed Prize", href: "/prizes/Jaber-AlAhmadPrize" },
       { label: "Al Sumait Prize", href: "/Prizes/Al-Sumait-Prize" },
       { label: "Laureates", href: "/Prizes/Laureates" },
     ],
