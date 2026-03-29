@@ -288,20 +288,34 @@ export default function JaberAlAhmadPrizePage() {
               <span className="text-white/60">Prizes / </span>
             </motion.div>
 
-            <div className="overflow-hidden">
-              <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]"
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
+            <h1 className="font-poppins flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-4 lg:gap-x-6 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]">
+              <div className="overflow-hidden shrink-0">
+                <motion.span
+                  className="block"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    duration: 0.7,
+                    delay: 0.2,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  Jaber Al-Ahmad Prize
+                </motion.span>
+              </div>
+              <motion.span
+                className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-light text-white/90 tracking-normal max-w-[20ch] sm:max-w-none"
+                initial={{ opacity: 0, x: 28 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{
                   duration: 0.7,
-                  delay: 0.2,
+                  delay: 0.72,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Jaber Al-Ahmad Prize
-              </motion.h1>
-            </div>
+                for Young Researchers
+              </motion.span>
+            </h1>
 
             <motion.div
               className="h-[2px] bg-[#EC601B] mt-6 origin-left"

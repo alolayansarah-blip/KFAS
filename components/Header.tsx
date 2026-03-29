@@ -678,8 +678,8 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     children: [
       { label: "Kuwait Prize", href: "/prizes/KuwaitPrize" },
       { label: "Jaber Al-Ahmed Prize", href: "/prizes/Jaber-AlAhmadPrize" },
-      { label: "Al Sumait Prize", href: "/Prizes/Al-Sumait-Prize" },
-      { label: "Laureates", href: "/Prizes/Laureates" },
+      { label: "Al Sumait Prize", href: "/prizes/AlSumaitPrize" },
+      { label: "Laureates", href: "/prizes/Laureates" },
     ],
   },
 ];
