@@ -101,9 +101,41 @@ function AnimatedListItem({
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
     >
-      <span className="shrink-0 select-none text-[#EC601B]" aria-hidden>{bullet}</span>
+      <span className="shrink-0 select-none text-[#EC601B]" aria-hidden>
+        {bullet}
+      </span>
       <span>{children}</span>
     </motion.li>
+  );
+}
+
+// ─── Apply link (matches Learning-and-Development / Professionals) ─────────────
+function ApplyLink({ href = "#" }: { href?: string }) {
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-2 w-fit inline-flex items-center gap-3 border border-[#1D2D44]/10 border-b-2 border-b-[#EC601B] px-6 py-3 text-sm font-medium text-[#1D2D44] font-poppins group/btn"
+      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+    >
+      <span className="group-hover/btn:text-[#EC601B] transition-colors duration-200">
+        Click here to apply
+      </span>
+      <svg
+        className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-[#EC601B]"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        strokeWidth={2.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M17 8l4 4m0 0l-4 4m4-4H3"
+        />
+      </svg>
+    </motion.a>
   );
 }
 
@@ -178,7 +210,11 @@ function PrizeFieldRow({ label, index }: { label: string; index: number }) {
       className="flex gap-5 py-5 border-b border-white/25 group"
       initial={{ opacity: 0, x: 24 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       <motion.span
         className="w-2 h-2 rounded-full bg-white mt-[10px] flex-shrink-0"
@@ -229,7 +265,11 @@ function EligibilityRow({ text, index }: { text: string; index: number }) {
       className="flex gap-5 py-5 border-b border-[#1D2D44]/10 group"
       initial={{ opacity: 0, x: 24 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.06,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       <motion.span
         className="w-2 h-2 rounded-full bg-[#EC601B] mt-[10px] flex-shrink-0"
@@ -275,7 +315,11 @@ function ObjectiveRow({ text, index }: { text: string; index: number }) {
       className="flex gap-5 py-5 border-b border-[#1D2D44]/10 group"
       initial={{ opacity: 0, x: 24 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       <motion.span
         className="w-2 h-2 rounded-full bg-[#EC601B] mt-[10px] flex-shrink-0"
@@ -319,7 +363,6 @@ export default function KuwaitPrizesPage() {
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
 
       <main className="min-h-screen bg-[#FAFAF8] font-poppins pt-20">
-
         {/* ══ HERO — original, unchanged ══ */}
         <section
           ref={heroRef}
@@ -363,7 +406,11 @@ export default function KuwaitPrizesPage() {
                 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.2,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
               >
                 Kuwait Prize
               </motion.h1>
@@ -373,7 +420,11 @@ export default function KuwaitPrizesPage() {
               className="h-[2px] bg-[#EC601B] mt-6 origin-left"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.8,
+                delay: 0.55,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               style={{ width: 80 }}
             />
           </motion.div>
@@ -384,7 +435,6 @@ export default function KuwaitPrizesPage() {
         {/* ══ BODY ══ */}
         <section className="py-20 sm:py-28">
           <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 space-y-16 sm:space-y-20">
-
             {/* Overview */}
             <div>
               <SectionHeading>Overview of the Kuwait Prize</SectionHeading>
@@ -393,32 +443,42 @@ export default function KuwaitPrizesPage() {
                   <FadeUp delay={0.1}>
                     <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/80 font-light">
                       The Kuwait Prize is one of the most prestigious scientific
-                      awards granted by the Kuwait Foundation for the Advancement of
-                      Sciences (KFAS). The prize recognizes distinguished
-                      researchers who have made significant and impactful
-                      contributions to the advancement of science, knowledge, and
-                      innovation in fields that serve humanity and promote
-                      scientific progress.
+                      awards granted by the Kuwait Foundation for the
+                      Advancement of Sciences (KFAS). The prize recognizes
+                      distinguished researchers who have made significant and
+                      impactful contributions to the advancement of science,
+                      knowledge, and innovation in fields that serve humanity
+                      and promote scientific progress.
                     </p>
                   </FadeUp>
                   <FadeUp delay={0.18}>
                     <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/80 font-light">
                       Established in{" "}
-                      <span className="font-semibold text-[#1D2D44]">1979</span>, the
-                      Kuwait Prize aims to encourage
-                      excellence in scientific research and to highlight outstanding
-                      achievements by scientists and scholars whose work contributes
-                      to the development of knowledge and the advancement of
-                      society.
+                      <span className="font-semibold text-[#1D2D44]">1979</span>
+                      , the Kuwait Prize aims to encourage excellence in
+                      scientific research and to highlight outstanding
+                      achievements by scientists and scholars whose work
+                      contributes to the development of knowledge and the
+                      advancement of society.
                     </p>
                   </FadeUp>
+                  <FadeUp delay={0.22}>
+                    <ApplyLink href="https://www.kfas.org.kw/" />
+                  </FadeUp>
                 </div>
-                <FadeUp delay={0.25} className="flex shrink-0 justify-center lg:justify-end lg:pt-1">
+                <FadeUp
+                  delay={0.25}
+                  className="flex shrink-0 justify-center lg:justify-end lg:pt-1"
+                >
                   <div className="relative">
                     <div className="absolute inset-0 bg-[#EC601B]/10 blur-3xl rounded-full scale-125 pointer-events-none" />
                     <motion.div
                       animate={{ y: [0, -8, 0] }}
-                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                      transition={{
+                        duration: 4.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
                       <Image
                         src="/image/KuwaitPrizeLogo.png"
@@ -446,13 +506,15 @@ export default function KuwaitPrizesPage() {
               </div>
               <ObjectiveRows />
             </div>
-
           </div>
         </section>
 
         {/* ══ PRIZE FIELDS — full-bleed orange section ══ */}
         <section className="bg-[#EC601B] py-24 relative">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+          <div
+            className="absolute inset-0 overflow-hidden pointer-events-none"
+            aria-hidden
+          >
             {/* subtle diagonal grid texture */}
             <div
               className="absolute inset-0 opacity-[0.12]"
@@ -481,10 +543,11 @@ export default function KuwaitPrizesPage() {
 
             <FadeUp delay={0.2}>
               <p className="font-poppins text-base leading-[1.9] text-white/75 font-light mt-14 lg:mt-16 max-w-2xl">
-                The first four fields are awarded annually, while the fifth field,
-                Emerging Sciences, is awarded biennially. Within these main fields, the
-                specific scientific subfields are determined and announced by KFAS in
-                accordance with the approved prize cycle.
+                The first four fields are awarded annually, while the fifth
+                field, Emerging Sciences, is awarded biennially. Within these
+                main fields, the specific scientific subfields are determined
+                and announced by KFAS in accordance with the approved prize
+                cycle.
               </p>
             </FadeUp>
           </div>
@@ -492,20 +555,65 @@ export default function KuwaitPrizesPage() {
 
         {/* ══ ELIGIBILITY — full-bleed light section ══ */}
         <section className="bg-[#F2EFE9] py-24 relative">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-            <svg className="absolute -top-20 -right-20 opacity-[0.08] w-[480px]" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="200" cy="200" r="180" fill="none" stroke="#EC601B" strokeWidth="1"/>
-              <circle cx="200" cy="200" r="130" fill="none" stroke="#EC601B" strokeWidth="1"/>
-              <circle cx="200" cy="200" r="80"  fill="none" stroke="#EC601B" strokeWidth="1"/>
+          <div
+            className="absolute inset-0 overflow-hidden pointer-events-none"
+            aria-hidden
+          >
+            <svg
+              className="absolute -top-20 -right-20 opacity-[0.08] w-[480px]"
+              viewBox="0 0 400 400"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="200"
+                cy="200"
+                r="180"
+                fill="none"
+                stroke="#EC601B"
+                strokeWidth="1"
+              />
+              <circle
+                cx="200"
+                cy="200"
+                r="130"
+                fill="none"
+                stroke="#EC601B"
+                strokeWidth="1"
+              />
+              <circle
+                cx="200"
+                cy="200"
+                r="80"
+                fill="none"
+                stroke="#EC601B"
+                strokeWidth="1"
+              />
             </svg>
-            <svg className="absolute -bottom-16 -left-16 opacity-[0.06] w-[320px]" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="200" cy="200" r="180" fill="none" stroke="#EC601B" strokeWidth="1"/>
-              <circle cx="200" cy="200" r="110" fill="none" stroke="#EC601B" strokeWidth="1"/>
+            <svg
+              className="absolute -bottom-16 -left-16 opacity-[0.06] w-[320px]"
+              viewBox="0 0 400 400"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="200"
+                cy="200"
+                r="180"
+                fill="none"
+                stroke="#EC601B"
+                strokeWidth="1"
+              />
+              <circle
+                cx="200"
+                cy="200"
+                r="110"
+                fill="none"
+                stroke="#EC601B"
+                strokeWidth="1"
+              />
             </svg>
           </div>
 
           <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start relative z-10">
-
             {/* left — sticky heading */}
             <div className="lg:sticky lg:top-32">
               <FadeUp>
@@ -518,12 +626,17 @@ export default function KuwaitPrizesPage() {
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    duration: 0.55,
+                    delay: 0.3,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                 />
                 <FadeUp delay={0.15}>
                   <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-6">
-                    Candidates for the Kuwait Prize must satisfy the approved conditions
-                    and requirements of the Prize, including the following:
+                    Candidates for the Kuwait Prize must satisfy the approved
+                    conditions and requirements of the Prize, including the
+                    following:
                   </p>
                 </FadeUp>
               </FadeUp>
@@ -536,7 +649,6 @@ export default function KuwaitPrizesPage() {
 
         <section className="py-20 sm:py-28">
           <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 space-y-16 sm:space-y-20">
-
             {/* Prize Components */}
             <div>
               <SectionHeading>Prize Components</SectionHeading>
@@ -551,13 +663,12 @@ export default function KuwaitPrizesPage() {
 
                 <FadeUp delay={0.1}>
                   <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/80 font-light">
-                    The prize may be awarded to one laureate or shared by multiple
-                    laureates whose contributions merit recognition.
+                    The prize may be awarded to one laureate or shared by
+                    multiple laureates whose contributions merit recognition.
                   </p>
                 </FadeUp>
               </div>
             </div>
-
           </div>
         </section>
       </main>

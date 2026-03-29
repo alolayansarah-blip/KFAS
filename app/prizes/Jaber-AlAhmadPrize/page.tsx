@@ -77,6 +77,35 @@ function SectionHeadingLight({ children }: { children: ReactNode }) {
   );
 }
 
+function ApplyLink({ href = "#" }: { href?: string }) {
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-2 w-fit inline-flex items-center gap-3 border border-[#1D2D44]/10 border-b-2 border-b-[#EC601B] px-6 py-3 text-sm font-medium text-[#1D2D44] font-poppins group/btn"
+      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+    >
+      <span className="group-hover/btn:text-[#EC601B] transition-colors duration-200">
+        Click here to apply
+      </span>
+      <svg
+        className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-[#EC601B]"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        strokeWidth={2.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M17 8l4 4m0 0l-4 4m4-4H3"
+        />
+      </svg>
+    </motion.a>
+  );
+}
+
 const objectiveItems = [
   "Encourage young Kuwaiti researchers to excel in scientific research.",
   "Recognize outstanding research achievements in the early stages of a scientific career.",
@@ -364,6 +393,9 @@ export default function JaberAlAhmadPrizePage() {
                       creativity and excellence in various fields of scientific
                       research.
                     </p>
+                  </FadeUp>
+                  <FadeUp delay={0.22}>
+                    <ApplyLink href="https://www.kfas.org.kw/" />
                   </FadeUp>
                 </div>
                 <FadeUp
