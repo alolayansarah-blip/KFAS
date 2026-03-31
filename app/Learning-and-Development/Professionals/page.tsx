@@ -583,7 +583,7 @@ function ApplyLink({ href = "#" }: { href?: string }) {
       whileHover={{ x: 4, transition: { duration: 0.2 } }}
     >
       <span className="group-hover/btn:text-[#EC601B] transition-colors duration-200">
-        Click here, to apply
+        Click here to apply
       </span>
       <svg
         className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-[#EC601B]"
@@ -931,7 +931,7 @@ export default function ProfessionalsPage() {
             <SectionHeading>Professional Development Learning</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               <ProgramCard
-                title="Open enrollment courses"
+                title="Open Enrollment Courses"
                 body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in courses by subject matter expert practitioners. This activity would focus on developing specific skills needed for organizational development. Short-courses (up to 5 days) are offered to all employee levels in open enrollment style. Courses are delivered with latest and highest standard of learning delivery. Seats are open to all Kuwaiti citizens, targeting the entire workforce population."
                 imageSrc="/image/OE.jpg"
                 applyHref="https://learn.kfas.org.kw/"
@@ -942,7 +942,7 @@ export default function ProfessionalsPage() {
                 title="Professional Certificate Incentive Scheme"
                 body="KFAS offer grants to enhance the capabilities of the Kuwaiti human capital and sharpen their professional skills by a scheme to encourage individuals to obtain their professional credentials. An attractive monetary reward is given upon successfully obtaining the professional certificate. The amount of the reward will be determined based on KFAS policies and procedures for rewards."
                 imageSrc="/image/back4.webp"
-                applyHref="https://learn.kfas.org.kw/"
+                applyHref="https://kfas.formstack.com/forms/kfas_support_for_professional_certifications_2026"
                 index={1}
               />
             </div>
@@ -955,14 +955,14 @@ export default function ProfessionalsPage() {
             <SectionHeading>Executive Education</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-10">
               <ProgramCard
-                title="Local courses"
+                title="Local Courses"
                 body="KFAS bring executive education short-courses offered by international academic institutions on selected topics (in line with KFAS strategic direction) to Kuwait to offer seats locally and would be available to all Kuwaiti citizens."
                 imageSrc="/image/InstagramPost.png"
                 applyHref="https://learn.kfas.org.kw/"
                 index={0}
               />
               <ProgramCard
-                title="Aboard courses (international open enrollment programs)"
+                title="Abroad Courses"
                 body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in programs already offered by academic institutions. This would allow participants to interact and exchange knowledge with other participants from around the world."
                 imageSrc="/image/KfasBuilding2.png"
                 applyHref="https://learn.kfas.org.kw/"

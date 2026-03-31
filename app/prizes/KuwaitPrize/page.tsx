@@ -463,7 +463,7 @@ export default function KuwaitPrizesPage() {
                     </p>
                   </FadeUp>
                   <FadeUp delay={0.22}>
-                    <ApplyLink href="https://www.kfas.org.kw/" />
+                    <ApplyLink href="https://prizes.kfas.org.kw" />
                   </FadeUp>
                 </div>
                 <FadeUp
