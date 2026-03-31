@@ -363,26 +363,28 @@ export default function KuwaitPrizesPage() {
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
 
       <main className="min-h-screen bg-[#FAFAF8] font-poppins pt-20">
-        {/* ══ HERO — original, unchanged ══ */}
+        {/* ══ HERO ══ */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[55vh] bg-[#1D2D44]"
+          className="relative overflow-hidden flex items-end justify-start h-[55vh] bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/KuwaitPrize4.png"
+              src="/image/KuwaitPrizee.jpg"
               alt=""
               fill
               priority
               sizes="100vw"
-              className="object-cover object-center scale-110"
+              className="object-cover object-[center_40%] scale-[1.06] brightness-[0.98] contrast-[1.02]"
             />
             <div
               className="absolute inset-0 pointer-events-none"
+              aria-hidden
               style={{
                 background: [
-                  "linear-gradient(118deg, rgba(72,143,204,0.42) 0%, rgba(72,143,204,0.14) 48%, transparent 72%)",
-                  "linear-gradient(to bottom, rgba(29,45,68,0.28) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.52) 100%)",
+                  "linear-gradient(128deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
+                  "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
+                  "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
                 ].join(", "),
               }}
             />
@@ -403,7 +405,7 @@ export default function KuwaitPrizesPage() {
 
             <div className="overflow-hidden">
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]"
+                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_0_2px_28px_rgba(0,0,0,0.45),_0_1px_2px_rgba(0,0,0,0.35)]"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
