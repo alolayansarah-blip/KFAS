@@ -1,15 +1,15 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type RefObject } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function ResearchGrantsPage() {
-  const heroRef = useRef(null);
+  const heroRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef,
+    target: heroRef as RefObject<HTMLElement | null>,
     offset: ["start start", "end start"],
   });
   const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);

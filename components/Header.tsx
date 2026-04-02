@@ -23,18 +23,18 @@
 //   },
 //   {
 //     label: "Research",
-//     href: "/Research",
+//     href: "/research",
 //     children: [
 //       { label: "Grants", href: "/research/grants" },
 //       {
 //         label: "Activities and Events",
-//         href: "/research/Activities-and-Events",
+//         href: "/Research/Activities-and-Events",
 //       },
-//       { label: "Projects", href: "/research/projects" },
-//       { label: "Scientific Missions", href: "/research/Scientific-Missions" },
+//       { label: "Projects", href: "/Research/projects" },
+//       { label: "Scientific Missions", href: "/Research/Scientific-Missions" },
 //       {
 //         label: "Scientific Conference Sponsorship",
-//         href: "/research/scientific-conference-sponsorship",
+//         href: "/Research/scientific-conference-sponsorship",
 //       },
 //     ],
 //   },
@@ -608,18 +608,18 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Research",
-    href: "/Research",
+    href: "/research",
     children: [
-      { label: "Grants", href: "/research/grants" },
+      { label: "Grants", href: "/Research/grants" },
       {
         label: "Activities and Events",
-        href: "/research/Activities-and-Events",
+        href: "/Research/Activities-and-Events",
       },
-      { label: "Projects", href: "/research/projects" },
-      { label: "Scientific Missions", href: "/research/Scientific-Missions" },
+      { label: "Assigned Studies", href: "/Research/assigned-studies" },
+      { label: "Scientific Missions", href: "/Research/Scientific-Missions" },
       {
         label: "Scientific Conference Sponsorship",
-        href: "/research/scientific-conference-sponsorship",
+        href: "/Research/scientific-conference-sponsorship",
       },
     ],
   },
@@ -636,8 +636,8 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         href: "/technology-and-innovation/RD-in-Private-Sector",
       },
       {
-        label: "R&D in Public Sector",
-        href: "/technology-and-innovation/RD-in-Public-Sector",
+        label: "KFAS Research Portal",
+        href: "/technology-and-innovation/KFAS-Research-Portal",
       },
     ],
   },
