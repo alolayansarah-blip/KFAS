@@ -18,16 +18,13 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
-  // Public URL stays /research/grants; app folder stays app/Research/grants (Windows case rename is awkward).
-  // Rewrite only — do not add a redirect from /Research/grants → /research/grants (that + rewrite caused loops).
-  async rewrites() {
-    return [
-      {
-        source: "/research/grants",
-        destination: "/Research/grants",
-      },
-    ];
-  },
+  // Canonical routes use capital R: /Research, /Research/grants. Rewrites map lowercase URLs for compatibility.
+  // async rewrites() {
+  //   return [
+  //     { source: "/research/grants", destination: "/Research/grants" },
+  //     { source: "/research", destination: "/Research" },
+  //   ];
+  // },
   // Add headers to help with cache invalidation
   async headers() {
     return [

@@ -23,7 +23,7 @@
 //   },
 //   {
 //     label: "Research",
-//     href: "/research",
+//     href: "/Research",
 //     children: [
 //       { label: "Grants", href: "/research/grants" },
 //       {
@@ -608,9 +608,9 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Research",
-    href: "/research",
+    href: "/Research",
     children: [
-      { label: "Grants", href: "/Research/grants" },
+      { label: "Grants", href: "/research/grants" },
       {
         label: "Activities and Events",
         href: "/Research/Activities-and-Events",

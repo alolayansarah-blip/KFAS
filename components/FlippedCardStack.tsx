@@ -95,7 +95,7 @@ import { motion, useInView } from "framer-motion";
 const CARDS = [
   {
     title: "Research Grants",
-    href: "/Research/grants",
+    href: "/research/grants",
     label: "Explore",
     image: "/image/Grants.jpg",
   },

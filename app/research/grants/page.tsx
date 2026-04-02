@@ -1,15 +1,16 @@
 "use client";
 
-import { useRef, type RefObject } from "react";
+import  { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function ResearchGrantsPage() {
-  const heroRef = useRef<HTMLElement | null>(null);
+
+export default function GrantsPage() {
+  const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef as RefObject<HTMLElement | null>,
+    target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
@@ -18,30 +19,25 @@ export default function ResearchGrantsPage() {
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-
-      <main className="min-h-screen bg-[#FAFAF8] font-poppins pt-20">
+      <main className="min-h-screen bg-white pt-20 font-poppins">
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[55vh] bg-[#121820]"
+          className="relative overflow-hidden flex items-end justify-start h-[55vh]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/Grants.jpg"
-              alt=""
+              src="/image/Grants2.png"
+              alt="Research Grants"
               fill
               priority
               sizes="100vw"
-              className="object-cover object-[center_40%] scale-[1.06] brightness-[0.98] contrast-[1.02]"
+              className="object-cover object-center scale-110"
             />
             <div
-              className="absolute inset-0 pointer-events-none"
-              aria-hidden
+              className="absolute inset-0"
               style={{
-                background: [
-                  "linear-gradient(128deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
-                  "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
-                  "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
-                ].join(", "),
+                background:
+                  "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)",
               }}
             />
           </motion.div>
@@ -56,12 +52,14 @@ export default function ResearchGrantsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <span className="text-white/60">Research / </span>
+              <span className="text-white/60">Research</span>
+              <span className="text-white/40">/</span>
+              <span className="text-white/60">Grants</span>
             </motion.div>
 
             <div className="overflow-hidden">
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_0_2px_28px_rgba(0,0,0,0.45),_0_1px_2px_rgba(0,0,0,0.35)]"
+                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] text-left"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
@@ -70,7 +68,7 @@ export default function ResearchGrantsPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Grants
+                Research Grants
               </motion.h1>
             </div>
 
@@ -87,14 +85,13 @@ export default function ResearchGrantsPage() {
             />
           </motion.div>
 
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-[#FAFAF8]" />
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
       </main>
-
       <Footer
         logo="/image/logoFooter.png"
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
       />
     </>
   );
-}
+}  
