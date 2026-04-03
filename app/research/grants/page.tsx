@@ -66,7 +66,7 @@ function ApplyLink({ href = "#" }: { href?: string }) {
       whileHover={{ x: 4, transition: { duration: 0.2 } }}
     >
       <span className="group-hover/btn:text-[#EC601B] transition-colors duration-200">
-        Click here to apply
+        Click here
       </span>
       <svg
         className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-[#EC601B]"
@@ -171,7 +171,7 @@ export default function GrantsPage() {
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
               src="/image/Grants2.png"
-              alt="Research Grants"
+              alt="Grants"
               fill
               priority
               sizes="100vw"
@@ -195,7 +195,7 @@ export default function GrantsPage() {
             >
               <span className="text-white/60">Research</span>
               <span className="text-white/40">/</span>
-              <span className="text-white/60">Grants</span>
+              {/* <span className="text-white/60">Grants</span> */}
             </motion.div>
 
             <div className="overflow-hidden">
@@ -205,7 +205,7 @@ export default function GrantsPage() {
                 animate={{ y: 0 }}
                 transition={HERO_TITLE_TRANSITION}
               >
-                Research Grants
+                Grants
               </motion.h1>
             </div>
 

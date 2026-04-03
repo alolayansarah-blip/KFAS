@@ -143,7 +143,7 @@ function Card({ title, href, label, image }: (typeof CARDS)[number]) {
         <div className="relative h-full min-h-[200px] overflow-hidden border border-white/15 bg-[#EC601B]">
           {/* Image — fades in on hover */}
           <div
-            className="absolute inset-0 bg-cover bg-center opacity-0 scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-100"
+            className="absolute inset-0 bg-cover bg-center opacity-0 scale-105 transition-all duration-700 ease-smooth-out group-hover:opacity-100 group-hover:scale-100"
             style={{ backgroundImage: `url(${image})` }}
           />
 
@@ -159,10 +159,10 @@ function Card({ title, href, label, image }: (typeof CARDS)[number]) {
               <p className="font-poppins text-[15px] font-semibold leading-snug tracking-tight text-white [text-shadow:_0_1px_12px_rgba(0,0,0,0.12)] transition-colors duration-300 sm:text-base">
                 {title}
               </p>
-              <div className="mx-auto mt-3 h-px w-0 bg-white/80 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-14" />
+              <div className="mx-auto mt-3 h-px w-0 bg-white/80 transition-all duration-500 ease-smooth-out group-hover:w-14" />
             </div>
 
-            <div className="pointer-events-none absolute bottom-7 left-1/2 flex -translate-x-1/2 translate-y-2 items-center gap-2 whitespace-nowrap opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+            <div className="pointer-events-none absolute bottom-7 left-1/2 flex -translate-x-1/2 translate-y-2 items-center gap-2 whitespace-nowrap opacity-0 transition-all duration-300 ease-smooth-out group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
               <span className="text-sm font-medium text-white drop-shadow-sm">
                 Read more
               </span>
