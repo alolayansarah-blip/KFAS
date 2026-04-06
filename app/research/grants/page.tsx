@@ -33,7 +33,7 @@ const GRANT_TYPES = [
     title: "Applied Research Grants",
     description:
       "Supporting research projects that translate scientific findings into practical solutions for industry and society.",
-    applyHref: "https://www.kfas.com/",
+    applyHref: "/research/grants/Applied-Research-Grants",
   },
   {
     title: "Fundamental Research Grants",
