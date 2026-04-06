@@ -27,7 +27,7 @@ const GRANT_TYPES = [
     title: "Research Infrastructure Grants",
     description:
       "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for research infrastructure proposals. The Research Infrastructure Grant (RIG) will support and invest in public research centers and laboratories in Kuwait.",
-    applyHref: "https://www.kfas.com/",
+    applyHref: "/research/grants/RIG",
   },
   {
     title: "Applied Research Grants",

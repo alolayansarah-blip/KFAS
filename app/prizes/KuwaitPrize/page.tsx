@@ -556,7 +556,7 @@ export default function KuwaitPrizesPage() {
         </section>
 
         {/* ══ ELIGIBILITY — full-bleed light section ══ */}
-        <section className="bg-[#F2EFE9] py-24 relative">
+        <section className="bg-[#BBDEFB25] py-24 relative">
           <div
             className="absolute inset-0 overflow-hidden pointer-events-none"
             aria-hidden
