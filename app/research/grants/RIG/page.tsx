@@ -93,7 +93,6 @@ export default function RigPage() {
         forceWhiteBackground
       />
       <main className="min-h-screen bg-white pt-20 font-poppins">
-
         {/* ── HERO — completely original, untouched ── */}
         <section
           ref={heroRef}
@@ -170,7 +169,10 @@ export default function RigPage() {
               >
                 Research Infrastructure Grants
               </h2>
-              <div className="mt-3 h-[2px] w-10" style={{ background: BRAND.orange }} />
+              <div
+                className="mt-3 h-[2px] w-10"
+                style={{ background: BRAND.orange }}
+              />
               <div
                 className="mt-6 space-y-4 font-poppins text-sm leading-[1.9] sm:text-[15px]"
                 style={{ color: `${BRAND.navy}BF` }}
@@ -178,8 +180,8 @@ export default function RigPage() {
                 <p>
                   The Kuwait Foundation for the Advancement of Sciences (KFAS)
                   provides grants for research infrastructure proposals. The
-                  Research Infrastructure Grant (RIG) will support and invest
-                  in public research centers and laboratories in Kuwait, in an aim
+                  Research Infrastructure Grant (RIG) will support and invest in
+                  public research centers and laboratories in Kuwait, in an aim
                   to maximize their impact on the scientific community and
                   strengthen their alignment with the global research ecosystem
                   standards.
@@ -197,7 +199,10 @@ export default function RigPage() {
         </section>
 
         {/* ── 2026 CALL ── */}
-        <section className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8" style={{ background: `${BRAND.lightBlue}25` }}>
+        <section
+          className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8"
+          style={{ background: `${BRAND.lightBlue}25` }}
+        >
           <div className="mx-auto max-w-[1024px]">
             <SectionHeading>
               KFAS 2026 Call for Research Infrastructure Grant Proposals
@@ -225,21 +230,35 @@ export default function RigPage() {
                 >
                   KFAS Call for Research Infrastructure Grant Proposals
                   <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <path d="M2 7h10M7 2l5 5-5 5" stroke={BRAND.orange} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M2 7h10M7 2l5 5-5 5"
+                      stroke={BRAND.orange}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </a>
               </motion.p>
               <motion.p
                 className="border-l-2 pl-4 pt-1"
-                style={{ borderColor: `${BRAND.orange}60`, color: `${BRAND.navy}CC` }}
+                style={{
+                  borderColor: `${BRAND.orange}60`,
+                  color: `${BRAND.navy}CC`,
+                }}
                 {...fadeUp(0.2)}
               >
-                <span className="font-semibold" style={{ color: BRAND.navy }}>Note:</span>{" "}
+                <span className="font-semibold" style={{ color: BRAND.navy }}>
+                  Note:
+                </span>{" "}
                 Only applications that are submitted via email to{" "}
                 <a
                   href="mailto:research@kfas.org.kw"
                   className="font-medium underline underline-offset-[3px]"
-                  style={{ color: BRAND.orange, textDecorationColor: `${BRAND.orange}50` }}
+                  style={{
+                    color: BRAND.orange,
+                    textDecorationColor: `${BRAND.orange}50`,
+                  }}
                 >
                   research@kfas.org.kw
                 </a>{" "}
@@ -267,16 +286,25 @@ export default function RigPage() {
                 <motion.div
                   key={label}
                   className="flex flex-col items-start gap-3 border p-5"
-                  style={{ borderColor: `${BRAND.blue}35`, background: `${BRAND.lightBlue}15` }}
+                  style={{
+                    borderColor: `${BRAND.blue}35`,
+                    background: `${BRAND.lightBlue}15`,
+                  }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
                 >
-                  <p className="font-poppins text-[13px] font-medium leading-snug" style={{ color: BRAND.navy }}>
+                  <p
+                    className="font-poppins text-[13px] font-medium leading-snug"
+                    style={{ color: BRAND.navy }}
+                  >
                     {label}
                   </p>
-                  <div className="mt-auto h-[2px] w-6" style={{ background: BRAND.orange }} />
+                  <div
+                    className="mt-auto h-[2px] w-6"
+                    style={{ background: BRAND.orange }}
+                  />
                 </motion.div>
               ))}
             </div>
@@ -294,7 +322,10 @@ export default function RigPage() {
         </section>
 
         {/* ── PROPOSAL SUBMISSIONS ── */}
-        <section className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8" style={{ background: `${BRAND.lightBlue}25` }}>
+        <section
+          className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8"
+          style={{ background: `${BRAND.lightBlue}25` }}
+        >
           <div className="mx-auto max-w-[1024px]">
             <SectionHeading>Proposal Submissions:</SectionHeading>
             <div
@@ -315,7 +346,10 @@ export default function RigPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{ color: BRAND.orange, textDecorationColor: `${BRAND.orange}50` }}
+                  style={{
+                    color: BRAND.orange,
+                    textDecorationColor: `${BRAND.orange}50`,
+                  }}
                 >
                   RIG Proposal Form Template
                 </a>
@@ -323,7 +357,10 @@ export default function RigPage() {
                 <a
                   href="mailto:research@kfas.org.kw"
                   className="font-medium underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{ color: BRAND.orange, textDecorationColor: `${BRAND.orange}50` }}
+                  style={{
+                    color: BRAND.orange,
+                    textDecorationColor: `${BRAND.orange}50`,
+                  }}
                 >
                   research@kfas.org.kw
                 </a>
@@ -337,7 +374,10 @@ export default function RigPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{ color: BRAND.orange, textDecorationColor: `${BRAND.orange}50` }}
+                  style={{
+                    color: BRAND.orange,
+                    textDecorationColor: `${BRAND.orange}50`,
+                  }}
                 >
                   RIG Letter of Intent Sample
                 </a>{" "}
@@ -357,7 +397,9 @@ export default function RigPage() {
         {/* ── ELIGIBILITY ── */}
         <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
           <div className="mx-auto max-w-[1024px]">
-            <SectionHeading>General Eligibility for Proposal Submissions:</SectionHeading>
+            <SectionHeading>
+              General Eligibility for Proposal Submissions:
+            </SectionHeading>
             <motion.p
               className="mt-6 font-poppins text-sm leading-[1.85] sm:text-[15px]"
               style={{ color: `${BRAND.navy}BF` }}
@@ -374,7 +416,10 @@ export default function RigPage() {
                   <a
                     href="mailto:research@kfas.org.kw"
                     className="font-medium underline underline-offset-[3px]"
-                    style={{ color: BRAND.orange, textDecorationColor: `${BRAND.orange}50` }}
+                    style={{
+                      color: BRAND.orange,
+                      textDecorationColor: `${BRAND.orange}50`,
+                    }}
                   >
                     research@kfas.org.kw
                   </a>
@@ -389,7 +434,10 @@ export default function RigPage() {
                       "Evidence of existing laboratory facilities and/or designated areas to host the proposed infrastructure.",
                     ].map((sub, j) => (
                       <li key={j} className="flex items-start gap-3">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: BRAND.blue }} />
+                        <span
+                          className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+                          style={{ background: BRAND.blue }}
+                        />
                         <span>{sub}</span>
                       </li>
                     ))}
@@ -431,21 +479,26 @@ export default function RigPage() {
               style={{ color: `${BRAND.navy}99` }}
               {...fadeUp(0.2)}
             >
-              Any application missing major requirements by the closing date
-              of the cycle will be marked as incomplete and consequently
-              declined.
+              Any application missing major requirements by the closing date of
+              the cycle will be marked as incomplete and consequently declined.
             </motion.p>
           </div>
         </section>
 
         {/* ── IMPORTANT INFORMATION ── */}
-        <section className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8" style={{ background: BRAND.navy }}>
+        <section
+          className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8"
+          style={{ background: BRAND.navy }}
+        >
           <div className="mx-auto max-w-[1024px]">
             <motion.div {...fadeUp(0)}>
               <h2 className="font-poppins text-[1.45rem] font-semibold leading-snug tracking-tight text-white sm:text-[1.7rem]">
                 Important Information:
               </h2>
-              <div className="mt-3 h-[2px] w-10" style={{ background: BRAND.orange }} />
+              <div
+                className="mt-3 h-[2px] w-10"
+                style={{ background: BRAND.orange }}
+              />
             </motion.div>
             <ul className="mt-8 space-y-5">
               {[
@@ -461,7 +514,10 @@ export default function RigPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.08 }}
                 >
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: BRAND.blue }} />
+                  <span
+                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ background: BRAND.blue }}
+                  />
                   {item}
                 </motion.li>
               ))}
@@ -511,21 +567,53 @@ export default function RigPage() {
                       className="flex h-9 w-9 shrink-0 items-center justify-center"
                       style={{ background: `${BRAND.blue}15` }}
                     >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M4 2h6l4 4v8H4V2z" stroke={BRAND.blue} strokeWidth="1.2" strokeLinejoin="round" />
-                        <path d="M10 2v4h4" stroke={BRAND.blue} strokeWidth="1.2" strokeLinecap="round" />
-                        <path d="M6 9h4M6 11.5h2.5" stroke={BRAND.blue} strokeWidth="1.2" strokeLinecap="round" />
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                      >
+                        <path
+                          d="M4 2h6l4 4v8H4V2z"
+                          stroke={BRAND.blue}
+                          strokeWidth="1.2"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M10 2v4h4"
+                          stroke={BRAND.blue}
+                          strokeWidth="1.2"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M6 9h4M6 11.5h2.5"
+                          stroke={BRAND.blue}
+                          strokeWidth="1.2"
+                          strokeLinecap="round"
+                        />
                       </svg>
                     </div>
-                    <span className="font-poppins text-sm font-medium" style={{ color: BRAND.navy }}>
+                    <span
+                      className="font-poppins text-sm font-medium"
+                      style={{ color: BRAND.navy }}
+                    >
                       {doc.label}
                     </span>
                   </div>
                   <svg
-                    width="14" height="14" viewBox="0 0 14 14" fill="none"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
                     className="shrink-0 opacity-25 transition-opacity group-hover:opacity-100"
                   >
-                    <path d="M2 7h10M7 2l5 5-5 5" stroke={BRAND.orange} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M2 7h10M7 2l5 5-5 5"
+                      stroke={BRAND.orange}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </motion.a>
               ))}
@@ -535,10 +623,10 @@ export default function RigPage() {
               style={{ color: `${BRAND.navy}BF` }}
               {...fadeUp(0.2)}
             >
-              It is the responsibility of the applicant and the
-              applicant&apos;s institution to ensure that they read,
-              understand, and adhere to the application requirements and all
-              KFAS guidelines, rules, and regulations.
+              It is the responsibility of the applicant and the applicant&apos;s
+              institution to ensure that they read, understand, and adhere to
+              the application requirements and all KFAS guidelines, rules, and
+              regulations.
             </motion.p>
           </div>
         </section>
@@ -559,7 +647,10 @@ export default function RigPage() {
                 <a
                   href="mailto:research@kfas.org.kw"
                   className="font-medium underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{ color: BRAND.orange, textDecorationColor: `${BRAND.orange}50` }}
+                  style={{
+                    color: BRAND.orange,
+                    textDecorationColor: `${BRAND.orange}50`,
+                  }}
                 >
                   research@kfas.org.kw
                 </a>
@@ -572,8 +663,8 @@ export default function RigPage() {
                   style={{ color: BRAND.navy }}
                 >
                   (+965) 22278125
-                </a>
-                {" "}or{" "}
+                </a>{" "}
+                or{" "}
                 <a
                   href="tel:+96522278126"
                   className="font-medium transition-colors hover:text-[#EC601B]"
@@ -582,14 +673,17 @@ export default function RigPage() {
                   22278126
                 </a>
               </motion.p>
-              <motion.p className="pt-2" style={{ color: `${BRAND.navy}80` }} {...fadeUp(0.15)}>
+              <motion.p
+                className="pt-2"
+                style={{ color: `${BRAND.navy}80` }}
+                {...fadeUp(0.15)}
+              >
                 KFAS decisions regarding research grants are final and not
                 subject to appeal.
               </motion.p>
             </div>
           </div>
         </section>
-
       </main>
       <Footer
         logo="/image/logoFooter.png"
