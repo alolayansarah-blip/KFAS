@@ -10,6 +10,10 @@ import Footer from "@/components/Footer";
 const GRADIENT_OVERLAY =
   "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)";
 
+/** Soft #7DC0F1 wash over card imagery (matches overview strip) */
+const CARD_IMAGE_TINT =
+  "linear-gradient(to bottom, rgba(125,192,241,0.12) 0%, rgba(125,192,241,0.38) 50%, rgba(125,192,241,0.62) 100%)";
+
 const HERO_TITLE_TRANSITION = {
   duration: 0.7,
   delay: 0.2,
@@ -22,18 +26,30 @@ const ACCENT_LINE_TRANSITION = {
   ease: [0.22, 1, 0.36, 1] as const,
 };
 
-const GRANT_TYPES = [
+const GRANT_TYPES: readonly {
+  title: string;
+  description: string;
+  applyHref: string;
+  imageSrc?: string;
+  imageAlt?: string;
+}[] = [
   {
     title: "Research Infrastructure Grants",
     description:
       "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for research infrastructure proposals. The Research Infrastructure Grant (RIG) will support and invest in public research centers and laboratories in Kuwait.",
     applyHref: "/research/grants/RIG",
+    imageSrc: "/image/RIG1.jpg",
+    imageAlt:
+      "Researchers collaborating in a laboratory with microscope and equipment",
   },
   {
     title: "Applied Research Grants",
     description:
       "Supporting research projects that translate scientific findings into practical solutions for industry and society.",
     applyHref: "/research/grants/Applied-Research-Grants",
+    imageSrc: "/image/applied1.png",
+    imageAlt:
+      "Students and mentor working on robotics and applied research equipment",
   },
   {
     title: "Fundamental Research Grants",
@@ -53,7 +69,7 @@ const GRANT_TYPES = [
       "Enabling evidence-based research that informs public policy, governance, and national development strategies.",
     applyHref: "https://www.kfas.com/",
   },
-] as const;
+];
 
 // ─── Apply Link ───────────────────────────────────────────────────────────────
 function ApplyLink({ href = "#" }: { href?: string }) {
@@ -90,11 +106,15 @@ function GrantCard({
   title,
   description,
   applyHref,
+  imageSrc,
+  imageAlt,
   index = 0,
 }: {
   title: string;
   description: string;
   applyHref?: string;
+  imageSrc?: string;
+  imageAlt?: string;
   index?: number;
 }) {
   const ref = useRef(null);
@@ -103,7 +123,7 @@ function GrantCard({
   return (
     <motion.article
       ref={ref}
-      className="group relative flex h-full flex-col overflow-hidden bg-white border border-[#1D2D44]/08 cursor-default"
+      className="group relative flex h-full cursor-default flex-col overflow-hidden rounded-2xl border border-[#1D2D44]/08 bg-white"
       initial={{ opacity: 0, y: 48 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{
@@ -128,6 +148,23 @@ function GrantCard({
           ease: [0.22, 1, 0.36, 1],
         }}
       />
+
+      {imageSrc ? (
+        <div className="relative h-44 w-full shrink-0 overflow-hidden bg-[#1D2D44]/08">
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? ""}
+            fill
+            className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 400px"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 z-[1]"
+            style={{ background: CARD_IMAGE_TINT }}
+            aria-hidden
+          />
+        </div>
+      ) : null}
 
       {/* Title band */}
       <div className="flex min-h-[5rem] items-center bg-[#EC601B] px-8 py-5">
@@ -217,38 +254,49 @@ export default function GrantsPage() {
               transition={ACCENT_LINE_TRANSITION}
             />
           </motion.div>
+        </section>
 
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
+        {/* ══ OVERVIEW (flush under hero — no gap) ══ */}
+        <section className="bg-[#7DC0F1] px-6 pb-12 pt-8 sm:px-8 sm:pb-16 sm:pt-10 lg:px-12">
+          <div className="mx-auto max-w-[1280px] text-center">
+            <motion.div
+              className="mb-8"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+            >
+              <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-white [text-shadow:0_1px_3px_rgba(29,45,68,0.35)] sm:text-[1.85rem]">
+                KFAS Grant Programs Overview
+              </h2>
+            </motion.div>
+            <motion.p
+              className="mx-auto max-w-3xl font-poppins text-sm font-light leading-[1.85] text-white [text-shadow:0_1px_2px_rgba(29,45,68,0.28)] sm:text-[15px]"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut", delay: 0.08 }}
+            >
+              The Kuwait Foundation for the Advancement of Sciences (KFAS)
+              offers a diverse portfolio of grant programs designed to support
+              research, innovation, and capacity building in Kuwait. These
+              programs are strategically structured to cover a wide spectrum of
+              research activities, including fundamental, applied,
+              policy-oriented, and infrastructure-focused initiatives, as well
+              as supporting early-career researchers. Through these grants, KFAS
+              aims to address national priorities, strengthen collaboration
+              across sectors, and ensure that research outcomes contribute to
+              scientific advancement, economic development, and evidence-based
+              policymaking. The following sections outline the key grant types
+              offered by KFAS:
+            </motion.p>
+          </div>
         </section>
 
         {/* ══ GRANT CARDS ══ */}
         <section className="py-20 sm:py-28">
-          <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12">
-            <motion.div
-              className="mb-10"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, ease: "easeOut" }}
-            >
-              <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
-                Grant Categories
-              </h2>
-              <motion.div
-                className="mt-3 h-[2px] bg-[#EC601B] origin-left"
-                style={{ width: 48 }}
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.55,
-                  delay: 0.3,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              />
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+          <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-12">
+            <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 lg:grid-cols-3">
               {GRANT_TYPES.map((grant, index) => (
                 <GrantCard key={grant.title} {...grant} index={index} />
               ))}
