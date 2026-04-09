@@ -2,18 +2,18 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface GrantType {
   title: string;
   description: string;
   applyHref: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 const GRADIENT_OVERLAY =
   "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)";
 
@@ -29,21 +29,24 @@ const ACCENT_LINE_TRANSITION = {
   ease: [0.22, 1, 0.36, 1] as const,
 };
 
-// FIX 1: Replaced "as const" with an explicit GrantType[] type.
-// "as const" makes the array deeply readonly, causing TS errors when
-// passing props to GrantCard (readonly string ≠ string in some contexts).
 const GRANT_TYPES: GrantType[] = [
   {
     title: "Research Infrastructure Grants",
     description:
       "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for research infrastructure proposals. The Research Infrastructure Grant (RIG) will support and invest in public research centers and laboratories in Kuwait.",
     applyHref: "/research/grants/RIG",
+    imageSrc: "/image/RIG1.jpg",
+    imageAlt:
+      "Researchers collaborating in a laboratory with microscope and equipment",
   },
   {
     title: "Applied Research Grants",
     description:
       "Supporting research projects that translate scientific findings into practical solutions for industry and society.",
     applyHref: "/research/grants/Applied-Research-Grants",
+    imageSrc: "/image/applied1.png",
+    imageAlt:
+      "Students and mentor working on robotics and applied research equipment",
   },
   {
     title: "Fundamental Research Grants",
@@ -65,14 +68,10 @@ const GRANT_TYPES: GrantType[] = [
   },
 ];
 
-// ─── Apply Link ───────────────────────────────────────────────────────────────
 function ApplyLink({ href = "#" }: { href?: string }) {
   const isExternal = href.startsWith("http://") || href.startsWith("https://");
 
   return (
-    // FIX 2: Replaced the {...(isExternal ? { target: "_blank" as const, rel } : {})} spread
-    // with direct conditional props. The spread pattern confuses TypeScript's
-    // type narrowing on motion.a and causes "Type X is not assignable" errors.
     <motion.a
       href={href}
       target={isExternal ? "_blank" : undefined}
@@ -100,24 +99,30 @@ function ApplyLink({ href = "#" }: { href?: string }) {
   );
 }
 
-// ─── Grant Card ───────────────────────────────────────────────────────────────
 function GrantCard({
   title,
   description,
   applyHref,
+  imageSrc,
+  imageAlt,
   index = 0,
 }: {
   title: string;
   description: string;
   applyHref?: string;
+  imageSrc?: string;
+  imageAlt?: string;
   index?: number;
 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
   return (
     <motion.article
-      className="group relative flex h-full flex-col overflow-hidden border border-[#1D2D44]/10 bg-white"
+      ref={ref}
+      className="group relative flex h-full cursor-default flex-col overflow-hidden border border-[#1D2D44]/08 bg-white"
       initial={{ opacity: 0, y: 48 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{
         duration: 0.7,
         delay: index * 0.12,
@@ -129,12 +134,10 @@ function GrantCard({
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
       }}
     >
-      {/* Top orange accent bar */}
       <motion.div
         className="h-[3px] origin-left bg-[#EC601B]"
         initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true, amount: 0.15 }}
+        animate={inView ? { scaleX: 1 } : {}}
         transition={{
           duration: 0.6,
           delay: index * 0.12 + 0.25,
@@ -142,15 +145,33 @@ function GrantCard({
         }}
       />
 
-      {/* Title band */}
+      {imageSrc ? (
+        <div className="relative aspect-[16/10] overflow-hidden">
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div
+            className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(29,45,68,0.4) 0%, transparent 60%)",
+            }}
+            aria-hidden
+          />
+        </div>
+      ) : null}
+
       <div className="flex min-h-[5rem] items-center bg-[#EC601B] px-8 py-5">
         <h3 className="font-poppins text-lg font-semibold leading-snug text-white">
           {title}
         </h3>
       </div>
 
-      {/* Body */}
-      <div className="flex flex-1 flex-col px-8 py-7">
+      <div className="flex flex-1 flex-col gap-0 px-8 py-7">
         <p className="flex-1 font-poppins text-sm font-light leading-[1.9] text-[#1D2D44]/65">
           {description}
         </p>
@@ -160,7 +181,6 @@ function GrantCard({
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function GrantsPage() {
   const heroRef = useRef<HTMLElement>(null);
 
@@ -179,7 +199,6 @@ export default function GrantsPage() {
         forceWhiteBackground
       />
       <main className="min-h-screen bg-white pt-20 font-poppins">
-        {/* ══ HERO ══ */}
         <section
           ref={heroRef}
           className="relative flex min-h-[280px] h-[55vh] items-end justify-start overflow-hidden bg-[#1D2D44]"
@@ -231,21 +250,27 @@ export default function GrantsPage() {
               transition={ACCENT_LINE_TRANSITION}
             />
           </motion.div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ══ OVERVIEW ══ */}
-        <section className="px-6 py-12 sm:px-8 sm:py-16 lg:px-12">
-          {/* FIX 4: bg-[#BBDEFB25] is invalid — hex colors can't include alpha
-              inside square brackets like that. Use the /opacity modifier instead. */}
-          <div className="mx-auto max-w-[1280px] bg-[#BBDEFB]/15 px-6 py-8 sm:px-8 sm:py-10">
-            <motion.p
-              className="font-poppins text-sm font-light leading-[1.85] text-[#1D2D44]/75 sm:text-[15px]"
+        <section className="bg-[#7DC0F1] px-6 pb-12 pt-8 sm:px-8 sm:pb-16 sm:pt-10 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <motion.div
+              className="mb-8 text-center"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55, ease: "easeOut" }}
+            >
+              <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-white sm:text-[1.85rem]">
+                KFAS Grant Programs Overview
+              </h2>
+            </motion.div>
+            <motion.p
+              className="font-poppins text-sm font-light leading-[1.85] text-white sm:text-[15px]"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut", delay: 0.08 }}
             >
               The Kuwait Foundation for the Advancement of Sciences (KFAS)
               offers a diverse portfolio of grant programs designed to support
@@ -263,33 +288,8 @@ export default function GrantsPage() {
           </div>
         </section>
 
-        {/* ══ GRANT CARDS ══ */}
         <section className="py-20 sm:py-28">
           <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-12">
-            <motion.div
-              className="mb-10"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.65, ease: "easeOut" }}
-            >
-              <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
-                Grant Categories
-              </h2>
-              <motion.div
-                className="mt-3 h-[2px] origin-left bg-[#EC601B]"
-                style={{ width: 48 }}
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.55,
-                  delay: 0.3,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              />
-            </motion.div>
-
             <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 lg:grid-cols-3">
               {GRANT_TYPES.map((grant, index) => (
                 <GrantCard
@@ -297,6 +297,8 @@ export default function GrantsPage() {
                   title={grant.title}
                   description={grant.description}
                   applyHref={grant.applyHref}
+                  imageSrc={grant.imageSrc}
+                  imageAlt={grant.imageAlt}
                   index={index}
                 />
               ))}
