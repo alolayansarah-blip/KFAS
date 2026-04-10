@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 interface GrantType {
+  id: string;
   title: string;
   description: string;
   applyHref: string;
@@ -17,20 +18,11 @@ interface GrantType {
 const GRADIENT_OVERLAY =
   "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)";
 
-const HERO_TITLE_TRANSITION = {
-  duration: 0.7,
-  delay: 0.2,
-  ease: [0.22, 1, 0.36, 1] as const,
-};
-
-const ACCENT_LINE_TRANSITION = {
-  duration: 0.8,
-  delay: 0.55,
-  ease: [0.22, 1, 0.36, 1] as const,
-};
+const bezier: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const GRANT_TYPES: GrantType[] = [
   {
+    id: "rig",
     title: "Research Infrastructure Grants",
     description:
       "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for research infrastructure proposals. The Research Infrastructure Grant (RIG) will support and invest in public research centers and laboratories in Kuwait.",
@@ -40,6 +32,7 @@ const GRANT_TYPES: GrantType[] = [
       "Researchers collaborating in a laboratory with microscope and equipment",
   },
   {
+    id: "applied",
     title: "Applied Research Grants",
     description:
       "Supporting research projects that translate scientific findings into practical solutions for industry and society.",
@@ -49,18 +42,21 @@ const GRANT_TYPES: GrantType[] = [
       "Students and mentor working on robotics and applied research equipment",
   },
   {
+    id: "fundamental",
     title: "Fundamental Research Grants",
     description:
       "Backing curiosity-driven research that advances foundational knowledge without immediate commercial application.",
     applyHref: "https://www.kfas.com/",
   },
   {
+    id: "young",
     title: "Young Researcher Grants",
     description:
       "Empowering early-career scientists and researchers with funding to launch independent research careers.",
     applyHref: "https://www.kfas.com/",
   },
   {
+    id: "policy",
     title: "Policy Research Grants",
     description:
       "Enabling evidence-based research that informs public policy, governance, and national development strategies.",
@@ -68,7 +64,7 @@ const GRANT_TYPES: GrantType[] = [
   },
 ];
 
-function ApplyLink({ href = "#" }: { href?: string }) {
+function ApplyLink({ href = "#" }: { href: string }) {
   const isExternal = href.startsWith("http://") || href.startsWith("https://");
 
   return (
@@ -76,7 +72,7 @@ function ApplyLink({ href = "#" }: { href?: string }) {
       href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
-      className="mt-6 inline-flex w-fit items-center gap-3 border border-[#1D2D44]/10 border-b-2 border-b-[#EC601B] px-6 py-3 font-poppins text-sm font-medium text-[#1D2D44] group/btn"
+      className="mt-6 inline-flex w-fit items-center gap-3 border border-[#1D2D44]/10 [border-bottom:2px_solid_#EC601B] px-6 py-3 font-poppins text-sm font-medium text-[#1D2D44] group/btn"
       whileHover={{ x: 4, transition: { duration: 0.2 } }}
     >
       <span className="transition-colors duration-200 group-hover/btn:text-[#EC601B]">
@@ -105,14 +101,14 @@ function GrantCard({
   applyHref,
   imageSrc,
   imageAlt,
-  index = 0,
+  index,
 }: {
   title: string;
   description: string;
   applyHref?: string;
   imageSrc?: string;
   imageAlt?: string;
-  index?: number;
+  index: number;
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -120,18 +116,18 @@ function GrantCard({
   return (
     <motion.article
       ref={ref}
-      className="group relative flex h-full cursor-default flex-col overflow-hidden border border-[#1D2D44]/08 bg-white"
+      className="group relative flex h-full cursor-default flex-col overflow-hidden border border-[#1D2D44]/10 bg-white"
       initial={{ opacity: 0, y: 48 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{
         duration: 0.7,
         delay: index * 0.12,
-        ease: [0.22, 1, 0.36, 1],
+        ease: bezier,
       }}
       whileHover={{
         y: -6,
         boxShadow: "0 28px 64px -16px rgba(29,45,68,0.14)",
-        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+        transition: { duration: 0.3, ease: bezier },
       }}
     >
       <motion.div
@@ -141,7 +137,7 @@ function GrantCard({
         transition={{
           duration: 0.6,
           delay: index * 0.12 + 0.25,
-          ease: [0.22, 1, 0.36, 1],
+          ease: bezier,
         }}
       />
 
@@ -160,29 +156,29 @@ function GrantCard({
               background:
                 "linear-gradient(to top, rgba(29,45,68,0.4) 0%, transparent 60%)",
             }}
-            aria-hidden
+            aria-hidden={true}
           />
         </div>
       ) : null}
 
-      <div className="flex min-h-[5rem] items-center bg-[#EC601B] px-8 py-5">
+      <div className="flex min-h-[5rem] items-start bg-[#EC601B] px-8 py-5">
         <h3 className="font-poppins text-lg font-semibold leading-snug text-white">
           {title}
         </h3>
       </div>
 
-      <div className="flex flex-1 flex-col gap-0 px-8 py-7">
+      <div className="flex flex-1 flex-col px-8 py-7">
         <p className="flex-1 font-poppins text-sm font-light leading-[1.9] text-[#1D2D44]/65">
           {description}
         </p>
-        <ApplyLink href={applyHref} />
+        <ApplyLink href={applyHref ?? "#"} />
       </div>
     </motion.article>
   );
 }
 
 export default function GrantsPage() {
-  const heroRef = useRef<HTMLElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -199,23 +195,26 @@ export default function GrantsPage() {
         forceWhiteBackground
       />
       <main className="min-h-screen bg-white pt-20 font-poppins">
-        <section
+        <div
           ref={heroRef}
           className="relative flex min-h-[280px] h-[55vh] items-end justify-start overflow-hidden bg-[#1D2D44]"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <motion.div
+            className="absolute inset-0 scale-110"
+            style={{ y: heroY }}
+          >
             <Image
               src="/image/Grants2.png"
               alt="Grants"
               fill
               priority
               sizes="100vw"
-              className="scale-110 object-cover object-center"
+              className="object-cover object-center"
             />
             <div
               className="absolute inset-0"
               style={{ background: GRADIENT_OVERLAY }}
-              aria-hidden
+              aria-hidden={true}
             />
           </motion.div>
 
@@ -236,21 +235,28 @@ export default function GrantsPage() {
                 className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] sm:text-5xl lg:text-6xl xl:text-7xl"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={HERO_TITLE_TRANSITION}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.2,
+                  ease: bezier,
+                }}
               >
                 Grants
               </motion.h1>
             </div>
 
             <motion.div
-              className="mt-6 h-[2px] origin-left bg-[#EC601B]"
-              style={{ width: 80 }}
+              className="mt-6 h-[2px] w-20 origin-left bg-[#EC601B]"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={ACCENT_LINE_TRANSITION}
+              transition={{
+                duration: 0.8,
+                delay: 0.55,
+                ease: bezier,
+              }}
             />
           </motion.div>
-        </section>
+        </div>
 
         <section className="bg-[#7DC0F1] px-6 pb-12 pt-8 sm:px-8 sm:pb-16 sm:pt-10 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
@@ -293,7 +299,7 @@ export default function GrantsPage() {
             <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 lg:grid-cols-3">
               {GRANT_TYPES.map((grant, index) => (
                 <GrantCard
-                  key={grant.title}
+                  key={grant.id}
                   title={grant.title}
                   description={grant.description}
                   applyHref={grant.applyHref}

@@ -364,7 +364,7 @@
 
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -386,32 +386,31 @@ interface HeroProps {
 
 // ─── Motion Variants ──────────────────────────────────────────────────────────
 
-/** Staggered container — children animate in sequence */
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.4 },
   },
 };
 
-/** Staggered fade-in per word (English title) */
+/** Clip-path wipe reveal per word */
 const wordVariants = {
-  hidden: { opacity: 0 },
+  hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
   visible: {
+    clipPath: "inset(0 0% 0 0)",
     opacity: 1,
     transition: {
-      duration: 0.65,
-      ease: [0.25, 0.1, 0.25, 1] as const,
+      duration: 0.55,
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   },
 };
 
-/** Generic fade-up for smaller elements */
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 28 },
   animate: { opacity: 1, y: 0 },
   transition: {
-    duration: 0.7,
+    duration: 0.75,
     delay,
     ease: [0.16, 1, 0.3, 1] as const,
   },
@@ -432,14 +431,13 @@ function splitLines(text: string) {
 function ScrollIndicator() {
   return (
     <motion.div
-      className="absolute bottom-8 left-1/2 z-30 hidden -translate-x-1/2 flex-col items-center gap-2 sm:flex"
-      {...fadeUp(1.4)}
+      className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2"
+      {...fadeUp(1.6)}
     >
-      <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-white/50">
+      <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-white/40">
         Scroll
       </span>
-      {/* Mouse outline */}
-      <div className="flex h-10 w-[22px] items-start justify-center rounded-full border border-white/25 p-[5px]">
+      <div className="flex h-10 w-[22px] items-start justify-center rounded-full border border-white/20 p-[5px]">
         <motion.div
           className="h-1.5 w-1.5 rounded-full bg-[#EC601B]"
           animate={{ y: [0, 10, 0] }}
@@ -463,9 +461,9 @@ function PlayPauseButton({
     <motion.button
       type="button"
       onClick={onClick}
-      className="group absolute bottom-8 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-md transition-colors duration-300 hover:border-[#EC601B]/50 hover:bg-[#EC601B]/10 sm:bottom-12 sm:right-8 sm:h-16 sm:w-16 lg:right-12"
+      className="group absolute bottom-8 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-md transition-colors duration-300 hover:border-[#EC601B]/60 hover:bg-[#EC601B]/10 sm:bottom-12 sm:right-8 sm:h-16 sm:w-16 lg:right-12"
       aria-label={isPlaying ? "Pause video" : "Play video"}
-      {...fadeUp(1.2)}
+      {...fadeUp(1.4)}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.94 }}
     >
@@ -517,7 +515,6 @@ export default function Hero({
   const sectionRef = useRef<HTMLElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
 
-  // Parallax: video drifts up as user scrolls
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -538,24 +535,39 @@ export default function Hero({
   return (
     <section
       ref={sectionRef}
-      className={`relative flex min-h-[600px] h-[100vh] items-center justify-start overflow-hidden pt-24 ${className}`}
+      className={`relative flex min-h-[600px] h-[100svh] items-center overflow-hidden pt-24
+        /* Mobile: centered */ justify-center text-center
+        /* Desktop: left-aligned */ lg:justify-start lg:text-left
+        ${className}`}
     >
       {/* ── Video background ── */}
       <motion.div className="absolute inset-0 z-0" style={{ y: videoY }}>
-        {/* Layered overlays for depth */}
+        {/* Soft directional wash — left-heavy for text legibility, stays light */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              "linear-gradient(108deg, rgba(29,45,68,0.82) 0%, rgba(29,45,68,0.52) 38%, rgba(29,45,68,0.22) 65%, transparent 100%)",
+              "linear-gradient(108deg, rgba(29,45,68,0.58) 0%, rgba(29,45,68,0.35) 42%, rgba(29,45,68,0.10) 70%, transparent 100%)",
           }}
         />
-        <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-[#1D2D44]/40 via-transparent to-[#1D2D44]/65" />
 
-        {/* Ambient brand glow — top right */}
-        <div className="pointer-events-none absolute -top-32 -right-32 z-10 h-[500px] w-[500px] rounded-full bg-[#56A0D7]/12 blur-[96px]" />
-        {/* Ambient accent glow — bottom left */}
-        <div className="pointer-events-none absolute -bottom-24 -left-24 z-10 h-80 w-80 rounded-full bg-[#EC601B]/08 blur-[80px]" />
+        {/* Gentle bottom grounding — keeps text readable on mobile without going dark */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(29,45,68,0.45) 0%, transparent 45%)",
+          }}
+        />
+
+        {/* Soft top fade — subtle depth, no darkening */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(29,45,68,0.18) 0%, transparent 30%)",
+          }}
+        />
 
         {video && (
           <video
@@ -577,11 +589,11 @@ export default function Hero({
 
       {/* ── Content ── */}
       <motion.div
-        className="relative z-20 mx-auto w-full max-w-7xl px-6 text-left sm:px-8 lg:px-12"
+        className="relative z-20 w-full max-w-7xl px-6 sm:px-8 lg:px-12"
         style={{ opacity: contentOpacity, y: contentY }}
       >
         <motion.div
-          className="max-w-4xl"
+          className="mx-auto max-w-4xl lg:mx-0"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -589,36 +601,45 @@ export default function Hero({
           {/* Subtitle / eyebrow */}
           {subtitle && (
             <motion.div
-              className="mb-8 inline-flex items-center gap-3"
+              className="mb-7 inline-flex items-center gap-3"
               {...fadeUp(0.2)}
             >
-              {/* Animated dash */}
               <motion.div
-                className="h-[1.5px] bg-gradient-to-r from-[#56A0D7] to-[#EC601B]"
+                className="h-[1.5px] bg-gradient-to-r from-[#7DC0F1] to-[#EC601B]"
                 initial={{ width: 0 }}
-                animate={{ width: 48 }}
+                animate={{ width: 44 }}
                 transition={{
                   duration: 0.7,
-                  delay: 0.4,
+                  delay: 0.5,
                   ease: [0.16, 1, 0.3, 1],
                 }}
               />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/70">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-white/65">
                 {subtitle}
               </span>
+              <motion.div
+                className="h-[1.5px] bg-gradient-to-l from-transparent to-[#EC601B]/40"
+                initial={{ width: 0 }}
+                animate={{ width: 24 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.8,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              />
             </motion.div>
           )}
 
-          {/* English title — staggered fade-in per word */}
+          {/* English title — clip-path wipe per word */}
           {titleEn && (
             <>
-              <h1 className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_16px_rgba(0,0,0,0.55)]">
+              <h1 className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.6)]">
                 {splitLines(titleEn).map((line, li) => (
                   <span key={li} className="block">
                     {splitWords(line.trim()).map((word, wi) => (
                       <motion.span
                         key={wi}
-                        className="mr-[0.28em] inline-block"
+                        className="mr-[0.28em] inline-block overflow-hidden"
                         variants={wordVariants}
                       >
                         {word}
@@ -628,17 +649,28 @@ export default function Hero({
                 ))}
               </h1>
 
-              {/* Orange rule — draws in from left */}
+              {/* Orange rule — draws in, then pulses */}
               <motion.div
-                className="mb-6 mt-6 h-[3px] rounded-full bg-[#EC601B]"
+                className="mb-6 mt-5 h-[3px] rounded-full bg-[#EC601B]"
                 initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 80, opacity: 1 }}
+                animate={{ width: 72, opacity: 1 }}
                 transition={{
                   duration: 0.8,
-                  delay: 0.9,
+                  delay: 1.0,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-              />
+              >
+                <motion.div
+                  className="h-full w-full rounded-full bg-[#EC601B]"
+                  animate={{ opacity: [1, 0.5, 1] }}
+                  transition={{
+                    duration: 2.5,
+                    delay: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              </motion.div>
             </>
           )}
 
@@ -646,9 +678,9 @@ export default function Hero({
           {titleAr && (
             <motion.h2
               dir="rtl"
-              className="mb-6 text-2xl font-light tracking-wide text-white/90 sm:text-3xl lg:text-4xl"
-              style={{ textShadow: "0 2px 12px rgba(0,0,0,0.65)" }}
-              {...fadeUp(0.8)}
+              className="mb-6 text-2xl font-light tracking-wide text-white/85 sm:text-3xl lg:text-4xl"
+              style={{ textShadow: "0 2px 14px rgba(0,0,0,0.65)" }}
+              {...fadeUp(0.85)}
             >
               {titleAr}
             </motion.h2>
@@ -656,20 +688,20 @@ export default function Hero({
 
           {/* Description */}
           {description && (
-            <motion.div className="relative" {...fadeUp(1.0)}>
-              {/* Left accent bar */}
+            <motion.div className="relative" {...fadeUp(1.05)}>
+              {/* Left accent bar — desktop only */}
               <motion.div
-                className="absolute -left-4 top-0 bottom-0 w-[2px] rounded-full bg-gradient-to-b from-[#56A0D7] to-[#EC601B]"
+                className="absolute -left-4 top-0 bottom-0 w-[2px] rounded-full bg-gradient-to-b from-[#7DC0F1] to-[#EC601B] hidden lg:block"
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
                 transition={{
                   duration: 0.6,
-                  delay: 1.2,
+                  delay: 1.3,
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 style={{ originY: 0 }}
               />
-              <p className="max-w-xl pl-2 text-base leading-[1.85] text-white/80 sm:text-lg">
+              <p className="max-w-xl text-base leading-[1.9] text-white/75 sm:text-lg lg:pl-2">
                 {description}
               </p>
             </motion.div>
