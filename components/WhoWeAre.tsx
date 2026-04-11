@@ -249,15 +249,9 @@
 // export default memo(WhoWeAre);
 "use client";
 
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useRef } from "react";
 import Image from "next/image";
-import {
-  motion,
-  useInView,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -268,60 +262,27 @@ const TITLE_PARTS = [
   { letter: "S", rest: "ciences" },
 ];
 
-// ─── Motion (aligned with Hero / FlippedCardStack) ───────────────────────────
-
 const EASE = [0.16, 1, 0.3, 1] as const;
+const VIEWPORT = { once: true, amount: 0.2 };
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.12 },
-  },
-};
-
-const fadeUpVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, ease: EASE },
-  },
-};
-
-const lineDividerVariants = {
-  hidden: { opacity: 0, scaleX: 0 },
-  visible: {
-    opacity: 1,
-    scaleX: 1,
-    transition: { duration: 0.75, ease: EASE },
-  },
-};
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: VIEWPORT,
+  transition: { duration: 0.7, delay, ease: EASE },
+});
 
 // ─── WhoWeAre ─────────────────────────────────────────────────────────────────
 
 function WhoWeAre() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [hasUserScrolled, setHasUserScrolled] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
-
-  const inView = useInView(sectionRef, { once: true, margin: "-80px" });
-
-  // Avoid running entrance motion on first paint / refresh; run after user scrolls
-  useEffect(() => {
-    const onScroll = () => setHasUserScrolled(true);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const shouldAnimate =
-    inView && (hasUserScrolled || Boolean(prefersReducedMotion));
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
 
   return (
     <section
@@ -330,81 +291,64 @@ function WhoWeAre() {
       className="relative bg-white py-20 lg:py-28"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
           {/* ── Left: Content ── */}
-          <motion.div
-            className="flex flex-col"
-            variants={containerVariants}
-            initial="hidden"
-            animate={shouldAnimate ? "visible" : "hidden"}
-          >
-            {/* Eyebrow */}
-            <motion.div
-              variants={fadeUpVariants}
-              className="mb-10 flex items-center gap-3"
+          <div className="flex flex-col">
+            {/* Eyebrow — plain, no line, matching inner pages */}
+            <motion.p
+              className="mb-6 text-[11px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]"
+              {...fadeUp(0)}
             >
-              <motion.div
-                className="h-px bg-[#EC601B]"
-                initial={{ width: 0 }}
-                animate={shouldAnimate ? { width: 28 } : { width: 0 }}
-                transition={{ duration: 0.65, ease: EASE }}
-              />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]">
-                Who We Are
-              </span>
-            </motion.div>
+              Who We Are
+            </motion.p>
 
-            {/* Title + logo side by side */}
-            <motion.div
-              variants={fadeUpVariants}
-              className="mb-8 flex items-start justify-between gap-4"
+            {/* Heading */}
+            <motion.h2
+              className="mb-6 font-poppins text-[1.75rem] font-normal leading-[1.45] tracking-tight text-[#1D2D44] sm:text-[2rem]"
+              {...fadeUp(0.1)}
             >
-              <div className="relative min-w-0 flex-1">
-                <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
-                  {TITLE_PARTS.map(({ letter, rest }) => (
-                    <React.Fragment key={letter}>
-                      <span className="font-bold text-[#EC601B]">{letter}</span>
-                      {rest}
-                    </React.Fragment>
-                  ))}
-                </h2>
-              </div>
-
-              <div className="shrink-0 pt-1">
-                <Image
-                  src="/image/logo_c.png"
-                  alt="KFAS"
-                  width={80}
-                  height={80}
-                  className="h-12 w-auto opacity-80 sm:h-14 lg:h-16"
-                />
-              </div>
-            </motion.div>
+              {TITLE_PARTS.map(({ letter, rest }) => (
+                <React.Fragment key={letter}>
+                  <span className="font-bold text-[#EC601B]">{letter}</span>
+                  {rest}
+                </React.Fragment>
+              ))}
+            </motion.h2>
 
             {/* Divider */}
             <motion.div
-              variants={lineDividerVariants}
-              className="mb-8 h-px origin-left bg-gradient-to-r from-[#EC601B]/50 via-[#7DC0F1]/25 to-transparent"
+              className="mb-8 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+              initial={{ opacity: 0, scaleX: 0 }}
+              whileInView={{ opacity: 1, scaleX: 1 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
             />
 
             {/* Body */}
             <motion.p
-              variants={fadeUpVariants}
-              className="font-poppins text-[15px] font-light leading-[2] tracking-[0.01em] text-[#1D2D44]/60"
+              className="mb-10 font-poppins text-[15px] font-light leading-[2] tracking-[0.01em] text-[#1D2D44]/60"
+              {...fadeUp(0.3)}
             >
               Established in 1976, KFAS is a private, non-profit organization
               that supports research, training, and development in STEAM
               innovation in alignment with Kuwait&apos;s national priorities.
               Through educational programs, cross-sector partnerships, and
               prestigious prizes, KFAS rewards excellence and inspires future
-              generations to spread knowledge and accelerate progress.{" "}
+              generations to spread knowledge and accelerate progress.
+            </motion.p>
+
+            {/* CTA */}
+            <motion.div {...fadeUp(0.4)}>
               <a
                 href="/about/AboutKfas"
-                className="group inline-flex items-center gap-1 font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-2 transition-colors hover:text-[#d45510] hover:decoration-[#d45510]/50"
+                className="group inline-flex items-center gap-3"
               >
-                Read more
+                <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+                <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
+                  Read more
+                </span>
                 <svg
-                  className="h-3 w-3 translate-y-px transition-transform duration-300 group-hover:translate-x-0.5"
+                  className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -418,27 +362,32 @@ function WhoWeAre() {
                   />
                 </svg>
               </a>
-            </motion.p>
-          </motion.div>
+            </motion.div>
+          </div>
 
-          {/* ── Right: Image with offset frame ── */}
-          <motion.div
-            className="relative"
-            variants={fadeUpVariants}
-            initial="hidden"
-            animate={shouldAnimate ? "visible" : "hidden"}
-          >
-            {/* Offset frame border — top-right */}
+          {/* ── Right: Image ── */}
+          <motion.div className="relative" {...fadeUp(0.2)}>
+            {/* Orange corner — top left */}
             <motion.div
-              className="absolute -right-3 -top-3 bottom-6 left-6 border border-[#EC601B]/25 pointer-events-none"
+              className="absolute -left-3 -top-3 h-10 w-10 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/35 pointer-events-none"
               initial={{ opacity: 0 }}
-              animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.65, delay: 0.35, ease: EASE }}
+              whileInView={{ opacity: 1 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
+            />
+
+            {/* Blue corner — bottom right */}
+            <motion.div
+              className="absolute -bottom-3 -right-3 h-10 w-10 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
             />
 
             {/* Image */}
             <div className="group relative overflow-hidden">
-              <motion.div className="relative" style={{ y: imageY }}>
+              <motion.div style={{ y: imageY }}>
                 <Image
                   src="/image/WhoWe3.png"
                   alt="KFAS — Kuwait Foundation for the Advancement of Sciences"

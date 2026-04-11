@@ -118,17 +118,17 @@ const CARDS = [
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.13, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.65,
+      duration: 0.7,
       ease: [0.16, 1, 0.3, 1] as const,
     },
   },
@@ -140,34 +140,34 @@ function Card({ title, href, label, image }: (typeof CARDS)[number]) {
   return (
     <motion.div variants={cardVariants} className="h-full">
       <Link href={href} className="group block h-full">
-        <div className="relative h-full min-h-[200px] overflow-hidden border border-white/15 bg-[#EC601B]">
+        <div className="relative h-full min-h-[160px] overflow-hidden bg-[#EC601B]">
           {/* Image — fades in on hover */}
           <div
-            className="absolute inset-0 bg-cover bg-center opacity-0 scale-105 transition-all duration-700 ease-smooth-out group-hover:opacity-100 group-hover:scale-100"
-            style={{ backgroundImage: `url(${image})` }}
+            className="absolute inset-0 bg-cover bg-center opacity-0 scale-105 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100"
+            style={{
+              backgroundImage: `url(${image})`,
+              filter: "grayscale(30%) brightness(0.8)",
+            }}
           />
 
-          {/* Darken photo on hover for readable white text */}
-          <div className="absolute inset-0 z-[1] bg-[#1D2D44]/50 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+          {/* Dark overlay on hover for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1D2D44]/80 via-[#1D2D44]/20 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
-          {/* Left accent */}
-          <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/25 transition-opacity duration-300 group-hover:opacity-60" />
+          {/* Content */}
+          <div className="relative z-10 flex h-full min-h-[160px] flex-col justify-end px-5 py-5">
+            {/* Title */}
+            <p className="font-poppins text-base font-semibold leading-snug tracking-tight text-white [text-shadow:_0_1px_8px_rgba(0,0,0,0.3)] sm:text-[17px]">
+              {title}
+            </p>
 
-          {/* Content — title centered; "Read more" fades in at bottom on hover */}
-          <div className="relative z-10 flex h-full min-h-[200px] flex-col items-center justify-center px-7 py-10 text-center">
-            <div className="flex max-w-[95%] flex-col items-center">
-              <p className="font-poppins text-[15px] font-semibold leading-snug tracking-tight text-white [text-shadow:_0_1px_12px_rgba(0,0,0,0.12)] transition-colors duration-300 sm:text-base">
-                {title}
-              </p>
-              <div className="mx-auto mt-3 h-px w-0 bg-white/80 transition-all duration-500 ease-smooth-out group-hover:w-14" />
-            </div>
-
-            <div className="pointer-events-none absolute bottom-7 left-1/2 flex -translate-x-1/2 translate-y-2 items-center gap-2 whitespace-nowrap opacity-0 transition-all duration-300 ease-smooth-out group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
-              <span className="text-sm font-medium text-white drop-shadow-sm">
+            {/* Animated underline + CTA */}
+            <div className="mt-3 flex items-center gap-2">
+              <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+              <span className="text-[13px] font-medium text-white/60 opacity-0 transition-all duration-400 group-hover:opacity-100 group-hover:text-white">
                 Read more
               </span>
               <svg
-                className="h-3.5 w-3.5 text-white"
+                className="h-3 w-3 text-white/0 transition-all duration-400 group-hover:text-white -translate-x-2 group-hover:translate-x-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -180,19 +180,16 @@ function Card({ title, href, label, image }: (typeof CARDS)[number]) {
                 />
               </svg>
             </div>
-
-            <span className="sr-only">{label}</span>
           </div>
 
-          {/* Top-right dot */}
-          <div className="absolute top-6 right-6 z-10 h-2 w-2 rounded-full bg-white/35 transition-all duration-300 group-hover:bg-white group-hover:shadow-[0_0_10px_rgba(255,255,255,0.6)]" />
+          <span className="sr-only">{label}</span>
         </div>
       </Link>
     </motion.div>
   );
 }
 
-// ─── Section ─────────────────────────────────────────────────────────────────
+// ─── Section ──────────────────────────────────────────────────────────────────
 
 export default function FlippedCardStack() {
   const ref = useRef<HTMLDivElement>(null);
@@ -202,7 +199,7 @@ export default function FlippedCardStack() {
     <section className="relative w-full bg-white py-12 lg:py-20">
       <div ref={ref} className="mx-auto max-w-[800px] px-6 lg:px-8">
         <motion.div
-          className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6"
+          className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5"
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}

@@ -582,11 +582,10 @@
 // }
 
 // export default memo(Header);
-
 "use client";
 
 import { useState, useEffect, memo } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type { NavItem } from "@/types";
 
@@ -696,7 +695,8 @@ interface HeaderProps {
   forceWhiteBackground?: boolean;
 }
 
-// Subcomponents
+// ─── Subcomponents ────────────────────────────────────────────────────────────
+
 const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => {
   const logoProps = {
     className: "absolute inset-0 w-full h-full object-contain",
@@ -709,7 +709,7 @@ const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => {
         src="/image/50.png"
         alt="50 Years"
         {...logoProps}
-        className={`${logoProps.className} transition-all duration-300 ease-in-out ${
+        className={`${logoProps.className} transition-all duration-500 ease-in-out ${
           isScrolled ? "opacity-0 scale-[0.8]" : "opacity-100 scale-100"
         }`}
       />
@@ -717,8 +717,8 @@ const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => {
         src="/image/50_gold.png"
         alt="50 Years Gold"
         {...logoProps}
-        className={`${logoProps.className} transition-all duration-300 ease-in-out ${
-          isScrolled ? "opacity-100" : "opacity-0"
+        className={`${logoProps.className} transition-all duration-500 ease-in-out ${
+          isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-[0.8]"
         }`}
       />
     </div>
@@ -733,7 +733,7 @@ const DropdownIcon = ({
   className?: string;
 }) => (
   <svg
-    className={`transition-all duration-300 ${className} ${isOpen ? "rotate-180" : ""}`}
+    className={`transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${className} ${isOpen ? "rotate-180" : ""}`}
     fill="none"
     strokeLinecap="round"
     strokeLinejoin="round"
@@ -759,8 +759,10 @@ const DesktopNavItem = ({
   onMouseLeave: () => void;
 }) => {
   const isOpen = openDropdown === item.href;
+
+  // Bumped: text-sm lg:text-[15px], slightly more padding
   const baseStyles =
-    "hover:bg-[#EC601B] font-normal transition-all duration-300 px-2 lg:px-2.5 py-1.5 whitespace-nowrap text-xs lg:text-sm";
+    "hover:bg-[#EC601B] font-normal transition-all duration-300 px-2.5 lg:px-3 py-2 whitespace-nowrap text-sm lg:text-[15px]";
   const colorStyles = isOpen
     ? "bg-[#EC601B] text-white"
     : isScrolled
@@ -778,7 +780,7 @@ const DesktopNavItem = ({
           className={`${baseStyles} ${colorStyles} flex items-center cursor-pointer`}
         >
           {item.label}
-          <DropdownIcon className="ml-0.5 w-3 h-3" />
+          <DropdownIcon className="ml-1 w-3 h-3 opacity-80" />
         </span>
       ) : (
         <Link href={item.href} className={`${baseStyles} ${colorStyles}`}>
@@ -786,23 +788,34 @@ const DesktopNavItem = ({
         </Link>
       )}
 
-      {item.children && isOpen && (
-        <div className="absolute top-full left-0 z-50 mt-0 min-w-[280px] bg-[#EC601B] py-4 shadow-lg">
-          {item.children.map((child, index) => (
-            <Link
-              key={child.href}
-              href={child.href}
-              className={`block px-6 py-3 text-white transition-colors hover:bg-white/20 whitespace-nowrap ${
-                index < item.children!.length - 1
-                  ? "border-b border-white/50"
-                  : ""
-              }`}
-            >
-              {child.label}
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* Animated dropdown */}
+      <AnimatePresence>
+        {item.children && isOpen && (
+          <motion.div
+            key={item.href}
+            className="absolute top-full left-0 z-50 min-w-[260px] bg-[#EC601B] overflow-hidden shadow-[0_12px_40px_rgba(236,96,27,0.22),0_4px_12px_rgba(0,0,0,0.08)]"
+            initial={{ opacity: 0, y: -10, scaleY: 0.94 }}
+            animate={{ opacity: 1, y: 0, scaleY: 1 }}
+            exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            style={{ transformOrigin: "top center" }}
+          >
+            {item.children.map((child, index) => (
+              <Link
+                key={child.href}
+                href={child.href}
+                className={`block px-6 py-3 text-[15px] text-white transition-colors duration-150 hover:bg-white/20 whitespace-nowrap ${
+                  index < item.children!.length - 1
+                    ? "border-b border-white/20"
+                    : ""
+                }`}
+              >
+                {child.label}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -823,7 +836,7 @@ const LanguageSwitcher = ({
   <div className="relative language-switcher ml-1">
     <button
       onClick={onToggle}
-      className={`flex items-center space-x-1 transition-colors px-2 py-1.5 ${
+      className={`flex items-center space-x-1 transition-colors px-2.5 py-2 text-sm lg:text-[15px] ${
         isScrolled
           ? "text-black hover:text-gray-700"
           : "text-white/90 hover:text-white"
@@ -831,28 +844,39 @@ const LanguageSwitcher = ({
       aria-label="Change language"
       aria-expanded={isOpen}
     >
-      <span className="uppercase text-xs lg:text-sm">{currentLanguage}</span>
-      <DropdownIcon isOpen={isOpen} className="w-3 h-3" />
+      <span className="uppercase">{currentLanguage}</span>
+      <DropdownIcon isOpen={isOpen} className="w-3 h-3 opacity-80" />
     </button>
 
-    {isOpen && (
-      <div className="absolute right-0 top-full z-50 mt-0 min-w-[200px] bg-[#EC601B] py-4 shadow-lg">
-        {LANGUAGES.map((lang, index) => (
-          <button
-            key={lang.code}
-            onClick={() => onSelect(lang.code)}
-            className={`flex w-full items-center space-x-2 px-6 py-3 text-left text-white transition-colors hover:bg-white/20 ${
-              index < LANGUAGES.length - 1 ? "border-b border-white/50" : ""
-            }`}
-          >
-            <span>{lang.flag}</span>
-            <span>{lang.label}</span>
-          </button>
-        ))}
-      </div>
-    )}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="absolute right-0 top-full z-50 min-w-[200px] bg-[#EC601B] overflow-hidden shadow-[0_12px_40px_rgba(236,96,27,0.22),0_4px_12px_rgba(0,0,0,0.08)]"
+          initial={{ opacity: 0, y: -10, scaleY: 0.94 }}
+          animate={{ opacity: 1, y: 0, scaleY: 1 }}
+          exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          style={{ transformOrigin: "top center" }}
+        >
+          {LANGUAGES.map((lang, index) => (
+            <button
+              key={lang.code}
+              onClick={() => onSelect(lang.code)}
+              className={`flex w-full items-center space-x-2 px-6 py-3 text-[15px] text-left text-white transition-colors duration-150 hover:bg-white/20 ${
+                index < LANGUAGES.length - 1 ? "border-b border-white/20" : ""
+              }`}
+            >
+              <span>{lang.flag}</span>
+              <span>{lang.label}</span>
+            </button>
+          ))}
+        </motion.div>
+      )}
+    </AnimatePresence>
   </div>
 );
+
+// ─── Header ───────────────────────────────────────────────────────────────────
 
 function Header({
   logo,
@@ -860,7 +884,6 @@ function Header({
   navItems = [],
   forceWhiteBackground = false,
 }: HeaderProps) {
-  // State
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(() =>
     typeof window !== "undefined" ? window.scrollY > SCROLL_THRESHOLD : false,
@@ -871,43 +894,37 @@ function Header({
   );
   const [currentLanguage, setCurrentLanguage] = useState("en");
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
   const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
   const shouldShowWhiteBg = isScrolled || forceWhiteBackground;
   const prefersReducedMotion = useReducedMotion();
 
-  // Effects
   useEffect(() => {
     let ticking = false;
-
     const handleScroll = () => {
       if (ticking) return;
-
       ticking = true;
       window.requestAnimationFrame(() => {
         setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
         ticking = false;
       });
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     if (!isLangDropdownOpen) return;
-
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       if (!target.closest(".language-switcher")) {
         setIsLangDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isLangDropdownOpen]);
 
-  // Handlers
   const handleLanguageSelect = (code: string) => {
     setCurrentLanguage(code);
     setIsLangDropdownOpen(false);
@@ -920,36 +937,38 @@ function Header({
 
   return (
     <motion.header
-      initial={prefersReducedMotion ? false : { opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: prefersReducedMotion ? 0 : 0.5,
+        duration: prefersReducedMotion ? 0 : 0.6,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className={`fixed top-0 right-0 left-0 z-[100] w-full transition-all duration-300 ${
+      className={`fixed top-0 right-0 left-0 z-[100] w-full transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
         shouldShowWhiteBg
-          ? "bg-transparent backdrop-blur-sm md:bg-white/90 shadow-sm"
+          ? "bg-transparent backdrop-blur-sm md:bg-white/95 shadow-[0_1px_0_rgba(0,0,0,0.06),0_4px_20px_rgba(0,0,0,0.06)]"
           : "bg-transparent"
       }`}
     >
       {/* Desktop Header */}
       <nav
-        className={`hidden md:block w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 transition-all duration-300 ${
-          shouldShowWhiteBg ? "py-0.5" : "py-3"
+        className={`hidden md:block w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+          shouldShowWhiteBg ? "py-1" : "py-3"
         }`}
       >
         <div className="flex items-center justify-between gap-4">
-          {/* Logo Section */}
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             {logo ? (
               <img
                 src={shouldShowWhiteBg ? "/image/logo_c.png" : logo}
                 alt={logoText}
-                className="w-auto transition-all duration-300 h-20"
+                className={`w-auto transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+                  shouldShowWhiteBg ? "h-16" : "h-20"
+                }`}
               />
             ) : (
               <span
-                className={`font-normal transition-all duration-300 ${
+                className={`font-normal transition-all duration-500 ${
                   shouldShowWhiteBg
                     ? "text-xl text-black"
                     : "text-2xl text-white"
@@ -961,7 +980,7 @@ function Header({
             <AnniversaryLogo isScrolled={shouldShowWhiteBg} />
           </Link>
 
-          {/* Navigation Section */}
+          {/* Navigation */}
           <div className="flex items-center justify-end gap-2 flex-1 min-w-0">
             <div className="flex items-center gap-0">
               {navItemsList.map((item) => (
@@ -989,7 +1008,7 @@ function Header({
         </div>
       </nav>
 
-      {/* Mobile Header */}
+      {/* Mobile Header — original structure, font sizes only updated */}
       <nav className="md:hidden w-full bg-white shadow-sm">
         <div
           className="flex items-center justify-between px-5 py-4"
@@ -1044,7 +1063,7 @@ function Header({
                   {item.children ? (
                     <>
                       <button
-                        className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
+                        className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-[15px] text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
                         onClick={() =>
                           setOpenMobileDropdown(
                             openMobileDropdown === item.href ? null : item.href,
@@ -1072,7 +1091,7 @@ function Header({
                             <Link
                               key={child.href}
                               href={child.href}
-                              className="block rounded-md px-4 py-2.5 font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
+                              className="block rounded-md px-4 py-2.5 text-[14px] font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
                               onClick={closeMobileMenu}
                             >
                               {child.label}
@@ -1084,7 +1103,7 @@ function Header({
                   ) : (
                     <Link
                       href={item.href}
-                      className="block py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
+                      className="block py-3.5 px-2 text-[15px] font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
                       onClick={closeMobileMenu}
                     >
                       <span className="flex items-center gap-2">
@@ -1101,14 +1120,16 @@ function Header({
             <div className="mt-2 pt-4 border-t border-gray-100 px-5 pb-4">
               <button
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
+                className="w-full flex items-center justify-between py-3.5 px-2 text-[15px] font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
                 aria-label="Change language"
                 aria-expanded={isLangDropdownOpen}
               >
                 <span className="flex items-center gap-2">
                   <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
                   <span className="flex items-center space-x-2">
-                    <span className="uppercase text-sm">{currentLanguage}</span>
+                    <span className="uppercase text-[15px]">
+                      {currentLanguage}
+                    </span>
                     <span>Language</span>
                   </span>
                 </span>
@@ -1126,9 +1147,9 @@ function Header({
                     <button
                       key={lang.code}
                       onClick={() => handleLanguageSelect(lang.code)}
-                      className={`flex w-full items-center space-x-2 rounded-md px-4 py-3 text-left font-normal text-white transition-all hover:bg-white/20 ${
+                      className={`flex w-full items-center space-x-2 rounded-md px-4 py-3 text-[15px] text-left font-normal text-white transition-all hover:bg-white/20 ${
                         index < LANGUAGES.length - 1
-                          ? "border-b border-white/50"
+                          ? "border-b border-white/30"
                           : ""
                       }`}
                     >
