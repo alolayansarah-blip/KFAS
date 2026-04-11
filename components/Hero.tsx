@@ -589,11 +589,11 @@ export default function Hero({
 
       {/* ── Content ── */}
       <motion.div
-        className="relative z-20 w-full max-w-7xl px-6 sm:px-8 lg:px-12"
+        className="relative z-20 mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-12"
         style={{ opacity: contentOpacity, y: contentY }}
       >
         <motion.div
-          className="mx-auto max-w-4xl lg:mx-0"
+          className="mx-auto w-full max-w-[1280px] lg:mx-0"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -701,7 +701,7 @@ export default function Hero({
                 }}
                 style={{ originY: 0 }}
               />
-              <p className="max-w-xl text-base leading-[1.9] text-white/75 sm:text-lg lg:pl-2">
+              <p className="max-w-[1280px] text-base leading-[1.9] text-white/75 sm:text-lg lg:pl-2">
                 {description}
               </p>
             </motion.div>

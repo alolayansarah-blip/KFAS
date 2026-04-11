@@ -28,8 +28,8 @@ const CONTACT_INFO = {
 
 const SOCIAL_LINKS = [
   {
-    name: "Twitter",
-    href: "https://twitter.com",
+    name: "Twitter / X",
+    href: "https://twitter.com/kfasinfo",
     icon: (
       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -38,7 +38,7 @@ const SOCIAL_LINKS = [
   },
   {
     name: "LinkedIn",
-    href: "https://linkedin.com",
+    href: "https://linkedin.com/company/kfasinfo",
     icon: (
       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -47,7 +47,7 @@ const SOCIAL_LINKS = [
   },
   {
     name: "Instagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/kfasinfo/",
     icon: (
       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
@@ -63,17 +63,16 @@ const SOCIAL_LINKS = [
       </svg>
     ),
   },
-];
+] as const;
 
-const DEFAULT_LOGO = "/image/logoFooter.png";
-const DEFAULT_LOGO_TEXT =
-  "Kuwait Foundation for the Advancement of Sciences (KFAS)";
+const EASE = [0.16, 1, 0.3, 1] as const;
+const VIEWPORT = { once: true, amount: 0.15 };
 
 type NewsletterStatus = "idle" | "loading" | "success" | "error";
 
 function Footer({
-  logo = DEFAULT_LOGO,
-  logoText = DEFAULT_LOGO_TEXT,
+  logo = "/image/logoFooter.png",
+  logoText = "Kuwait Foundation for the Advancement of Sciences (KFAS)",
 }: FooterProps) {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
@@ -84,20 +83,14 @@ function Footer({
     e.preventDefault();
     setStatus("loading");
     setMessage("");
-
     try {
       const response = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Subscription failed");
-      }
-
+      if (!response.ok) throw new Error(data.error || "Subscription failed");
       setStatus("success");
       setMessage(data.message);
       setEmail("");
@@ -109,58 +102,53 @@ function Footer({
     }
   };
 
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
-    },
-  };
-
   return (
-    <footer className="relative overflow-hidden bg-[#1D2D44]">
+    <footer className="relative bg-[#1D2D44] overflow-hidden">
+      {/* Subtle top divider with brand gradient */}
+      <div className="h-[1.5px] w-full bg-gradient-to-r from-[#EC601B]/60 via-[#7DC0F1]/30 to-transparent" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-10 lg:pt-12 pb-6 lg:pb-8">
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-16 lg:pt-20 pb-8">
+        {/* Main grid */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-14"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.25, margin: "0px 0px -80px 0px" }}
-          variants={containerVariants}
+          viewport={VIEWPORT}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+            },
+          }}
         >
-          {/* Brand Column */}
-          <motion.div className="flex flex-col" variants={itemVariants}>
-            <Link
-              href="/"
-              className="inline-flex flex-col gap-0 mb-4 transition-transform hover:scale-105 duration-300"
-            >
+          {/* ── Brand ── */}
+          <motion.div
+            className="flex flex-col"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: EASE },
+              },
+            }}
+          >
+            <Link href="/" className="inline-block mb-6">
               {logo && (
                 <Image
                   src={logo}
                   alt={logoText}
-                  width={160}
-                  height={160}
-                  className="object-contain w-32 h-32 sm:w-40 sm:h-40 drop-shadow-2xl"
+                  width={140}
+                  height={140}
+                  className="object-contain w-28 h-28 sm:w-32 sm:h-32"
                 />
               )}
-              {/* <span className="inline-flex items-center gap-2 mt-2 text-white/70 text-[11px] tracking-[0.25em] font-light uppercase">
-                <span className="w-6 h-px bg-white/40" aria-hidden />
-                1976
-              </span> */}
             </Link>
 
-            {/* <h3 className="text-white font-semibold text-xs tracking-[0.2em] uppercase mb-4 opacity-90">
-              Keep in Touch
-            </h3> */}
-
+            {/* Social icons */}
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
+              Follow Us
+            </p>
             <div className="flex items-center gap-2">
               {SOCIAL_LINKS.map((social) => (
                 <a
@@ -168,8 +156,8 @@ function Footer({
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/90 hover:text-white transition-all duration-300 hover:scale-110"
                   aria-label={social.name}
+                  className="group flex h-8 w-8 items-center justify-center border border-white/10 text-white/40 transition-all duration-300 hover:border-[#EC601B]/50 hover:text-[#EC601B]"
                 >
                   {social.icon}
                 </a>
@@ -177,22 +165,29 @@ function Footer({
             </div>
           </motion.div>
 
-          {/* Navigation Column */}
-          <motion.nav variants={itemVariants}>
-            <h3 className="text-white font-bold text-lg tracking-[0.15em] mb-3">
+          {/* ── Explore ── */}
+          <motion.nav
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: EASE },
+              },
+            }}
+          >
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
               Explore
-            </h3>
-            <div className="h-px w-12 bg-white/50 mb-4" />
-            <ul className="space-y-2">
+            </p>
+            <div className="mb-5 h-px w-8 bg-[#EC601B]/50" />
+            <ul className="space-y-3">
               {NAVIGATION_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group/nav inline-flex items-center text-white/85 hover:text-white text-sm transition-all duration-300 hover:translate-x-1"
+                    className="group inline-flex items-center gap-2 text-[14px] font-light text-white/55 transition-all duration-300 hover:text-white"
                   >
-                    <span className="opacity-0 group-hover/nav:opacity-100 transition-opacity mr-2">
-                      ›
-                    </span>
+                    <span className="h-[1px] w-0 bg-[#EC601B] transition-all duration-300 group-hover:w-3" />
                     {link.label}
                   </Link>
                 </li>
@@ -200,124 +195,149 @@ function Footer({
             </ul>
           </motion.nav>
 
-          {/* Newsletter Column */}
-          <motion.div variants={itemVariants}>
-            <h3 className="text-white font-bold text-lg tracking-[0.15em] mb-3">
+          {/* ── Newsletter ── */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: EASE },
+              },
+            }}
+          >
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
               Subscribe
-            </h3>
-            <div className="h-px w-12 bg-white/50 mb-4" />
-            <p className="text-white/80 text-sm mb-3 leading-relaxed">
+            </p>
+            <div className="mb-5 h-px w-8 bg-[#EC601B]/50" />
+            <p className="mb-5 text-[14px] font-light text-white/50 leading-relaxed">
               Sign up for our newsletter to stay updated on all the latest news
-              and announcement.
+              and announcements.
             </p>
 
-            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+            <form onSubmit={handleNewsletterSubmit} className="space-y-4">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Your email address"
                 required
                 disabled={status === "loading"}
-                className="w-full px-0 py-2 bg-transparent border-0 border-b-2 border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white text-sm transition-all duration-300 disabled:opacity-50"
-                aria-label="Email address"
+                className="w-full bg-transparent border-b border-white/20 pb-2 text-[14px] text-white placeholder-white/30 focus:outline-none focus:border-[#EC601B]/60 transition-colors duration-300 disabled:opacity-50"
               />
-
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="group/btn inline-flex items-center gap-2 text-sm text-white/90 hover:text-white font-medium transition-all duration-300 disabled:opacity-50 hover:gap-3"
+                className="group inline-flex items-center gap-3"
               >
-                {status === "loading" ? "Subscribing…" : "Subscribe"}
-                <span className="transform group-hover/btn:translate-x-1 transition-transform">
-                  →
+                <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
+                <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-white">
+                  {status === "loading" ? "Subscribing…" : "Subscribe"}
                 </span>
+                <svg
+                  className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
               </button>
             </form>
 
             {message && (
-              <div
-                className={`mt-3 p-2.5 rounded-lg text-xs leading-relaxed animate-fadeIn ${
-                  status === "error"
-                    ? "bg-red-500/20 text-red-100 border border-red-400/30"
-                    : "bg-green-500/20 text-green-100 border border-green-400/30"
-                }`}
-                role="alert"
+              <p
+                className={`mt-3 text-[12px] leading-relaxed ${status === "error" ? "text-red-300" : "text-green-300"}`}
               >
                 {message}
-              </div>
+              </p>
             )}
           </motion.div>
 
-          {/* Map Column */}
-          <motion.div variants={itemVariants}>
-            <a
-              href={CONTACT_INFO.mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block group/map"
-            >
-              <div className="aspect-[4/3] rounded-xl overflow-hidden border-2 border-white/20 shadow-2xl transition-all duration-300 hover:border-white/40 hover:shadow-3xl hover:scale-[1.02]">
-                <iframe
-                  src={CONTACT_INFO.mapEmbedUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="KFAS Location Map"
-                  className="w-full h-full grayscale-[30%] group-hover/map:grayscale-0 transition-all duration-500"
-                />
-              </div>
-            </a>
-            <address className="not-italic text-white/85 text-sm leading-relaxed space-y-0.5 mt-3">
+          {/* ── Map ── */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: EASE },
+              },
+            }}
+          >
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
+              Find Us
+            </p>
+            <div className="mb-5 h-px w-8 bg-[#EC601B]/50" />
+
+            {/* Map */}
+            <div className="aspect-[4/3] overflow-hidden border border-white/10 mb-4">
+              <iframe
+                src={CONTACT_INFO.mapEmbedUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="KFAS Location Map"
+                className="w-full h-full"
+              />
+            </div>
+
+            <address className="not-italic text-[14px] font-light text-white/50 leading-relaxed mb-3">
               <p>{CONTACT_INFO.address}</p>
               <p>{CONTACT_INFO.city}</p>
             </address>
+
             <a
               href={CONTACT_INFO.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium mt-2 transition-all duration-300 hover:gap-3 group/link"
+              className="group inline-flex items-center gap-3"
             >
-              View on Map
-              <span className="transform group-hover/link:translate-x-1 transition-transform">
-                →
+              <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
+              <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-white">
+                View on Map
               </span>
+              <svg
+                className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
             </a>
           </motion.div>
         </motion.div>
 
-        {/* Bottom Bar */}
+        {/* Bottom bar */}
         <motion.div
-          className="mt-6 pt-4 border-t border-white/15"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
         >
-          <p className="text-white/60 text-xs text-center sm:text-left">
+          <p className="text-[12px] font-light text-white/30 tracking-wide">
             © {currentYear} Kuwait Foundation for the Advancement of Sciences
+          </p>
+          <p className="text-[12px] font-light text-white/20 tracking-wide">
+            Est. 1976
           </p>
         </motion.div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
     </footer>
   );
 }
