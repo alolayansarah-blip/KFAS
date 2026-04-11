@@ -6,6 +6,8 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 interface GrantType {
   id: string;
   title: string;
@@ -14,11 +16,6 @@ interface GrantType {
   imageSrc?: string;
   imageAlt?: string;
 }
-
-const GRADIENT_OVERLAY =
-  "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)";
-
-const bezier: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const GRANT_TYPES: GrantType[] = [
   {
@@ -64,22 +61,22 @@ const GRANT_TYPES: GrantType[] = [
   },
 ];
 
+// ─── Apply Link ───────────────────────────────────────────────────────────────
 function ApplyLink({ href = "#" }: { href: string }) {
   const isExternal = href.startsWith("http://") || href.startsWith("https://");
-
   return (
-    <motion.a
+    <a
       href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
-      className="mt-6 inline-flex w-fit items-center gap-3 border border-[#1D2D44]/10 [border-bottom:2px_solid_#EC601B] px-6 py-3 font-poppins text-sm font-medium text-[#1D2D44] group/btn"
-      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+      className="group mt-6 inline-flex w-fit items-center gap-3"
     >
-      <span className="transition-colors duration-200 group-hover/btn:text-[#EC601B]">
+      <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+      <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
         Click here
       </span>
       <svg
-        className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-[#EC601B]"
+        className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -91,10 +88,11 @@ function ApplyLink({ href = "#" }: { href: string }) {
           d="M17 8l4 4m0 0l-4 4m4-4H3"
         />
       </svg>
-    </motion.a>
+    </a>
   );
 }
 
+// ─── Grant Card ───────────────────────────────────────────────────────────────
 function GrantCard({
   title,
   description,
@@ -116,59 +114,42 @@ function GrantCard({
   return (
     <motion.article
       ref={ref}
-      className="group relative flex h-full cursor-default flex-col overflow-hidden border border-[#1D2D44]/10 bg-white"
-      initial={{ opacity: 0, y: 48 }}
+      className="group relative flex h-full flex-col overflow-hidden border border-[#1D2D44]/08 bg-white"
+      initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.12,
-        ease: bezier,
-      }}
-      whileHover={{
-        y: -6,
-        boxShadow: "0 28px 64px -16px rgba(29,45,68,0.14)",
-        transition: { duration: 0.3, ease: bezier },
-      }}
+      transition={{ duration: 0.7, delay: index * 0.12, ease: EASE }}
     >
       <motion.div
-        className="h-[3px] origin-left bg-[#EC601B]"
+        className="h-[2px] origin-left bg-[#EC601B]"
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
-        transition={{
-          duration: 0.6,
-          delay: index * 0.12 + 0.25,
-          ease: bezier,
-        }}
+        transition={{ duration: 0.6, delay: index * 0.12 + 0.25, ease: EASE }}
       />
 
-      {imageSrc ? (
+      {imageSrc && (
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
             src={imageSrc}
             alt={imageAlt ?? title}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />
           <div
-            className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-            style={{
-              background:
-                "linear-gradient(to top, rgba(29,45,68,0.4) 0%, transparent 60%)",
-            }}
-            aria-hidden={true}
+            className="absolute inset-0 bg-[#1D2D44]/0 transition-all duration-500 group-hover:bg-[#1D2D44]/10"
+            aria-hidden
           />
         </div>
-      ) : null}
+      )}
 
-      <div className="flex min-h-[5rem] items-start bg-[#EC601B] px-8 py-5">
+      <div className="flex min-h-[5rem] items-start bg-[#EC601B] px-7 py-5">
         <h3 className="font-poppins text-lg font-semibold leading-snug text-white">
           {title}
         </h3>
       </div>
 
-      <div className="flex flex-1 flex-col px-8 py-7">
-        <p className="flex-1 font-poppins text-sm font-light leading-[1.9] text-[#1D2D44]/65">
+      <div className="flex flex-1 flex-col px-7 py-7">
+        <p className="flex-1 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/60">
           {description}
         </p>
         <ApplyLink href={applyHref ?? "#"} />
@@ -177,15 +158,15 @@ function GrantCard({
   );
 }
 
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function GrantsPage() {
   const heroRef = useRef<HTMLDivElement>(null);
-
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
-
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
     <>
@@ -194,10 +175,11 @@ export default function GrantsPage() {
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
         forceWhiteBackground
       />
-      <main className="min-h-screen bg-white pt-20 font-poppins">
+      <main className="min-h-screen bg-white font-poppins">
+        {/* ── Hero ── */}
         <div
           ref={heroRef}
-          className="relative flex min-h-[280px] h-[55vh] items-end justify-start overflow-hidden bg-[#1D2D44]"
+          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div
             className="absolute inset-0 scale-110"
@@ -213,70 +195,81 @@ export default function GrantsPage() {
             />
             <div
               className="absolute inset-0"
-              style={{ background: GRADIENT_OVERLAY }}
-              aria-hidden={true}
+              style={{
+                background:
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+              }}
+              aria-hidden
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+              }}
+              aria-hidden
             />
           </motion.div>
 
-          <motion.div className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-16 sm:px-8 lg:px-12">
+          <motion.div
+            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            style={{ opacity: heroOpacity }}
+          >
             <motion.div
-              className="mb-4 inline-flex flex-wrap items-center gap-2 text-xs tracking-[0.3em] text-white/70 sm:text-sm"
-              initial={{ opacity: 0, y: 20 }}
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.55, ease: EASE }}
             >
-              <span className="text-white/60">Research</span>
-              <span className="text-white/40">/</span>
-              <span className="text-white/60">Grants</span>
+              <span>Research</span>
+              <span className="text-white/25">/</span>
             </motion.div>
-
             <div className="overflow-hidden">
               <motion.h1
-                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.2,
-                  ease: bezier,
-                }}
+                transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
                 Grants
               </motion.h1>
             </div>
-
             <motion.div
-              className="mt-6 h-[2px] w-20 origin-left bg-[#EC601B]"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.55,
-                ease: bezier,
-              }}
+              className="mt-5 h-[3px] w-[72px] rounded-full origin-left bg-[#EC601B]"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
             />
           </motion.div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-0 bg-white" />
         </div>
 
-        <section className="bg-[#7DC0F1] px-6 pb-12 pt-8 sm:px-8 sm:pb-16 sm:pt-10 lg:px-12">
-          <div className="mx-auto max-w-[1280px]">
-            <motion.div
-              className="mb-8 text-center"
+        {/* ── Overview band ── */}
+        <section className="bg-[#7DC0F1] px-6 pb-14 pt-10 sm:px-8 sm:pb-16 sm:pt-12 lg:px-12">
+          <div className="mx-auto max-w-[1280px] text-center">
+            <motion.h2
+              className="mb-6 font-poppins text-2xl sm:text-3xl font-semibold text-white leading-tight tracking-tight"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: "easeOut" }}
+              transition={{ duration: 0.55, ease: EASE }}
             >
-              <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-white sm:text-[1.85rem]">
-                KFAS Grant Programs Overview
-              </h2>
-            </motion.div>
+              KFAS Grant Programs Overview
+            </motion.h2>
+            <motion.div
+              className="mb-6 h-px w-10 bg-white/40 mx-auto"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
+            />
             <motion.p
-              className="font-poppins text-sm font-light leading-[1.85] text-white sm:text-[15px]"
+              className="mx-auto max-w-4xl text-justify font-poppins text-[15px] font-light leading-[1.9] text-white/85"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: "easeOut", delay: 0.08 }}
+              transition={{ duration: 0.55, ease: EASE, delay: 0.1 }}
             >
               The Kuwait Foundation for the Advancement of Sciences (KFAS)
               offers a diverse portfolio of grant programs designed to support
@@ -294,7 +287,8 @@ export default function GrantsPage() {
           </div>
         </section>
 
-        <section className="py-20 sm:py-28">
+        {/* ── Grant Cards ── */}
+        <section className="py-20 sm:py-28 bg-white">
           <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-12">
             <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 lg:grid-cols-3">
               {GRANT_TYPES.map((grant, index) => (
@@ -312,7 +306,6 @@ export default function GrantsPage() {
           </div>
         </section>
       </main>
-
       <Footer
         logo="/image/logoFooter.png"
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"

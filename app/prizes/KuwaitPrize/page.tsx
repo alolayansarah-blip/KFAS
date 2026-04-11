@@ -6,7 +6,9 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-// ─── Reusable fade-up on scroll ───────────────────────────────────────────────
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+// ─── FadeUp ───────────────────────────────────────────────────────────────────
 function FadeUp({
   children,
   delay = 0,
@@ -24,106 +26,77 @@ function FadeUp({
       className={className}
       initial={{ opacity: 0, y: 36 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, delay, ease: EASE }}
     >
       {children}
     </motion.div>
   );
 }
 
-// ─── Section heading with animated underline ─────────────────────────────────
+// ─── Section Heading ──────────────────────────────────────────────────────────
 function SectionHeading({ children }: { children: ReactNode }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <div ref={ref}>
+    <div ref={ref} className="mb-10">
       <motion.h2
-        className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]"
+        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.65, ease: EASE }}
       >
         {children}
       </motion.h2>
       <motion.div
-        className="mt-3 h-[2px] bg-[#EC601B] origin-left"
-        style={{ width: 48 }}
-        initial={{ scaleX: 0 }}
-        animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
       />
     </div>
   );
 }
 
-// ─── Section heading — light text (for orange / dark bands) ───────────────────
+// ─── Section Heading Light (for orange bg) ────────────────────────────────────
 function SectionHeadingLight({ children }: { children: ReactNode }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <div ref={ref}>
+    <div ref={ref} className="mb-10">
       <motion.h2
-        className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-white sm:text-[1.85rem]"
+        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight"
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.65, ease: EASE }}
       >
         {children}
       </motion.h2>
       <motion.div
-        className="mt-3 h-[2px] bg-white origin-left"
+        className="mt-5 h-px origin-left bg-white/30"
         style={{ width: 48 }}
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.55, delay: 0.3, ease: EASE }}
       />
     </div>
   );
 }
 
-// ─── Animated list item ───────────────────────────────────────────────────────
-function AnimatedListItem({
-  children,
-  bullet = "·",
-  delay = 0,
-}: {
-  children: ReactNode;
-  bullet?: string;
-  delay?: number;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  return (
-    <motion.li
-      ref={ref}
-      className="flex gap-3"
-      initial={{ opacity: 0, x: -16 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <span className="shrink-0 select-none text-[#EC601B]" aria-hidden>
-        {bullet}
-      </span>
-      <span>{children}</span>
-    </motion.li>
-  );
-}
-
-// ─── Apply link (matches Learning-and-Development / Professionals) ─────────────
+// ─── Apply Link — matches site CTA style ─────────────────────────────────────
 function ApplyLink({ href = "#" }: { href?: string }) {
   return (
-    <motion.a
+    <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="mt-2 w-fit inline-flex items-center gap-3 border border-[#1D2D44]/10 border-b-2 border-b-[#EC601B] px-6 py-3 text-sm font-medium text-[#1D2D44] font-poppins group/btn"
-      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+      className="group mt-6 inline-flex items-center gap-3 w-fit"
     >
-      <span className="group-hover/btn:text-[#EC601B] transition-colors duration-200">
+      <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+      <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
         Click here to apply
       </span>
       <svg
-        className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-[#EC601B]"
+        className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -135,24 +108,18 @@ function ApplyLink({ href = "#" }: { href?: string }) {
           d="M17 8l4 4m0 0l-4 4m4-4H3"
         />
       </svg>
-    </motion.a>
+    </a>
   );
 }
 
-// ─── Prize Components (three-column triptych) ────────────────────────────────────
-const prizeComponentItems: { title: string; desc: string }[] = [
+// ─── Prize Components ─────────────────────────────────────────────────────────
+const prizeComponentItems = [
   {
     title: "KD 40,000",
     desc: "A monetary award of KD 40,000. (Approx. $135,000)",
   },
-  {
-    title: "Gold Medal",
-    desc: "A gold medal bearing the emblem of KFAS.",
-  },
-  {
-    title: "Certificate",
-    desc: "A certificate of recognition from KFAS.",
-  },
+  { title: "Gold Medal", desc: "A gold medal bearing the emblem of KFAS." },
+  { title: "Certificate", desc: "A certificate of recognition from KFAS." },
 ];
 
 function PrizeComponentRows() {
@@ -161,23 +128,19 @@ function PrizeComponentRows() {
   return (
     <motion.div
       ref={ref}
-      className="mt-10 border-t border-[#1D2D44]/[0.08] pt-12 sm:pt-14"
+      className="mt-10 border-t border-[#1D2D44]/08 pt-12 sm:pt-14"
       initial={{ opacity: 0, y: 14 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.75, ease: EASE }}
     >
       <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-0">
         {prizeComponentItems.map((item, i) => (
           <motion.div
             key={item.title}
-            className="relative flex min-w-0 flex-col items-center border-b border-[#1D2D44]/[0.06] px-5 py-10 text-center last:border-b-0 sm:border-b-0 sm:border-r sm:border-[#1D2D44]/[0.08] sm:py-2 sm:last:border-r-0 lg:px-10"
+            className="relative flex min-w-0 flex-col items-center border-b border-[#1D2D44]/06 px-5 py-10 text-center last:border-b-0 sm:border-b-0 sm:border-r sm:border-[#1D2D44]/08 sm:py-2 sm:last:border-r-0 lg:px-10"
             initial={{ opacity: 0, y: 12 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 0.55,
-              delay: 0.15 + i * 0.28,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            transition={{ duration: 0.55, delay: 0.15 + i * 0.28, ease: EASE }}
           >
             <p className="font-poppins text-[#EC601B] font-light text-[1.5rem] leading-[1.25] tracking-[0.03em] sm:text-[1.65rem] lg:text-[1.8rem]">
               {item.title}
@@ -192,7 +155,7 @@ function PrizeComponentRows() {
   );
 }
 
-// ─── Prize Fields rows (matches ObjectiveRows pattern) ─────────────────────────
+// ─── Prize Fields ─────────────────────────────────────────────────────────────
 const fieldData = [
   "Basic Sciences",
   "Applied Sciences",
@@ -210,11 +173,7 @@ function PrizeFieldRow({ label, index }: { label: string; index: number }) {
       className="flex gap-5 py-5 border-b border-white/25 group"
       initial={{ opacity: 0, x: 24 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{
-        duration: 0.55,
-        delay: index * 0.08,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: EASE }}
     >
       <motion.span
         className="w-2 h-2 rounded-full bg-white mt-[10px] flex-shrink-0"
@@ -243,7 +202,7 @@ function PrizeFieldRows() {
   );
 }
 
-// ─── Eligibility rows ───────────────────────────────────────────────────────────
+// ─── Eligibility ──────────────────────────────────────────────────────────────
 const eligibilityItems = [
   "The nominee must be of Arab nationality and provide supporting documentation proving Arab origin.",
   "The nominee must be a distinguished researcher in the relevant scientific field and hold a doctorate degree or, in medical specialties, an equivalent fellowship.",
@@ -265,11 +224,7 @@ function EligibilityRow({ text, index }: { text: string; index: number }) {
       className="flex gap-5 py-5 border-b border-[#1D2D44]/10 group"
       initial={{ opacity: 0, x: 24 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{
-        duration: 0.55,
-        delay: index * 0.06,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      transition={{ duration: 0.55, delay: index * 0.06, ease: EASE }}
     >
       <motion.span
         className="w-2 h-2 rounded-full bg-[#EC601B] mt-[10px] flex-shrink-0"
@@ -298,7 +253,7 @@ function EligibilityRows() {
   );
 }
 
-// ─── Objective rows ─────────────────────────────────────────────────────────────
+// ─── Objectives ───────────────────────────────────────────────────────────────
 const objectiveItems = [
   "Promote scientific research and innovation in key fields of knowledge.",
   "Recognize and honor distinguished scientists and scholars whose work has significantly advanced their disciplines.",
@@ -315,11 +270,7 @@ function ObjectiveRow({ text, index }: { text: string; index: number }) {
       className="flex gap-5 py-5 border-b border-[#1D2D44]/10 group"
       initial={{ opacity: 0, x: 24 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{
-        duration: 0.55,
-        delay: index * 0.08,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: EASE }}
     >
       <motion.span
         className="w-2 h-2 rounded-full bg-[#EC601B] mt-[10px] flex-shrink-0"
@@ -348,7 +299,7 @@ function ObjectiveRows() {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function KuwaitPrizesPage() {
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -361,12 +312,11 @@ export default function KuwaitPrizesPage() {
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-
-      <main className="min-h-screen bg-[#FAFAF8] font-poppins pt-20">
-        {/* ══ HERO ══ */}
+      <main className="min-h-screen bg-white font-poppins">
+        {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[55vh] bg-[#121820]"
+          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px] bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -391,59 +341,50 @@ export default function KuwaitPrizesPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-16"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.55, ease: EASE }}
             >
-              <span className="text-white/60">Prizes / </span>
+              <span>Prizes</span>
+              <span className="text-white/25">/</span>
             </motion.div>
-
             <div className="overflow-hidden">
               <motion.h1
                 className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_0_2px_28px_rgba(0,0,0,0.45),_0_1px_2px_rgba(0,0,0,0.35)]"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.2,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+                transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
               >
                 Kuwait Prize
               </motion.h1>
             </div>
-
             <motion.div
-              className="h-[2px] bg-[#EC601B] mt-6 origin-left"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.55,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              style={{ width: 80 }}
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              style={{ width: 72 }}
             />
           </motion.div>
 
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-[#FAFAF8]" />
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ══ BODY ══ */}
-        <section className="py-20 sm:py-28">
-          <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 space-y-16 sm:space-y-20">
+        {/* ── Body ── */}
+        <section className="py-20 sm:py-28 bg-white">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 space-y-16 sm:space-y-20">
             {/* Overview */}
             <div>
               <SectionHeading>Overview of the Kuwait Prize</SectionHeading>
               <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10 xl:gap-12">
                 <div className="min-w-0 flex-1 space-y-6">
                   <FadeUp delay={0.1}>
-                    <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/80 font-light">
+                    <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
                       The Kuwait Prize is one of the most prestigious scientific
                       awards granted by the Kuwait Foundation for the
                       Advancement of Sciences (KFAS). The prize recognizes
@@ -454,7 +395,7 @@ export default function KuwaitPrizesPage() {
                     </p>
                   </FadeUp>
                   <FadeUp delay={0.18}>
-                    <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/80 font-light">
+                    <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
                       Established in{" "}
                       <span className="font-semibold text-[#1D2D44]">1979</span>
                       , the Kuwait Prize aims to encourage excellence in
@@ -501,7 +442,7 @@ export default function KuwaitPrizesPage() {
               <div className="lg:sticky lg:top-32">
                 <SectionHeading>Objectives of the Prize</SectionHeading>
                 <FadeUp delay={0.15}>
-                  <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-6">
+                  <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-4">
                     The Kuwait Prize seeks to:
                   </p>
                 </FadeUp>
@@ -511,13 +452,12 @@ export default function KuwaitPrizesPage() {
           </div>
         </section>
 
-        {/* ══ PRIZE FIELDS — full-bleed orange section ══ */}
+        {/* ── Prize Fields — orange ── */}
         <section className="bg-[#EC601B] py-24 relative">
           <div
             className="absolute inset-0 overflow-hidden pointer-events-none"
             aria-hidden
           >
-            {/* subtle diagonal grid texture */}
             <div
               className="absolute inset-0 opacity-[0.12]"
               style={{
@@ -526,23 +466,20 @@ export default function KuwaitPrizesPage() {
                 backgroundSize: "28px 28px",
               }}
             />
-            {/* glow blob top-right */}
             <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/20 blur-3xl" />
           </div>
-
-          <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
             <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
               <div className="lg:sticky lg:top-32">
                 <SectionHeadingLight>Prize Fields</SectionHeadingLight>
                 <FadeUp delay={0.15}>
-                  <p className="font-poppins text-base leading-[1.9] text-white/70 font-light mt-6">
+                  <p className="font-poppins text-base leading-[1.9] text-white/70 font-light mt-4">
                     The Kuwait Prize covers five main fields:
                   </p>
                 </FadeUp>
               </div>
               <PrizeFieldRows />
             </div>
-
             <FadeUp delay={0.2}>
               <p className="font-poppins text-base leading-[1.9] text-white/75 font-light mt-14 lg:mt-16 max-w-2xl">
                 The first four fields are awarded annually, while the fifth
@@ -555,8 +492,8 @@ export default function KuwaitPrizesPage() {
           </div>
         </section>
 
-        {/* ══ ELIGIBILITY — full-bleed light section ══ */}
-        <section className="bg-[#BBDEFB25] py-24 relative">
+        {/* ── Eligibility — light blue tint ── */}
+        <section className="bg-[#BBDEFB40] py-24 relative">
           <div
             className="absolute inset-0 overflow-hidden pointer-events-none"
             aria-hidden
@@ -614,25 +551,18 @@ export default function KuwaitPrizesPage() {
               />
             </svg>
           </div>
-
-          <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start relative z-10">
-            {/* left — sticky heading */}
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start relative z-10">
             <div className="lg:sticky lg:top-32">
               <FadeUp>
-                <h2 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
+                <h2 className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight">
                   Eligibility and Conditions
                 </h2>
                 <motion.div
-                  className="mt-3 h-[2px] bg-[#EC601B] origin-left"
-                  style={{ width: 48 }}
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
+                  className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+                  initial={{ scaleX: 0, opacity: 0 }}
+                  whileInView={{ scaleX: 1, opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{
-                    duration: 0.55,
-                    delay: 0.3,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
+                  transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
                 />
                 <FadeUp delay={0.15}>
                   <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-6">
@@ -643,38 +573,31 @@ export default function KuwaitPrizesPage() {
                 </FadeUp>
               </FadeUp>
             </div>
-
-            {/* right — animated rows */}
             <EligibilityRows />
           </div>
         </section>
 
-        <section className="py-20 sm:py-28">
-          <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12 space-y-16 sm:space-y-20">
-            {/* Prize Components */}
-            <div>
-              <SectionHeading>Prize Components</SectionHeading>
-              <div className="mt-8 space-y-6">
-                <FadeUp delay={0.05}>
-                  <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/80 font-light">
-                    For each awarded subfield, the Kuwait Prize consists of:
-                  </p>
-                </FadeUp>
-
-                <PrizeComponentRows />
-
-                <FadeUp delay={0.1}>
-                  <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/80 font-light">
-                    The prize may be awarded to one laureate or shared by
-                    multiple laureates whose contributions merit recognition.
-                  </p>
-                </FadeUp>
-              </div>
+        {/* ── Prize Components ── */}
+        <section className="py-20 sm:py-28 bg-white">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <SectionHeading>Prize Components</SectionHeading>
+            <div className="mt-8 space-y-6">
+              <FadeUp delay={0.05}>
+                <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
+                  For each awarded subfield, the Kuwait Prize consists of:
+                </p>
+              </FadeUp>
+              <PrizeComponentRows />
+              <FadeUp delay={0.1}>
+                <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
+                  The prize may be awarded to one laureate or shared by multiple
+                  laureates whose contributions merit recognition.
+                </p>
+              </FadeUp>
             </div>
           </div>
         </section>
       </main>
-
       <Footer
         logo="/image/logoFooter.png"
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"

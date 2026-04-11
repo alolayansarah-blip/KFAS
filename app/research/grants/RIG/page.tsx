@@ -7,46 +7,36 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const BRAND = {
-  blue: "#56A0D7",
-  orange: "#EC601B",
-  lightBlue: "#BBDEFB",
-  navy: "#1D2D44",
-};
-
-const GRADIENT_OVERLAY =
-  "linear-gradient(to bottom, rgba(29,45,68,0.35) 0%, rgba(29,45,68,0.45) 50%, rgba(29,45,68,0.6) 100%)";
-
-const HERO_TITLE_TRANSITION = {
-  duration: 0.7,
-  delay: 0.2,
-  ease: [0.22, 1, 0.36, 1] as const,
-};
-
-const ACCENT_LINE_TRANSITION = {
-  duration: 0.8,
-  delay: 0.55,
-  ease: [0.22, 1, 0.36, 1] as const,
-};
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 28 },
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
   transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as const },
 });
 
-const SectionHeading = ({ children }: { children: ReactNode }) => (
-  <motion.div {...fadeUp(0)}>
-    <h2
-      className="font-poppins text-[1.45rem] font-semibold leading-snug tracking-tight sm:text-[1.7rem]"
-      style={{ color: BRAND.navy }}
-    >
-      {children}
-    </h2>
-    <div className="mt-3 h-[2px] w-10" style={{ background: BRAND.orange }} />
-  </motion.div>
-);
+// ─── Section Heading ──────────────────────────────────────────────────────────
+function SectionHeading({
+  children,
+  light = false,
+}: {
+  children: ReactNode;
+  light?: boolean;
+}) {
+  return (
+    <motion.div {...fadeUp(0)}>
+      <h2
+        className={`font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight ${light ? "text-white" : "text-[#1D2D44]"}`}
+      >
+        {children}
+      </h2>
+      <div
+        className={`mt-5 h-px origin-left bg-gradient-to-r ${light ? "from-[#EC601B]/70 via-white/20 to-transparent" : "from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"}`}
+      />
+    </motion.div>
+  );
+}
 
 const focusAreas = [
   "Health-related infrastructures",
@@ -76,12 +66,10 @@ const documents = [
 
 export default function RigPage() {
   const heroRef = useRef<HTMLElement>(null);
-
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
-
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
@@ -92,11 +80,11 @@ export default function RigPage() {
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
         forceWhiteBackground
       />
-      <main className="min-h-screen bg-white pt-20 font-poppins">
-        {/* ── HERO — completely original, untouched ── */}
+      <main className="min-h-screen bg-white font-poppins">
+        {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[55vh] items-end justify-start overflow-hidden"
+          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -109,74 +97,79 @@ export default function RigPage() {
             />
             <div
               className="absolute inset-0"
-              style={{ background: GRADIENT_OVERLAY }}
+              style={{
+                background:
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+              }}
+              aria-hidden
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+              }}
               aria-hidden
             />
           </motion.div>
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-4 inline-flex flex-wrap items-center gap-2 text-xs tracking-[0.3em] text-white/70 sm:text-sm"
-              initial={{ opacity: 0, y: 20 }}
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.55, ease: EASE }}
             >
-              <span className="text-white/60">Research</span>
-              <span className="text-white/40">/</span>
+              <span>Research</span>
+              <span className="text-white/25">/</span>
               <Link
                 href="/research/grants"
-                className="text-white/60 transition-colors hover:text-white"
+                className="hover:text-white transition-colors"
               >
                 Grants
               </Link>
-              <span className="text-white/40">/</span>
-              <span className="text-white/60">RIG</span>
+              <span className="text-white/25">/</span>
+              <span>RIG</span>
             </motion.div>
-
             <div className="overflow-hidden">
               <motion.h1
-                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={HERO_TITLE_TRANSITION}
+                transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
                 RIG
               </motion.h1>
             </div>
-
             <motion.div
-              className="mt-6 h-[2px] origin-left bg-[#EC601B]"
-              style={{ width: 80 }}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={ACCENT_LINE_TRANSITION}
+              className="mt-5 h-[3px] w-[72px] rounded-full origin-left bg-[#EC601B]"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
             />
           </motion.div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── OVERVIEW ── */}
-        <section className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <div className="mx-auto max-w-[1024px]">
-            <motion.div className="max-w-3xl" {...fadeUp(0)}>
-              <h2
-                className="font-poppins text-[1.45rem] font-semibold leading-snug tracking-tight sm:text-[1.7rem]"
-                style={{ color: BRAND.navy }}
-              >
+        {/* ── Overview ── */}
+        <section className="px-6 py-16 sm:px-8 sm:py-20 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <motion.div className="w-full" {...fadeUp(0)}>
+              <h2 className="font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight text-[#1D2D44]">
                 Research Infrastructure Grants
               </h2>
-              <div
-                className="mt-3 h-[2px] w-10"
-                style={{ background: BRAND.orange }}
+              <motion.div
+                className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+                initial={{ scaleX: 0, opacity: 0 }}
+                whileInView={{ scaleX: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
               />
-              <div
-                className="mt-6 space-y-4 font-poppins text-sm leading-[1.9] sm:text-[15px]"
-                style={{ color: `${BRAND.navy}BF` }}
-              >
+              <div className="mt-7 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
                 <p>
                   The Kuwait Foundation for the Advancement of Sciences (KFAS)
                   provides grants for research infrastructure proposals. The
@@ -198,216 +191,183 @@ export default function RigPage() {
           </div>
         </section>
 
-        {/* ── 2026 CALL ── */}
-        <section
-          className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8"
-          style={{ background: `${BRAND.lightBlue}25` }}
-        >
-          <div className="mx-auto max-w-[1024px]">
+        {/* ── 2026 Call ── */}
+        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#BBDEFB40]">
+          <div className="mx-auto max-w-[1280px]">
             <SectionHeading>
               KFAS 2026 Call for Research Infrastructure Grant Proposals
             </SectionHeading>
-            <div
-              className="mt-8 space-y-4 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-            >
-              <motion.p {...fadeUp(0.05)}>
-                For the 2026 First Call for Research Infrastructure Grant
-                Proposals (RIG), the Kuwait Foundation for the Advancement of
-                Sciences (KFAS) invites competitive proposals to be submitted
-                starting from February 1st 2026 to May 1st 2026.
-              </motion.p>
-              <motion.p {...fadeUp(0.1)}>
-                The call can be accessed and downloaded from the link below:
-              </motion.p>
-              <motion.p {...fadeUp(0.15)}>
+            <div className="mt-8 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+              <motion.div {...fadeUp(0.05)}>
+                <p>
+                  For the 2026 First Call for Research Infrastructure Grant
+                  Proposals (RIG), the Kuwait Foundation for the Advancement of
+                  Sciences (KFAS) invites competitive proposals to be submitted
+                  starting from February 1st 2026 to May 1st 2026.
+                </p>
+              </motion.div>
+              <motion.div {...fadeUp(0.1)}>
+                <p>
+                  The call can be accessed and downloaded from the link below:
+                </p>
+              </motion.div>
+              <motion.div {...fadeUp(0.15)}>
                 <a
                   href="https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2F2026%2FResearch%20Infrastructure%20Grants%202026%20Final%201%20Feb%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS%2F2026&p=true&ga=1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-medium transition-colors hover:opacity-80"
-                  style={{ color: BRAND.orange }}
+                  className="group inline-flex items-center gap-3"
                 >
-                  KFAS Call for Research Infrastructure Grant Proposals
-                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+                  <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+                  <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
+                    KFAS Call for Research Infrastructure Grant Proposals
+                  </span>
+                  <svg
+                    className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                  >
                     <path
-                      d="M2 7h10M7 2l5 5-5 5"
-                      stroke={BRAND.orange}
-                      strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
                     />
                   </svg>
                 </a>
-              </motion.p>
-              <motion.p
-                className="border-l-2 pl-4 pt-1"
-                style={{
-                  borderColor: `${BRAND.orange}60`,
-                  color: `${BRAND.navy}CC`,
-                }}
-                {...fadeUp(0.2)}
-              >
-                <span className="font-semibold" style={{ color: BRAND.navy }}>
-                  Note:
-                </span>{" "}
-                Only applications that are submitted via email to{" "}
-                <a
-                  href="mailto:research@kfas.org.kw"
-                  className="font-medium underline underline-offset-[3px]"
-                  style={{
-                    color: BRAND.orange,
-                    textDecorationColor: `${BRAND.orange}50`,
-                  }}
-                >
-                  research@kfas.org.kw
-                </a>{" "}
-                are accepted.
-              </motion.p>
+              </motion.div>
+              <motion.div {...fadeUp(0.2)}>
+                <p className="border-l-2 border-[#EC601B]/40 pl-4 pt-1 text-[#1D2D44]/75">
+                  <span className="font-semibold text-[#1D2D44]">Note:</span>{" "}
+                  Only applications that are submitted via email to{" "}
+                  <a
+                    href="mailto:research@kfas.org.kw"
+                    className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40"
+                  >
+                    research@kfas.org.kw
+                  </a>{" "}
+                  are accepted.
+                </p>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* ── FOCUS AREAS ── */}
-        <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-          <div className="mx-auto max-w-[1024px]">
+        {/* ── Focus Areas ── */}
+        <section className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
             <SectionHeading>Focus Areas and Domains:</SectionHeading>
-            <motion.p
-              className="mt-6 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-              {...fadeUp(0.05)}
-            >
-              The Kuwait Foundation for the Advancement of Sciences (KFAS)
-              invites proposals that advance Kuwait&apos;s research
-              infrastructure within the following priority domains:
-            </motion.p>
+            <motion.div {...fadeUp(0.05)}>
+              <p className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+                The Kuwait Foundation for the Advancement of Sciences (KFAS)
+                invites proposals that advance Kuwait&apos;s research
+                infrastructure within the following priority domains:
+              </p>
+            </motion.div>
             <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {focusAreas.map((label, i) => (
                 <motion.div
                   key={label}
-                  className="flex flex-col items-start gap-3 border p-5"
-                  style={{
-                    borderColor: `${BRAND.blue}35`,
-                    background: `${BRAND.lightBlue}15`,
-                  }}
+                  className="flex flex-col items-start gap-3 border border-[#7DC0F1]/30 bg-[#BBDEFB]/10 p-5"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
                 >
-                  <p
-                    className="font-poppins text-[13px] font-medium leading-snug"
-                    style={{ color: BRAND.navy }}
-                  >
+                  <p className="font-poppins text-[13px] font-medium leading-snug text-[#1D2D44]">
                     {label}
                   </p>
-                  <div
-                    className="mt-auto h-[2px] w-6"
-                    style={{ background: BRAND.orange }}
-                  />
+                  <div className="mt-auto h-[2px] w-6 bg-[#EC601B]" />
                 </motion.div>
               ))}
             </div>
-            <motion.p
-              className="mt-6 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-              {...fadeUp(0.2)}
-            >
-              All submitted proposals should demonstrate how the proposed
-              infrastructure will elevate research capacity, catalyze
-              innovation, and enable impactful scientific and technological
-              advancement.
-            </motion.p>
+            <motion.div {...fadeUp(0.2)}>
+              <p className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+                All submitted proposals should demonstrate how the proposed
+                infrastructure will elevate research capacity, catalyze
+                innovation, and enable impactful scientific and technological
+                advancement.
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── PROPOSAL SUBMISSIONS ── */}
-        <section
-          className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8"
-          style={{ background: `${BRAND.lightBlue}25` }}
-        >
-          <div className="mx-auto max-w-[1024px]">
+        {/* ── Proposal Submissions ── */}
+        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#BBDEFB40]">
+          <div className="mx-auto max-w-[1280px]">
             <SectionHeading>Proposal Submissions:</SectionHeading>
-            <div
-              className="mt-8 space-y-5 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-            >
-              <motion.p {...fadeUp(0.05)}>
-                All proposals must be submitted by the Principal Researchers,
-                who are the individuals responsible for managing and overseeing
-                research laboratories or centers and who hold official
-                administrative titles, acting on behalf of their respective
-                entities.
-              </motion.p>
-              <motion.p {...fadeUp(0.1)}>
-                The following,{" "}
-                <a
-                  href="https://kfas.sharepoint.com/:w:/g/IQDcdCil0djoQ4u0Et7ait4-AXDquE-z_lMQheiMMDs4pvE?e=wRrIux"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{
-                    color: BRAND.orange,
-                    textDecorationColor: `${BRAND.orange}50`,
-                  }}
-                >
-                  RIG Proposal Form Template
-                </a>
-                , must be completed and submitted via email to{" "}
-                <a
-                  href="mailto:research@kfas.org.kw"
-                  className="font-medium underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{
-                    color: BRAND.orange,
-                    textDecorationColor: `${BRAND.orange}50`,
-                  }}
-                >
-                  research@kfas.org.kw
-                </a>
-                . All necessary details are included in the template for your
-                reference.
-              </motion.p>
-              <motion.p {...fadeUp(0.15)}>
-                A Letter of Intent:{" "}
-                <a
-                  href="https://kfas.sharepoint.com/:w:/g/IQBE5Pe5xj0kTK7vhkYRBiXnAcc26lBv17tZdUR88wnKcpg?e=XLADNz"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{
-                    color: BRAND.orange,
-                    textDecorationColor: `${BRAND.orange}50`,
-                  }}
-                >
-                  RIG Letter of Intent Sample
-                </a>{" "}
-                from the applicant&apos;s institution/organization issued by the
-                assigned authority, indicating the approval to submit the
-                proposal to KFAS is required with the submission.
-              </motion.p>
-              <motion.p {...fadeUp(0.2)}>
-                Proposals are strongly encouraged to set short- to medium-term
-                objectives and are expected to be implemented within five years
-                of the award date.
-              </motion.p>
+            <div className="mt-8 space-y-5 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+              <motion.div {...fadeUp(0.05)}>
+                <p>
+                  All proposals must be submitted by the Principal Researchers,
+                  who are the individuals responsible for managing and
+                  overseeing research laboratories or centers and who hold
+                  official administrative titles, acting on behalf of their
+                  respective entities.
+                </p>
+              </motion.div>
+              <motion.div {...fadeUp(0.1)}>
+                <p>
+                  The following,{" "}
+                  <a
+                    href="https://kfas.sharepoint.com/:w:/g/IQDcdCil0djoQ4u0Et7ait4-AXDquE-z_lMQheiMMDs4pvE?e=wRrIux"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+                  >
+                    RIG Proposal Form Template
+                  </a>
+                  , must be completed and submitted via email to{" "}
+                  <a
+                    href="mailto:research@kfas.org.kw"
+                    className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+                  >
+                    research@kfas.org.kw
+                  </a>
+                  . All necessary details are included in the template for your
+                  reference.
+                </p>
+              </motion.div>
+              <motion.div {...fadeUp(0.15)}>
+                <p>
+                  A Letter of Intent:{" "}
+                  <a
+                    href="https://kfas.sharepoint.com/:w:/g/IQBE5Pe5xj0kTK7vhkYRBiXnAcc26lBv17tZdUR88wnKcpg?e=XLADNz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+                  >
+                    RIG Letter of Intent Sample
+                  </a>{" "}
+                  from the applicant&apos;s institution/organization issued by
+                  the assigned authority, indicating the approval to submit the
+                  proposal to KFAS is required with the submission.
+                </p>
+              </motion.div>
+              <motion.div {...fadeUp(0.2)}>
+                <p>
+                  Proposals are strongly encouraged to set short- to medium-term
+                  objectives and are expected to be implemented within five
+                  years of the award date.
+                </p>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* ── ELIGIBILITY ── */}
-        <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-          <div className="mx-auto max-w-[1024px]">
+        {/* ── Eligibility ── */}
+        <section className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
             <SectionHeading>
               General Eligibility for Proposal Submissions:
             </SectionHeading>
-            <motion.p
-              className="mt-6 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-              {...fadeUp(0.05)}
-            >
-              All institutions applying for the Research Infrastructure Grant
-              must meet the following eligibility requirements:
-            </motion.p>
+            <motion.div {...fadeUp(0.05)}>
+              <p className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+                All institutions applying for the Research Infrastructure Grant
+                must meet the following eligibility requirements:
+              </p>
+            </motion.div>
             <ol className="mt-8 space-y-5">
               {[
                 <>Must be based in Kuwait at a Public Institution.</>,
@@ -415,11 +375,7 @@ export default function RigPage() {
                   Must Submit proposals via e-mail to (
                   <a
                     href="mailto:research@kfas.org.kw"
-                    className="font-medium underline underline-offset-[3px]"
-                    style={{
-                      color: BRAND.orange,
-                      textDecorationColor: `${BRAND.orange}50`,
-                    }}
+                    className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40"
                   >
                     research@kfas.org.kw
                   </a>
@@ -434,10 +390,7 @@ export default function RigPage() {
                       "Evidence of existing laboratory facilities and/or designated areas to host the proposed infrastructure.",
                     ].map((sub, j) => (
                       <li key={j} className="flex items-start gap-3">
-                        <span
-                          className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-                          style={{ background: BRAND.blue }}
-                        />
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
                         <span>{sub}</span>
                       </li>
                     ))}
@@ -457,49 +410,33 @@ export default function RigPage() {
               ].map((item, i) => (
                 <motion.li
                   key={i}
-                  className="flex gap-5 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-                  style={{ color: `${BRAND.navy}BF` }}
+                  className="flex gap-5 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
                   initial={{ opacity: 0, x: -16 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.07 }}
                 >
-                  <span
-                    className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-poppins text-xs font-bold text-white"
-                    style={{ background: BRAND.blue }}
-                  >
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center bg-[#7DC0F1]/20 font-poppins text-xs font-bold text-[#1D2D44]">
                     {i + 1}
                   </span>
                   <div className="min-w-0 flex-1">{item}</div>
                 </motion.li>
               ))}
             </ol>
-            <motion.p
-              className="mt-8 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}99` }}
-              {...fadeUp(0.2)}
-            >
-              Any application missing major requirements by the closing date of
-              the cycle will be marked as incomplete and consequently declined.
-            </motion.p>
+            <motion.div {...fadeUp(0.2)}>
+              <p className="mt-8 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/50 font-light">
+                Any application missing major requirements by the closing date
+                of the cycle will be marked as incomplete and consequently
+                declined.
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── IMPORTANT INFORMATION ── */}
-        <section
-          className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8"
-          style={{ background: BRAND.navy }}
-        >
-          <div className="mx-auto max-w-[1024px]">
-            <motion.div {...fadeUp(0)}>
-              <h2 className="font-poppins text-[1.45rem] font-semibold leading-snug tracking-tight text-white sm:text-[1.7rem]">
-                Important Information:
-              </h2>
-              <div
-                className="mt-3 h-[2px] w-10"
-                style={{ background: BRAND.orange }}
-              />
-            </motion.div>
+        {/* ── Important Information — navy ── */}
+        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#1D2D44]">
+          <div className="mx-auto max-w-[1280px]">
+            <SectionHeading light>Important Information:</SectionHeading>
             <ul className="mt-8 space-y-5">
               {[
                 "A Letter of Intent from the applicant's institution/organization issued by the assigned authority, indicating the approval to submit the proposal to KFAS is required.",
@@ -508,45 +445,39 @@ export default function RigPage() {
               ].map((item, i) => (
                 <motion.li
                   key={i}
-                  className="flex items-start gap-4 font-poppins text-sm leading-[1.85] text-white/70 sm:text-[15px]"
+                  className="flex items-start gap-4 font-poppins text-[15px] leading-[1.9] text-white/65 font-light"
                   initial={{ opacity: 0, x: -12 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.08 }}
                 >
-                  <span
-                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-                    style={{ background: BRAND.blue }}
-                  />
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
                   {item}
                 </motion.li>
               ))}
             </ul>
-            <motion.p
-              className="mt-8 font-poppins text-sm leading-[1.85] text-white/50"
-              {...fadeUp(0.25)}
-            >
-              Applicants (Principal Researchers, who hold official
-              administrative titles) are strongly encouraged to submit their
-              applications early in the call announcement period to ensure
-              sufficient time for resolving any missing documentation.
-            </motion.p>
+            <motion.div {...fadeUp(0.25)}>
+              <p className="mt-8 font-poppins text-[15px] leading-[1.9] text-white/40 font-light">
+                Applicants (Principal Researchers, who hold official
+                administrative titles) are strongly encouraged to submit their
+                applications early in the call announcement period to ensure
+                sufficient time for resolving any missing documentation.
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── DOCUMENTS ── */}
-        <section className="px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-          <div className="mx-auto max-w-[1024px]">
+        {/* ── Documents ── */}
+        <section className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
             <SectionHeading>Application Related Documents:</SectionHeading>
-            <motion.p
-              className="mt-6 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-              {...fadeUp(0.05)}
-            >
-              All details, conditions and information on the scope of funding
-              and proposal requirements can be found in the following
-              attachments:
-            </motion.p>
+            <motion.div {...fadeUp(0.05)}>
+              <p className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+                All details, conditions and information on the scope of funding
+                and proposal requirements can be found in the following
+                attachments:
+              </p>
+            </motion.div>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {documents.map((doc, i) => (
                 <motion.a
@@ -554,19 +485,14 @@ export default function RigPage() {
                   href={doc.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-between border p-5 transition-all"
-                  style={{ borderColor: `${BRAND.navy}18` }}
+                  className="group flex items-center justify-between border border-[#1D2D44]/08 p-5 transition-all hover:bg-[#BBDEFB]/20"
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.08 }}
-                  whileHover={{ backgroundColor: `${BRAND.lightBlue}35` }}
                 >
                   <div className="flex items-center gap-4">
-                    <div
-                      className="flex h-9 w-9 shrink-0 items-center justify-center"
-                      style={{ background: `${BRAND.blue}15` }}
-                    >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-[#7DC0F1]/15">
                       <svg
                         width="16"
                         height="16"
@@ -575,28 +501,25 @@ export default function RigPage() {
                       >
                         <path
                           d="M4 2h6l4 4v8H4V2z"
-                          stroke={BRAND.blue}
+                          stroke="#56A0D7"
                           strokeWidth="1.2"
                           strokeLinejoin="round"
                         />
                         <path
                           d="M10 2v4h4"
-                          stroke={BRAND.blue}
+                          stroke="#56A0D7"
                           strokeWidth="1.2"
                           strokeLinecap="round"
                         />
                         <path
                           d="M6 9h4M6 11.5h2.5"
-                          stroke={BRAND.blue}
+                          stroke="#56A0D7"
                           strokeWidth="1.2"
                           strokeLinecap="round"
                         />
                       </svg>
                     </div>
-                    <span
-                      className="font-poppins text-sm font-medium"
-                      style={{ color: BRAND.navy }}
-                    >
+                    <span className="font-poppins text-[14px] font-medium text-[#1D2D44]">
                       {doc.label}
                     </span>
                   </div>
@@ -605,11 +528,11 @@ export default function RigPage() {
                     height="14"
                     viewBox="0 0 14 14"
                     fill="none"
-                    className="shrink-0 opacity-25 transition-opacity group-hover:opacity-100"
+                    className="shrink-0 opacity-20 transition-opacity group-hover:opacity-100"
                   >
                     <path
                       d="M2 7h10M7 2l5 5-5 5"
-                      stroke={BRAND.orange}
+                      stroke="#EC601B"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -618,69 +541,57 @@ export default function RigPage() {
                 </motion.a>
               ))}
             </div>
-            <motion.p
-              className="mt-6 font-poppins text-sm leading-[1.85] sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-              {...fadeUp(0.2)}
-            >
-              It is the responsibility of the applicant and the applicant&apos;s
-              institution to ensure that they read, understand, and adhere to
-              the application requirements and all KFAS guidelines, rules, and
-              regulations.
-            </motion.p>
+            <motion.div {...fadeUp(0.2)}>
+              <p className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+                It is the responsibility of the applicant and the
+                applicant&apos;s institution to ensure that they read,
+                understand, and adhere to the application requirements and all
+                KFAS guidelines, rules, and regulations.
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── CONTACT ── */}
-        <section
-          className="px-4 py-14 sm:px-6 sm:py-16 lg:px-8"
-          style={{ borderTop: `1px solid ${BRAND.navy}12` }}
-        >
-          <div className="mx-auto max-w-[1024px]">
+        {/* ── Contact ── */}
+        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 border-t border-[#1D2D44]/08">
+          <div className="mx-auto max-w-[1280px]">
             <SectionHeading>Contact Us:</SectionHeading>
-            <div
-              className="mt-8 space-y-3 font-poppins text-sm sm:text-[15px]"
-              style={{ color: `${BRAND.navy}BF` }}
-            >
-              <motion.p {...fadeUp(0.05)}>
-                If you have any inquiries, please email us at:{" "}
-                <a
-                  href="mailto:research@kfas.org.kw"
-                  className="font-medium underline underline-offset-[3px] transition-colors hover:opacity-80"
-                  style={{
-                    color: BRAND.orange,
-                    textDecorationColor: `${BRAND.orange}50`,
-                  }}
-                >
-                  research@kfas.org.kw
-                </a>
-              </motion.p>
-              <motion.p {...fadeUp(0.1)}>
-                Telephone:{" "}
-                <a
-                  href="tel:+96522278125"
-                  className="font-medium transition-colors hover:text-[#EC601B]"
-                  style={{ color: BRAND.navy }}
-                >
-                  (+965) 22278125
-                </a>{" "}
-                or{" "}
-                <a
-                  href="tel:+96522278126"
-                  className="font-medium transition-colors hover:text-[#EC601B]"
-                  style={{ color: BRAND.navy }}
-                >
-                  22278126
-                </a>
-              </motion.p>
-              <motion.p
-                className="pt-2"
-                style={{ color: `${BRAND.navy}80` }}
-                {...fadeUp(0.15)}
-              >
-                KFAS decisions regarding research grants are final and not
-                subject to appeal.
-              </motion.p>
+            <div className="mt-8 space-y-3 font-poppins text-[15px] text-[#1D2D44]/65 font-light">
+              <motion.div {...fadeUp(0.05)}>
+                <p>
+                  If you have any inquiries, please email us at:{" "}
+                  <a
+                    href="mailto:research@kfas.org.kw"
+                    className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+                  >
+                    research@kfas.org.kw
+                  </a>
+                </p>
+              </motion.div>
+              <motion.div {...fadeUp(0.1)}>
+                <p>
+                  Telephone:{" "}
+                  <a
+                    href="tel:+96522278125"
+                    className="font-medium text-[#1D2D44] hover:text-[#EC601B] transition-colors"
+                  >
+                    (+965) 22278125
+                  </a>{" "}
+                  or{" "}
+                  <a
+                    href="tel:+96522278126"
+                    className="font-medium text-[#1D2D44] hover:text-[#EC601B] transition-colors"
+                  >
+                    22278126
+                  </a>
+                </p>
+              </motion.div>
+              <motion.div {...fadeUp(0.15)}>
+                <p className="pt-2 text-[#1D2D44]/45">
+                  KFAS decisions regarding research grants are final and not
+                  subject to appeal.
+                </p>
+              </motion.div>
             </div>
           </div>
         </section>

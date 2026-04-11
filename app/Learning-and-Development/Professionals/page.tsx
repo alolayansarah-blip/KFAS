@@ -513,7 +513,6 @@
 //     </>
 //   );
 // }
-
 "use client";
 
 import { useRef } from "react";
@@ -522,7 +521,9 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-// ─── FadeUp ──────────────────────────────────────────────────────────────────
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+// ─── FadeUp ───────────────────────────────────────────────────────────────────
 function FadeUp({
   children,
   delay = 0,
@@ -538,55 +539,82 @@ function FadeUp({
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: 36 }}
+      initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, delay, ease: EASE }}
     >
       {children}
     </motion.div>
   );
 }
 
-// ─── Section heading with animated underline ─────────────────────────────────
+// ─── Section Heading ──────────────────────────────────────────────────────────
 function SectionHeading({ children }: { children: React.ReactNode }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <div ref={ref} className="mb-10">
+    <div ref={ref} className="mb-12">
+      <motion.p
+        className="mb-3 text-[10px] font-semibold uppercase tracking-[0.42em] text-[#EC601B]"
+        initial={{ opacity: 0, y: 16 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, ease: EASE }}
+      />
       <motion.h2
-        className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]"
+        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.65, ease: EASE }}
       >
         {children}
       </motion.h2>
       <motion.div
-        className="mt-3 h-[2px] bg-[#EC601B] origin-left"
-        style={{ width: 48 }}
-        initial={{ scaleX: 0 }}
-        animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
       />
     </div>
   );
 }
 
-// ─── Apply link ───────────────────────────────────────────────────────────────
+// ─── Section Heading Dark (for navy bg) ──────────────────────────────────────
+function SectionHeadingDark({ children }: { children: React.ReactNode }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <div ref={ref} className="mb-12">
+      <motion.h2
+        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight"
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, ease: EASE }}
+      >
+        {children}
+      </motion.h2>
+      <motion.div
+        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/70 via-[#7DC0F1]/30 to-transparent"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
+      />
+    </div>
+  );
+}
 function ApplyLink({ href = "#" }: { href?: string }) {
   return (
-    <motion.a
+    <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="mt-6 w-fit inline-flex items-center gap-3 border border-[#1D2D44]/10 border-b-2 border-b-[#EC601B] px-6 py-3 text-sm font-medium text-[#1D2D44] font-poppins group/btn"
-      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+      className="group mt-6 inline-flex items-center gap-3 w-fit"
     >
-      <span className="group-hover/btn:text-[#EC601B] transition-colors duration-200">
+      <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+      <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
         Click here to apply
       </span>
       <svg
-        className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-[#EC601B]"
+        className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -598,7 +626,7 @@ function ApplyLink({ href = "#" }: { href?: string }) {
           d="M17 8l4 4m0 0l-4 4m4-4H3"
         />
       </svg>
-    </motion.a>
+    </a>
   );
 }
 
@@ -625,30 +653,17 @@ function ProgramCard({
   return (
     <motion.article
       ref={ref}
-      className="group relative flex h-full flex-col overflow-hidden bg-white border border-[#1D2D44]/08 cursor-default"
-      initial={{ opacity: 0, y: 48 }}
+      className="group relative flex h-full flex-col overflow-hidden bg-white border border-[#1D2D44]/08"
+      initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.12,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      whileHover={{
-        y: -6,
-        boxShadow: "0 28px 64px -16px rgba(29,45,68,0.14)",
-        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
-      }}
+      transition={{ duration: 0.7, delay: index * 0.12, ease: EASE }}
     >
-      {/* top orange accent bar */}
+      {/* Orange top bar */}
       <motion.div
-        className="h-[3px] bg-[#EC601B] origin-left"
+        className="h-[2px] bg-[#EC601B] origin-left"
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
-        transition={{
-          duration: 0.6,
-          delay: index * 0.12 + 0.25,
-          ease: [0.22, 1, 0.36, 1],
-        }}
+        transition={{ duration: 0.6, delay: index * 0.12 + 0.25, ease: EASE }}
       />
 
       {imageSrc && (
@@ -658,27 +673,21 @@ function ProgramCard({
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{
-              background:
-                "linear-gradient(to top, rgba(29,45,68,0.4) 0%, transparent 60%)",
-            }}
-          />
+          <div className="absolute inset-0 bg-[#1D2D44]/0 transition-all duration-500 group-hover:bg-[#1D2D44]/10" />
         </div>
       )}
 
-      {/* title band */}
-      <div className="bg-[#EC601B] px-8 py-5 min-h-[5rem] flex items-center">
+      {/* Title band */}
+      <div className="bg-[#EC601B] px-7 py-5 min-h-[5rem] flex items-center">
         <TitleTag className="font-poppins text-lg font-semibold text-white leading-snug">
           {title}
         </TitleTag>
       </div>
 
-      <div className="flex flex-col flex-1 px-8 py-7 gap-0">
-        <p className="font-poppins text-sm leading-[1.9] text-[#1D2D44]/65 font-light flex-1">
+      <div className="flex flex-col flex-1 px-7 py-7">
+        <p className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/60 font-light flex-1">
           {body}
         </p>
         <ApplyLink href={applyHref} />
@@ -707,29 +716,16 @@ function SubProgramCard({
   return (
     <motion.article
       ref={ref}
-      className="group relative flex h-full flex-col overflow-hidden bg-white border border-[#1D2D44]/08 cursor-default"
-      initial={{ opacity: 0, y: 40 }}
+      className="group relative flex h-full flex-col overflow-hidden bg-white border border-[#1D2D44]/08"
+      initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.65,
-        delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      whileHover={{
-        y: -5,
-        boxShadow: "0 20px 48px -12px rgba(236,96,27,0.18)",
-        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
-      }}
+      transition={{ duration: 0.65, delay: index * 0.1, ease: EASE }}
     >
       <motion.div
-        className="h-[3px] bg-[#EC601B] origin-left"
+        className="h-[2px] bg-[#EC601B] origin-left"
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
-        transition={{
-          duration: 0.6,
-          delay: index * 0.1 + 0.2,
-          ease: [0.22, 1, 0.36, 1],
-        }}
+        transition={{ duration: 0.6, delay: index * 0.1 + 0.2, ease: EASE }}
       />
 
       {imageSrc && (
@@ -739,7 +735,7 @@ function SubProgramCard({
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />
         </div>
       )}
@@ -750,8 +746,8 @@ function SubProgramCard({
         </h4>
       </div>
 
-      <div className="flex flex-col flex-1 px-6 py-6 gap-0">
-        <p className="font-poppins text-sm leading-[1.85] text-[#1D2D44]/65 font-light flex-1">
+      <div className="flex flex-col flex-1 px-6 py-6">
+        <p className="font-poppins text-[14px] leading-[1.85] text-[#1D2D44]/60 font-light flex-1">
           {body}
         </p>
         <ApplyLink href={applyHref} />
@@ -760,66 +756,7 @@ function SubProgramCard({
   );
 }
 
-// ─── Customized Programs block ────────────────────────────────────────────────
-function CustomizedPrograms() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      className="relative overflow-hidden border border-[#1D2D44]/08 bg-white"
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {/* animated top bar */}
-      <motion.div
-        className="h-[3px] bg-[#EC601B] origin-left"
-        initial={{ scaleX: 0 }}
-        animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      />
-
-      <div className="p-8 sm:p-10 lg:p-12">
-        <FadeUp delay={0.1}>
-          <h3 className="font-poppins text-[1.4rem] font-normal text-[#1D2D44] leading-snug">
-            Customized Programs
-          </h3>
-          <motion.div
-            className="mt-3 h-[2px] bg-[#EC601B] origin-left mb-6"
-            style={{ width: 48 }}
-            initial={{ scaleX: 0 }}
-            animate={inView ? { scaleX: 1 } : {}}
-            transition={{
-              duration: 0.55,
-              delay: 0.4,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          />
-        </FadeUp>
-
-        <FadeUp delay={0.2}>
-          <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/70 font-light max-w-2xl mb-8">
-            KFAS partners with academic institutions to create customized
-            programs specifically for participants from Kuwait, offering blended
-            and experiential learning experiences taught over a period of
-            months.
-          </p>
-          <ApplyLink href="https://learn.kfas.org.kw/" />
-        </FadeUp>
-
-        <div className="mt-10 border-t border-[#1D2D44]/08 pt-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-          {SUB_PROGRAMS.map((p, i) => (
-            <SubProgramCard key={p.title} {...p} index={i} />
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Customized Programs ──────────────────────────────────────────────────────
 const SUB_PROGRAMS = [
   {
     title: "KFAS Innovation Challenge",
@@ -841,6 +778,50 @@ const SUB_PROGRAMS = [
   },
 ];
 
+function CustomizedPrograms() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      className="relative overflow-hidden bg-white border border-[#1D2D44]/08"
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, ease: EASE }}
+    >
+      <motion.div
+        className="h-[2px] bg-[#EC601B] origin-left"
+        initial={{ scaleX: 0 }}
+        animate={inView ? { scaleX: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
+      />
+
+      <div className="p-8 sm:p-10 lg:p-12">
+        <FadeUp delay={0.1}>
+          <h3 className="font-poppins text-xl sm:text-2xl font-semibold text-[#1D2D44] leading-snug mb-4">
+            Customized Programs
+          </h3>
+          <div className="mb-6 h-px w-10 bg-gradient-to-r from-[#EC601B]/50 to-transparent" />
+          <p className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/60 font-light max-w-2xl mb-6">
+            KFAS partners with academic institutions to create customized
+            programs specifically for participants from Kuwait, offering blended
+            and experiential learning experiences taught over a period of
+            months.
+          </p>
+          <ApplyLink href="https://learn.kfas.org.kw/" />
+        </FadeUp>
+
+        <div className="mt-12 border-t border-[#1D2D44]/06 pt-12 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+          {SUB_PROGRAMS.map((p, i) => (
+            <SubProgramCard key={p.title} {...p} index={i} />
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ProfessionalsPage() {
   const heroRef = useRef(null);
@@ -854,12 +835,11 @@ export default function ProfessionalsPage() {
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-
-      <main className="min-h-screen bg-[#FAFAF8] font-poppins pt-20">
-        {/* ══ HERO ══ */}
+      <main className="min-h-screen bg-white font-poppins">
+        {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[55vh] bg-[#1D2D44]"
+          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px] bg-white"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -871,63 +851,67 @@ export default function ProfessionalsPage() {
               className="object-cover object-center scale-110"
             />
             <div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0"
               style={{
-                background: [
-                  "linear-gradient(to bottom, rgba(29,45,68,0.15) 0%, rgba(29,45,68,0.5) 60%, rgba(29,45,68,0.85) 100%)",
-                  "linear-gradient(to right, rgba(29,45,68,0.6) 0%, rgba(29,45,68,0.2) 60%, transparent 100%)",
-                ].join(", "),
+                background:
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
               }}
             />
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-16"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.55, ease: EASE }}
             >
-              <span className="text-white/60">Learning & Development / </span>
+              <span>Learning & Development</span>
+              <span className="text-white/25">/</span>
             </motion.div>
-
             <div className="overflow-hidden">
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)]"
+                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
-                  duration: 0.7,
-                  delay: 0.2,
+                  duration: 0.75,
+                  delay: 0.15,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
                 Professionals
               </motion.h1>
             </div>
-
             <motion.div
-              className="h-[2px] bg-[#EC601B] mt-6 origin-left"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
               transition={{
                 duration: 0.8,
                 delay: 0.55,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              style={{ width: 80 }}
+              style={{ width: 72 }}
             />
           </motion.div>
 
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-[#FAFAF8]" />
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ══ PROFESSIONAL DEVELOPMENT LEARNING ══ */}
-        <section className="py-20 sm:py-28">
-          <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12">
+        {/* ── Professional Development Learning ── */}
+        <section className="py-20 sm:py-28 bg-white">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <SectionHeading>Professional Development Learning</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               <ProgramCard
@@ -949,9 +933,9 @@ export default function ProfessionalsPage() {
           </div>
         </section>
 
-        {/* ══ EXECUTIVE EDUCATION ══ */}
-        <section className="py-20 sm:py-28 bg-[#F2EFE9]">
-          <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-12">
+        {/* ── Executive Education ── */}
+        <section className="py-20 sm:py-28 bg-white">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <SectionHeading>Executive Education</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-10">
               <ProgramCard
@@ -973,7 +957,6 @@ export default function ProfessionalsPage() {
           </div>
         </section>
       </main>
-
       <Footer
         logo="/image/logoFooter.png"
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
