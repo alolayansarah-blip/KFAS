@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+const VIEWPORT = { once: true, amount: 0.1 };
+
 export default function OurHistoryPage() {
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [selectedYear, setSelectedYear] = useState<number | "all">("all");
-  const sectionRef = useRef<HTMLDivElement>(null);
 
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -21,44 +20,7 @@ export default function OurHistoryPage() {
   const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 400);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: "0px",
-      },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   const historyMilestones = [
     {
@@ -173,7 +135,7 @@ export default function OurHistoryPage() {
       year: "2019",
       title: "Kuwait University CMS-CERN Membership",
       description:
-        "KFAS supported Kuwait University’s full membership in the CMS experiment at CERN to deepen research collaboration and build student and teacher capacity in physics and engineering.",
+        "KFAS supported Kuwait University's full membership in the CMS experiment at CERN to deepen research collaboration and build student and teacher capacity in physics and engineering.",
     },
     {
       year: "2020",
@@ -193,7 +155,7 @@ export default function OurHistoryPage() {
       year: "2024",
       title: "PURE Research Portal",
       description:
-        "KFAS launched the “PURE” portal to showcase funded projects and research outputs, and to enable discovery of expertise and collaboration opportunities.",
+        'KFAS launched the \"PURE\" portal to showcase funded projects and research outputs, and to enable discovery of expertise and collaboration opportunities.',
       image: "/image/2024-pure.png",
       imageAlt: "PURE Research Portal",
     },
@@ -201,7 +163,7 @@ export default function OurHistoryPage() {
       year: "Sep 2024",
       title: "Kuwait National Space Research Center Announced",
       description:
-        "A national space research center was announced under KFAS auspices to strengthen Kuwait’s space research, technology, and human-capital development.",
+        "A national space research center was announced under KFAS auspices to strengthen Kuwait's space research, technology, and human-capital development.",
     },
     {
       year: "2024–2025",
@@ -253,7 +215,7 @@ export default function OurHistoryPage() {
       .map((m) => getStartYear(m.year))
       .filter((year): year is number => year !== null);
     return Array.from(new Set(years)).sort((a, b) => a - b);
-  }, [historyMilestones]);
+  }, []);
 
   const filteredMilestones = useMemo(() => {
     if (selectedYear === "all") return historyMilestones;
@@ -261,16 +223,16 @@ export default function OurHistoryPage() {
       const startYear = getStartYear(m.year);
       return startYear !== null && startYear >= selectedYear;
     });
-  }, [historyMilestones, selectedYear]);
+  }, [selectedYear]);
 
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-      <main className="min-h-screen bg-white pt-20 font-poppins">
-        {/* Hero Section with Banner */}
+      <main className="min-h-screen bg-white font-poppins">
+        {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[55vh]"
+          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -285,34 +247,40 @@ export default function OurHistoryPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
               }}
             />
           </motion.div>
 
           <motion.div
-            ref={sectionRef}
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-16"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.55, ease: EASE }}
             >
-              <span className="text-white/60">About</span>
-              <span className="text-white/40">/</span>
+              <span>About</span>
+              <span className="text-white/25">/</span>
             </motion.div>
 
             <div className="overflow-hidden">
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] text-left"
+                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
-                  duration: 0.7,
-                  delay: 0.2,
+                  duration: 0.75,
+                  delay: 0.15,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
@@ -321,147 +289,186 @@ export default function OurHistoryPage() {
             </div>
 
             <motion.div
-              className="h-[2px] bg-[#EC601B] mt-6 origin-left"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
               transition={{
                 duration: 0.8,
                 delay: 0.55,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              style={{ width: 80 }}
+              style={{ width: 72 }}
             />
           </motion.div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* History Content Section */}
+        {/* ── Content ── */}
         <section className="py-20 sm:py-28 bg-white">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="space-y-12">
-              {/* Introduction Text */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+            {/* Intro */}
+            <motion.p
+              className="max-w-4xl text-base font-light leading-[1.9] text-[#1D2D44]/65 mb-14"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.6, ease: EASE }}
+            >
+              Founded in 1976 by Amiri Decree, the Kuwait Foundation for the
+              Advancement of Sciences (KFAS) is a private, non-profit
+              organization that advances science, technology, and innovation to
+              support Kuwait's development. KFAS is funded by contributions from
+              Kuwait's private-sector shareholding companies as a percentage of
+              annual profits (currently 1%), with a governance model in which
+              the Board is chaired and appointed by the Amir of the State of
+              Kuwait.
+            </motion.p>
+
+            {/* Filter */}
+            <motion.div
+              className="mb-14 inline-flex flex-col gap-3"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.5, ease: EASE }}
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#1D2D44]/40">
+                Filter by year
+              </p>
+              <select
+                value={selectedYear}
+                onChange={(e) =>
+                  setSelectedYear(
+                    e.target.value === "all" ? "all" : Number(e.target.value),
+                  )
+                }
+                className="border border-[#1D2D44]/12 bg-white px-5 py-3 text-[13px] font-medium text-[#1D2D44] focus:outline-none focus:border-[#EC601B]/40 transition-colors duration-200 w-48"
+                aria-label="Filter timeline by year"
               >
-                <p className="text-base font-light leading-[1.9] text-[#1D2D44]/65">
-                  Founded in 1976 by Amiri Decree, the Kuwait Foundation for the
-                  Advancement of Sciences (KFAS) is a private, non-profit
-                  organization that advances science, technology, and innovation
-                  to support Kuwait’s development. KFAS is funded by
-                  contributions from Kuwait’s private-sector shareholding
-                  companies as a percentage of annual profits (currently 1%),
-                  with a governance model in which the Board is chaired and
-                  appointed by the Amir of the State of Kuwait.
-                </p>
-              </motion.div>
+                <option value="all">All Years</option>
+                {yearOptions.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </motion.div>
 
-              {/* Timeline Filters */}
-              <div className="mt-8 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="relative group">
-                    <div className="text-xs uppercase tracking-[0.35em] text-gray-400">
-                      Filter
-                    </div>
-                    <div className="pointer-events-none absolute left-0 top-6 z-10 w-56 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-600 shadow-lg opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                      Filter timeline entries by year.
-                    </div>
-                  </div>
-                </div>
+            {/* Timeline */}
+            <div className="relative">
+              {/* Center vertical line */}
+              <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#EC601B]/60 via-[#EC601B]/20 to-transparent" />
 
-                {/* Dropdown */}
-                <div>
-                  <select
-                    value={selectedYear}
-                    onChange={(e) =>
-                      setSelectedYear(
-                        e.target.value === "all"
-                          ? "all"
-                          : Number(e.target.value),
-                      )
-                    }
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm sm:max-w-xs"
-                    aria-label="Filter timeline by year"
-                  >
-                    <option value="all">All</option>
-                    {yearOptions.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+              <div className="space-y-12">
+                {filteredMilestones.map((milestone, index) => {
+                  const hasImage = Boolean(milestone.image);
+                  const isEven = index % 2 === 0;
 
-              {/* Timeline Display - Modern Alternating Layout */}
-              <div className="mt-12">
-                <div className="relative space-y-12">
-                  <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#EC601B] via-[#EC601B]/40 to-transparent" />
-                  {filteredMilestones.map((milestone, index) => {
-                    const hasImage = Boolean(milestone.image);
-                    const isFoundation = milestone.year === "1976";
-                    const isEven = index % 2 === 0;
-                    return (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          duration: isFoundation ? 0.9 : 0.6,
-                          delay: index * 0.12 + (isFoundation ? 0.2 : 0),
-                          ease: "easeOut",
-                        }}
-                        className={`relative pb-12 last:pb-0 flex flex-col lg:flex-row ${
-                          isEven ? "" : "lg:flex-row-reverse"
-                        }`}
-                      >
-                        {/* Marker */}
-                        <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-8 w-3 h-3 rounded-full bg-white border-2 border-[#EC601B] shadow-sm" />
+                  return (
+                    <motion.div
+                      key={index}
+                      className={`relative flex flex-col lg:flex-row ${isEven ? "" : "lg:flex-row-reverse"}`}
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={VIEWPORT}
+                      transition={{ duration: 0.6, delay: 0.05, ease: EASE }}
+                    >
+                      {/* Center dot */}
+                      <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-8 h-3 w-3 rounded-full bg-white border-2 border-[#EC601B]" />
 
-                        {/* Content Column */}
-                        <div className="lg:w-1/2 lg:px-8">
-                          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300 p-6 sm:p-7">
-                            <div className="font-poppins font-bold text-[#EC601B] text-5xl sm:text-6xl lg:text-7xl leading-none tracking-tight">
-                              {milestone.year}
-                            </div>
-                            <div className="text-[11px] uppercase tracking-[0.25em] text-gray-400 mt-3">
-                              Milestone
-                            </div>
-                            <h4 className="mt-3 font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem]">
-                              {milestone.title}
-                            </h4>
-                            <p className="mt-3 text-base font-light leading-[1.9] text-[#1D2D44]/65">
-                              {milestone.description}
-                            </p>
+                      {/* Content card */}
+                      <div className="lg:w-1/2 lg:px-10">
+                        <div className="relative border border-[#1D2D44]/08 p-6 sm:p-8">
+                          {/* Corner accent */}
+                          <div
+                            className={`absolute -top-2 h-8 w-8 border-t-[1.5px] border-[#EC601B]/40 pointer-events-none ${isEven ? "-right-2 border-r-[1.5px]" : "-left-2 border-l-[1.5px]"}`}
+                          />
+
+                          {/* Year */}
+                          <div className="font-poppins font-bold text-[#EC601B] text-5xl sm:text-6xl lg:text-7xl leading-none tracking-tight mb-3">
+                            {milestone.year}
                           </div>
-                        </div>
 
-                        {/* Image Column */}
-                        <div className="lg:w-1/2 lg:px-8 mt-6 lg:mt-0">
-                          {hasImage && (
-                            <div className="relative w-full h-48 sm:h-60 lg:h-64 rounded-2xl overflow-hidden shadow-lg ring-1 ring-gray-200">
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
-                              <img
-                                src={milestone.image}
-                                alt={milestone.imageAlt || milestone.title}
-                                className={`w-full h-full object-cover scale-[1.03] contrast-110 saturate-110 ${
-                                  milestone.image === "/image/ShaikhJaber.jpeg"
-                                    ? "grayscale"
-                                    : ""
-                                }`}
-                              />
-                            </div>
-                          )}
+                          {/* Eyebrow */}
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#1D2D44]/35 mb-3">
+                            Milestone
+                          </p>
+
+                          {/* Title */}
+                          <h4 className="font-poppins text-[1.6rem] font-normal leading-[1.5] tracking-tight text-[#1D2D44] sm:text-[1.85rem] mb-4">
+                            {milestone.title}
+                          </h4>
+
+                          {/* Divider */}
+                          <div className="mb-4 h-px w-8 bg-gradient-to-r from-[#EC601B]/40 to-transparent" />
+
+                          {/* Description */}
+                          <p className="text-base font-light leading-[1.9] text-[#1D2D44]/65">
+                            {milestone.description}
+                          </p>
                         </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
+                      </div>
+
+                      {/* Image */}
+                      <div className="lg:w-1/2 lg:px-10 mt-5 lg:mt-0 flex items-center">
+                        {hasImage && (
+                          <div className="relative w-full overflow-hidden aspect-[16/10] group">
+                            <img
+                              src={milestone.image}
+                              alt={milestone.imageAlt || milestone.title}
+                              className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
+                                milestone.image === "/image/ShaikhJaber.jpeg"
+                                  ? "grayscale"
+                                  : ""
+                              }`}
+                            />
+                            <div className="absolute inset-0 bg-[#1D2D44]/15 transition-all duration-500 group-hover:bg-[#1D2D44]/5" />
+                            <div
+                              className={`absolute -top-2 h-8 w-8 border-t-[1.5px] border-[#7DC0F1]/40 pointer-events-none ${!isEven ? "-right-2 border-r-[1.5px]" : "-left-2 border-l-[1.5px]"}`}
+                            />
+                            <div
+                              className={`absolute -bottom-2 h-8 w-8 border-b-[1.5px] border-[#7DC0F1]/35 pointer-events-none ${isEven ? "-right-2 border-r-[1.5px]" : "-left-2 border-l-[1.5px]"}`}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
+            </div>
+
+            {/* Back to top */}
+            <div className="mt-24 flex justify-center">
+              <motion.button
+                onClick={scrollToTop}
+                className="group inline-flex flex-col items-center gap-2 text-[#1D2D44]/35 hover:text-[#EC601B] transition-colors duration-300"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={VIEWPORT}
+                transition={{ duration: 0.5, ease: EASE }}
+                aria-label="Back to top"
+              >
+                <div className="flex h-9 w-9 items-center justify-center border border-[#1D2D44]/15 transition-all duration-300 group-hover:border-[#EC601B]/50 group-hover:-translate-y-1">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                </div>
+                <span className="text-[11px] font-medium uppercase tracking-[0.2em]">
+                  Back to Top
+                </span>
+              </motion.button>
             </div>
           </div>
         </section>

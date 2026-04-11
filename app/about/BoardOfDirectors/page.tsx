@@ -1,10 +1,123 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useInView, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { User, X } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+// ─── Modal component — shared across all board members ────────────────────────
+
+function Modal({
+  isOpen,
+  onClose,
+  imageSrc,
+  name,
+  children,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  imageSrc?: string;
+  name: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-[#1D2D44]/70 backdrop-blur-sm"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.97, y: 20 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Orange top accent */}
+            <div className="h-[2px] w-full bg-gradient-to-r from-[#EC601B] via-[#7DC0F1]/50 to-transparent" />
+
+            {/* Header */}
+            <div className="sticky top-0 z-10 bg-white border-b border-[#1D2D44]/08">
+              <div className="flex items-start gap-5 px-6 py-5">
+                {imageSrc && (
+                  <div className="shrink-0 w-16 h-16 overflow-hidden border border-[#1D2D44]/08">
+                    <img
+                      src={imageSrc}
+                      alt={name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0 pt-1">
+                  <h3 className="font-poppins text-base font-semibold text-[#1D2D44] leading-snug tracking-tight">
+                    {name}
+                  </h3>
+                  <div className="mt-2 h-px w-8 bg-gradient-to-r from-[#EC601B]/50 to-transparent" />
+                </div>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="shrink-0 p-2 text-[#1D2D44]/30 hover:text-[#EC601B] transition-colors duration-200"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" strokeWidth={1.5} />
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="overflow-y-auto max-h-[calc(90vh-100px)] px-6 py-6">
+              {children}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function ModalSection({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div className="mb-7">
+      <p className="mb-3 text-[10px] font-semibold tracking-wide text-[#EC601B]">
+        {label}
+      </p>
+      <div className="pl-4 border-l border-[#1D2D44]/08">
+        <ul className="space-y-2">
+          {items.map((item, i) => (
+            <li
+              key={i}
+              className="flex gap-3 text-[13px] text-[#1D2D44]/65 leading-relaxed font-light"
+            >
+              <span
+                className="shrink-0 w-1 h-1 rounded-full bg-[#EC601B]/50 mt-2"
+                aria-hidden
+              />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+// ─── Profile Card ─────────────────────────────────────────────────────────────
 
 function ProfileCard({
   imageSrc,
@@ -14,8 +127,6 @@ function ProfileCard({
   usePlaceholder = false,
   isInView,
   animationDelay = 0,
-  borderPosition = "left",
-  layout = "horizontal",
   compact = false,
   large = false,
   onClick,
@@ -27,132 +138,86 @@ function ProfileCard({
   usePlaceholder?: boolean;
   isInView: boolean;
   animationDelay?: number;
-  borderPosition?: "left" | "right";
-  layout?: "horizontal" | "vertical";
   compact?: boolean;
   large?: boolean;
   onClick?: () => void;
 }) {
-  const isVertical = layout === "vertical";
+  const imgSize = large
+    ? "w-48 h-48 sm:w-56 sm:h-56"
+    : compact
+      ? "w-36 h-36 sm:w-40 sm:h-40"
+      : "w-44 h-44 sm:w-48 sm:h-48";
 
   const content = (
     <div
-      className={`flex items-center gap-6 sm:gap-8 ${
-        isVertical ? "flex-col" : "flex-col sm:flex-row"
-      } ${onClick ? "cursor-pointer" : ""}`}
+      className={`flex flex-col items-center gap-4 ${onClick ? "cursor-pointer group" : ""}`}
     >
+      {/* Image */}
       <motion.div
         className="relative shrink-0"
-        initial={{ opacity: 0, x: -40 }}
-        animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
-        transition={{ duration: 0.6, delay: animationDelay, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.6, delay: animationDelay, ease: EASE }}
       >
-        {borderPosition === "left" && (
-          <div
-            className="absolute -top-4 -left-4 w-full h-full border-l-4 border-b-4 border-[#56A0D7] pointer-events-none"
-            aria-hidden
-          />
-        )}
-        <div
-          className={`relative bg-blue-50 p-4 ${
-            large
-              ? "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
-              : isVertical
-                ? compact
-                  ? "w-40 h-40 sm:w-44 sm:h-44 shadow-[0_6px_24px_rgba(86,160,215,0.1)]"
-                  : "w-48 h-48 sm:w-52 sm:h-52 shadow-[0_8px_30px_rgba(86,160,215,0.12)]"
-                : "w-56 h-56 sm:w-64 sm:h-64 shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
-          }`}
-        >
+        {/* Corner brackets */}
+        <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
+        <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
+
+        <div className={`relative overflow-hidden ${imgSize}`}>
           {usePlaceholder ? (
-            <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
-              <User className="w-24 h-24" strokeWidth={1.5} />
+            <div className="w-full h-full flex items-center justify-center bg-[#1D2D44]/05 text-[#1D2D44]/20">
+              <User className="w-16 h-16" strokeWidth={1} />
             </div>
           ) : (
             <img
               src={imageSrc}
               alt={imageAlt}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             />
           )}
         </div>
       </motion.div>
+
+      {/* Name + title */}
       <motion.div
-        className={`min-w-0 relative ${
-          large
-            ? "w-[300px] h-[140px] sm:h-[150px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
-            : isVertical
-              ? compact
-                ? "w-[200px] h-[100px] sm:h-[108px] flex flex-col justify-center px-4 py-4 text-center rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.04)] shrink-0"
-                : "w-[260px] h-[120px] sm:h-[125px] flex flex-col justify-center px-5 py-6 text-center rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.04)] shrink-0"
-              : "text-left flex-1"
-        } ${borderPosition === "right" && !isVertical ? "pr-8 pb-6" : ""}`}
-        initial={{ opacity: 0, y: isVertical ? 16 : 0, x: isVertical ? 0 : 40 }}
-        animate={
-          isInView
-            ? { opacity: 1, y: 0, x: 0 }
-            : { opacity: 0, y: isVertical ? 16 : 0, x: isVertical ? 0 : 40 }
-        }
-        transition={{
-          duration: 0.6,
-          delay: animationDelay + 0.15,
-          ease: "easeOut",
-        }}
+        className="text-center"
+        initial={{ opacity: 0, y: 12 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        transition={{ duration: 0.5, delay: animationDelay + 0.12, ease: EASE }}
       >
-        {borderPosition === "right" && isVertical && (
-          <div
-            className={`absolute border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/80 pointer-events-none ${
-              large ? "bottom-3 right-3 w-14 h-14" : compact ? "bottom-2 right-2 w-10 h-10" : "bottom-3 right-3 w-14 h-14"
-            }`}
-            style={{ borderBottomRightRadius: "2px" }}
-            aria-hidden
-          />
-        )}
-        {borderPosition === "right" && !isVertical && (
-          <div
-            className="absolute bottom-0 right-0 w-20 h-20 border-r-[1.5px] border-b-[1.5px] border-[#56A0D7]/90 pointer-events-none"
-            style={{ borderBottomRightRadius: "2px" }}
-            aria-hidden
-          />
-        )}
         <p
-          className={`font-poppins font-bold text-gray-900 leading-tight ${
-            large
-              ? "text-[15px] sm:text-base tracking-wide"
-              : isVertical
-                ? compact
-                  ? "text-[13px] sm:text-[14px] tracking-wide"
-                  : "text-[15px] sm:text-base tracking-wide"
-                : "text-base sm:text-lg tracking-tight"
-          }`}
+          className={`font-poppins font-semibold text-[#1D2D44] leading-snug tracking-tight ${large ? "text-base" : "text-[13px] sm:text-[14px]"}`}
         >
           {name}
         </p>
         <p
-          className={`leading-relaxed break-words ${
-            large
-              ? "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
-              : isVertical
-                ? compact
-                  ? "mt-1.5 text-[11px] sm:text-xs text-gray-600/95 font-medium tracking-wide"
-                  : "mt-2.5 text-[13px] sm:text-sm text-gray-600/95 font-medium tracking-wide"
-                : "mt-3 text-sm sm:text-base text-gray-700/95"
-          }`}
+          className={`mt-1.5 font-light text-[#EC601B] tracking-wide ${large ? "text-[13px]" : "text-[11px] sm:text-[12px]"}`}
         >
           {title}
         </p>
+        {onClick && (
+          <div className="mt-2 flex justify-center">
+            <div className="h-[1px] w-4 bg-[#EC601B]/40 transition-all duration-300 group-hover:w-8" />
+          </div>
+        )}
       </motion.div>
     </div>
   );
 
   return onClick ? (
-    <button type="button" onClick={onClick} className="text-left w-fit focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#56A0D7]/50 rounded-lg">
+    <button
+      type="button"
+      onClick={onClick}
+      className="text-left w-fit focus:outline-none"
+    >
       {content}
     </button>
   ) : (
     content
   );
 }
+
+// ─── Modal content data ───────────────────────────────────────────────────────
 
 const SHEIKH_AHMAD_MODAL_CONTENT = {
   name: "H.H the Prime Minister of Kuwait Sheikh Ahmad Abdullah Al-Ahmad Al-Sabah",
@@ -326,14 +391,18 @@ const MESHAAL_MODAL_CONTENT = {
   ],
 };
 
+// ─── Page ────────────────────────────────────────────────────────────────────
+
 export default function BoardOfDirectorsPage() {
   const [isAhmadModalOpen, setIsAhmadModalOpen] = useState(false);
   const [isAbdullahModalOpen, setIsAbdullahModalOpen] = useState(false);
   const [isMeshaalModalOpen, setIsMeshaalModalOpen] = useState(false);
-  const [isAhmadAldekheelModalOpen, setIsAhmadAldekheelModalOpen] = useState(false);
+  const [isAhmadAldekheelModalOpen, setIsAhmadAldekheelModalOpen] =
+    useState(false);
   const [isKhaledModalOpen, setIsKhaledModalOpen] = useState(false);
   const [isIbrahimModalOpen, setIsIbrahimModalOpen] = useState(false);
   const [isAmeenahModalOpen, setIsAmeenahModalOpen] = useState(false);
+
   const heroRef = useRef(null);
   const chairmanRef = useRef(null);
   const directorGeneralRef = useRef(null);
@@ -347,10 +416,31 @@ export default function BoardOfDirectorsPage() {
   const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
-  const isChairmanInView = useInView(chairmanRef, { once: true, margin: "-80px" });
-  const isDirectorGeneralInView = useInView(directorGeneralRef, { once: true, margin: "-80px" });
-  const isMembersInView = useInView(membersRef, { once: true, margin: "-80px" });
-  const isMembers2InView = useInView(members2Ref, { once: true, margin: "-80px" });
+  const isChairmanInView = useInView(chairmanRef, {
+    once: true,
+    margin: "-80px",
+  });
+  const isDirectorGeneralInView = useInView(directorGeneralRef, {
+    once: true,
+    margin: "-80px",
+  });
+  const isMembersInView = useInView(membersRef, {
+    once: true,
+    margin: "-80px",
+  });
+  const isMembers2InView = useInView(members2Ref, {
+    once: true,
+    margin: "-80px",
+  });
+
+  const anyModalOpen =
+    isAhmadModalOpen ||
+    isAbdullahModalOpen ||
+    isMeshaalModalOpen ||
+    isAhmadAldekheelModalOpen ||
+    isKhaledModalOpen ||
+    isIbrahimModalOpen ||
+    isAmeenahModalOpen;
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -364,7 +454,7 @@ export default function BoardOfDirectorsPage() {
         setIsAmeenahModalOpen(false);
       }
     };
-    if (isAhmadModalOpen || isAbdullahModalOpen || isMeshaalModalOpen || isAhmadAldekheelModalOpen || isKhaledModalOpen || isIbrahimModalOpen || isAmeenahModalOpen) {
+    if (anyModalOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
     }
@@ -372,15 +462,16 @@ export default function BoardOfDirectorsPage() {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
     };
-  }, [isAhmadModalOpen, isAbdullahModalOpen, isMeshaalModalOpen, isAhmadAldekheelModalOpen, isKhaledModalOpen, isIbrahimModalOpen, isAmeenahModalOpen]);
+  }, [anyModalOpen]);
 
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-      <main className="min-h-screen bg-white pt-20 font-poppins">
+      <main className="min-h-screen bg-white font-poppins">
+        {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[55vh]"
+          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <img
@@ -392,59 +483,65 @@ export default function BoardOfDirectorsPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to bottom, rgba(29,45,68,0.3) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.55) 100%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
               }}
             />
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-16"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.3em] text-white/70 mb-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.55, ease: EASE }}
             >
-              <span className="text-white/60">About</span>
-              <span className="text-white/40">/</span>
+              <span>About</span>
+              <span className="text-white/25">/</span>
             </motion.div>
-
             <div className="overflow-hidden">
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight drop-shadow-2xl [text-shadow:_3px_3px_10px_rgba(0,0,0,0.8)] text-left"
+                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
-                  duration: 0.7,
-                  delay: 0.2,
+                  duration: 0.75,
+                  delay: 0.15,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
                 Board of Directors
               </motion.h1>
             </div>
-
             <motion.div
-              className="h-[2px] bg-[#EC601B] mt-6 origin-left"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
               transition={{
                 duration: 0.8,
                 delay: 0.55,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              style={{ width: 80 }}
+              style={{ width: 72 }}
             />
           </motion.div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        <section ref={chairmanRef} className="bg-white py-16">
+        {/* ── Chairman ── */}
+        <section ref={chairmanRef} className="bg-white py-20">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 justify-items-center">
+            <div className="flex justify-center">
               <ProfileCard
                 imageSrc="/image/SHIEKH%20MESHAAL%20JABER%20AL%20SABAH-%20BM.png"
                 imageAlt="H.H. The Amir Sheikh Meshal Al-Ahmad Al-Jaber Al-Sabah"
@@ -457,18 +554,16 @@ export default function BoardOfDirectorsPage() {
                 }
                 title="Chairman"
                 isInView={isChairmanInView}
-                borderPosition="right"
-                layout="vertical"
-                compact
                 large
               />
             </div>
           </div>
         </section>
 
+        {/* ── Board Members row 1 ── */}
         <section ref={membersRef} className="bg-white pb-20">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 justify-items-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 justify-items-center">
               <ProfileCard
                 imageSrc="/image/ShaikhAhmadAlsabah.png"
                 imageAlt="H.H the Prime Minister of Kuwait Sheikh Ahmad Abdullah Al-Ahmad Al-Sabah"
@@ -476,8 +571,6 @@ export default function BoardOfDirectorsPage() {
                 title="Board Member"
                 isInView={isMembersInView}
                 animationDelay={0}
-                borderPosition="right"
-                layout="vertical"
                 compact
                 onClick={() => setIsAhmadModalOpen(true)}
               />
@@ -488,8 +581,6 @@ export default function BoardOfDirectorsPage() {
                 title="Board Member"
                 isInView={isMembersInView}
                 animationDelay={0.05}
-                borderPosition="right"
-                layout="vertical"
                 compact
                 onClick={() => setIsAbdullahModalOpen(true)}
               />
@@ -500,8 +591,6 @@ export default function BoardOfDirectorsPage() {
                 title="Board Member"
                 isInView={isMembersInView}
                 animationDelay={0.1}
-                borderPosition="right"
-                layout="vertical"
                 compact
                 onClick={() => setIsMeshaalModalOpen(true)}
               />
@@ -512,8 +601,6 @@ export default function BoardOfDirectorsPage() {
                 title="Board Member"
                 isInView={isMembersInView}
                 animationDelay={0.15}
-                borderPosition="right"
-                layout="vertical"
                 compact
                 onClick={() => setIsIbrahimModalOpen(true)}
               />
@@ -521,9 +608,10 @@ export default function BoardOfDirectorsPage() {
           </div>
         </section>
 
+        {/* ── Board Members row 2 ── */}
         <section ref={members2Ref} className="bg-white pb-20">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 justify-items-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 justify-items-center">
               <div className="hidden lg:block" aria-hidden />
               <ProfileCard
                 imageSrc="/image/MRAhmedAldhakheel.png"
@@ -532,8 +620,6 @@ export default function BoardOfDirectorsPage() {
                 title="Board Member"
                 isInView={isMembers2InView}
                 animationDelay={0}
-                borderPosition="right"
-                layout="vertical"
                 compact
                 onClick={() => setIsAhmadAldekheelModalOpen(true)}
               />
@@ -544,8 +630,6 @@ export default function BoardOfDirectorsPage() {
                 title="Board Member"
                 isInView={isMembers2InView}
                 animationDelay={0.1}
-                borderPosition="right"
-                layout="vertical"
                 compact
                 onClick={() => setIsKhaledModalOpen(true)}
               />
@@ -554,481 +638,114 @@ export default function BoardOfDirectorsPage() {
           </div>
         </section>
 
-        <section ref={directorGeneralRef} className="bg-white pb-20">
+        {/* ── Director General ── */}
+        <section ref={directorGeneralRef} className="bg-white pb-24">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 justify-items-center">
+            <div className="flex justify-center">
               <ProfileCard
                 imageSrc="/image/DrAmeenah.png"
                 imageAlt="Dr. Ameenah Rajab Farhan"
                 name="Dr. Ameenah Rajab Farhan"
                 title="Director General"
                 isInView={isDirectorGeneralInView}
-                borderPosition="right"
-                layout="vertical"
-                compact
                 large
                 onClick={() => setIsAmeenahModalOpen(true)}
               />
             </div>
           </div>
         </section>
-
       </main>
       <Footer />
 
-      <AnimatePresence>
-        {isAmeenahModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsAmeenahModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 24 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] as const }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
-                <div className="relative flex items-start gap-5 px-6 py-5">
-                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
-                    <img
-                      src={AMEENAH_MODAL_CONTENT.image}
-                      alt={AMEENAH_MODAL_CONTENT.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                      {AMEENAH_MODAL_CONTENT.name}
-                    </h3>
-                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsAmeenahModalOpen(false)}
-                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" strokeWidth={2} />
-                  </button>
-                </div>
-              </div>
+      {/* ── Modals ── */}
 
-              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
-                <div className="space-y-8">
-                  {AMEENAH_MODAL_CONTENT.sections.map((section) => (
-                    <div key={section.label} className="relative pl-6 border-l-2 border-[#56A0D7]/25">
-                      <h4 className="font-poppins text-[11px] font-semibold text-[#56A0D7] uppercase tracking-[0.2em] mb-3 ml-1">
-                        {section.label}
-                      </h4>
-                      <ul className="space-y-2.5">
-                        {section.items.map((item, i) => (
-                          <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
-                            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Modal
+        isOpen={isAmeenahModalOpen}
+        onClose={() => setIsAmeenahModalOpen(false)}
+        imageSrc={AMEENAH_MODAL_CONTENT.image}
+        name={AMEENAH_MODAL_CONTENT.name}
+      >
+        {AMEENAH_MODAL_CONTENT.sections.map((s) => (
+          <ModalSection key={s.label} label={s.label} items={s.items} />
+        ))}
+      </Modal>
 
-      <AnimatePresence>
-        {isAhmadModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsAhmadModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 24 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header with profile */}
-              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
-                <div className="relative flex items-start gap-5 px-6 py-5">
-                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
-                    <img
-                      src="/image/ShaikhAhmadAlsabah.png"
-                      alt={SHEIKH_AHMAD_MODAL_CONTENT.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                      {SHEIKH_AHMAD_MODAL_CONTENT.name}
-                    </h3>
-                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsAhmadModalOpen(false)}
-                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" strokeWidth={2} />
-                  </button>
-                </div>
-              </div>
+      <Modal
+        isOpen={isAhmadModalOpen}
+        onClose={() => setIsAhmadModalOpen(false)}
+        imageSrc="/image/ShaikhAhmadAlsabah.png"
+        name={SHEIKH_AHMAD_MODAL_CONTENT.name}
+      >
+        <ModalSection
+          label="Government"
+          items={SHEIKH_AHMAD_MODAL_CONTENT.government}
+        />
+        <ModalSection
+          label="Private Sector"
+          items={SHEIKH_AHMAD_MODAL_CONTENT.privateSector}
+        />
+        <ModalSection
+          label="Other Experience"
+          items={SHEIKH_AHMAD_MODAL_CONTENT.otherExperience}
+        />
+        <ModalSection
+          label="Education"
+          items={SHEIKH_AHMAD_MODAL_CONTENT.education}
+        />
+      </Modal>
 
-              {/* Content */}
-              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
-                <div className="space-y-8">
-                  {[
-                    { label: "Government", items: SHEIKH_AHMAD_MODAL_CONTENT.government },
-                    { label: "Private Sector", items: SHEIKH_AHMAD_MODAL_CONTENT.privateSector },
-                    { label: "Other Experience", items: SHEIKH_AHMAD_MODAL_CONTENT.otherExperience },
-                    { label: "Education", items: SHEIKH_AHMAD_MODAL_CONTENT.education },
-                  ].map((section) => (
-                    <div key={section.label} className="relative pl-6 border-l-2 border-[#56A0D7]/25">
-                      <h4 className="font-poppins text-[11px] font-semibold text-[#56A0D7] uppercase tracking-[0.2em] mb-3 ml-1">
-                        {section.label}
-                      </h4>
-                      <ul className="space-y-2.5">
-                        {section.items.map((item, i) => (
-                          <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
-                            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Modal
+        isOpen={isAbdullahModalOpen}
+        onClose={() => setIsAbdullahModalOpen(false)}
+        imageSrc={ABDULLAH_ALGHUNAIM_MODAL_CONTENT.image}
+        name={ABDULLAH_ALGHUNAIM_MODAL_CONTENT.name}
+      >
+        <ModalSection
+          label="Experience"
+          items={ABDULLAH_ALGHUNAIM_MODAL_CONTENT.items}
+        />
+      </Modal>
 
-      <AnimatePresence>
-        {isAbdullahModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsAbdullahModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 24 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
-                <div className="relative flex items-start gap-5 px-6 py-5">
-                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
-                    <img
-                      src={ABDULLAH_ALGHUNAIM_MODAL_CONTENT.image}
-                      alt={ABDULLAH_ALGHUNAIM_MODAL_CONTENT.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                      {ABDULLAH_ALGHUNAIM_MODAL_CONTENT.name}
-                    </h3>
-                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsAbdullahModalOpen(false)}
-                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" strokeWidth={2} />
-                  </button>
-                </div>
-              </div>
+      <Modal
+        isOpen={isMeshaalModalOpen}
+        onClose={() => setIsMeshaalModalOpen(false)}
+        imageSrc={MESHAAL_MODAL_CONTENT.image}
+        name={MESHAAL_MODAL_CONTENT.name}
+      >
+        <ModalSection label="Experience" items={MESHAAL_MODAL_CONTENT.items} />
+      </Modal>
 
-              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
-                <ul className="space-y-2.5">
-                  {ABDULLAH_ALGHUNAIM_MODAL_CONTENT.items.map((item, i) => (
-                    <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
-                      <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Modal
+        isOpen={isAhmadAldekheelModalOpen}
+        onClose={() => setIsAhmadAldekheelModalOpen(false)}
+        imageSrc={AHMAD_ALDEKHEEL_MODAL_CONTENT.image}
+        name={AHMAD_ALDEKHEEL_MODAL_CONTENT.name}
+      >
+        <ModalSection
+          label="Experience"
+          items={AHMAD_ALDEKHEEL_MODAL_CONTENT.items}
+        />
+      </Modal>
 
-      <AnimatePresence>
-        {isMeshaalModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsMeshaalModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 24 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
-                <div className="relative flex items-start gap-5 px-6 py-5">
-                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
-                    <img
-                      src={MESHAAL_MODAL_CONTENT.image}
-                      alt={MESHAAL_MODAL_CONTENT.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                      {MESHAAL_MODAL_CONTENT.name}
-                    </h3>
-                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsMeshaalModalOpen(false)}
-                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" strokeWidth={2} />
-                  </button>
-                </div>
-              </div>
+      <Modal
+        isOpen={isKhaledModalOpen}
+        onClose={() => setIsKhaledModalOpen(false)}
+        imageSrc={KHALED_ALFADHEL_MODAL_CONTENT.image}
+        name={KHALED_ALFADHEL_MODAL_CONTENT.name}
+      >
+        {KHALED_ALFADHEL_MODAL_CONTENT.sections.map((s) => (
+          <ModalSection key={s.label} label={s.label} items={s.items} />
+        ))}
+      </Modal>
 
-              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
-                <ul className="space-y-2.5">
-                  {MESHAAL_MODAL_CONTENT.items.map((item, i) => (
-                    <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
-                      <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isAhmadAldekheelModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsAhmadAldekheelModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 24 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
-                <div className="relative flex items-start gap-5 px-6 py-5">
-                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
-                    <img
-                      src={AHMAD_ALDEKHEEL_MODAL_CONTENT.image}
-                      alt={AHMAD_ALDEKHEEL_MODAL_CONTENT.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                      {AHMAD_ALDEKHEEL_MODAL_CONTENT.name}
-                    </h3>
-                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsAhmadAldekheelModalOpen(false)}
-                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" strokeWidth={2} />
-                  </button>
-                </div>
-              </div>
-
-              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
-                <ul className="space-y-2.5">
-                  {AHMAD_ALDEKHEEL_MODAL_CONTENT.items.map((item, i) => (
-                    <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
-                      <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isIbrahimModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsIbrahimModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 24 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
-                <div className="relative flex items-start gap-5 px-6 py-5">
-                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
-                    <img
-                      src={IBRAHIM_MODAL_CONTENT.image}
-                      alt={IBRAHIM_MODAL_CONTENT.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                      {IBRAHIM_MODAL_CONTENT.name}
-                    </h3>
-                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsIbrahimModalOpen(false)}
-                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" strokeWidth={2} />
-                  </button>
-                </div>
-              </div>
-
-              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
-                <ul className="space-y-2.5">
-                  {IBRAHIM_MODAL_CONTENT.items.map((item, i) => (
-                    <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
-                      <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isKhaledModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsKhaledModalOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 24 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="sticky top-0 z-10 bg-gradient-to-br from-slate-50 to-blue-50/50 border-b border-gray-100/80">
-                <div className="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-[#56A0D7]/30 pointer-events-none rounded-br" aria-hidden />
-                <div className="relative flex items-start gap-5 px-6 py-5">
-                  <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden ring-2 ring-white shadow-lg">
-                    <img
-                      src={KHALED_ALFADHEL_MODAL_CONTENT.image}
-                      alt={KHALED_ALFADHEL_MODAL_CONTENT.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <h3 className="font-poppins text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                      {KHALED_ALFADHEL_MODAL_CONTENT.name}
-                    </h3>
-                    <div className="mt-2 h-px w-8 bg-[#56A0D7]/40" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsKhaledModalOpen(false)}
-                    className="shrink-0 p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/80 rounded-xl transition-all duration-200"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" strokeWidth={2} />
-                  </button>
-                </div>
-              </div>
-
-              <div className="overflow-y-auto max-h-[calc(90vh-140px)] px-6 py-6">
-                <div className="space-y-8">
-                  {KHALED_ALFADHEL_MODAL_CONTENT.sections.map((section) => (
-                    <div key={section.label} className="relative pl-6 border-l-2 border-[#56A0D7]/25">
-                      <h4 className="font-poppins text-[11px] font-semibold text-[#56A0D7] uppercase tracking-[0.2em] mb-3 ml-1">
-                        {section.label}
-                      </h4>
-                      <ul className="space-y-2.5">
-                        {section.items.map((item, i) => (
-                          <li key={i} className="text-sm text-gray-600 leading-relaxed flex gap-3">
-                            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#56A0D7]/40 mt-2" aria-hidden />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Modal
+        isOpen={isIbrahimModalOpen}
+        onClose={() => setIsIbrahimModalOpen(false)}
+        imageSrc={IBRAHIM_MODAL_CONTENT.image}
+        name={IBRAHIM_MODAL_CONTENT.name}
+      >
+        <ModalSection label="Experience" items={IBRAHIM_MODAL_CONTENT.items} />
+      </Modal>
     </>
   );
 }
