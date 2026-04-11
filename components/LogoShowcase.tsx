@@ -374,7 +374,7 @@ export default function LogoShowcase() {
             >
               {/* Card */}
               <div
-                className={`relative flex flex-col items-center justify-start px-6 py-10 border transition-all duration-500 min-h-[340px] ${
+                className={`relative flex flex-col items-center justify-start px-4 py-6 md:px-6 md:py-10 border transition-all duration-500 min-h-[200px] md:min-h-[340px] ${
                   hoveredIndex === index
                     ? "border-[#EC601B]/60 bg-white/10 backdrop-blur-sm"
                     : "border-white/10 bg-white/5"
@@ -388,11 +388,11 @@ export default function LogoShowcase() {
                 />
 
                 {/* Logo */}
-                <div className="flex items-center justify-center h-28 w-full mb-5">
+                <div className="flex items-center justify-center h-16 md:h-28 w-full mb-4 md:mb-5">
                   <img
                     src={tile.logo}
                     alt={tile.title}
-                    className="h-full w-auto max-w-[180px] object-contain transition-all duration-500"
+                    className="h-full w-auto max-w-[120px] md:max-w-[180px] object-contain transition-all duration-500"
                     style={{
                       filter: "brightness(0) invert(1)",
                       opacity: hoveredIndex === index ? 1 : 0.45,
