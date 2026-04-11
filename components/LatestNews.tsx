@@ -188,236 +188,167 @@
 "use client";
 
 import React, { useRef } from "react";
-import {
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-  useReducedMotion,
-} from "framer-motion";
-import { MOTION } from "@/lib/motion";
+import { motion } from "framer-motion";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+const VIEWPORT = { once: true, amount: 0.15 };
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: VIEWPORT,
+  transition: { duration: 0.7, delay, ease: EASE },
+});
+
+const ArrowIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    strokeWidth={2.5}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M17 8l4 4m0 0l-4 4m4-4H3"
+    />
+  </svg>
+);
+
+const news = [
+  {
+    image: "/image/news1.jpeg",
+    title: "The ICTP SciFabLab Meets Kuwait",
+    description:
+      "ICTP and the Kuwait Foundation for the Advancement of Sciences (KFAS) have been working together to support scientific development across the Middle East and Northern Africa since 1981. Their collaboration has recently expanded to include outreach activities in Kuwait.",
+    date: "January 10, 2026",
+    link: "#",
+  },
+  {
+    image: "/image/news2.jpeg",
+    title:
+      "KFAS signs a memorandum of understanding with the Mohammed Bin Rashid Space Centre.",
+    description:
+      "The Kuwait Foundation for the Advancement of Sciences (KFAS) announced a memorandum of understanding with the Mohammed Bin Rashid Space Centre (MBRSC), establishing a strategic framework for cooperation in space sciences and scientific research.",
+    date: "December 5, 2024",
+    link: "#",
+  },
+  {
+    image: "/image/news3.jpeg",
+    title: "Innovation Workshop Success",
+    description:
+      "Over 200 participants joined our recent workshop on fostering innovation and entrepreneurship in the scientific community.",
+    date: "November 28, 2024",
+    link: "#",
+  },
+];
+
+const sortedNews = [...news].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+);
 
 export default function OurImpactStories() {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, MOTION.viewport);
-  const prefersReducedMotion = useReducedMotion();
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const headerY = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    prefersReducedMotion ? [0, 0, 0] : [18, 0, -12],
-  );
-
-  const news = [
-    {
-      image: "/image/news1.jpeg",
-      title: "The ICTP SciFabLab Meets Kuwait",
-      description:
-        "ICTP and the Kuwait Foundation for the Advancement of Sciences (KFAS) have been working together to support scientific development across the Middle East and Northern Africa since 1981. Their collaboration, which so far has focussed on supporting researchers and scholars, has recently expanded to include outreach activities in Kuwait.",
-      date: "January 10, 2026",
-      link: "#",
-    },
-    {
-      image: "/image/news2.jpeg",
-      title:
-        "KFAS signs a memorandum of understanding with the Mohammed Bin Rashid Space Centre to enhance cooperation in space sciences.",
-      description:
-        "The Kuwait Foundation for the Advancement of Sciences (KFAS) announced that it has signed a memorandum of understanding with the Mohammed Bin Rashid Space Centre (MBRSC), aiming to establish a strategic framework for cooperation in the fields of space sciences, scientific research, and the development of national capabilities in this vital sector.",
-      date: "December 5, 2024",
-      link: "#",
-    },
-    {
-      image: "/image/news3.jpeg",
-      title: "Innovation Workshop Success",
-      description:
-        "Over 200 participants joined our recent workshop on fostering innovation and entrepreneurship in the scientific community.",
-      date: "November 28, 2024",
-      link: "#",
-    },
-  ];
-
-  const sortedNews = [...news].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
-
-  const ArrowIcon = ({ className }: { className?: string }) => (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      strokeWidth={2.5}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M17 8l4 4m0 0l-4 4m4-4H3"
-      />
-    </svg>
-  );
 
   return (
-    <motion.section
+    <section
       ref={sectionRef}
       id="our-impact-stories"
-      className="relative bg-gray-50 py-20 lg:py-32 overflow-hidden"
-      initial={{ opacity: 0, y: 36 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={MOTION.viewport}
-      transition={{ duration: MOTION.duration, ease: MOTION.ease }}
+      className="relative bg-white py-20 lg:py-28"
     >
-      {/* Soft brand accents — fade in with section */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.8, delay: 0.15, ease: MOTION.ease }}
-      >
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#EC601B]/[0.07] blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-56 w-56 rounded-full bg-[#7DC0F1]/10 blur-3xl" />
-      </motion.div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header — subtle parallax + underline draw */}
-        <motion.div
-          style={{ y: headerY }}
-          variants={MOTION.fadeUpDelay(0.08)}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="mb-16 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between"
-        >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="font-poppins text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-900 leading-tight tracking-tight">
+            {/* Eyebrow */}
+            <motion.p
+              className="mb-4 text-[11px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]"
+              {...fadeUp(0)}
+            >
               Latest News
-            </h2>
+            </motion.p>
+
+            {/* Heading */}
+            <motion.h2
+              className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
+              {...fadeUp(0.1)}
+            >
+              Stories & Updates
+            </motion.h2>
+
+            {/* Divider */}
             <motion.div
-              className="mt-4 h-[3px] max-w-20 origin-left rounded-full bg-[#EC601B]"
-              initial={{ scaleX: 0 }}
-              animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{
-                duration: 0.65,
-                delay: 0.2,
-                ease: MOTION.ease,
-              }}
+              className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+              initial={{ opacity: 0, scaleX: 0 }}
+              whileInView={{ opacity: 1, scaleX: 1 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
             />
           </div>
 
-          {/* View All Link */}
+          {/* All News CTA — matches site style */}
           <motion.a
             href="#"
-            className="font-poppins inline-flex shrink-0 items-center gap-3 self-start border border-gray-200 border-b-2 border-b-[#7DC0F1] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 group hover:text-gray-900 sm:self-auto"
-            whileHover={{ x: 4, boxShadow: "0 8px 24px rgba(29,45,68,0.08)" }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
+            className="group inline-flex items-center gap-3 self-start sm:self-auto shrink-0"
+            {...fadeUp(0.15)}
           >
-            <span>All News</span>
-            <ArrowIcon className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+            <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+            <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
+              All News
+            </span>
+            <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]" />
           </motion.a>
-        </motion.div>
+        </div>
 
-        {/* News Grid — staggered cards */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.12,
-                delayChildren: 0.12,
-              },
-            },
-          }}
-        >
+        {/* News Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {sortedNews.map((item, index) => (
             <motion.article
               key={index}
-              variants={{
-                hidden: { opacity: 0, y: 28 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: MOTION.duration,
-                    ease: MOTION.ease,
-                  },
-                },
-              }}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              whileHover={{
-                y: -6,
-                transition: { duration: 0.25, ease: "easeOut" },
-              }}
-              className="group h-full rounded-xl p-4 transition-shadow duration-300 hover:shadow-[0_20px_40px_-12px_rgba(29,45,68,0.15)]"
+              {...fadeUp(0.1 + index * 0.1)}
+              className="group flex flex-col"
             >
               <a href={item.link} className="flex h-full flex-col">
-                <div className="relative overflow-hidden rounded-lg">
-                  <div
-                    className="absolute bottom-0 right-0 z-10 w-16 h-16 border-r border-b border-[#2563EB] pointer-events-none"
-                    aria-hidden
+                {/* Image */}
+                <div className="relative overflow-hidden aspect-[16/10] mb-5">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
-                  <div className="relative bg-blue-50 p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                    <div className="relative aspect-[16/10] overflow-hidden">
-                      <motion.img
-                        src={item.image}
-                        alt={item.title}
-                        className="absolute inset-0 h-full w-full object-cover"
-                        initial={{ scale: 1.08 }}
-                        animate={isInView ? { scale: 1 } : { scale: 1.08 }}
-                        transition={{
-                          duration: 0.85,
-                          delay: 0.08 + index * 0.06,
-                          ease: MOTION.ease,
-                        }}
-                        whileHover={{
-                          scale: 1.06,
-                          transition: { duration: 0.45, ease: "easeOut" },
-                        }}
-                      />
-                      <motion.div
-                        className="absolute top-4 left-4 rounded-full bg-white/90 px-4 py-2 backdrop-blur-sm"
-                        initial={{ opacity: 0, x: -8 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{
-                          delay: 0.25 + index * 0.08,
-                          duration: 0.45,
-                          ease: MOTION.ease,
-                        }}
-                      >
-                        <span className="font-poppins text-xs font-semibold text-gray-900">
-                          {item.date}
-                        </span>
-                      </motion.div>
-                    </div>
-                  </div>
+                  {/* Subtle overlay on hover */}
+                  <div className="absolute inset-0 bg-[#1D2D44]/0 transition-all duration-500 group-hover:bg-[#1D2D44]/10" />
                 </div>
 
-                <div className="pt-5 flex flex-col flex-1">
-                  <h3 className="font-poppins text-lg lg:text-xl font-light text-gray-900 leading-tight mb-3 line-clamp-3 min-h-[3.75rem] group-hover:text-[#EC601B] transition-colors duration-300">
-                    {item.title}
-                  </h3>
-                  <p className="font-poppins text-sm text-gray-600 leading-relaxed line-clamp-3 min-h-[4.5rem] mb-4">
-                    {item.description}
-                  </p>
-                  <div className="mt-auto">
-                    <span className="font-poppins inline-flex items-center gap-3 border border-gray-200 border-b-2 border-b-[#7DC0F1] px-6 py-3 text-sm font-semibold text-gray-900 transition-all duration-300 group-hover:text-gray-900">
-                      Read More
-                      <ArrowIcon className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
-                  </div>
+                {/* Date */}
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1D2D44]/35">
+                  {item.date}
+                </p>
+
+                {/* Title */}
+                <h3 className="font-poppins text-[17px] font-normal text-[#1D2D44] leading-snug mb-3 line-clamp-3 transition-colors duration-300 group-hover:text-[#EC601B]">
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                <p className="font-poppins text-[14px] font-light text-[#1D2D44]/55 leading-relaxed line-clamp-3 mb-6">
+                  {item.description}
+                </p>
+
+                {/* CTA — matches WhoWeAre / FlippedCardStack style */}
+                <div className="mt-auto flex items-center gap-3">
+                  <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
+                  <span className="text-[12px] font-medium tracking-[0.08em] text-[#EC601B]">
+                    Read More
+                  </span>
+                  <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0" />
                 </div>
               </a>
             </motion.article>
           ))}
-        </motion.div>
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

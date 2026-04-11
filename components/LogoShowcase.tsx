@@ -229,8 +229,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import SplitText from "./SplitText";
-import { MOTION } from "@/lib/motion";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+const VIEWPORT = { once: true, amount: 0.2 };
 
 const tiles = [
   {
@@ -270,180 +271,186 @@ const tiles = [
 export default function LogoShowcase() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, {
-    once: true,
-    amount: 0.2,
-    margin: "0px 0px -80px 0px" as const,
-  });
-  const activeIndex = hoveredIndex ?? 0;
-  const activeImage = tiles[activeIndex].image;
+  const isInView = useInView(sectionRef, VIEWPORT);
 
-  const [visibleImage, setVisibleImage] = useState(activeImage);
+  const [visibleImage, setVisibleImage] = useState<string | null>(null);
   const [fadeIn, setFadeIn] = useState(true);
 
   useEffect(() => {
+    if (hoveredIndex === null) {
+      setFadeIn(false);
+      const t = setTimeout(() => setVisibleImage(null), 300);
+      return () => clearTimeout(t);
+    }
     setFadeIn(false);
-    const timeout = setTimeout(() => {
-      setVisibleImage(activeImage);
+    const t = setTimeout(() => {
+      setVisibleImage(tiles[hoveredIndex].image);
       setFadeIn(true);
-    }, 300);
-    return () => clearTimeout(timeout);
-  }, [activeImage]);
+    }, 150);
+    return () => clearTimeout(t);
+  }, [hoveredIndex]);
 
   return (
-    <motion.section
+    <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden bg-white"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={MOTION.viewport}
-      transition={{ duration: MOTION.duration, ease: MOTION.ease }}
+      className="relative w-full overflow-hidden bg-[#1D2D44] py-20 lg:py-28"
     >
-      {/* Hero */}
-      <div className="relative min-h-[480px] sm:min-h-[520px] md:min-h-[620px]">
-        <div className="absolute inset-0">
+      {/* Background image — only shows on hover */}
+      <div className="absolute inset-0 pointer-events-none">
+        {visibleImage && (
           <img
             src={visibleImage}
             alt=""
-            className="w-full h-full object-cover object-center"
-            style={{
-              opacity: fadeIn ? 1 : 0,
-              transition: "opacity 0.6s ease",
-            }}
+            aria-hidden
+            className="h-full w-full object-cover object-center"
+            style={{ opacity: fadeIn ? 1 : 0, transition: "opacity 0.5s ease" }}
           />
-          <div className="absolute inset-0 bg-[#1D2D44]/95" />
-        </div>
+        )}
+        {/* Blue overlay — always present */}
+        <div
+          className="absolute inset-0 bg-[#7DC0F1]/65"
+          style={{
+            opacity: visibleImage && fadeIn ? 1 : 0,
+            transition: "opacity 0.5s ease",
+          }}
+        />
+        {/* Navy base — fades slightly when image is shown */}
+        <div
+          className="absolute inset-0 bg-[#1D2D44]"
+          style={{
+            opacity: visibleImage && fadeIn ? 0.45 : 1,
+            transition: "opacity 0.5s ease",
+          }}
+        />
+      </div>
 
-        {/* Hero content — stretch so right column matches full section height */}
-        <div className="absolute inset-0 z-10 flex items-stretch">
-          <div className="w-full min-h-0 flex-1 px-5 sm:px-6 lg:px-8 py-8 sm:pt-16 sm:pb-10 max-w-7xl mx-auto flex h-full min-h-full flex-col justify-center lg:min-h-0 lg:h-full lg:flex-row lg:items-stretch lg:gap-8">
-            <div className="flex flex-col gap-6 sm:gap-8 lg:flex-1 lg:justify-center lg:pl-6 xl:pl-10 text-left">
-              {/* Title */}
-              <h2 className="font-poppins text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-semibold text-white leading-tight tracking-tight">
-                <SplitText
-                  text="Building the Future"
-                  className="text-white"
-                  delay={40}
-                  duration={1}
-                  ease="easeOut"
-                  splitType="chars"
-                  from={{ opacity: 0, y: 10 }}
-                  to={{ opacity: 1, y: 0 }}
-                  textAlign="left"
-                />{" "}
-                <span className="relative inline-block">
-                  <SplitText
-                    text="Together"
-                    className="relative z-10 text-white"
-                    delay={40}
-                    duration={1}
-                    ease="easeOut"
-                    splitType="chars"
-                    from={{ opacity: 0, y: 10 }}
-                    to={{ opacity: 1, y: 0 }}
-                    textAlign="left"
-                  />
-                  <span className="absolute bottom-1 left-0 right-0 h-3 bg-white/20 -z-10" />
-                </span>
-              </h2>
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Title */}
+        <motion.p
+          className="mb-3 text-[10px] font-semibold uppercase tracking-[0.42em] text-white/40"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.6, ease: EASE }}
+        >
+          Our Partners
+        </motion.p>
+        <motion.h2
+          className="mb-5 font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.6, delay: 0.1, ease: EASE }}
+        >
+          Building the Future{" "}
+          <span className="font-extralight italic text-white/55">Together</span>
+        </motion.h2>
+        <motion.div
+          className="mb-16 h-px origin-left bg-gradient-to-r from-[#EC601B]/50 via-[#7DC0F1]/20 to-transparent"
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
+        />
 
-              {/* Logos — 2×2 on mobile, row on lg+ */}
-              <div className="grid grid-cols-2 gap-5 sm:gap-8 lg:flex lg:flex-nowrap lg:items-center lg:gap-10">
-                {tiles.map((tile, index) => (
-                  <motion.a
-                    key={tile.title}
-                    href={tile.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center outline-none lg:rounded-full"
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                    onClick={() => setHoveredIndex(index)}
-                    aria-label={tile.title}
-                    variants={MOTION.fadeUpDelay(0.1 + index * 0.08)}
-                    initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
-                    whileHover={MOTION.whileHover}
-                  >
-                    {/* Mobile: frosted pill backdrop for contrast; invisible on lg+ */}
-                    <span className="flex items-center justify-center w-full rounded-2xl bg-white/10 backdrop-blur-sm p-4 lg:contents lg:rounded-none lg:bg-transparent lg:backdrop-blur-none lg:p-0">
-                      <span
-                        className="block h-16 w-full sm:h-20 lg:h-28 lg:w-36 bg-white"
-                        style={{
-                          WebkitMaskImage: `url(${tile.logo})`,
-                          WebkitMaskSize: "contain",
-                          WebkitMaskRepeat: "no-repeat",
-                          WebkitMaskPosition: "center",
-                          maskImage: `url(${tile.logo})`,
-                          maskSize: "contain",
-                          maskRepeat: "no-repeat",
-                          maskPosition: "center",
-                        }}
-                        role="img"
-                        aria-label={tile.title}
-                      />
-                    </span>
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-
-            {/* Right card — desktop only; image fills full section height */}
-            <motion.div
-              className="group hidden lg:flex lg:w-[380px] xl:w-[420px] lg:flex-shrink-0 lg:self-stretch lg:min-h-0 lg:h-full"
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        {/* Logos row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {tiles.map((tile, index) => (
+            <motion.a
+              key={tile.title}
+              href={tile.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative flex flex-col overflow-hidden cursor-pointer"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              initial={{ opacity: 0, y: 28 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
               transition={{
-                duration: MOTION.duration,
-                delay: 0.3,
-                ease: MOTION.ease,
+                duration: 0.6,
+                delay: 0.15 + index * 0.1,
+                ease: EASE,
               }}
             >
-              <div className="relative flex min-h-0 h-full w-full flex-1 flex-col">
-                {/* Decorative corner — orange, thick */}
+              {/* Card */}
+              <div
+                className={`relative flex flex-col items-center justify-start px-6 py-10 border transition-all duration-500 min-h-[340px] ${
+                  hoveredIndex === index
+                    ? "border-[#EC601B]/60 bg-white/10 backdrop-blur-sm"
+                    : "border-white/10 bg-white/5"
+                }`}
+              >
+                {/* Orange top bar on hover */}
                 <div
-                  className="absolute bottom-0 right-0 w-16 h-16 border-r-4 border-b-4 border-[#EC601B] pointer-events-none z-10"
-                  aria-hidden
+                  className={`absolute top-0 left-0 right-0 h-[2px] bg-[#EC601B] transition-all duration-500 origin-left ${
+                    hoveredIndex === index ? "scale-x-100" : "scale-x-0"
+                  }`}
                 />
-                <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden">
-                  <div className="relative min-h-0 h-full flex-1 overflow-hidden">
-                    <img
-                      src={visibleImage}
-                      alt={tiles[activeIndex].title}
-                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                      style={{
-                        opacity: fadeIn ? 1 : 0,
-                        transition: "opacity 0.6s ease",
-                      }}
-                    />
-                    <div
-                      className="absolute inset-0 pointer-events-none"
-                      style={{
-                        background:
-                          "linear-gradient(to top, rgba(29, 45, 68, 0.95) 0%, rgba(29, 45, 68, 0.5) 35%, transparent 70%)",
-                      }}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-5 pt-16 pointer-events-none">
-                      <h3 className="font-poppins text-lg font-semibold text-white mb-2">
-                        {tiles[activeIndex].title}
-                      </h3>
-                      <p
-                        className="font-poppins text-sm text-white/90 leading-relaxed"
-                        style={{
-                          opacity: fadeIn ? 1 : 0,
-                          transition: "opacity 0.6s ease",
-                        }}
-                      >
-                        {tiles[activeIndex].description}
-                      </p>
-                    </div>
-                  </div>
+
+                {/* Logo */}
+                <div className="flex items-center justify-center h-28 w-full mb-5">
+                  <img
+                    src={tile.logo}
+                    alt={tile.title}
+                    className="h-full w-auto max-w-[180px] object-contain transition-all duration-500"
+                    style={{
+                      filter: "brightness(0) invert(1)",
+                      opacity: hoveredIndex === index ? 1 : 0.45,
+                    }}
+                  />
+                </div>
+
+                {/* Divider */}
+                <div
+                  className={`h-px w-8 bg-white/20 mb-4 transition-all duration-500 ${
+                    hoveredIndex === index ? "w-12 bg-[#EC601B]/60" : ""
+                  }`}
+                />
+
+                {/* Title — always visible */}
+                <p
+                  className={`text-center text-[13px] font-medium leading-snug transition-colors duration-300 mb-4 ${
+                    hoveredIndex === index ? "text-white" : "text-white/50"
+                  }`}
+                >
+                  {tile.title}
+                </p>
+
+                {/* Summary — fixed space, fades in without affecting height */}
+                <div className="flex-1 flex flex-col items-center justify-end">
+                  <p
+                    className={`text-center text-[12px] font-light text-white/70 leading-relaxed mb-4 transition-all duration-500 ${
+                      hoveredIndex === index ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    {tile.description}
+                  </p>
+                  <span
+                    className={`inline-flex items-center gap-2 text-[11px] font-medium tracking-[0.1em] text-[#EC601B] transition-all duration-500 ${
+                      hoveredIndex === index ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    Visit
+                    <svg
+                      className="h-3 w-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2.5}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </span>
                 </div>
               </div>
-            </motion.div>
-          </div>
+            </motion.a>
+          ))}
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
