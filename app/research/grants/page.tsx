@@ -43,7 +43,10 @@ const GRANT_TYPES: GrantType[] = [
     title: "Fundamental Research Grants",
     description:
       "Backing curiosity-driven research that advances foundational knowledge without immediate commercial application.",
-    applyHref: "https://www.kfas.com/",
+    applyHref: "/research/grants/Fundamental-Research-Grants",
+    imageSrc: "/image/FRG.jpg",
+    imageAlt:
+      "Researchers and attendees at a scientific conference poster session",
   },
   {
     id: "young",
