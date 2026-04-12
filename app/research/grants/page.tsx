@@ -63,7 +63,10 @@ const GRANT_TYPES: GrantType[] = [
     title: "Policy Research Grants",
     description:
       "Enabling evidence-based research that informs public policy, governance, and national development strategies.",
-    applyHref: "https://www.kfas.com/",
+    applyHref: "/research/grants/Policy-Research-Grants",
+    imageSrc: "/image/Policy.png",
+    imageAlt:
+      "Professionals collaborating in a policy research and workshop discussion",
   },
 ];
 
