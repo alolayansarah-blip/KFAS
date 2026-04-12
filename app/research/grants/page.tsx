@@ -44,19 +44,13 @@ const GRANT_TYPES: GrantType[] = [
     description:
       "Backing curiosity-driven research that advances foundational knowledge without immediate commercial application.",
     applyHref: "/research/grants/Fundamental-Research-Grants",
-    imageSrc: "/image/FRG.jpg",
-    imageAlt:
-      "Researchers and attendees at a scientific conference poster session",
   },
   {
     id: "young",
     title: "Young Researcher Grants",
     description:
       "Empowering early-career scientists and researchers with funding to launch independent research careers.",
-    applyHref: "/research/grants/Young-Researcher-Grants",
-    imageSrc: "/image/YoungResearcher.png",
-    imageAlt:
-      "Young researchers and scientists collaborating in a research setting",
+    applyHref: "https://www.kfas.com/",
   },
   {
     id: "policy",
