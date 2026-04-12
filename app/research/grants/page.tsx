@@ -53,7 +53,10 @@ const GRANT_TYPES: GrantType[] = [
     title: "Young Researcher Grants",
     description:
       "Empowering early-career scientists and researchers with funding to launch independent research careers.",
-    applyHref: "https://www.kfas.com/",
+    applyHref: "/research/grants/Young-Researcher-Grants",
+    imageSrc: "/image/YoungResearcher.png",
+    imageAlt:
+      "Young researchers and scientists collaborating in a research setting",
   },
   {
     id: "policy",
