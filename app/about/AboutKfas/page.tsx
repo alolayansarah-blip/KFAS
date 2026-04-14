@@ -533,7 +533,7 @@ const CENTERS = [
     title: "Dasman Diabetes Institute",
     description:
       "Developing research projects, educational programs, and awareness-raising initiatives that improve society and combat diabetes.",
-    image: "/image/DDI2.jpg",
+    image: "/image/DDI.jpg",
     href: "https://www.dasmaninstitute.org/",
   },
   {
