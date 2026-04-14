@@ -178,7 +178,7 @@ export default function OurHistoryPage() {
       title: "KFAS Strategy 2025–2029",
       description:
         "KFAS launched its 2025–2029 strategy to strengthen the national research ecosystem and leverage science, technology, and innovation to address national challenges and sustainable development.",
-      image: "/image/kfasStrategy.jpeg",
+      image: "/image/KFASstrategy1.jpeg",
       imageAlt: "KFAS Strategy 2025–2029",
     },
     {
