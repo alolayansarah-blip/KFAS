@@ -1,14 +1,25 @@
 // "use client";
 
-// import { useState, useEffect, memo } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
+// import { useState, useEffect, useRef, useCallback, memo } from "react";
+// import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 // import Link from "next/link";
+// import { usePathname } from "next/navigation";
 // import type { NavItem } from "@/types";
 
-// // Constants
-// const SCROLL_THRESHOLD = 50;
+// // ─── Constants ────────────────────────────────────────────────────────────────
 
-// // Navigation data
+// const SCROLL_THRESHOLD = 50;
+// const NAV_CLOSE_DELAY_MS = 120;
+// const LANG_STORAGE_KEY = "kfas-lang";
+
+// // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// function navItemKey(item: NavItem): string {
+//   return `${item.href}::${item.label}`;
+// }
+
+// // ─── Navigation data ──────────────────────────────────────────────────────────
+
 // const DEFAULT_NAV_ITEMS: NavItem[] = [
 //   {
 //     label: "About",
@@ -25,23 +36,41 @@
 //     label: "Research",
 //     href: "/Research",
 //     children: [
-//       { label: "Grants", href: "/research/grants" },
+//       {
+//         label: "Grants",
+//         href: "/research/grants",
+//         children: [
+//           {
+//             label: "Research Infrastructure Grants",
+//             href: "/research/grants/RIG",
+//           },
+//           {
+//             label: "Applied Research Grants",
+//             href: "/research/grants/Applied-Research-Grants",
+//           },
+//           {
+//             label: "Fundamental Research Grants",
+//             href: "/research/grants/Fundamental-Research-Grants",
+//           },
+//           {
+//             label: "Young Researcher Grants",
+//             href: "/research/grants/Young-Researcher-Grants",
+//           },
+//           {
+//             label: "Policy Research Grants",
+//             href: "/research/grants/Policy-Research-Grants",
+//           },
+//         ],
+//       },
 //       {
 //         label: "Activities and Events",
 //         href: "/Research/Activities-and-Events",
 //       },
-//       { label: "Projects", href: "/Research/projects" },
-//       { label: "Scientific Missions", href: "/Research/Scientific-Missions" },
+//       { label: "Assigned Studies", href: "/Research/assigned-studies" },
 //       {
 //         label: "Scientific Conference Sponsorship",
 //         href: "/Research/scientific-conference-sponsorship",
 //       },
-//     ],
-//   },
-//   {
-//     label: "Tech & Innovation",
-//     href: "/technology-and-innovation",
-//     children: [
 //       {
 //         label: "Tech Deployment",
 //         href: "/technology-and-innovation/technology-deployment",
@@ -51,17 +80,37 @@
 //         href: "/technology-and-innovation/RD-in-Private-Sector",
 //       },
 //       {
-//         label: "R&D in Public Sector",
-//         href: "/technology-and-innovation/RD-in-Public-Sector",
+//         label: "KFAS Research Portal",
+//         href: "/technology-and-innovation/KFAS-Research-Portal",
 //       },
-//       // { label: "Outcomes", href: "/technology-and-innovation/Outcomes2" },
 //     ],
 //   },
 //   {
 //     label: "Learning & Development",
 //     href: "/Learning-and-Development",
 //     children: [
-//       { label: "Researchers", href: "/Learning-and-Development/Researchers" },
+//       {
+//         label: "Researchers",
+//         href: "/Learning-and-Development/Researchers",
+//         children: [
+//           {
+//             label: "International Collaborative Research",
+//             href: "/Learning-and-Development/Researchers/International-Collaborative-Research",
+//           },
+//           {
+//             label: "Scholar Fellowship",
+//             href: "/Learning-and-Development/Researchers/Scholar-Fellowship",
+//           },
+//           {
+//             label: "Scholarly Publication",
+//             href: "/Learning-and-Development/Researchers/Scholarly-Publication",
+//           },
+//           {
+//             label: "Scientific Missions",
+//             href: "/Learning-and-Development/Researchers/Scientific-Missions",
+//           },
+//         ],
+//       },
 //       {
 //         label: "Professionals",
 //         href: "/Learning-and-Development/Professionals",
@@ -71,7 +120,6 @@
 //         label: "Special Needs",
 //         href: "/Learning-and-Development/Special-needs",
 //       },
-//       // { label: "Outcomes", href: "/Learning-and-Development/Outcomes3" },
 //     ],
 //   },
 //   {
@@ -87,17 +135,16 @@
 //         href: "/Science-and-Society/Activities-and-Events",
 //       },
 //       { label: "Publications", href: "/Science-and-Society/Publications" },
-//       // { label: "Outcomes", href: "/Science-and-Society/Outcomes4" },
 //     ],
 //   },
 //   {
 //     label: "Prizes",
-//     href: "/Prizes",
+//     href: "/prizes",
 //     children: [
-//       { label: "Kuwait Prize", href: "/KuwaitPrizes" },
+//       { label: "Kuwait Prize", href: "/prizes/KuwaitPrize" },
 //       { label: "Jaber Al-Ahmed Prize", href: "/prizes/Jaber-AlAhmadPrize" },
-//       { label: "Al Sumait Prize", href: "/Prizes/Al-Sumait-Prize" },
-//       { label: "Laureates", href: "/Prizes/Laureates" },
+//       { label: "Al Sumait Prize", href: "/prizes/AlSumaitPrize" },
+//       { label: "Laureates", href: "/prizes/Laureates" },
 //     ],
 //   },
 // ];
@@ -107,6 +154,8 @@
 //   { code: "ar", label: "العربية", flag: "🇰🇼" },
 // ];
 
+// // ─── Types ────────────────────────────────────────────────────────────────────
+
 // interface HeaderProps {
 //   logo?: string;
 //   logoText?: string;
@@ -114,34 +163,7 @@
 //   forceWhiteBackground?: boolean;
 // }
 
-// // Subcomponents
-// const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => {
-//   const logoProps = {
-//     className: "absolute inset-0 w-full h-full object-contain",
-//     style: { filter: "drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2))" },
-//   };
-
-//   return (
-//     <div className="relative w-16 h-12">
-//       <motion.img
-//         src="/image/50.png"
-//         alt="50 Years"
-//         {...logoProps}
-//         initial={false}
-//         animate={{ opacity: isScrolled ? 0 : 1, scale: isScrolled ? 0.8 : 1 }}
-//         transition={{ duration: 0.3, ease: "easeInOut" }}
-//       />
-//       <motion.img
-//         src="/image/50_gold.png"
-//         alt="50 Years Gold"
-//         {...logoProps}
-//         initial={false}
-//         animate={{ opacity: isScrolled ? 1 : 0, scale: 1 }}
-//         transition={{ duration: 0.3, ease: "easeInOut" }}
-//       />
-//     </div>
-//   );
-// };
+// // ─── Icons ────────────────────────────────────────────────────────────────────
 
 // const DropdownIcon = ({
 //   isOpen,
@@ -151,80 +173,299 @@
 //   className?: string;
 // }) => (
 //   <svg
-//     className={`transition-all duration-300 ${className} ${isOpen ? "rotate-180" : ""}`}
+//     className={`transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${className} ${
+//       isOpen ? "rotate-180" : ""
+//     }`}
 //     fill="none"
 //     strokeLinecap="round"
 //     strokeLinejoin="round"
 //     strokeWidth="2"
 //     viewBox="0 0 24 24"
 //     stroke="currentColor"
+//     aria-hidden="true"
 //   >
 //     <path d="M19 9l-7 7-7-7" />
 //   </svg>
 // );
 
-// const DesktopNavItem = ({
-//   item,
-//   isScrolled,
-//   openDropdown,
-//   onMouseEnter,
-//   onMouseLeave,
-// }: {
-//   item: NavItem;
-//   isScrolled: boolean;
-//   openDropdown: string | null;
-//   onMouseEnter: () => void;
-//   onMouseLeave: () => void;
-// }) => {
-//   const isOpen = openDropdown === item.href;
-//   const baseStyles =
-//     "hover:bg-[#EC601B] font-normal transition-all duration-300 px-2 lg:px-2.5 py-1.5 whitespace-nowrap text-xs lg:text-sm";
-//   const colorStyles = isOpen
+// // ─── Anniversary Logo ─────────────────────────────────────────────────────────
+// // Single <img> — no dual-image layout flash.
+
+// const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => (
+//   <div className="relative h-10 w-14 shrink-0">
+//     <img
+//       src={isScrolled ? "/image/50_gold.png" : "/image/50.png"}
+//       alt="KFAS 50 years"
+//       className="h-full w-full object-contain transition-opacity duration-300"
+//     />
+//   </div>
+// );
+
+// // ─── Shared nav link styles ───────────────────────────────────────────────────
+
+// const NAV_LINK_BASE =
+//   "flex items-center gap-1 px-2.5 lg:px-3 py-2 text-sm lg:text-[15px] font-normal whitespace-nowrap cursor-pointer select-none transition-all duration-300";
+
+// function navLinkColor(isScrolled: boolean, isActive: boolean): string {
+//   if (isScrolled) {
+//     return isActive
+//       ? "bg-[#EC601B] text-white"
+//       : "text-black hover:bg-[#EC601B] hover:text-white";
+//   }
+//   return isActive
 //     ? "bg-[#EC601B] text-white"
-//     : isScrolled
-//       ? "text-black hover:text-white"
-//       : "text-white/90 hover:text-white";
+//     : "text-white/90 hover:bg-[#EC601B] hover:text-white";
+// }
 
-//   return (
-//     <div
-//       className="relative"
-//       onMouseEnter={onMouseEnter}
-//       onMouseLeave={onMouseLeave}
+// // ─── Orange Dropdown Panel ────────────────────────────────────────────────────
+// // Original brand style: solid orange background, white text.
+// // id + labelledBy on the motion.div directly — no double role="menu".
+
+// const DropdownPanel = ({
+//   isOpen,
+//   align = "left",
+//   id,
+//   labelledBy,
+//   children,
+// }: {
+//   isOpen: boolean;
+//   align?: "left" | "right";
+//   id?: string;
+//   labelledBy?: string;
+//   children: React.ReactNode;
+// }) => (
+//   <AnimatePresence>
+//     {isOpen && (
+//       <motion.div
+//         id={id}
+//         role="menu"
+//         aria-labelledby={labelledBy}
+//         className={`absolute top-full z-[111] min-w-[260px] bg-[#EC601B] overflow-visible shadow-[0_12px_40px_rgba(236,96,27,0.25),0_4px_12px_rgba(0,0,0,0.10)] ${
+//           align === "right" ? "right-0" : "left-0"
+//         }`}
+//         initial={{ opacity: 0, y: -10, scaleY: 0.94 }}
+//         animate={{ opacity: 1, y: 0, scaleY: 1 }}
+//         exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
+//         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+//         style={{ transformOrigin: "top center" }}
+//       >
+//         {children}
+//       </motion.div>
+//     )}
+//   </AnimatePresence>
+// );
+
+// // ─── Dropdown primitives ──────────────────────────────────────────────────────
+
+// const DropdownLink = memo(
+//   ({
+//     href,
+//     children,
+//     onClick,
+//     className = "",
+//   }: {
+//     href: string;
+//     children: React.ReactNode;
+//     onClick?: () => void;
+//     className?: string;
+//   }) => (
+//     <Link
+//       href={href}
+//       role="menuitem"
+//       onClick={onClick}
+//       className={`block px-6 py-3 text-[15px] text-white transition-colors duration-150 hover:bg-white/20 whitespace-nowrap ${className}`}
 //     >
-//       {item.children ? (
-//         <span
-//           className={`${baseStyles} ${colorStyles} flex items-center cursor-pointer`}
-//         >
-//           {item.label}
-//           <DropdownIcon className="ml-0.5 w-3 h-3" />
-//         </span>
-//       ) : (
-//         <Link href={item.href} className={`${baseStyles} ${colorStyles}`}>
-//           {item.label}
-//         </Link>
-//       )}
+//       {children}
+//     </Link>
+//   ),
+// );
+// DropdownLink.displayName = "DropdownLink";
 
-//       {item.children && isOpen && (
-//         // ✅ FIXED: Use static class name for min-w
-//         <div className="absolute top-full left-0 mt-0 bg-[#EC601B] shadow-lg py-4 min-w-[280px] z-50">
-//           {item.children.map((child, index) => (
-//             <Link
-//               key={child.href}
-//               href={child.href}
-//               className={`block px-6 py-3 text-white hover:bg-white/20 transition-colors whitespace-nowrap ${
-//                 index < item.children!.length - 1
-//                   ? "border-b border-white/50"
-//                   : ""
-//               }`}
-//             >
-//               {child.label}
-//             </Link>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
+// const DropdownDivider = () => <div className="border-t border-white/20" />;
+
+// // ─── Desktop Nav Item ─────────────────────────────────────────────────────────
+
+// const DesktopNavItem = memo(
+//   ({
+//     item,
+//     isScrolled,
+//     isOpen,
+//     onMouseEnter,
+//     onMouseLeave,
+//     onTriggerClick,
+//   }: {
+//     item: NavItem;
+//     isScrolled: boolean;
+//     isOpen: boolean;
+//     onMouseEnter: () => void;
+//     onMouseLeave: () => void;
+//     onTriggerClick: () => void;
+//   }) => {
+//     const [nestedOpenHref, setNestedOpenHref] = useState<string | null>(null);
+//     const nestedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+//     // Reset nested when top-level closes
+//     useEffect(() => {
+//       if (!isOpen) setNestedOpenHref(null);
+//     }, [isOpen]);
+
+//     // Cleanup on unmount
+//     useEffect(
+//       () => () => {
+//         if (nestedTimer.current) clearTimeout(nestedTimer.current);
+//       },
+//       [],
+//     );
+
+//     // Wrapped in useCallback — no stale closure risk
+//     const openNested = useCallback((href: string) => {
+//       if (nestedTimer.current) clearTimeout(nestedTimer.current);
+//       setNestedOpenHref(href);
+//     }, []);
+
+//     const scheduleCloseNested = useCallback(() => {
+//       nestedTimer.current = setTimeout(() => setNestedOpenHref(null), 80);
+//     }, []);
+
+//     const triggerId = `nav-trigger-${item.href.replace(/\//g, "-")}`;
+//     const menuId = `nav-menu-${item.href.replace(/\//g, "-")}`;
+
+//     return (
+//       <div
+//         className="relative"
+//         onMouseEnter={onMouseEnter}
+//         onMouseLeave={onMouseLeave}
+//       >
+//         {item.children ? (
+//           <button
+//             type="button"
+//             id={triggerId}
+//             aria-expanded={isOpen}
+//             aria-haspopup="menu"
+//             aria-controls={isOpen ? menuId : undefined}
+//             onClick={onTriggerClick}
+//             className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, isOpen)}`}
+//           >
+//             {item.label}
+//             <DropdownIcon
+//               isOpen={isOpen}
+//               className="ml-0.5 h-3 w-3 opacity-80"
+//             />
+//           </button>
+//         ) : (
+//           <Link
+//             href={item.href}
+//             className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, false)}`}
+//           >
+//             {item.label}
+//           </Link>
+//         )}
+
+//         {item.children && (
+//           <DropdownPanel
+//             isOpen={isOpen}
+//             align="left"
+//             id={menuId}
+//             labelledBy={triggerId}
+//           >
+//             {item.children.map((child, idx) => {
+//               const nested = child.children?.length
+//                 ? child.children
+//                 : undefined;
+//               const isLast = idx === item.children!.length - 1;
+
+//               if (!nested) {
+//                 return (
+//                   <div key={navItemKey(child)}>
+//                     <DropdownLink href={child.href}>{child.label}</DropdownLink>
+//                     {!isLast && <DropdownDivider />}
+//                   </div>
+//                 );
+//               }
+
+//               // Item with flyout — shown with chevron arrow
+//               return (
+//                 <div key={navItemKey(child)}>
+//                   {idx > 0 && <DropdownDivider />}
+//                   <div
+//                     className="relative"
+//                     onMouseEnter={() => openNested(child.href)}
+//                     onMouseLeave={scheduleCloseNested}
+//                   >
+//                     <div className="flex items-stretch">
+//                       <Link
+//                         href={child.href}
+//                         role="menuitem"
+//                         className="flex-1 px-6 py-3 text-[15px] text-white transition-colors duration-150 hover:bg-white/20 whitespace-nowrap"
+//                       >
+//                         {child.label}
+//                       </Link>
+//                       <div
+//                         aria-hidden="true"
+//                         className="flex shrink-0 items-center border-l border-white/15 px-3 text-white/80"
+//                       >
+//                         <svg
+//                           className="h-3.5 w-3.5"
+//                           fill="none"
+//                           stroke="currentColor"
+//                           viewBox="0 0 24 24"
+//                           strokeWidth={2}
+//                           strokeLinecap="round"
+//                           strokeLinejoin="round"
+//                           aria-hidden="true"
+//                         >
+//                           <path d="M9 5l7 7-7 7" />
+//                         </svg>
+//                       </div>
+//                     </div>
+
+//                     {/* Flyout sub-panel — also orange, blue top accent */}
+//                     <AnimatePresence>
+//                       {nestedOpenHref === child.href && (
+//                         <motion.div
+//                           role="menu"
+//                           aria-label={child.label}
+//                           className="absolute left-full top-0 z-[112] min-w-[260px] bg-[#EC601B] py-1 shadow-[4px_12px_24px_rgba(0,0,0,0.12)]"
+//                           style={{
+//                             borderLeft: "3px solid rgba(255,255,255,0.25)",
+//                           }}
+//                           initial={{ opacity: 0, x: -8 }}
+//                           animate={{ opacity: 1, x: 0 }}
+//                           exit={{ opacity: 0, x: -4 }}
+//                           transition={{
+//                             duration: 0.14,
+//                             ease: [0.16, 1, 0.3, 1],
+//                           }}
+//                           // Keep alive while pointer crosses the gap
+//                           onMouseEnter={() => openNested(child.href)}
+//                           onMouseLeave={scheduleCloseNested}
+//                         >
+//                           {nested.map((sub) => (
+//                             <DropdownLink
+//                               key={navItemKey(sub)}
+//                               href={sub.href}
+//                               className="px-5 py-2.5 text-[14px]"
+//                             >
+//                               {sub.label}
+//                             </DropdownLink>
+//                           ))}
+//                         </motion.div>
+//                       )}
+//                     </AnimatePresence>
+//                   </div>
+//                 </div>
+//               );
+//             })}
+//           </DropdownPanel>
+//         )}
+//       </div>
+//     );
+//   },
+// );
+// DesktopNavItem.displayName = "DesktopNavItem";
+
+// // ─── Language Switcher ────────────────────────────────────────────────────────
+// // Orange panel, white text — matches the nav dropdown style.
 
 // const LanguageSwitcher = ({
 //   currentLanguage,
@@ -239,39 +480,199 @@
 //   onToggle: () => void;
 //   onSelect: (code: string) => void;
 // }) => (
-//   <div className="relative language-switcher ml-1">
+//   <div className="language-switcher relative ml-1 shrink-0">
 //     <button
+//       type="button"
+//       id="lang-trigger"
 //       onClick={onToggle}
-//       className={`flex items-center space-x-1 transition-colors px-2 py-1.5 ${
-//         isScrolled
-//           ? "text-black hover:text-gray-700"
-//           : "text-white/90 hover:text-white"
-//       }`}
 //       aria-label="Change language"
 //       aria-expanded={isOpen}
+//       aria-haspopup="menu"
+//       aria-controls={isOpen ? "lang-menu" : undefined}
+//       className={`${NAV_LINK_BASE} ${
+//         isScrolled
+//           ? "text-black hover:bg-[#EC601B] hover:text-white"
+//           : "text-white/90 hover:bg-[#EC601B] hover:text-white"
+//       } ${isOpen ? "bg-[#EC601B] text-white" : ""}`}
 //     >
-//       <span className="uppercase text-xs lg:text-sm">{currentLanguage}</span>
-//       <DropdownIcon isOpen={isOpen} className="w-3 h-3" />
+//       <span className="uppercase">{currentLanguage}</span>
+//       <DropdownIcon isOpen={isOpen} className="h-3 w-3 opacity-80" />
 //     </button>
 
-//     {isOpen && (
-//       <div className="absolute right-0 top-full mt-0 bg-[#EC601B] shadow-lg py-4 min-w-[200px] z-50">
-//         {LANGUAGES.map((lang, index) => (
+//     <DropdownPanel
+//       isOpen={isOpen}
+//       align="right"
+//       id="lang-menu"
+//       labelledBy="lang-trigger"
+//     >
+//       {LANGUAGES.map((lang, idx) => (
+//         <div key={lang.code}>
 //           <button
-//             key={lang.code}
+//             type="button"
+//             role="menuitem"
+//             aria-current={currentLanguage === lang.code ? "true" : undefined}
 //             onClick={() => onSelect(lang.code)}
-//             className={`w-full text-left px-6 py-3 text-white hover:bg-white/20 transition-colors flex items-center space-x-2 ${
-//               index < LANGUAGES.length - 1 ? "border-b border-white/50" : ""
+//             className={`flex w-full items-center gap-2.5 px-6 py-3 text-[15px] text-left text-white transition-colors duration-150 hover:bg-white/20 ${
+//               currentLanguage === lang.code ? "bg-white/15" : ""
 //             }`}
 //           >
-//             <span>{lang.flag}</span>
+//             <span className="text-base leading-none">{lang.flag}</span>
 //             <span>{lang.label}</span>
+//             {currentLanguage === lang.code && (
+//               <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
+//             )}
 //           </button>
-//         ))}
-//       </div>
-//     )}
+//           {idx < LANGUAGES.length - 1 && <DropdownDivider />}
+//         </div>
+//       ))}
+//     </DropdownPanel>
 //   </div>
 // );
+
+// // ─── Mobile Nav Item ──────────────────────────────────────────────────────────
+
+// const MobileNavItem = memo(
+//   ({ item, onClose }: { item: NavItem; onClose: () => void }) => {
+//     const [isOpen, setIsOpen] = useState(false);
+//     const [nestedOpen, setNestedOpen] = useState<string | null>(null);
+
+//     if (!item.children) {
+//       return (
+//         <Link
+//           href={item.href}
+//           onClick={onClose}
+//           className="flex items-center gap-2 rounded-lg px-2 py-3.5 text-[15px] font-normal text-gray-800 transition-all hover:bg-gray-50 hover:text-[#EC601B] group"
+//         >
+//           <span className="h-5 w-1 rounded-full bg-[#EC601B] opacity-0 transition-opacity group-hover:opacity-100" />
+//           {item.label}
+//         </Link>
+//       );
+//     }
+
+//     return (
+//       <div>
+//         <button
+//           type="button"
+//           onClick={() => {
+//             setIsOpen((v) => !v);
+//             setNestedOpen(null);
+//           }}
+//           aria-expanded={isOpen}
+//           className="flex w-full items-center justify-between rounded-lg px-2 py-3.5 text-[15px] font-normal text-gray-800 transition-all hover:bg-gray-50 group"
+//         >
+//           <span className="flex items-center gap-2">
+//             <span
+//               className={`h-5 w-1 rounded-full bg-[#EC601B] transition-opacity ${isOpen ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+//             />
+//             <span className={isOpen ? "text-[#EC601B]" : ""}>{item.label}</span>
+//           </span>
+//           <DropdownIcon
+//             isOpen={isOpen}
+//             className={`h-5 w-5 transition-colors ${isOpen ? "text-[#EC601B]" : "text-gray-400 group-hover:text-[#EC601B]"}`}
+//           />
+//         </button>
+
+//         <AnimatePresence initial={false}>
+//           {isOpen && (
+//             <motion.div
+//               key="children"
+//               initial={{ height: 0, opacity: 0 }}
+//               animate={{ height: "auto", opacity: 1 }}
+//               exit={{ height: 0, opacity: 0 }}
+//               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+//               className="overflow-hidden"
+//             >
+//               <div className="mb-1 ml-4 mt-1 space-y-0.5 rounded-lg border-l-2 border-[#EC601B]/30 bg-gray-50/50 py-2 pl-3">
+//                 {item.children.map((child) => {
+//                   const hasNested = Boolean(child.children?.length);
+//                   const nestedKey = `${item.href}>${child.href}`;
+
+//                   if (!hasNested) {
+//                     return (
+//                       <Link
+//                         key={navItemKey(child)}
+//                         href={child.href}
+//                         onClick={onClose}
+//                         className="block rounded-md px-4 py-2.5 text-[14px] font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
+//                       >
+//                         {child.label}
+//                       </Link>
+//                     );
+//                   }
+
+//                   return (
+//                     <div
+//                       key={navItemKey(child)}
+//                       className="rounded-md bg-white/60"
+//                     >
+//                       <div className="flex items-stretch">
+//                         <Link
+//                           href={child.href}
+//                           onClick={onClose}
+//                           className="flex-1 rounded-l-md px-4 py-2.5 text-[14px] font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
+//                         >
+//                           {child.label}
+//                         </Link>
+//                         <button
+//                           type="button"
+//                           aria-expanded={nestedOpen === nestedKey}
+//                           aria-label={`${child.label} submenu`}
+//                           onClick={() =>
+//                             setNestedOpen((v) =>
+//                               v === nestedKey ? null : nestedKey,
+//                             )
+//                           }
+//                           className="flex shrink-0 items-center border-l border-gray-200/80 px-3 text-gray-400 hover:bg-gray-50 hover:text-[#EC601B]"
+//                         >
+//                           <DropdownIcon
+//                             isOpen={nestedOpen === nestedKey}
+//                             className="h-4 w-4"
+//                           />
+//                         </button>
+//                       </div>
+
+//                       <AnimatePresence initial={false}>
+//                         {nestedOpen === nestedKey && child.children && (
+//                           <motion.div
+//                             key={nestedKey}
+//                             initial={{ height: 0, opacity: 0 }}
+//                             animate={{ height: "auto", opacity: 1 }}
+//                             exit={{ height: 0, opacity: 0 }}
+//                             transition={{
+//                               duration: 0.18,
+//                               ease: [0.16, 1, 0.3, 1],
+//                             }}
+//                             className="overflow-hidden"
+//                           >
+//                             <div className="border-t border-gray-100 bg-gray-50/80 py-1.5 pl-3">
+//                               {child.children.map((sub) => (
+//                                 <Link
+//                                   key={navItemKey(sub)}
+//                                   href={sub.href}
+//                                   onClick={onClose}
+//                                   className="block rounded-md px-3 py-2 text-[13px] font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
+//                                 >
+//                                   {sub.label}
+//                                 </Link>
+//                               ))}
+//                             </div>
+//                           </motion.div>
+//                         )}
+//                       </AnimatePresence>
+//                     </div>
+//                   );
+//                 })}
+//               </div>
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </div>
+//     );
+//   },
+// );
+// MobileNavItem.displayName = "MobileNavItem";
+
+// // ─── Header ───────────────────────────────────────────────────────────────────
 
 // function Header({
 //   logo,
@@ -279,128 +680,213 @@
 //   navItems = [],
 //   forceWhiteBackground = false,
 // }: HeaderProps) {
-//   // State
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//   // SSR-safe: always false on server, synced after mount
 //   const [isScrolled, setIsScrolled] = useState(false);
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
 //   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-//   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(
-//     null,
-//   );
+//   const [isLangOpen, setIsLangOpen] = useState(false);
 //   const [currentLanguage, setCurrentLanguage] = useState("en");
-//   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
-//   const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
-//   const shouldShowWhiteBg = isScrolled || forceWhiteBackground;
 
-//   // Effects
+//   // IMPROVEMENT #2: Close everything on route change
+//   const pathname = usePathname();
 //   useEffect(() => {
+//     setOpenDropdown(null);
+//     setIsLangOpen(false);
+//     setIsMenuOpen(false);
+//   }, [pathname]);
+
+//   const closeNavTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+//   const clearCloseTimer = useCallback(() => {
+//     if (closeNavTimer.current) {
+//       clearTimeout(closeNavTimer.current);
+//       closeNavTimer.current = null;
+//     }
+//   }, []);
+
+//   const openNav = useCallback(
+//     (href: string) => {
+//       clearCloseTimer();
+//       setIsLangOpen(false);
+//       setOpenDropdown(href);
+//     },
+//     [clearCloseTimer],
+//   );
+
+//   const scheduleClose = useCallback(() => {
+//     clearCloseTimer();
+//     closeNavTimer.current = setTimeout(() => {
+//       setOpenDropdown(null);
+//       closeNavTimer.current = null;
+//     }, NAV_CLOSE_DELAY_MS);
+//   }, [clearCloseTimer]);
+
+//   const toggleNav = useCallback(
+//     (href: string) => {
+//       clearCloseTimer();
+//       setIsLangOpen(false);
+//       setOpenDropdown((prev) => (prev === href ? null : href));
+//     },
+//     [clearCloseTimer],
+//   );
+
+//   const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
+//   const showWhiteBg = isScrolled || forceWhiteBackground;
+//   const prefersReducedMotion = useReducedMotion();
+
+//   // Scroll listener — SSR-safe init inside useEffect
+//   useEffect(() => {
+//     setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
 //     let ticking = false;
-
-//     const handleScroll = () => {
+//     const onScroll = () => {
 //       if (ticking) return;
-
 //       ticking = true;
-//       window.requestAnimationFrame(() => {
+//       requestAnimationFrame(() => {
 //         setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
 //         ticking = false;
 //       });
 //     };
-
-//     window.addEventListener("scroll", handleScroll, { passive: true });
-//     return () => window.removeEventListener("scroll", handleScroll);
+//     window.addEventListener("scroll", onScroll, { passive: true });
+//     return () => window.removeEventListener("scroll", onScroll);
 //   }, []);
 
-//   useEffect(() => {
-//     if (!isLangDropdownOpen) return;
+//   // Timer cleanup on unmount
+//   useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
 
-//     const handleClickOutside = (event: MouseEvent) => {
-//       const target = event.target as HTMLElement;
-//       if (!target.closest(".language-switcher")) {
-//         setIsLangDropdownOpen(false);
+//   // Restore persisted language
+//   useEffect(() => {
+//     try {
+//       const saved = localStorage.getItem(LANG_STORAGE_KEY);
+//       if (saved === "en" || saved === "ar") {
+//         setCurrentLanguage(saved);
+//         document.documentElement.lang = saved;
+//         document.documentElement.dir = saved === "ar" ? "rtl" : "ltr";
+//       }
+//     } catch {
+//       /* SSR / private mode */
+//     }
+//   }, []);
+
+//   // Escape key closes all overlays
+//   useEffect(() => {
+//     if (!openDropdown && !isLangOpen && !isMenuOpen) return;
+//     const onKey = (e: KeyboardEvent) => {
+//       if (e.key === "Escape") {
+//         clearCloseTimer();
+//         setOpenDropdown(null);
+//         setIsLangOpen(false);
+//         setIsMenuOpen(false);
 //       }
 //     };
+//     window.addEventListener("keydown", onKey);
+//     return () => window.removeEventListener("keydown", onKey);
+//   }, [openDropdown, isLangOpen, isMenuOpen, clearCloseTimer]);
 
-//     document.addEventListener("mousedown", handleClickOutside);
-//     return () => document.removeEventListener("mousedown", handleClickOutside);
-//   }, [isLangDropdownOpen]);
+//   // IMPROVEMENT #3: Click-outside closes all desktop dropdowns
+//   useEffect(() => {
+//     if (!openDropdown && !isLangOpen) return;
+//     const onPointerDown = (e: MouseEvent) => {
+//       if (!(e.target as HTMLElement).closest(".kfas-nav-desktop")) {
+//         clearCloseTimer();
+//         setOpenDropdown(null);
+//         setIsLangOpen(false);
+//       }
+//     };
+//     document.addEventListener("mousedown", onPointerDown);
+//     return () => document.removeEventListener("mousedown", onPointerDown);
+//   }, [openDropdown, isLangOpen, clearCloseTimer]);
 
-//   // Handlers
-//   const handleLanguageSelect = (code: string) => {
+//   const handleLanguageSelect = useCallback((code: string) => {
 //     setCurrentLanguage(code);
-//     setIsLangDropdownOpen(false);
-//   };
+//     setIsLangOpen(false);
+//     try {
+//       localStorage.setItem(LANG_STORAGE_KEY, code);
+//     } catch {
+//       /* ignore */
+//     }
+//     document.documentElement.lang = code;
+//     document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+//   }, []);
 
-//   const closeMobileMenu = () => {
-//     setIsMenuOpen(false);
-//     setOpenMobileDropdown(null);
-//   };
+//   const closeMobileMenu = useCallback(() => setIsMenuOpen(false), []);
 
 //   return (
-//     <header
-//       className={`w-full fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
-//         shouldShowWhiteBg
-//           ? "md:bg-white/90 bg-transparent backdrop-blur-sm shadow-sm"
+//     <motion.header
+//       initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
+//       animate={{ opacity: 1, y: 0 }}
+//       transition={{
+//         duration: prefersReducedMotion ? 0 : 0.6,
+//         ease: [0.25, 0.1, 0.25, 1],
+//       }}
+//       className={`fixed left-0 right-0 top-0 z-[100] w-full transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+//         showWhiteBg
+//           ? "bg-white/95 backdrop-blur-sm shadow-[0_1px_0_rgba(0,0,0,0.06),0_4px_20px_rgba(0,0,0,0.06)]"
 //           : "bg-transparent"
 //       }`}
 //     >
-//       {/* Desktop Header */}
+//       {/* ── Desktop ─────────────────────────────────────────────────────────── */}
 //       <nav
-//         className={`hidden md:block w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 transition-all duration-300 ${
-//           shouldShowWhiteBg ? "py-0.5" : "py-3"
+//         className={`kfas-nav-desktop hidden w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 md:block transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+//           showWhiteBg ? "py-1" : "py-3"
 //         }`}
 //       >
-//         <div className="flex items-center justify-between gap-4">
-//           {/* Logo Section */}
-//           <Link href="/" className="flex items-center gap-2 shrink-0">
+//         <div className="flex items-center justify-between gap-4 lg:gap-6">
+//           {/* Logo */}
+//           <Link
+//             href="/"
+//             className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
+//           >
 //             {logo ? (
 //               <img
-//                 src={shouldShowWhiteBg ? "/image/logo_c.png" : logo}
+//                 src={showWhiteBg ? "/image/logo_c.png" : logo}
 //                 alt={logoText}
-//                 className="w-auto transition-all duration-300 h-20"
+//                 className={`block w-auto object-contain transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+//                   showWhiteBg ? "h-16" : "h-20"
+//                 }`}
 //               />
 //             ) : (
 //               <span
-//                 className={`font-normal transition-all duration-300 ${
-//                   shouldShowWhiteBg
-//                     ? "text-xl text-black"
-//                     : "text-2xl text-white"
+//                 className={`font-normal transition-all duration-500 ${
+//                   showWhiteBg ? "text-xl text-black" : "text-2xl text-white"
 //                 }`}
 //               >
 //                 {logoText}
 //               </span>
 //             )}
-//             <AnniversaryLogo isScrolled={shouldShowWhiteBg} />
+//             <AnniversaryLogo isScrolled={showWhiteBg} />
 //           </Link>
 
-//           {/* Navigation Section */}
-//           <div className="flex items-center justify-end gap-2 flex-1 min-w-0">
-//             <div className="flex items-center gap-0">
-//               {navItemsList.map((item) => (
-//                 <DesktopNavItem
-//                   key={item.href}
-//                   item={item}
-//                   isScrolled={shouldShowWhiteBg}
-//                   openDropdown={openDropdown}
-//                   onMouseEnter={() =>
-//                     item.children && setOpenDropdown(item.href)
-//                   }
-//                   onMouseLeave={() => setOpenDropdown(null)}
-//                 />
-//               ))}
-//             </div>
+//           {/* Right: nav items + lang */}
+//           <div className="flex min-w-0 flex-1 items-center justify-end gap-x-1">
+//             {navItemsList.map((item) => (
+//               <DesktopNavItem
+//                 key={navItemKey(item)}
+//                 item={item}
+//                 isScrolled={showWhiteBg}
+//                 isOpen={openDropdown === item.href}
+//                 onMouseEnter={() => item.children && openNav(item.href)}
+//                 onMouseLeave={scheduleClose}
+//                 onTriggerClick={() => toggleNav(item.href)}
+//               />
+//             ))}
 
 //             <LanguageSwitcher
 //               currentLanguage={currentLanguage}
-//               isOpen={isLangDropdownOpen}
-//               isScrolled={shouldShowWhiteBg}
-//               onToggle={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+//               isOpen={isLangOpen}
+//               isScrolled={showWhiteBg}
+//               onToggle={() => {
+//                 clearCloseTimer();
+//                 setOpenDropdown(null);
+//                 setIsLangOpen((v) => !v);
+//               }}
 //               onSelect={handleLanguageSelect}
 //             />
 //           </div>
 //         </div>
 //       </nav>
 
-//       {/* Mobile Header */}
-//       <nav className="md:hidden w-full bg-white shadow-sm">
+//       {/* ── Mobile ──────────────────────────────────────────────────────────── */}
+//       <nav className="w-full bg-white shadow-sm md:hidden">
 //         <div
 //           className="flex items-center justify-between px-5 py-4"
 //           style={{ paddingTop: "env(safe-area-inset-top)" }}
@@ -415,27 +901,26 @@
 //               className="h-16 w-auto"
 //             />
 //             <span className="h-6 w-px bg-gray-300" />
-//             <img
-//               src="/image/50_gold.png"
-//               alt="50 Years"
-//               className="h-10 w-auto"
-//             />
+//             <AnniversaryLogo isScrolled />
 //           </Link>
 
 //           <button
-//             className="p-2.5 rounded-lg text-gray-600 hover:text-gray-700 hover:bg-gray-50 transition-all active:scale-95"
-//             onClick={() => setIsMenuOpen(!isMenuOpen)}
+//             type="button"
+//             onClick={() => setIsMenuOpen((v) => !v)}
 //             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 //             aria-expanded={isMenuOpen}
+//             aria-controls="mobile-menu"
+//             className="rounded-lg p-2.5 text-gray-600 transition-all hover:bg-gray-50 hover:text-gray-700 active:scale-95"
 //           >
 //             <svg
-//               className="w-6 h-6"
+//               className="h-6 w-6"
 //               fill="none"
 //               strokeLinecap="round"
 //               strokeLinejoin="round"
 //               strokeWidth="2.5"
 //               viewBox="0 0 24 24"
 //               stroke="currentColor"
+//               aria-hidden="true"
 //             >
 //               {isMenuOpen ? (
 //                 <path d="M6 18L18 6M6 6l12 12" />
@@ -446,153 +931,90 @@
 //           </button>
 //         </div>
 
-//         {/* Mobile Navigation Menu */}
-//         <AnimatePresence>
+//         <AnimatePresence initial={false}>
 //           {isMenuOpen && (
 //             <motion.div
-//               initial={{ opacity: 0, height: 0 }}
-//               animate={{ opacity: 1, height: "auto" }}
-//               exit={{ opacity: 0, height: 0 }}
-//               transition={{ duration: 0.3 }}
-//               className="bg-white border-t border-gray-100 shadow-lg"
+//               id="mobile-menu"
+//               key="mobile-menu"
+//               initial={{ height: 0, opacity: 0 }}
+//               animate={{ height: "auto", opacity: 1 }}
+//               exit={{ height: 0, opacity: 0 }}
+//               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+//               className="overflow-hidden border-t border-gray-100 bg-white shadow-lg"
 //             >
-//               <div className="px-5 py-4 space-y-1">
+//               <div className="space-y-1 px-5 py-4">
 //                 {navItemsList.map((item) => (
-//                   <div key={item.href}>
-//                     {item.children ? (
-//                       <>
-//                         <button
-//                           className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-//                           onClick={() =>
-//                             setOpenMobileDropdown(
-//                               openMobileDropdown === item.href
-//                                 ? null
-//                                 : item.href,
-//                             )
-//                           }
-//                           aria-expanded={openMobileDropdown === item.href}
-//                         >
-//                           <span className="flex items-center gap-2">
-//                             <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-//                             <span>{item.label}</span>
-//                           </span>
-//                           <DropdownIcon
-//                             isOpen={openMobileDropdown === item.href}
-//                             className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
-//                               openMobileDropdown === item.href
-//                                 ? "text-[#EC601B]"
-//                                 : ""
-//                             }`}
-//                           />
-//                         </button>
-
-//                         {openMobileDropdown === item.href && (
-//                           <motion.div
-//                             initial={{ opacity: 0, height: 0 }}
-//                             animate={{ opacity: 1, height: "auto" }}
-//                             exit={{ opacity: 0, height: 0 }}
-//                             transition={{ duration: 0.2 }}
-//                             className="ml-4 mt-1 space-y-0.5 bg-gray-50/50 rounded-lg py-2 border-l-2 border-[#EC601B]/30"
-//                           >
-//                             {item.children.map((child) => (
-//                               <Link
-//                                 key={child.href}
-//                                 href={child.href}
-//                                 className="block py-2.5 px-4 font-normal text-gray-600 hover:text-[#EC601B] hover:bg-white rounded-md transition-all"
-//                                 onClick={closeMobileMenu}
-//                               >
-//                                 {child.label}
-//                               </Link>
-//                             ))}
-//                           </motion.div>
-//                         )}
-//                       </>
-//                     ) : (
-//                       <Link
-//                         href={item.href}
-//                         className="block py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-//                         onClick={closeMobileMenu}
-//                       >
-//                         <span className="flex items-center gap-2">
-//                           <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-//                           <span>{item.label}</span>
-//                         </span>
-//                       </Link>
-//                     )}
-//                   </div>
+//                   <MobileNavItem
+//                     key={navItemKey(item)}
+//                     item={item}
+//                     onClose={closeMobileMenu}
+//                   />
 //                 ))}
 //               </div>
 
-//               {/* Language Switcher - Mobile */}
-//               <div className="mt-2 pt-4 border-t border-gray-100 px-5 pb-4">
-//                 <button
-//                   onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-//                   className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-//                   aria-label="Change language"
-//                   aria-expanded={isLangDropdownOpen}
-//                 >
-//                   <span className="flex items-center gap-2">
-//                     <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-//                     <span className="flex items-center space-x-2">
-//                       <span className="uppercase text-sm">
-//                         {currentLanguage}
+//               {/* Mobile language switcher */}
+//               <div className="mt-2 border-t border-gray-100 px-5 pb-4 pt-4">
+//                 <p className="mb-2 px-2 text-[10px] font-medium uppercase tracking-widest text-gray-400">
+//                   Language
+//                 </p>
+//                 <div className="space-y-0.5">
+//                   {LANGUAGES.map((lang) => (
+//                     <button
+//                       key={lang.code}
+//                       type="button"
+//                       onClick={() => {
+//                         handleLanguageSelect(lang.code);
+//                         closeMobileMenu();
+//                       }}
+//                       className={`flex w-full items-center gap-2.5 rounded-lg px-4 py-3 text-[15px] font-normal transition-all ${
+//                         currentLanguage === lang.code
+//                           ? "bg-[#EC601B] text-white"
+//                           : "text-gray-700 hover:bg-gray-50"
+//                       }`}
+//                     >
+//                       <span className="text-base leading-none">
+//                         {lang.flag}
 //                       </span>
-//                       <span>Language</span>
-//                     </span>
-//                   </span>
-//                   <DropdownIcon
-//                     isOpen={isLangDropdownOpen}
-//                     className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
-//                       isLangDropdownOpen ? "text-[#EC601B]" : ""
-//                     }`}
-//                   />
-//                 </button>
-
-//                 {isLangDropdownOpen && (
-//                   <motion.div
-//                     initial={{ opacity: 0, height: 0 }}
-//                     animate={{ opacity: 1, height: "auto" }}
-//                     exit={{ opacity: 0, height: 0 }}
-//                     transition={{ duration: 0.2 }}
-//                     className="ml-4 mt-2 space-y-0.5 bg-[#EC601B] rounded-lg py-2 border-l-2 border-white/30"
-//                   >
-//                     {LANGUAGES.map((lang, index) => (
-//                       <button
-//                         key={lang.code}
-//                         onClick={() => handleLanguageSelect(lang.code)}
-//                         className={`w-full text-left py-3 px-4 font-normal text-white hover:bg-white/20 rounded-md transition-all flex items-center space-x-2 ${
-//                           index < LANGUAGES.length - 1
-//                             ? "border-b border-white/50"
-//                             : ""
-//                         }`}
-//                       >
-//                         <span className="text-lg">{lang.flag}</span>
-//                         <span>{lang.label}</span>
-//                       </button>
-//                     ))}
-//                   </motion.div>
-//                 )}
+//                       <span>{lang.label}</span>
+//                       {currentLanguage === lang.code && (
+//                         <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
+//                       )}
+//                     </button>
+//                   ))}
+//                 </div>
 //               </div>
 //             </motion.div>
 //           )}
 //         </AnimatePresence>
 //       </nav>
-//     </header>
+//     </motion.header>
 //   );
 // }
 
 // export default memo(Header);
+
 "use client";
 
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, useRef, useCallback, memo } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { NavItem } from "@/types";
 
-// Constants
-const SCROLL_THRESHOLD = 50;
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-// Navigation data
+const SCROLL_THRESHOLD = 50;
+const NAV_CLOSE_DELAY_MS = 120;
+const LANG_STORAGE_KEY = "kfas-lang";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function navItemKey(item: NavItem): string {
+  return `${item.href}::${item.label}`;
+}
+
+// ─── Navigation data ──────────────────────────────────────────────────────────
+
 const DEFAULT_NAV_ITEMS: NavItem[] = [
   {
     label: "About",
@@ -609,23 +1031,41 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     label: "Research",
     href: "/Research",
     children: [
-      { label: "Grants", href: "/research/grants" },
+      {
+        label: "Grants",
+        href: "/research/grants",
+        children: [
+          {
+            label: "Research Infrastructure Grants",
+            href: "/research/grants/RIG",
+          },
+          {
+            label: "Applied Research Grants",
+            href: "/research/grants/Applied-Research-Grants",
+          },
+          {
+            label: "Fundamental Research Grants",
+            href: "/research/grants/Fundamental-Research-Grants",
+          },
+          {
+            label: "Young Researcher Grants",
+            href: "/research/grants/Young-Researcher-Grants",
+          },
+          {
+            label: "Policy Research Grants",
+            href: "/research/grants/Policy-Research-Grants",
+          },
+        ],
+      },
       {
         label: "Activities and Events",
         href: "/Research/Activities-and-Events",
       },
       { label: "Assigned Studies", href: "/Research/assigned-studies" },
-      { label: "Scientific Missions", href: "/Research/Scientific-Missions" },
       {
         label: "Scientific Conference Sponsorship",
         href: "/Research/scientific-conference-sponsorship",
       },
-    ],
-  },
-  {
-    label: "Tech & Innovation",
-    href: "/technology-and-innovation",
-    children: [
       {
         label: "Tech Deployment",
         href: "/technology-and-innovation/technology-deployment",
@@ -644,7 +1084,28 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     label: "Learning & Development",
     href: "/Learning-and-Development",
     children: [
-      { label: "Researchers", href: "/Learning-and-Development/Researchers" },
+      {
+        label: "Researchers",
+        href: "/Learning-and-Development/Researchers",
+        children: [
+          {
+            label: "International Collaborative Research",
+            href: "/Learning-and-Development/Researchers/International-Collaborative-Research",
+          },
+          {
+            label: "Scholar Fellowship",
+            href: "/Learning-and-Development/Researchers/Scholar-Fellowship",
+          },
+          {
+            label: "Scholarly Publication",
+            href: "/Learning-and-Development/Researchers/Scholarly-Publication",
+          },
+          {
+            label: "Scientific Missions",
+            href: "/Learning-and-Development/Researchers/Scientific-Missions",
+          },
+        ],
+      },
       {
         label: "Professionals",
         href: "/Learning-and-Development/Professionals",
@@ -688,6 +1149,8 @@ const LANGUAGES = [
   { code: "ar", label: "العربية", flag: "🇰🇼" },
 ];
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+
 interface HeaderProps {
   logo?: string;
   logoText?: string;
@@ -695,35 +1158,7 @@ interface HeaderProps {
   forceWhiteBackground?: boolean;
 }
 
-// ─── Subcomponents ────────────────────────────────────────────────────────────
-
-const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => {
-  const logoProps = {
-    className: "absolute inset-0 w-full h-full object-contain",
-    style: { filter: "drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2))" },
-  };
-
-  return (
-    <div className="relative w-16 h-12">
-      <img
-        src="/image/50.png"
-        alt="50 Years"
-        {...logoProps}
-        className={`${logoProps.className} transition-all duration-500 ease-in-out ${
-          isScrolled ? "opacity-0 scale-[0.8]" : "opacity-100 scale-100"
-        }`}
-      />
-      <img
-        src="/image/50_gold.png"
-        alt="50 Years Gold"
-        {...logoProps}
-        className={`${logoProps.className} transition-all duration-500 ease-in-out ${
-          isScrolled ? "opacity-100 scale-100" : "opacity-0 scale-[0.8]"
-        }`}
-      />
-    </div>
-  );
-};
+// ─── Icons ────────────────────────────────────────────────────────────────────
 
 const DropdownIcon = ({
   isOpen,
@@ -733,92 +1168,297 @@ const DropdownIcon = ({
   className?: string;
 }) => (
   <svg
-    className={`transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${className} ${isOpen ? "rotate-180" : ""}`}
+    className={`transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${className} ${
+      isOpen ? "rotate-180" : ""
+    }`}
     fill="none"
     strokeLinecap="round"
     strokeLinejoin="round"
     strokeWidth="2"
     viewBox="0 0 24 24"
     stroke="currentColor"
+    aria-hidden="true"
   >
     <path d="M19 9l-7 7-7-7" />
   </svg>
 );
 
-const DesktopNavItem = ({
-  item,
-  isScrolled,
-  openDropdown,
-  onMouseEnter,
-  onMouseLeave,
+// ─── Anniversary Logo ─────────────────────────────────────────────────────────
+// Single <img> — no dual-image layout flash.
+
+const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => (
+  <div className="relative h-10 w-14 shrink-0">
+    <img
+      src={isScrolled ? "/image/50_gold.png" : "/image/50.png"}
+      alt="KFAS 50 years"
+      className="h-full w-full object-contain transition-opacity duration-300"
+    />
+  </div>
+);
+
+// ─── Shared nav link styles ───────────────────────────────────────────────────
+
+const NAV_LINK_BASE =
+  "flex items-center gap-1 px-2.5 lg:px-3 py-2 text-sm lg:text-[14px] font-normal whitespace-nowrap cursor-pointer select-none transition-all duration-200";
+
+function navLinkColor(isScrolled: boolean, isActive: boolean): string {
+  if (isScrolled) {
+    return isActive
+      ? "bg-[#EC601B] text-white"
+      : "text-gray-700 hover:text-[#EC601B]";
+  }
+  return isActive
+    ? "bg-white/15 text-white"
+    : "text-white/85 hover:text-white hover:bg-white/10";
+}
+
+// ─── Orange Dropdown Panel ────────────────────────────────────────────────────
+// Original brand style: solid orange background, white text.
+// id + labelledBy on the motion.div directly — no double role="menu".
+
+const DropdownPanel = ({
+  isOpen,
+  align = "left",
+  id,
+  labelledBy,
+  children,
 }: {
-  item: NavItem;
-  isScrolled: boolean;
-  openDropdown: string | null;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-}) => {
-  const isOpen = openDropdown === item.href;
+  isOpen: boolean;
+  align?: "left" | "right";
+  id?: string;
+  labelledBy?: string;
+  children: React.ReactNode;
+}) => (
+  <AnimatePresence>
+    {isOpen && (
+      <motion.div
+        id={id}
+        role="menu"
+        aria-labelledby={labelledBy}
+        className={`absolute top-full z-[111] min-w-[260px] bg-[#EC601B] overflow-visible shadow-[0_12px_40px_rgba(236,96,27,0.30),0_4px_12px_rgba(0,0,0,0.08)] ${
+          align === "right" ? "right-0" : "left-0"
+        }`}
+        initial={{ opacity: 0, y: -10, scaleY: 0.94 }}
+        animate={{ opacity: 1, y: 0, scaleY: 1 }}
+        exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
+        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        style={{ transformOrigin: "top center" }}
+      >
+        {children}
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
 
-  // Bumped: text-sm lg:text-[15px], slightly more padding
-  const baseStyles =
-    "hover:bg-[#EC601B] font-normal transition-all duration-300 px-2.5 lg:px-3 py-2 whitespace-nowrap text-sm lg:text-[15px]";
-  const colorStyles = isOpen
-    ? "bg-[#EC601B] text-white"
-    : isScrolled
-      ? "text-black hover:text-white"
-      : "text-white/90 hover:text-white";
+// ─── Dropdown primitives ──────────────────────────────────────────────────────
 
-  return (
-    <div
-      className="relative"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+const DropdownLink = memo(
+  ({
+    href,
+    children,
+    onClick,
+    className = "",
+  }: {
+    href: string;
+    children: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+  }) => (
+    <Link
+      href={href}
+      role="menuitem"
+      onClick={onClick}
+      className={`block px-5 py-2.5 text-[14px] text-white/90 transition-colors duration-150 hover:bg-white/15 hover:text-white whitespace-nowrap ${className}`}
     >
-      {item.children ? (
-        <span
-          className={`${baseStyles} ${colorStyles} flex items-center cursor-pointer`}
-        >
-          {item.label}
-          <DropdownIcon className="ml-1 w-3 h-3 opacity-80" />
-        </span>
-      ) : (
-        <Link href={item.href} className={`${baseStyles} ${colorStyles}`}>
-          {item.label}
-        </Link>
-      )}
+      {children}
+    </Link>
+  ),
+);
+DropdownLink.displayName = "DropdownLink";
 
-      {/* Animated dropdown */}
-      <AnimatePresence>
-        {item.children && isOpen && (
-          <motion.div
-            key={item.href}
-            className="absolute top-full left-0 z-50 min-w-[260px] bg-[#EC601B] overflow-hidden shadow-[0_12px_40px_rgba(236,96,27,0.22),0_4px_12px_rgba(0,0,0,0.08)]"
-            initial={{ opacity: 0, y: -10, scaleY: 0.94 }}
-            animate={{ opacity: 1, y: 0, scaleY: 1 }}
-            exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            style={{ transformOrigin: "top center" }}
+const DropdownDivider = () => <div className="border-t border-white/10" />;
+
+// ─── Desktop Nav Item ─────────────────────────────────────────────────────────
+
+const DesktopNavItem = memo(
+  ({
+    item,
+    isScrolled,
+    isOpen,
+    onMouseEnter,
+    onMouseLeave,
+    onTriggerClick,
+  }: {
+    item: NavItem;
+    isScrolled: boolean;
+    isOpen: boolean;
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
+    onTriggerClick: () => void;
+  }) => {
+    const [nestedOpenHref, setNestedOpenHref] = useState<string | null>(null);
+    const nestedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    // Reset nested when top-level closes
+    useEffect(() => {
+      if (!isOpen) setNestedOpenHref(null);
+    }, [isOpen]);
+
+    // Cleanup on unmount
+    useEffect(
+      () => () => {
+        if (nestedTimer.current) clearTimeout(nestedTimer.current);
+      },
+      [],
+    );
+
+    // Wrapped in useCallback — no stale closure risk
+    const openNested = useCallback((href: string) => {
+      if (nestedTimer.current) clearTimeout(nestedTimer.current);
+      setNestedOpenHref(href);
+    }, []);
+
+    const scheduleCloseNested = useCallback(() => {
+      nestedTimer.current = setTimeout(() => setNestedOpenHref(null), 80);
+    }, []);
+
+    const triggerId = `nav-trigger-${item.href.replace(/\//g, "-")}`;
+    const menuId = `nav-menu-${item.href.replace(/\//g, "-")}`;
+
+    return (
+      <div
+        className="relative"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        {item.children ? (
+          <button
+            type="button"
+            id={triggerId}
+            aria-expanded={isOpen}
+            aria-haspopup="menu"
+            aria-controls={isOpen ? menuId : undefined}
+            onClick={onTriggerClick}
+            className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, isOpen)}`}
           >
-            {item.children.map((child, index) => (
-              <Link
-                key={child.href}
-                href={child.href}
-                className={`block px-6 py-3 text-[15px] text-white transition-colors duration-150 hover:bg-white/20 whitespace-nowrap ${
-                  index < item.children!.length - 1
-                    ? "border-b border-white/20"
-                    : ""
-                }`}
-              >
-                {child.label}
-              </Link>
-            ))}
-          </motion.div>
+            {item.label}
+            <DropdownIcon
+              isOpen={isOpen}
+              className="ml-0.5 h-3 w-3 opacity-80"
+            />
+          </button>
+        ) : (
+          <Link
+            href={item.href}
+            className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, false)}`}
+          >
+            {item.label}
+          </Link>
         )}
-      </AnimatePresence>
-    </div>
-  );
-};
+
+        {item.children && (
+          <DropdownPanel
+            isOpen={isOpen}
+            align="left"
+            id={menuId}
+            labelledBy={triggerId}
+          >
+            {item.children.map((child, idx) => {
+              const nested = child.children?.length
+                ? child.children
+                : undefined;
+              const isLast = idx === item.children!.length - 1;
+
+              if (!nested) {
+                return (
+                  <div key={navItemKey(child)}>
+                    <DropdownLink href={child.href}>{child.label}</DropdownLink>
+                    {!isLast && <DropdownDivider />}
+                  </div>
+                );
+              }
+
+              // Item with flyout — shown with chevron arrow
+              return (
+                <div key={navItemKey(child)}>
+                  {idx > 0 && <DropdownDivider />}
+                  <div
+                    className="relative"
+                    onMouseEnter={() => openNested(child.href)}
+                    onMouseLeave={scheduleCloseNested}
+                  >
+                    <div className="flex items-stretch">
+                      <Link
+                        href={child.href}
+                        role="menuitem"
+                        className="flex-1 px-5 py-2.5 text-[14px] text-white/90 transition-colors duration-150 hover:bg-white/15 hover:text-white whitespace-nowrap"
+                      >
+                        {child.label}
+                      </Link>
+                      <div
+                        aria-hidden="true"
+                        className="flex shrink-0 items-center border-l border-white/10 px-3 text-[#7DC0F1]"
+                      >
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Flyout sub-panel — light orange bg, dark text */}
+                    <AnimatePresence>
+                      {nestedOpenHref === child.href && (
+                        <motion.div
+                          role="menu"
+                          aria-label={child.label}
+                          className="absolute left-full top-0 z-[112] min-w-[260px] bg-[#FFF3EE] py-1 shadow-[4px_12px_32px_rgba(236,96,27,0.15)]"
+                          style={{ borderLeft: "3px solid #7DC0F1" }}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -4 }}
+                          transition={{
+                            duration: 0.14,
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
+                          onMouseEnter={() => openNested(child.href)}
+                          onMouseLeave={scheduleCloseNested}
+                        >
+                          {nested.map((sub) => (
+                            <Link
+                              key={navItemKey(sub)}
+                              href={sub.href}
+                              role="menuitem"
+                              className="block px-5 py-2.5 text-[14px] text-[#EC601B] whitespace-nowrap transition-colors duration-150 hover:bg-[#FEE9DC]"
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              );
+            })}
+          </DropdownPanel>
+        )}
+      </div>
+    );
+  },
+);
+DesktopNavItem.displayName = "DesktopNavItem";
+
+// ─── Language Switcher ────────────────────────────────────────────────────────
+// Orange panel, white text — matches the nav dropdown style.
 
 const LanguageSwitcher = ({
   currentLanguage,
@@ -833,48 +1473,194 @@ const LanguageSwitcher = ({
   onToggle: () => void;
   onSelect: (code: string) => void;
 }) => (
-  <div className="relative language-switcher ml-1">
+  <div className="language-switcher relative ml-1 shrink-0">
     <button
+      type="button"
+      id="lang-trigger"
       onClick={onToggle}
-      className={`flex items-center space-x-1 transition-colors px-2.5 py-2 text-sm lg:text-[15px] ${
-        isScrolled
-          ? "text-black hover:text-gray-700"
-          : "text-white/90 hover:text-white"
-      }`}
       aria-label="Change language"
       aria-expanded={isOpen}
+      aria-haspopup="menu"
+      aria-controls={isOpen ? "lang-menu" : undefined}
+      className={`${NAV_LINK_BASE} ${
+        isScrolled
+          ? "text-gray-500 hover:text-[#EC601B]"
+          : "text-white/75 hover:text-white hover:bg-white/10"
+      } ${isOpen ? "bg-[#EC601B] text-white" : ""}`}
     >
       <span className="uppercase">{currentLanguage}</span>
-      <DropdownIcon isOpen={isOpen} className="w-3 h-3 opacity-80" />
+      <DropdownIcon isOpen={isOpen} className="h-3 w-3 opacity-80" />
     </button>
 
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="absolute right-0 top-full z-50 min-w-[200px] bg-[#EC601B] overflow-hidden shadow-[0_12px_40px_rgba(236,96,27,0.22),0_4px_12px_rgba(0,0,0,0.08)]"
-          initial={{ opacity: 0, y: -10, scaleY: 0.94 }}
-          animate={{ opacity: 1, y: 0, scaleY: 1 }}
-          exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
-          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          style={{ transformOrigin: "top center" }}
-        >
-          {LANGUAGES.map((lang, index) => (
-            <button
-              key={lang.code}
-              onClick={() => onSelect(lang.code)}
-              className={`flex w-full items-center space-x-2 px-6 py-3 text-[15px] text-left text-white transition-colors duration-150 hover:bg-white/20 ${
-                index < LANGUAGES.length - 1 ? "border-b border-white/20" : ""
-              }`}
-            >
-              <span>{lang.flag}</span>
-              <span>{lang.label}</span>
-            </button>
-          ))}
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <DropdownPanel
+      isOpen={isOpen}
+      align="right"
+      id="lang-menu"
+      labelledBy="lang-trigger"
+    >
+      {LANGUAGES.map((lang, idx) => (
+        <div key={lang.code}>
+          <button
+            type="button"
+            role="menuitem"
+            aria-current={currentLanguage === lang.code ? "true" : undefined}
+            onClick={() => onSelect(lang.code)}
+            className={`flex w-full items-center gap-2.5 px-5 py-2.5 text-[14px] text-left text-white/90 transition-colors duration-150 hover:bg-white/15 hover:text-white ${
+              currentLanguage === lang.code ? "bg-white/15 text-white" : ""
+            }`}
+          >
+            <span className="text-base leading-none">{lang.flag}</span>
+            <span>{lang.label}</span>
+            {currentLanguage === lang.code && (
+              <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
+            )}
+          </button>
+          {idx < LANGUAGES.length - 1 && <DropdownDivider />}
+        </div>
+      ))}
+    </DropdownPanel>
   </div>
 );
+
+// ─── Mobile Nav Item ──────────────────────────────────────────────────────────
+
+const MobileNavItem = memo(
+  ({ item, onClose }: { item: NavItem; onClose: () => void }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [nestedOpen, setNestedOpen] = useState<string | null>(null);
+
+    if (!item.children) {
+      return (
+        <Link
+          href={item.href}
+          onClick={onClose}
+          className="flex items-center gap-2 px-2 py-3 text-[14.5px] font-normal text-gray-700 transition-all hover:text-[#EC601B] group"
+        >
+          <span className="h-4 w-0.5 rounded-full bg-[#EC601B] opacity-0 transition-opacity group-hover:opacity-40" />
+          {item.label}
+        </Link>
+      );
+    }
+
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            setIsOpen((v) => !v);
+            setNestedOpen(null);
+          }}
+          aria-expanded={isOpen}
+          className="flex w-full items-center justify-between px-2 py-3 text-[14.5px] font-normal text-gray-700 transition-all group"
+        >
+          <span className="flex items-center gap-2">
+            <span
+              className={`h-4 w-0.5 rounded-full bg-[#EC601B] transition-opacity ${isOpen ? "opacity-100" : "opacity-0 group-hover:opacity-40"}`}
+            />
+            <span className={isOpen ? "text-[#EC601B]" : ""}>{item.label}</span>
+          </span>
+          <DropdownIcon
+            isOpen={isOpen}
+            className={`h-4 w-4 transition-colors ${isOpen ? "text-[#EC601B]" : "text-gray-300 group-hover:text-[#EC601B]"}`}
+          />
+        </button>
+
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              key="children"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="mb-1 ml-3 mt-0.5 space-y-0 border-l-2 border-[#EC601B]/20 bg-[#FFF3EE] py-1.5 pl-3">
+                {item.children.map((child) => {
+                  const hasNested = Boolean(child.children?.length);
+                  const nestedKey = `${item.href}>${child.href}`;
+
+                  if (!hasNested) {
+                    return (
+                      <Link
+                        key={navItemKey(child)}
+                        href={child.href}
+                        onClick={onClose}
+                        className="block px-3 py-2 text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
+                      >
+                        {child.label}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <div key={navItemKey(child)} className="rounded-md">
+                      <div className="flex items-stretch">
+                        <Link
+                          href={child.href}
+                          onClick={onClose}
+                          className="flex-1 rounded-l-md px-3 py-2 text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
+                        >
+                          {child.label}
+                        </Link>
+                        <button
+                          type="button"
+                          aria-expanded={nestedOpen === nestedKey}
+                          aria-label={`${child.label} submenu`}
+                          onClick={() =>
+                            setNestedOpen((v) =>
+                              v === nestedKey ? null : nestedKey,
+                            )
+                          }
+                          className="flex shrink-0 items-center border-l border-[#EC601B]/10 px-3 text-gray-300 hover:text-[#EC601B]"
+                        >
+                          <DropdownIcon
+                            isOpen={nestedOpen === nestedKey}
+                            className="h-4 w-4"
+                          />
+                        </button>
+                      </div>
+
+                      <AnimatePresence initial={false}>
+                        {nestedOpen === nestedKey && child.children && (
+                          <motion.div
+                            key={nestedKey}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{
+                              duration: 0.18,
+                              ease: [0.16, 1, 0.3, 1],
+                            }}
+                            className="overflow-hidden"
+                          >
+                            <div className="border-t border-orange-100 bg-[#FFF3EE] py-1.5 pl-3">
+                              {child.children.map((sub) => (
+                                <Link
+                                  key={navItemKey(sub)}
+                                  href={sub.href}
+                                  onClick={onClose}
+                                  className="block px-3 py-1.5 text-[13px] font-normal text-gray-500 transition-colors hover:text-[#EC601B]"
+                                >
+                                  {sub.label}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  },
+);
+MobileNavItem.displayName = "MobileNavItem";
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 
@@ -884,56 +1670,135 @@ function Header({
   navItems = [],
   forceWhiteBackground = false,
 }: HeaderProps) {
+  // SSR-safe: always false on server, synced after mount
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(() =>
-    typeof window !== "undefined" ? window.scrollY > SCROLL_THRESHOLD : false,
-  );
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(
-    null,
-  );
+  const [isLangOpen, setIsLangOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState("en");
-  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
+  // IMPROVEMENT #2: Close everything on route change
+  const pathname = usePathname();
+  useEffect(() => {
+    setOpenDropdown(null);
+    setIsLangOpen(false);
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  const closeNavTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeNavTimer.current) {
+      clearTimeout(closeNavTimer.current);
+      closeNavTimer.current = null;
+    }
+  }, []);
+
+  const openNav = useCallback(
+    (href: string) => {
+      clearCloseTimer();
+      setIsLangOpen(false);
+      setOpenDropdown(href);
+    },
+    [clearCloseTimer],
+  );
+
+  const scheduleClose = useCallback(() => {
+    clearCloseTimer();
+    closeNavTimer.current = setTimeout(() => {
+      setOpenDropdown(null);
+      closeNavTimer.current = null;
+    }, NAV_CLOSE_DELAY_MS);
+  }, [clearCloseTimer]);
+
+  const toggleNav = useCallback(
+    (href: string) => {
+      clearCloseTimer();
+      setIsLangOpen(false);
+      setOpenDropdown((prev) => (prev === href ? null : href));
+    },
+    [clearCloseTimer],
+  );
 
   const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
-  const shouldShowWhiteBg = isScrolled || forceWhiteBackground;
+  const showWhiteBg = isScrolled || forceWhiteBackground;
   const prefersReducedMotion = useReducedMotion();
 
+  // Scroll listener — SSR-safe init inside useEffect
   useEffect(() => {
+    setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
     let ticking = false;
-    const handleScroll = () => {
+    const onScroll = () => {
       if (ticking) return;
       ticking = true;
-      window.requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
         setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
         ticking = false;
       });
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Timer cleanup on unmount
+  useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
+
+  // Restore persisted language
   useEffect(() => {
-    if (!isLangDropdownOpen) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest(".language-switcher")) {
-        setIsLangDropdownOpen(false);
+    try {
+      const saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if (saved === "en" || saved === "ar") {
+        setCurrentLanguage(saved);
+        document.documentElement.lang = saved;
+        document.documentElement.dir = saved === "ar" ? "rtl" : "ltr";
+      }
+    } catch {
+      /* SSR / private mode */
+    }
+  }, []);
+
+  // Escape key closes all overlays
+  useEffect(() => {
+    if (!openDropdown && !isLangOpen && !isMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        clearCloseTimer();
+        setOpenDropdown(null);
+        setIsLangOpen(false);
+        setIsMenuOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isLangDropdownOpen]);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [openDropdown, isLangOpen, isMenuOpen, clearCloseTimer]);
 
-  const handleLanguageSelect = (code: string) => {
+  // IMPROVEMENT #3: Click-outside closes all desktop dropdowns
+  useEffect(() => {
+    if (!openDropdown && !isLangOpen) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest(".kfas-nav-desktop")) {
+        clearCloseTimer();
+        setOpenDropdown(null);
+        setIsLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, [openDropdown, isLangOpen, clearCloseTimer]);
+
+  const handleLanguageSelect = useCallback((code: string) => {
     setCurrentLanguage(code);
-    setIsLangDropdownOpen(false);
-  };
+    setIsLangOpen(false);
+    try {
+      localStorage.setItem(LANG_STORAGE_KEY, code);
+    } catch {
+      /* ignore */
+    }
+    document.documentElement.lang = code;
+    document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+  }, []);
 
-  const closeMobileMenu = () => {
-    setIsMenuOpen(false);
-    setOpenMobileDropdown(null);
-  };
+  const closeMobileMenu = useCallback(() => setIsMenuOpen(false), []);
 
   return (
     <motion.header
@@ -943,75 +1808,77 @@ function Header({
         duration: prefersReducedMotion ? 0 : 0.6,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className={`fixed top-0 right-0 left-0 z-[100] w-full transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
-        shouldShowWhiteBg
-          ? "bg-transparent backdrop-blur-sm md:bg-white/95 shadow-[0_1px_0_rgba(0,0,0,0.06),0_4px_20px_rgba(0,0,0,0.06)]"
+      className={`fixed left-0 right-0 top-0 z-[100] w-full transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+        showWhiteBg
+          ? "bg-white/95 backdrop-blur-sm shadow-[0_1px_0_rgba(0,0,0,0.06),0_4px_20px_rgba(0,0,0,0.06)]"
           : "bg-transparent"
       }`}
     >
-      {/* Desktop Header */}
+      {/* ── Desktop ─────────────────────────────────────────────────────────── */}
       <nav
-        className={`hidden md:block w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
-          shouldShowWhiteBg ? "py-1" : "py-3"
+        className={`kfas-nav-desktop hidden w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 md:block transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+          showWhiteBg ? "py-2" : "py-3.5"
         }`}
       >
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 lg:gap-6">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
+          >
             {logo ? (
               <img
-                src={shouldShowWhiteBg ? "/image/logo_c.png" : logo}
+                src={showWhiteBg ? "/image/logo_c.png" : logo}
                 alt={logoText}
-                className={`w-auto transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
-                  shouldShowWhiteBg ? "h-16" : "h-20"
+                className={`block w-auto object-contain transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
+                  showWhiteBg ? "h-14" : "h-[4.5rem]"
                 }`}
               />
             ) : (
               <span
                 className={`font-normal transition-all duration-500 ${
-                  shouldShowWhiteBg
-                    ? "text-xl text-black"
-                    : "text-2xl text-white"
+                  showWhiteBg ? "text-xl text-black" : "text-2xl text-white"
                 }`}
               >
                 {logoText}
               </span>
             )}
-            <AnniversaryLogo isScrolled={shouldShowWhiteBg} />
+            <AnniversaryLogo isScrolled={showWhiteBg} />
           </Link>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-end gap-2 flex-1 min-w-0">
-            <div className="flex items-center gap-0">
-              {navItemsList.map((item) => (
-                <DesktopNavItem
-                  key={item.href}
-                  item={item}
-                  isScrolled={shouldShowWhiteBg}
-                  openDropdown={openDropdown}
-                  onMouseEnter={() =>
-                    item.children && setOpenDropdown(item.href)
-                  }
-                  onMouseLeave={() => setOpenDropdown(null)}
-                />
-              ))}
-            </div>
+          {/* Right: nav items + lang */}
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-x-1">
+            {navItemsList.map((item) => (
+              <DesktopNavItem
+                key={navItemKey(item)}
+                item={item}
+                isScrolled={showWhiteBg}
+                isOpen={openDropdown === item.href}
+                onMouseEnter={() => item.children && openNav(item.href)}
+                onMouseLeave={scheduleClose}
+                onTriggerClick={() => toggleNav(item.href)}
+              />
+            ))}
 
             <LanguageSwitcher
               currentLanguage={currentLanguage}
-              isOpen={isLangDropdownOpen}
-              isScrolled={shouldShowWhiteBg}
-              onToggle={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+              isOpen={isLangOpen}
+              isScrolled={showWhiteBg}
+              onToggle={() => {
+                clearCloseTimer();
+                setOpenDropdown(null);
+                setIsLangOpen((v) => !v);
+              }}
               onSelect={handleLanguageSelect}
             />
           </div>
         </div>
       </nav>
 
-      {/* Mobile Header — original structure, font sizes only updated */}
-      <nav className="md:hidden w-full bg-white shadow-sm">
+      {/* ── Mobile ──────────────────────────────────────────────────────────── */}
+      <nav className="w-full bg-white shadow-[0_1px_0_rgba(0,0,0,0.05)] md:hidden">
         <div
-          className="flex items-center justify-between px-5 py-4"
+          className="flex items-center justify-between px-5 py-3"
           style={{ paddingTop: "env(safe-area-inset-top)" }}
         >
           <Link
@@ -1021,30 +1888,29 @@ function Header({
             <img
               src="/image/logo_c.png"
               alt={logoText}
-              className="h-16 w-auto"
+              className="h-12 w-auto"
             />
-            <span className="h-6 w-px bg-gray-300" />
-            <img
-              src="/image/50_gold.png"
-              alt="50 Years"
-              className="h-10 w-auto"
-            />
+            <span className="h-5 w-px bg-gray-200" />
+            <AnniversaryLogo isScrolled />
           </Link>
 
           <button
-            className="p-2.5 rounded-lg text-gray-600 hover:text-gray-700 hover:bg-gray-50 transition-all active:scale-95"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            type="button"
+            onClick={() => setIsMenuOpen((v) => !v)}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            className="p-2 text-gray-400 transition-colors hover:text-[#EC601B] active:scale-95"
           >
             <svg
-              className="w-6 h-6"
+              className="h-6 w-6"
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2.5"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               {isMenuOpen ? (
                 <path d="M6 18L18 6M6 6l12 12" />
@@ -1055,113 +1921,61 @@ function Header({
           </button>
         </div>
 
-        {isMenuOpen && (
-          <div className="overflow-hidden border-t border-gray-100 bg-white shadow-lg">
-            <div className="px-5 py-4 space-y-1">
-              {navItemsList.map((item) => (
-                <div key={item.href}>
-                  {item.children ? (
-                    <>
-                      <button
-                        className="w-full flex items-center justify-between py-3.5 px-2 font-normal text-[15px] text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-                        onClick={() =>
-                          setOpenMobileDropdown(
-                            openMobileDropdown === item.href ? null : item.href,
-                          )
-                        }
-                        aria-expanded={openMobileDropdown === item.href}
-                      >
-                        <span className="flex items-center gap-2">
-                          <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-                          <span>{item.label}</span>
-                        </span>
-                        <DropdownIcon
-                          isOpen={openMobileDropdown === item.href}
-                          className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
-                            openMobileDropdown === item.href
-                              ? "text-[#EC601B]"
-                              : ""
-                          }`}
-                        />
-                      </button>
+        <AnimatePresence initial={false}>
+          {isMenuOpen && (
+            <motion.div
+              id="mobile-menu"
+              key="mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden border-t border-gray-50 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
+            >
+              <div className="space-y-0 px-5 py-3 divide-y divide-gray-50">
+                {navItemsList.map((item) => (
+                  <MobileNavItem
+                    key={navItemKey(item)}
+                    item={item}
+                    onClose={closeMobileMenu}
+                  />
+                ))}
+              </div>
 
-                      {openMobileDropdown === item.href && (
-                        <div className="ml-4 mt-1 space-y-0.5 overflow-hidden rounded-lg border-l-2 border-[#EC601B]/30 bg-gray-50/50 py-2">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              className="block rounded-md px-4 py-2.5 text-[14px] font-normal text-gray-600 transition-all hover:bg-white hover:text-[#EC601B]"
-                              onClick={closeMobileMenu}
-                            >
-                              {child.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className="block py-3.5 px-2 text-[15px] font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-                      onClick={closeMobileMenu}
-                    >
-                      <span className="flex items-center gap-2">
-                        <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-                        <span>{item.label}</span>
-                      </span>
-                    </Link>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Language Switcher - Mobile */}
-            <div className="mt-2 pt-4 border-t border-gray-100 px-5 pb-4">
-              <button
-                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className="w-full flex items-center justify-between py-3.5 px-2 text-[15px] font-normal text-gray-800 hover:text-[#EC601B] hover:bg-gray-50 rounded-lg transition-all group"
-                aria-label="Change language"
-                aria-expanded={isLangDropdownOpen}
-              >
-                <span className="flex items-center gap-2">
-                  <span className="w-1 h-5 bg-[#EC601B] opacity-0 group-hover:opacity-100 rounded-full transition-opacity" />
-                  <span className="flex items-center space-x-2">
-                    <span className="uppercase text-[15px]">
-                      {currentLanguage}
-                    </span>
-                    <span>Language</span>
-                  </span>
-                </span>
-                <DropdownIcon
-                  isOpen={isLangDropdownOpen}
-                  className={`w-5 h-5 text-gray-400 group-hover:text-[#EC601B] ${
-                    isLangDropdownOpen ? "text-[#EC601B]" : ""
-                  }`}
-                />
-              </button>
-
-              {isLangDropdownOpen && (
-                <div className="ml-4 mt-2 space-y-0.5 overflow-hidden rounded-lg border-l-2 border-white/30 bg-[#EC601B] py-2">
-                  {LANGUAGES.map((lang, index) => (
+              {/* Mobile language switcher */}
+              <div className="border-t border-gray-50 px-5 pb-4 pt-3">
+                <p className="mb-2 px-2 text-[10px] font-medium uppercase tracking-[0.1em] text-gray-300">
+                  Language
+                </p>
+                <div className="space-y-0.5">
+                  {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
-                      onClick={() => handleLanguageSelect(lang.code)}
-                      className={`flex w-full items-center space-x-2 rounded-md px-4 py-3 text-[15px] text-left font-normal text-white transition-all hover:bg-white/20 ${
-                        index < LANGUAGES.length - 1
-                          ? "border-b border-white/30"
-                          : ""
+                      type="button"
+                      onClick={() => {
+                        handleLanguageSelect(lang.code);
+                        closeMobileMenu();
+                      }}
+                      className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-[14px] font-normal transition-colors ${
+                        currentLanguage === lang.code
+                          ? "bg-[#EC601B] text-white rounded-lg"
+                          : "text-gray-600 hover:text-[#EC601B]"
                       }`}
                     >
-                      <span className="text-lg">{lang.flag}</span>
+                      <span className="text-base leading-none">
+                        {lang.flag}
+                      </span>
                       <span>{lang.label}</span>
+                      {currentLanguage === lang.code && (
+                        <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
+                      )}
                     </button>
                   ))}
                 </div>
-              )}
-            </div>
-          </div>
-        )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </motion.header>
   );
