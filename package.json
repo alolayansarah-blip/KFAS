@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true});console.log('Removed .next');}catch(e){if(e.code!=='ENOENT')throw e;}\"",
     "dev": "next dev -H 0.0.0.0 -p 3007",
     "dev:alt": "next dev -H 0.0.0.0 -p 3009",
     "dev:tunnel": "lt --port 3000",
@@ -38,7 +39,7 @@
     "typescript": "^5.5.0"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": "22.x",
+    "npm": "10.x"
   }
 }
