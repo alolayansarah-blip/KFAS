@@ -418,11 +418,28 @@ const fadeUp = (delay = 0) => ({
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function splitWords(text: string) {
-  return text.split(" ").filter(Boolean);
+/**
+ * Split text into words.
+ * Handles normal spaces AND camelCase/PascalCase strings
+ * e.g. "TimelessLegacy" → ["Timeless", "Legacy"]
+ */
+function splitWords(text: string): string[] {
+  // First try splitting on spaces
+  const bySpace = text.split(" ").filter(Boolean);
+  if (bySpace.length > 1) return bySpace;
+
+  // Fallback: split PascalCase / camelCase into separate words
+  // "TimelessLegacyInnovativeFuture" → ["Timeless", "Legacy", "Innovative", "Future"]
+  const byCamel = text
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    .split(" ")
+    .filter(Boolean);
+
+  return byCamel.length > 1 ? byCamel : bySpace;
 }
 
-function splitLines(text: string) {
+function splitLines(text: string): string[] {
   return text.split(/\||\n/).filter((l) => l.trim());
 }
 
@@ -542,7 +559,7 @@ export default function Hero({
     >
       {/* ── Video background ── */}
       <motion.div className="absolute inset-0 z-0" style={{ y: videoY }}>
-        {/* Soft directional wash — left-heavy for text legibility, stays light */}
+        {/* Soft directional wash */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
@@ -550,8 +567,7 @@ export default function Hero({
               "linear-gradient(108deg, rgba(29,45,68,0.58) 0%, rgba(29,45,68,0.35) 42%, rgba(29,45,68,0.10) 70%, transparent 100%)",
           }}
         />
-
-        {/* Gentle bottom grounding — keeps text readable on mobile without going dark */}
+        {/* Gentle bottom grounding */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
@@ -559,8 +575,7 @@ export default function Hero({
               "linear-gradient(to top, rgba(29,45,68,0.45) 0%, transparent 45%)",
           }}
         />
-
-        {/* Soft top fade — subtle depth, no darkening */}
+        {/* Soft top fade */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
@@ -633,9 +648,18 @@ export default function Hero({
           {/* English title — clip-path wipe per word */}
           {titleEn && (
             <>
-              <h1 className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.6)]">
+              {/*
+               * aria-label provides the full clean string to screen readers,
+               * while the visual spans handle the animated word-by-word reveal.
+               */}
+              <h1
+                className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.6)]"
+                aria-label={splitLines(titleEn)
+                  .map((line) => splitWords(line.trim()).join(" "))
+                  .join(" ")}
+              >
                 {splitLines(titleEn).map((line, li) => (
-                  <span key={li} className="block">
+                  <span key={li} className="block" aria-hidden="true">
                     {splitWords(line.trim()).map((word, wi) => (
                       <motion.span
                         key={wi}
@@ -649,7 +673,7 @@ export default function Hero({
                 ))}
               </h1>
 
-              {/* Orange rule — draws in, then pulses */}
+              {/* Orange rule */}
               <motion.div
                 className="mb-6 mt-5 h-[3px] rounded-full bg-[#EC601B]"
                 initial={{ width: 0, opacity: 0 }}

@@ -15,7 +15,6 @@ const NAVIGATION_LINKS = [
   { label: "Our Strategy", href: "/OurStrategy" },
   { label: "Our History", href: "/OurHistory" },
   { label: "Board of Directors", href: "/BoardOfDirectors" },
-  { label: "Executive Management", href: "/about/executive-management" },
 ] as const;
 
 const CONTACT_INFO = {

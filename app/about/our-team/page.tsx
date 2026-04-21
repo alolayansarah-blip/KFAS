@@ -138,7 +138,7 @@ function ProfileCard({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function ExecutiveManagementPage() {
+export default function OurTeamPage() {
   const heroRef = useRef(null);
   const profileRef = useRef(null);
   const deputiesRef = useRef(null);
@@ -188,7 +188,7 @@ export default function ExecutiveManagementPage() {
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <img
               src="/image/KfasBuilding2.png"
-              alt="Executive Management"
+              alt="Our Team"
               className="w-full h-full object-cover object-[center_15%] scale-110"
             />
             <div
@@ -231,7 +231,7 @@ export default function ExecutiveManagementPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Executive Management
+                Our Team  
               </motion.h1>
             </div>
             <motion.div

@@ -14,10 +14,20 @@ const nextConfig = {
     // your project has type errors.
     ignoreBuildErrors: false,
   },
-  // Performance optimizations
-  compress: true,
-  poweredByHeader: false,
-  reactStrictMode: true,
+  // // Performance optimizations
+  // compress: true,
+  // poweredByHeader: false,
+  // reactStrictMode: true,
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: "/about/our-team",
+  //       destination: "/about/our-team",
+  //       permanent: true,
+  //     },
+  //   ];
+  // },
+  
   // Canonical routes use capital R: /Research, /Research/grants. Rewrites map lowercase URLs for compatibility.
   // async rewrites() {
   //   return [
