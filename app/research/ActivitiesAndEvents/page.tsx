@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
@@ -31,32 +30,11 @@ export default function ActivitiesAndEventsPage() {
           ref={heroRef}
           className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            <Image
-              src="/image/Grants2.png"
-              alt="Research activities and events at KFAS"
-              fill
-              priority
-              sizes="100vw"
-              className="scale-110 object-cover object-center"
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
-              }}
-              aria-hidden
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
-              }}
-              aria-hidden
-            />
-          </motion.div>
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-br from-[#1D2D44] via-[#2a3f5c] to-[#152536]"
+            style={{ y: heroY }}
+            aria-hidden
+          />
 
           <motion.div
             className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
