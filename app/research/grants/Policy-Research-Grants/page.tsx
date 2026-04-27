@@ -345,7 +345,7 @@ export default function PolicyResearchGrantsPage() {
               <motion.div {...fadeUp(0.1)}>
                 <p>
                   <Link
-                    href="/technology-and-innovation/KFAS-Research-Portal"
+                    href="/research/KFASResearchPortal"
                     className="font-semibold text-[#EC601B] underline decoration-[#EC601B]/40 underline-offset-[3px] transition-colors hover:text-[#d45510]"
                   >
                     KFAS Research Portal Link

@@ -51,7 +51,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       },
       {
         label: "KFAS Research Portal",
-        href: "/technology-and-innovation/KFAS-Research-Portal",
+        href: "/research/KFASResearchPortal",
       },
     ],
   },
