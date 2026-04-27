@@ -34,28 +34,6 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       {
         label: "Grants",
         href: "/research/grants",
-        children: [
-          {
-            label: "Research Infrastructure Grants",
-            href: "/research/grants/RIG",
-          },
-          {
-            label: "Applied Research Grants",
-            href: "/research/grants/Applied-Research-Grants",
-          },
-          {
-            label: "Fundamental Research Grants",
-            href: "/research/grants/Fundamental-Research-Grants",
-          },
-          {
-            label: "Young Researcher Grants",
-            href: "/research/grants/Young-Researcher-Grants",
-          },
-          {
-            label: "Policy Research Grants",
-            href: "/research/grants/Policy-Research-Grants",
-          },
-        ],
       },
       { label: "Activities and Events", href: "/research/ActivitiesAndEvents" },
       { label: "Assigned Studies", href: "/Research/assigned-studies" },
