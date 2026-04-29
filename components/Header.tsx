@@ -36,7 +36,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         href: "/research/grants",
       },
       { label: "Activities and Events", href: "/research/ActivitiesAndEvents" },
-      { label: "Assigned Studies", href: "/Research/assigned-studies" },
+      { label: "Assigned Studies", href: "/research/AssignedStudies" },
       {
         label: "Scientific Conference Sponsorship",
         href: "/Research/scientific-conference-sponsorship",
