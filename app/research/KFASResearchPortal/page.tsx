@@ -249,7 +249,13 @@ export default function KFASResearchPortalPage() {
         </section>
 
         {/* ── FAQ ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12">
+        <section
+          className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(236,96,27,0.82), rgba(236,96,27,0.82)), url('/image/BackPortal.png')",
+          }}
+        >
           <div className="mx-auto max-w-[1280px]">
             <div className="mx-auto max-w-[880px] space-y-16">
               {[
@@ -259,7 +265,7 @@ export default function KFASResearchPortalPage() {
                     <>
                       It serves as the centralized system for managing
                       publications, grants, projects, and researcher profiles.{" "}
-                      <strong className="font-semibold text-[#1D2D44]">
+                      <strong className="font-semibold text-white">
                         The KFAS Research Portal powered by Pure provides a
                         single, searchable platform
                       </strong>{" "}
@@ -277,12 +283,12 @@ export default function KFASResearchPortalPage() {
                   a: "Only researchers who have engaged in projects with KFAS, whether past or future, are eligible to create profiles on the KFAS Research Portal.",
                 },
               ].map(({ q, a }, i) => (
-                <motion.div key={i} {...fadeUp(0)}>
-                  <h2 className="font-poppins text-2xl font-semibold leading-tight tracking-tight text-[#1D2D44] sm:text-3xl">
+                <motion.div key={q} {...fadeUp(0)}>
+                  <h2 className="font-poppins text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl">
                     {q}
                   </h2>
-                  <Divider />
-                  <p className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
+                  <div className="mt-5 h-px bg-gradient-to-r from-white/80 via-white/35 to-transparent" />
+                  <p className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-white">
                     {a}
                   </p>
                 </motion.div>
