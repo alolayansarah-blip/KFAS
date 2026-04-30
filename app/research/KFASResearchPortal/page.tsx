@@ -52,6 +52,54 @@ const PERFORMANCE_METRICS = [
   },
 ];
 
+// ─── FAQ Data ─────────────────────────────────────────────────────────────────
+
+const FAQ_ITEMS = [
+  {
+    label: "What is it",
+    question: "What is the KFAS Research Portal?",
+    answer: (
+      <>
+        It serves as the centralized system for managing publications, grants,
+        projects, and researcher profiles.{" "}
+        <strong className="font-semibold text-white">
+          The KFAS Research Portal powered by Pure provides a single, searchable
+          platform
+        </strong>{" "}
+        that aggregates and showcases all KFAS-funded research outputs and
+        impact in one place.
+      </>
+    ),
+    image: "/image/Portal1.png",
+    imageAlt: "Researcher name",
+    imageCaption: "Researcher name",
+    // text left, image right
+    reverse: false,
+  },
+  {
+    label: "Who can access",
+    question: "Who can access the KFAS Research Portal?",
+    answer:
+      "Everyone has access to the Portal; it showcases all the research achievements of KFAS to our audience in Kuwait and around the world.",
+    image: "/image/Portal2.png",
+    imageAlt: "Researcher name",
+    imageCaption: "Researcher name",
+    // image left, text right
+    reverse: true,
+  },
+  {
+    label: "Eligibility",
+    question: "Who can create a profile in KFAS Research Portal?",
+    answer:
+      "Only researchers who have engaged in projects with KFAS, whether past or future, are eligible to create profiles on the KFAS Research Portal.",
+    image: "/image/Portal 3.png",
+    imageAlt: "Researcher name",
+    imageCaption: "Researcher name",
+    // text left, image right
+    reverse: false,
+  },
+];
+
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
 function Divider() {
@@ -65,6 +113,138 @@ function Bullet({ faded = false }: { faded?: boolean }) {
     <span
       className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${faded ? "bg-[#EC601B]/40" : "bg-[#EC601B]"}`}
     />
+  );
+}
+
+// ─── FAQ Row ──────────────────────────────────────────────────────────────────
+
+function FaqRow({
+  item,
+  index,
+}: {
+  item: (typeof FAQ_ITEMS)[number];
+  index: number;
+}) {
+  const { label, question, answer, image, imageAlt, imageCaption, reverse } =
+    item;
+
+  const textCell = (
+    <motion.div
+      className="flex flex-col justify-center px-10 py-14 lg:px-16 lg:py-20 relative overflow-hidden"
+      initial={{ opacity: 0, x: reverse ? 40 : -40 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.75, delay: 0.1, ease: EASE }}
+    >
+      {/* subtle radial highlight */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.07) 0%, transparent 65%)",
+        }}
+      />
+
+      {/* label */}
+      <motion.span
+        className="mb-5 flex items-center gap-3 font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50"
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
+      >
+        <span className="h-px w-7 shrink-0 bg-white/35" />
+        {label}
+      </motion.span>
+
+      {/* question */}
+      <motion.h2
+        className="font-poppins text-[1.3rem] font-bold leading-[1.3] tracking-tight text-white sm:text-[1.6rem]"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.25, ease: EASE }}
+      >
+        {question}
+      </motion.h2>
+
+      {/* animated accent bar */}
+      <motion.div
+        className="mt-5 mb-5 h-[2.5px] w-10 origin-left rounded-full bg-white/55"
+        initial={{ scaleX: 0, opacity: 0 }}
+        whileInView={{ scaleX: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.35, ease: EASE }}
+      />
+
+      {/* answer */}
+      <motion.p
+        className="font-poppins text-[14.5px] font-light leading-[1.9] text-white/80"
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
+      >
+        {answer}
+      </motion.p>
+    </motion.div>
+  );
+
+  const imageCell = (
+    <motion.div
+      className="relative overflow-hidden"
+      initial={{ opacity: 0, scale: 1.04 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.9, delay: 0.05, ease: EASE }}
+    >
+      <Image
+        src={image}
+        alt={imageAlt}
+        fill
+        sizes="50vw"
+        className="object-cover object-center transition-transform duration-[1200ms] ease-out hover:scale-105"
+      />
+      {/* bottom caption overlay */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-24 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(236,96,27,0.7) 0%, transparent 100%)",
+        }}
+      />
+      <span className="absolute bottom-3 left-5 font-poppins text-[10px] font-semibold uppercase tracking-[0.2em] text-white/65">
+        {imageCaption}
+      </span>
+    </motion.div>
+  );
+
+  return (
+    <>
+      {/* thin divider between rows (skip first) */}
+      {index > 0 && (
+        <div className="mx-12 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      )}
+
+      <div
+        className="grid min-h-[340px] sm:min-h-[380px]"
+        style={{ gridTemplateColumns: "1fr 1fr" }}
+      >
+        {reverse ? (
+          <>
+            {imageCell}
+            {textCell}
+          </>
+        ) : (
+          <>
+            {textCell}
+            {imageCell}
+          </>
+        )}
+      </div>
+    </>
   );
 }
 
@@ -248,53 +428,11 @@ export default function KFASResearchPortalPage() {
           </div>
         </section>
 
-        {/* ── FAQ ── */}
-        <section
-          className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(236,96,27,0.82), rgba(236,96,27,0.82)), url('/image/BackPortal.png')",
-          }}
-        >
-          <div className="mx-auto max-w-[1280px]">
-            <div className="mx-auto max-w-[880px] space-y-16">
-              {[
-                {
-                  q: "What is the KFAS Research Portal?",
-                  a: (
-                    <>
-                      It serves as the centralized system for managing
-                      publications, grants, projects, and researcher profiles.{" "}
-                      <strong className="font-semibold text-white">
-                        The KFAS Research Portal powered by Pure provides a
-                        single, searchable platform
-                      </strong>{" "}
-                      that aggregates and showcases all KFAS-funded research
-                      outputs and impact in one place.
-                    </>
-                  ),
-                },
-                {
-                  q: "Who can access the KFAS Research Portal?",
-                  a: "Everyone has access to the Portal; it showcases all the research achievements of KFAS to our audience in Kuwait and around the world.",
-                },
-                {
-                  q: "Who can create a profile in KFAS Research Portal?",
-                  a: "Only researchers who have engaged in projects with KFAS, whether past or future, are eligible to create profiles on the KFAS Research Portal.",
-                },
-              ].map(({ q, a }, i) => (
-                <motion.div key={q} {...fadeUp(0)}>
-                  <h2 className="font-poppins text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl">
-                    {q}
-                  </h2>
-                  <div className="mt-5 h-px bg-gradient-to-r from-white/80 via-white/35 to-transparent" />
-                  <p className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-white">
-                    {a}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+        {/* ── FAQ (redesigned) ── */}
+        <section className="overflow-hidden bg-[#EC601B]">
+          {FAQ_ITEMS.map((item, i) => (
+            <FaqRow key={item.label} item={item} index={i} />
+          ))}
         </section>
 
         {/* ── Portal Showcases ── */}
