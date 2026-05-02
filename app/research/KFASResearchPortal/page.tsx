@@ -428,10 +428,12 @@ export default function KFASResearchPortalPage() {
         </section>
 
         {/* ── FAQ (redesigned) ── */}
-        <section className="overflow-hidden bg-[#EC601B]">
-          {FAQ_ITEMS.map((item, i) => (
-            <FaqRow key={item.label} item={item} index={i} />
-          ))}
+        <section className="overflow-hidden bg-[#EC601B] px-6 sm:px-8 lg:px-12">
+          <div className="mx-auto w-full max-w-[1280px]">
+            {FAQ_ITEMS.map((item, i) => (
+              <FaqRow key={item.label} item={item} index={i} />
+            ))}
+          </div>
         </section>
 
         {/* ── Portal Showcases ── */}
