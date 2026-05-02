@@ -249,85 +249,177 @@
 // export default memo(WhoWeAre);
 "use client";
 
-import React, { memo, useRef } from "react";
+import React, { memo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const TITLE_PARTS = [
-  { letter: "K", rest: "uwait " },
-  { letter: "F", rest: "oundation for the " },
-  { letter: "A", rest: "dvancement of " },
-  { letter: "S", rest: "ciences" },
+const EASE = [0.16, 1, 0.3, 1] as const;
+const VIEWPORT = { once: true, amount: 0.15 };
+
+const ACRONYM = [
+  { letter: "K", word: "uwait" },
+  { letter: "F", word: "oundation for the" },
+  { letter: "A", word: "dvancement of" },
+  { letter: "S", word: "ciences" },
 ];
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-const VIEWPORT = { once: true, amount: 0.2 };
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: VIEWPORT,
-  transition: { duration: 0.7, delay, ease: EASE },
-});
+const STATS = [
+  { value: "1976", label: "Founded" },
+  { value: "48+", label: "Years of Impact" },
+  { value: "500+", label: "Research Grants" },
+];
 
 // ─── WhoWeAre ─────────────────────────────────────────────────────────────────
 
 function WhoWeAre() {
   const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
 
+  // ── Two-phase title animation ──
+  // Phase "kfas" : only the orange letters are visible (words clipped away)
+  // Phase "full" : the rest of each word wipes in left-to-right
+  const isTitleInView = useInView(titleRef, { once: true, amount: 0.6 });
+  const [phase, setPhase] = useState<"kfas" | "full">("kfas");
+
+  useEffect(() => {
+    if (!isTitleInView) return;
+    // Let the letter drop-in finish (≈ 4 letters × 100 ms stagger + 500 ms duration)
+    // then reveal the full words
+    const t = setTimeout(() => setPhase("full"), 900);
+    return () => clearTimeout(t);
+  }, [isTitleInView]);
+
+  // ── Parallax ──
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-
   const imageY = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+  const ghostY = useTransform(scrollYProgress, [0, 1], ["2%", "-5%"]);
 
   return (
     <section
       ref={sectionRef}
       id="who-we-are"
-      className="relative bg-white py-20 lg:py-28"
+      className="relative overflow-hidden bg-white py-20 lg:py-28"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Ghost year watermark */}
+      <motion.div
+        className="pointer-events-none absolute -right-[4vw] top-1/2 -translate-y-1/2 select-none
+                   font-poppins text-[26vw] font-black leading-none text-[#1D2D44]/[0.03] whitespace-nowrap"
+        style={{ y: ghostY }}
+        aria-hidden
+      >
+        1976
+      </motion.div>
+
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
           {/* ── Left: Content ── */}
           <div className="flex flex-col">
-            {/* Eyebrow — plain, no line, matching inner pages */}
-            <motion.p
-              className="mb-6 text-[11px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]"
-              {...fadeUp(0)}
+            {/* Eyebrow */}
+            <motion.div
+              className="mb-8 flex items-center gap-3"
+              initial={{ opacity: 0, x: -16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.6, ease: EASE }}
             >
-              Who We Are
-            </motion.p>
+              <div className="h-px w-7 bg-[#EC601B]" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.45em] text-[#EC601B]">
+                Who We Are
+              </span>
+            </motion.div>
 
-            {/* Heading */}
-            <motion.h2
-              className="mb-6 font-poppins text-[1.75rem] font-normal leading-[1.45] tracking-tight text-[#1D2D44] sm:text-[2rem]"
-              {...fadeUp(0.1)}
+            {/* ── KFAS → Full-name title ── */}
+            {/*
+             * Layout technique: each row is a flex row containing:
+             *   1. The orange letter  — always visible, drop-in entrance
+             *   2. A "rest" container — holds an invisible spacer (so the row
+             *      never changes width) plus an absolutely-positioned animated
+             *      span that clips in from the right.
+             *
+             * This gives zero layout shift while delivering a clean wipe reveal.
+             */}
+            <div
+              ref={titleRef}
+              className="mb-8 space-y-0.5"
+              // Accessible full label for screen readers
+              aria-label="Kuwait Foundation for the Advancement of Sciences"
             >
-              {TITLE_PARTS.map(({ letter, rest }) => (
-                <React.Fragment key={letter}>
-                  <span className="font-bold text-[#EC601B]">{letter}</span>
-                  {rest}
-                </React.Fragment>
+              {ACRONYM.map(({ letter, word }, i) => (
+                <div key={letter} className="flex items-baseline" aria-hidden>
+                  {/* Orange initial letter — drops in */}
+                  <motion.span
+                    className="shrink-0 font-poppins text-[1.25rem] font-black leading-[1.2]
+                               text-[#EC601B] min-[400px]:text-[1.5rem] sm:text-[2rem] lg:text-[2.1rem] xl:text-[2.5rem]"
+                    initial={{ opacity: 0, y: 22 }}
+                    animate={
+                      isTitleInView
+                        ? { opacity: 1, y: 0 }
+                        : { opacity: 0, y: 22 }
+                    }
+                    transition={{ duration: 0.55, delay: i * 0.1, ease: EASE }}
+                  >
+                    {letter}
+                  </motion.span>
+
+                  {/* Rest of the word */}
+                  <span className="relative">
+                    {/*
+                     * Invisible spacer — always rendered at full width so the
+                     * row height / section height never jumps when words reveal.
+                     */}
+                    <span
+                      className="invisible whitespace-nowrap font-poppins text-[1.25rem] font-light
+                                 leading-[1.2] min-[400px]:text-[1.5rem] sm:text-[2rem] lg:text-[2.1rem] xl:text-[2.5rem]"
+                      aria-hidden
+                    >
+                      {word}
+                    </span>
+
+                    {/* Animated reveal — wipes in left → right via clipPath */}
+                    <motion.span
+                      className="absolute inset-0 whitespace-nowrap font-poppins text-[1.25rem]
+                                 font-light leading-[1.2] text-[#1D2D44]
+                                 min-[400px]:text-[1.5rem] sm:text-[2rem] lg:text-[2.1rem] xl:text-[2.5rem]"
+                      initial={{ clipPath: "inset(0 100% 0 0)" }}
+                      animate={
+                        phase === "full"
+                          ? { clipPath: "inset(0 0% 0 0)" }
+                          : { clipPath: "inset(0 100% 0 0)" }
+                      }
+                      transition={{
+                        duration: 0.65,
+                        delay: i * 0.12,
+                        ease: EASE,
+                      }}
+                    >
+                      {word}
+                    </motion.span>
+                  </span>
+                </div>
               ))}
-            </motion.h2>
+            </div>
 
             {/* Divider */}
             <motion.div
-              className="mb-8 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
+              className="mb-8 h-px origin-left bg-gradient-to-r from-[#EC601B]/50 to-transparent"
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
               viewport={VIEWPORT}
-              transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
+              transition={{ duration: 0.85, delay: 0.38, ease: EASE }}
             />
 
-            {/* Body */}
+            {/* Body — original words unchanged */}
             <motion.p
               className="mb-10 font-poppins text-[15px] font-light leading-[2] tracking-[0.01em] text-[#1D2D44]/60"
-              {...fadeUp(0.3)}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.7, delay: 0.45, ease: EASE }}
             >
               Established in 1976, KFAS is a private, non-profit organization
               that supports research, training, and development in STEAM
@@ -337,8 +429,33 @@ function WhoWeAre() {
               generations to spread knowledge and accelerate progress.
             </motion.p>
 
+            {/* Stats */}
+            <motion.div
+              className="mb-10 grid grid-cols-3 gap-4 border-l-2 border-[#EC601B]/20 pl-5"
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.65, delay: 0.55, ease: EASE }}
+            >
+              {STATS.map(({ value, label }) => (
+                <div key={label}>
+                  <div className="font-poppins text-lg font-bold tabular-nums text-[#EC601B]">
+                    {value}
+                  </div>
+                  <div className="mt-0.5 text-[10px] font-light uppercase tracking-[0.18em] text-[#1D2D44]/40">
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+
             {/* CTA */}
-            <motion.div {...fadeUp(0.4)}>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.6, delay: 0.65, ease: EASE }}
+            >
               <a
                 href="/about/AboutKfas"
                 className="group inline-flex items-center gap-3"
@@ -366,7 +483,13 @@ function WhoWeAre() {
           </div>
 
           {/* ── Right: Image ── */}
-          <motion.div className="relative" {...fadeUp(0.2)}>
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
+          >
             {/* Orange corner — top left */}
             <motion.div
               className="absolute -left-3 -top-3 h-10 w-10 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/35 pointer-events-none"
@@ -376,16 +499,16 @@ function WhoWeAre() {
               transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
             />
 
-            {/* Blue corner — bottom right */}
+            {/* Orange corner — bottom right */}
             <motion.div
-              className="absolute -bottom-3 -right-3 h-10 w-10 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none"
+              className="absolute -bottom-3 -right-3 h-10 w-10 border-b-[1.5px] border-r-[1.5px] border-[#EC601B]/35 pointer-events-none"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={VIEWPORT}
               transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
             />
 
-            {/* Image */}
+            {/* Full image — no crop */}
             <div className="group relative overflow-hidden">
               <motion.div style={{ y: imageY }}>
                 <Image

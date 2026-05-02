@@ -418,18 +418,10 @@ const fadeUp = (delay = 0) => ({
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/**
- * Split text into words.
- * Handles normal spaces AND camelCase/PascalCase strings
- * e.g. "TimelessLegacy" → ["Timeless", "Legacy"]
- */
 function splitWords(text: string): string[] {
-  // First try splitting on spaces
   const bySpace = text.split(" ").filter(Boolean);
   if (bySpace.length > 1) return bySpace;
 
-  // Fallback: split PascalCase / camelCase into separate words
-  // "TimelessLegacyInnovativeFuture" → ["Timeless", "Legacy", "Innovative", "Future"]
   const byCamel = text
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
@@ -447,9 +439,18 @@ function splitLines(text: string): string[] {
 
 function ScrollIndicator() {
   return (
+    // FIX 3: Remove Tailwind's `-translate-x-1/2` to avoid CSS transform conflict
+    // with Framer Motion's `y` animation. Use `left: "50%"` + `x: "-50%"` instead,
+    // so both transforms are owned by Framer Motion and compose correctly.
     <motion.div
-      className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2"
-      {...fadeUp(1.6)}
+      className="absolute bottom-8 left-1/2 z-30 flex flex-col items-center gap-2"
+      initial={{ opacity: 0, y: 28, x: "-50%" }}
+      animate={{ opacity: 1, y: 0, x: "-50%" }}
+      transition={{
+        duration: 0.75,
+        delay: 1.6,
+        ease: [0.16, 1, 0.3, 1] as const,
+      }}
     >
       <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-white/40">
         Scroll
@@ -530,7 +531,11 @@ export default function Hero({
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
+
+  // FIX 1: Start as `false` — let the `onPlay` event set it to `true`.
+  // Previously `true` caused the button to show "Pause" even when autoplay
+  // was blocked by the browser, resulting in an incorrect UI state.
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -545,7 +550,9 @@ export default function Hero({
     if (isPlaying) {
       videoRef.current.pause();
     } else {
-      videoRef.current.play();
+      // FIX 2: `play()` returns a Promise that rejects when autoplay is blocked.
+      // Without `.catch()`, this produces an unhandled promise rejection error.
+      videoRef.current.play().catch(() => {});
     }
   };
 
@@ -620,7 +627,7 @@ export default function Hero({
               {...fadeUp(0.2)}
             >
               <motion.div
-                className="h-[1.5px] bg-gradient-to-r from-[#7DC0F1] to-[#EC601B]"
+                className="h-[1.5px] bg-gradient-to-r from-white/50 to-[#EC601B]"
                 initial={{ width: 0 }}
                 animate={{ width: 44 }}
                 transition={{
@@ -633,7 +640,7 @@ export default function Hero({
                 {subtitle}
               </span>
               <motion.div
-                className="h-[1.5px] bg-gradient-to-l from-transparent to-[#EC601B]/40"
+                className="h-[1.5px] bg-gradient-to-l from-transparent to-[#EC601B]/60"
                 initial={{ width: 0 }}
                 animate={{ width: 24 }}
                 transition={{
@@ -648,10 +655,6 @@ export default function Hero({
           {/* English title — clip-path wipe per word */}
           {titleEn && (
             <>
-              {/*
-               * aria-label provides the full clean string to screen readers,
-               * while the visual spans handle the animated word-by-word reveal.
-               */}
               <h1
                 className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.6)]"
                 aria-label={splitLines(titleEn)
@@ -715,7 +718,7 @@ export default function Hero({
             <motion.div className="relative" {...fadeUp(1.05)}>
               {/* Left accent bar — desktop only */}
               <motion.div
-                className="absolute -left-4 top-0 bottom-0 w-[2px] rounded-full bg-gradient-to-b from-[#7DC0F1] to-[#EC601B] hidden lg:block"
+                className="absolute -left-4 top-0 bottom-0 w-[2px] rounded-full bg-gradient-to-b from-[#EC601B] to-[#EC601B]/10 hidden lg:block"
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
                 transition={{
