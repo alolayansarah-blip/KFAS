@@ -39,7 +39,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       { label: "Assigned Studies", href: "/research/AssignedStudies" },
       {
         label: "Scientific Conference Sponsorship",
-        href: "/Research/scientific-conference-sponsorship",
+        href: "/research/SCS",
       },
       {
         label: "Tech Deployment",
