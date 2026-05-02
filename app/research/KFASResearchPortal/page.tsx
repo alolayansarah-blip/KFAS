@@ -73,7 +73,6 @@ const FAQ_ITEMS = [
     image: "/image/Portal1.png",
     imageAlt: "Researcher name",
     imageCaption: "Researcher name",
-    // text left, image right
     reverse: false,
   },
   {
@@ -84,7 +83,6 @@ const FAQ_ITEMS = [
     image: "/image/Portal2.png",
     imageAlt: "Researcher name",
     imageCaption: "Researcher name",
-    // image left, text right
     reverse: true,
   },
   {
@@ -95,7 +93,6 @@ const FAQ_ITEMS = [
     image: "/image/Portal 3.png",
     imageAlt: "Researcher name",
     imageCaption: "Researcher name",
-    // text left, image right
     reverse: false,
   },
 ];
@@ -191,9 +188,10 @@ function FaqRow({
     </motion.div>
   );
 
+  // hidden on mobile (below sm), visible on sm and above
   const imageCell = (
     <motion.div
-      className="relative overflow-hidden"
+      className="relative overflow-hidden hidden sm:block"
       initial={{ opacity: 0, scale: 1.04 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -228,10 +226,11 @@ function FaqRow({
         <div className="mx-12 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       )}
 
-      <div
-        className="grid min-h-[340px] sm:min-h-[380px]"
-        style={{ gridTemplateColumns: "1fr 1fr" }}
-      >
+      {/*
+        Mobile: single column — text fills full width (image is hidden via hidden sm:block)
+        Desktop (sm+): two equal columns — text + image side by side
+      */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 min-h-[340px] sm:min-h-[380px]">
         {reverse ? (
           <>
             {imageCell}
