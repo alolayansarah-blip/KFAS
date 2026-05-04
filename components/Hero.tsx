@@ -62,7 +62,7 @@ export default function Hero({
   return (
     <section
       ref={sectionRef}
-      className={`relative flex h-[100svh] min-h-[600px] flex-col items-start justify-end overflow-hidden ${className}`}
+      className={`relative flex h-[min(100dvh,52rem)] min-h-[min(100dvh,36rem)] flex-col items-start justify-end overflow-hidden ${className}`}
     >
       {/* ── Video ── */}
       <motion.div className="absolute inset-0 z-0" style={{ y: videoY }}>
@@ -86,17 +86,10 @@ export default function Hero({
           <div className="absolute inset-0 bg-[#1D2D44]" />
         )}
 
-        {/*
-         * Bottom-heavy gradient — strong at the base where text sits,
-         * completely transparent at the top so the video is fully visible.
-         * This is what makes it feel cinematic rather than "dark overlay".
-         */}
+        {/* Navy wash over video for legibility */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.50) 30%, rgba(0,0,0,0.15) 55%, transparent 100%)",
-          }}
+          style={{ background: "rgba(29, 45, 68, 0.50)" }}
         />
 
         {/* Film grain */}
@@ -111,82 +104,84 @@ export default function Hero({
 
       {/* ── Content — pinned to bottom-left ── */}
       <motion.div
-        className="relative z-20 w-full px-6 pb-20 sm:px-10 sm:pb-24 lg:px-14 lg:pb-28"
+        className="relative z-20 w-full pb-20 sm:pb-24 lg:pb-28"
         style={{ opacity: contentOp, y: contentY }}
       >
-        {/* Eyebrow */}
-        {subtitle && (
-          <motion.p
-            className="mb-5 text-[10px] font-semibold uppercase tracking-[0.5em] text-white/40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.3, ease: EASE }}
-          >
-            {subtitle}
-          </motion.p>
-        )}
+        <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-12">
+          {/* Eyebrow */}
+          {subtitle && (
+            <motion.p
+              className="mb-5 text-[10px] font-semibold uppercase tracking-[0.5em] text-white/40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.3, ease: EASE }}
+            >
+              {subtitle}
+            </motion.p>
+          )}
 
-        {/* Large title — bigger on mobile now that nothing competes above it */}
-        {lines.length > 0 && (
-          <h1
-            className="mb-6 font-poppins font-bold leading-[1.04] tracking-[-0.02em] text-white"
+          {/* Large title — bigger on mobile now that nothing competes above it */}
+          {lines.length > 0 && (
+            <h1
+              className="mb-6 font-poppins font-bold leading-[1.04] tracking-[-0.02em] text-white"
             style={{
-              fontSize: "clamp(3rem, 7.5vw, 6.25rem)",
+              fontSize: "clamp(2.75rem, 1.25rem + 4vw, 5.5rem)",
               textShadow: "0 2px 32px rgba(0,0,0,0.25)",
             }}
-            aria-label={lines.join(" ")}
-          >
-            {lines.map((line, i) => (
-              <motion.span
-                key={i}
-                className="block"
-                aria-hidden="true"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.85,
-                  delay: 0.45 + i * 0.12,
-                  ease: EASE,
-                }}
-              >
-                {line}
-              </motion.span>
-            ))}
-          </h1>
-        )}
+              aria-label={lines.join(" ")}
+            >
+              {lines.map((line, i) => (
+                <motion.span
+                  key={i}
+                  className="block"
+                  aria-hidden="true"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.85,
+                    delay: 0.45 + i * 0.12,
+                    ease: EASE,
+                  }}
+                >
+                  {line}
+                </motion.span>
+              ))}
+            </h1>
+          )}
 
-        {/* Orange rule */}
-        <motion.div
-          className="mb-6 h-px bg-[#EC601B]"
-          initial={{ width: 0, opacity: 0 }}
-          animate={{ width: 40, opacity: 1 }}
-          transition={{ duration: 0.7, delay: 1.0, ease: EASE }}
-        />
+          {/* Orange rule */}
+          <motion.div
+            className="mb-6 h-px bg-[#EC601B]"
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 40, opacity: 1 }}
+            transition={{ duration: 0.7, delay: 1.0, ease: EASE }}
+          />
 
-        {/* Arabic */}
-        {titleAr && (
-          <motion.p
-            dir="rtl"
-            className="mb-4 font-poppins text-lg font-light text-white/40 sm:text-xl lg:text-lg"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 1.1, ease: EASE }}
-          >
-            {titleAr}
-          </motion.p>
-        )}
+          {/* Arabic */}
+          {titleAr && (
+            <motion.p
+              dir="rtl"
+              className="mb-4 font-poppins text-lg font-light text-white/40 sm:text-xl lg:text-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 1.1, ease: EASE }}
+            >
+              {titleAr}
+            </motion.p>
+          )}
 
-        {/* Description */}
-        {description && (
-          <motion.p
-            className="max-w-[48ch] font-poppins text-[13.5px] font-light leading-[2] tracking-[0.01em] text-white/45 sm:text-[15px] lg:text-[14px]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 1.15, ease: EASE }}
-          >
-            {description}
-          </motion.p>
-        )}
+          {/* Description */}
+          {description && (
+            <motion.p
+              className="max-w-[48ch] font-poppins text-[13.5px] font-light leading-[2] tracking-[0.01em] text-white/45 sm:text-[15px] lg:text-[14px]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 1.15, ease: EASE }}
+            >
+              {description}
+            </motion.p>
+          )}
+        </div>
       </motion.div>
 
       {/* ── Play / Pause — bottom right ── */}
