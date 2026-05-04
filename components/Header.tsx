@@ -43,7 +43,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       },
       {
         label: "Tech Deployment",
-        href: "/technology-and-innovation/technology-deployment",
+        href: "/research/TechDeployment",
       },
       {
         label: "R&D in Private Sector",
