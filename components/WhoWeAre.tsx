@@ -78,8 +78,7 @@ function WhoWeAre() {
                   <div key={text} className="overflow-hidden">
                     <motion.span
                       className={[
-                        "block font-poppins font-black leading-[1.1] tracking-[-0.02em]",
-                        "text-[1.15rem] min-[400px]:text-[1.35rem] sm:text-[1.65rem] lg:text-[1.85rem] xl:text-[2.1rem]",
+                        "block font-poppins text-2xl font-semibold leading-tight tracking-tight sm:text-3xl lg:text-4xl",
                         accent ? "text-[#EC601B]" : "text-[#1D2D44]",
                       ].join(" ")}
                       initial={{ y: "110%", opacity: 0 }}
