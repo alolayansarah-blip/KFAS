@@ -42,7 +42,9 @@ export default function Home() {
         <FlippedCardStack />
 
         <WhoWeAre />
-        <StatsCounter />
+        <div className="mt-12 lg:mt-16">
+          <StatsCounter />
+        </div>
         <LatestNews />
         <LogoShowcase />
         <InstagramFeed />

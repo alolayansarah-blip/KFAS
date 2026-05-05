@@ -1,17 +1,15 @@
 "use client";
 
-import React, { memo, useRef, useState, useEffect } from "react";
+import React, { memo, useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
 
-const ACRONYM = [
-  { letter: "K", word: "uwait" },
-  { letter: "F", word: "oundation for the" },
-  { letter: "A", word: "dvancement of" },
-  { letter: "S", word: "ciences" },
+const TITLE_LINES = [
+  { text: "Kuwait Foundation", accent: false },
+  { text: "for the Advancement of Sciences", accent: true },
 ];
 
 const STATS = [
@@ -25,13 +23,6 @@ function WhoWeAre() {
   const titleRef = useRef<HTMLDivElement>(null);
 
   const isTitleInView = useInView(titleRef, { once: true, amount: 0.6 });
-  const [phase, setPhase] = useState<"kfas" | "full">("kfas");
-
-  useEffect(() => {
-    if (!isTitleInView) return;
-    const t = setTimeout(() => setPhase("full"), 900);
-    return () => clearTimeout(t);
-  }, [isTitleInView]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -75,64 +66,62 @@ function WhoWeAre() {
               </span>
             </motion.div>
 
-            {/* KFAS title */}
+            {/* Title — elegant two-line + logo lockup */}
             <div
               ref={titleRef}
-              className="mb-4 space-y-0.5"
+              className="mb-4 flex items-start gap-5"
               aria-label="Kuwait Foundation for the Advancement of Sciences"
             >
-              {ACRONYM.map(({ letter, word }, i) => (
-                <div key={letter} className="flex items-baseline" aria-hidden>
-                  <motion.span
-                    className="shrink-0 font-poppins text-[1.25rem] font-black leading-[1.2] text-[#EC601B] min-[400px]:text-[1.5rem] sm:text-[2rem] lg:text-[2.1rem] xl:text-[2.5rem]"
-                    initial={{ opacity: 0, y: 22 }}
-                    animate={
-                      isTitleInView
-                        ? { opacity: 1, y: 0 }
-                        : { opacity: 0, y: 22 }
-                    }
-                    transition={{ duration: 0.55, delay: i * 0.1, ease: EASE }}
-                  >
-                    {letter}
-                  </motion.span>
-
-                  <span className="relative">
-                    <span
-                      className="invisible whitespace-nowrap font-poppins text-[1.25rem] font-light leading-[1.2] min-[400px]:text-[1.5rem] sm:text-[2rem] lg:text-[2.1rem] xl:text-[2.5rem]"
-                      aria-hidden
-                    >
-                      {word}
-                    </span>
-
+              {/* Text lines */}
+              <div className="flex flex-col gap-0.5 flex-1">
+                {TITLE_LINES.map(({ text, accent }, i) => (
+                  <div key={text} className="overflow-hidden">
                     <motion.span
-                      className="absolute inset-0 whitespace-nowrap font-poppins text-[1.25rem] font-light leading-[1.2] text-[#1D2D44] min-[400px]:text-[1.5rem] sm:text-[2rem] lg:text-[2.1rem] xl:text-[2.5rem]"
-                      initial={{ clipPath: "inset(0 100% 0 0)" }}
+                      className={[
+                        "block font-poppins font-black leading-[1.1] tracking-[-0.02em]",
+                        "text-[1.15rem] min-[400px]:text-[1.35rem] sm:text-[1.65rem] lg:text-[1.85rem] xl:text-[2.1rem]",
+                        accent ? "text-[#EC601B]" : "text-[#1D2D44]",
+                      ].join(" ")}
+                      initial={{ y: "110%", opacity: 0 }}
                       animate={
-                        phase === "full"
-                          ? { clipPath: "inset(0 0% 0 0)" }
-                          : { clipPath: "inset(0 100% 0 0)" }
+                        isTitleInView
+                          ? { y: "0%", opacity: 1 }
+                          : { y: "110%", opacity: 0 }
                       }
                       transition={{
-                        duration: 0.65,
-                        delay: i * 0.12,
+                        duration: 0.7,
+                        delay: 0.08 + i * 0.14,
                         ease: EASE,
                       }}
                     >
-                      {word}
+                      {text}
                     </motion.span>
-                  </span>
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
 
-            {/* Divider */}
-            <motion.div
-              className="mb-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/50 to-transparent"
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              viewport={VIEWPORT}
-              transition={{ duration: 0.85, delay: 0.38, ease: EASE }}
-            />
+              {/* Logo */}
+              <motion.div
+                className="flex items-center gap-4 pt-1 self-stretch"
+                initial={{ opacity: 0, x: 10 }}
+                animate={
+                  isTitleInView
+                    ? { opacity: 1, x: 0 }
+                    : { opacity: 0, x: 10 }
+                }
+                transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
+              >
+                <div className="relative h-20 w-20 shrink-0 sm:h-24 sm:w-24 opacity-90">
+                  <Image
+                    src="/image/logo_c.png"
+                    alt="KFAS logo"
+                    fill
+                    sizes="96px"
+                    className="object-contain drop-shadow-sm"
+                  />
+                </div>
+              </motion.div>
+            </div>
 
             {/* Body */}
             <motion.p
@@ -152,7 +141,7 @@ function WhoWeAre() {
 
             {/* Stats */}
             <motion.div
-              className="mb-7 grid grid-cols-3 gap-4 border-l-2 border-[#EC601B]/20 pl-5"
+              className="mb-7 grid grid-cols-3 gap-4"
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}
