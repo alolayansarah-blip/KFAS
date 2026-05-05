@@ -124,10 +124,10 @@ export default function Hero({
           {lines.length > 0 && (
             <h1
               className="mb-6 font-poppins font-bold leading-[1.04] tracking-[-0.02em] text-white"
-            style={{
-              fontSize: "clamp(2.75rem, 1.25rem + 4vw, 5.5rem)",
-              textShadow: "0 2px 32px rgba(0,0,0,0.25)",
-            }}
+              style={{
+                fontSize: "clamp(2.75rem, 1.25rem + 4vw, 5.5rem)",
+                textShadow: "0 2px 32px rgba(0,0,0,0.25)",
+              }}
               aria-label={lines.join(" ")}
             >
               {lines.map((line, i) => (
