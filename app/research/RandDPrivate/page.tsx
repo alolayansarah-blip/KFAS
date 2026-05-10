@@ -384,7 +384,7 @@ export default function RandDPrivatePage() {
             style={{ y: heroY }}
           >
             <Image
-              src="/image/RandD.png"
+              src="/image/kfas-hipo.jpg"
               alt=""
               fill
               priority
