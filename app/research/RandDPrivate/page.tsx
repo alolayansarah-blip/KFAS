@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -382,6 +383,14 @@ export default function RandDPrivatePage() {
             className="absolute inset-0 bg-[#1D2D44]"
             style={{ y: heroY }}
           >
+            <Image
+              src="/image/RandD.png"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center brightness-[0.92] contrast-[1.02]"
+            />
             <div
               aria-hidden
               className="absolute inset-0"
@@ -392,7 +401,7 @@ export default function RandDPrivatePage() {
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent"
             />
           </motion.div>
 
