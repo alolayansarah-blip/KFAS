@@ -47,7 +47,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       },
       {
         label: "R&D in Private Sector",
-        href: "/technology-and-innovation/RD-in-Private-Sector",
+        href: "/research/RandDPrivate",
       },
       {
         label: "KFAS Research Portal",
