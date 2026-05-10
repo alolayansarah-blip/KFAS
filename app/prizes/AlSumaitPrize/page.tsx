@@ -272,7 +272,6 @@ export default function AlSumaitPrizePage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
   return (
@@ -284,27 +283,17 @@ export default function AlSumaitPrizePage() {
           ref={heroRef}
           className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px] bg-[#1a1412]"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            <Image
-              src="/image/AlsumaitPrize.png"
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-[center_42%] scale-[1.06] brightness-[0.97] contrast-[1.02]"
-            />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              aria-hidden
-              style={{
-                background: [
-                  "linear-gradient(128deg, rgba(236,96,27,0.34) 0%, rgba(236,96,27,0.09) 44%, transparent 70%)",
-                  "radial-gradient(ellipse 90% 65% at 12% 8%, rgba(255,180,130,0.14) 0%, transparent 58%)",
-                  "linear-gradient(to bottom, rgba(26,20,18,0.12) 0%, rgba(55,32,22,0.28) 42%, rgba(18,12,10,0.78) 100%)",
-                ].join(", "),
-              }}
-            />
-          </motion.div>
+          <div
+            className="absolute inset-0 pointer-events-none"
+            aria-hidden
+            style={{
+              background: [
+                "linear-gradient(128deg, rgba(236,96,27,0.34) 0%, rgba(236,96,27,0.09) 44%, transparent 70%)",
+                "radial-gradient(ellipse 90% 65% at 12% 8%, rgba(255,180,130,0.14) 0%, transparent 58%)",
+                "linear-gradient(to bottom, rgba(26,20,18,0.12) 0%, rgba(55,32,22,0.28) 42%, rgba(18,12,10,0.78) 100%)",
+              ].join(", "),
+            }}
+          />
 
           <motion.div
             className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
