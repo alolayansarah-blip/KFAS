@@ -349,20 +349,20 @@ export default function TechDeploymentPage() {
           </div>
         </section>
 
-        {/* ── Application Process — orange section ──────────────────────── */}
-        <section className="bg-[#EC601B] py-24 relative overflow-hidden">
-          <Watermark text="Process" light />
+        {/* ── Application Process — white section ───────────────────────── */}
+        <section className="bg-white py-24 relative overflow-hidden">
+          <Watermark text="Process" />
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
               <div className="lg:sticky lg:top-32">
-                <SectionHeadingLight>How the Process Works</SectionHeadingLight>
-                <p className="font-poppins text-base leading-[1.9] text-white/70 font-light mt-4">
+                <SectionHeading>How the Process Works</SectionHeading>
+                <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/50 font-light mt-4">
                   Applications open year-round
                 </p>
               </div>
               <div>
                 {PROCESS_STEPS.map((step, i) => (
-                  <StepBlockLight key={step.num} step={step} index={i} />
+                  <StepBlock key={step.num} step={step} index={i} />
                 ))}
               </div>
             </div>
