@@ -1,18 +1,142 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, type ReactNode } from "react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.15 },
-  transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as const },
-});
+/* ─── Shared primitives ─────────────────────────────────────────────────── */
+
+function FadeUp({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-70px" });
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 36 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay, ease: EASE }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function SectionHeading({ children }: { children: ReactNode }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <div ref={ref} className="mb-10">
+      <motion.h2
+        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, ease: EASE }}
+      >
+        {children}
+      </motion.h2>
+      <motion.div
+        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
+      />
+    </div>
+  );
+}
+
+function SectionHeadingLight({ children }: { children: ReactNode }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <div ref={ref} className="mb-10">
+      <motion.h2
+        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight"
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, ease: EASE }}
+      >
+        {children}
+      </motion.h2>
+      <motion.div
+        className="mt-5 h-px origin-left bg-white/30"
+        style={{ width: 48 }}
+        initial={{ scaleX: 0 }}
+        animate={inView ? { scaleX: 1 } : {}}
+        transition={{ duration: 0.55, delay: 0.3, ease: EASE }}
+      />
+    </div>
+  );
+}
+
+function Watermark({ text, light = false }: { text: string; light?: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={`pointer-events-none select-none absolute bottom-0 right-0 font-poppins font-black uppercase leading-none tracking-tighter overflow-hidden ${
+        light ? "text-white/[0.025]" : "text-[#1D2D44]/[0.025]"
+      }`}
+      style={{ fontSize: "clamp(4.5rem, 13vw, 11rem)", lineHeight: 0.85 }}
+    >
+      {text}
+    </span>
+  );
+}
+
+function BulletRow({
+  text,
+  index,
+  light = false,
+}: {
+  text: string;
+  index: number;
+  light?: boolean;
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  return (
+    <motion.div
+      ref={ref}
+      className={`flex gap-5 py-5 border-b ${
+        light ? "border-white/25" : "border-[#1D2D44]/10"
+      }`}
+      initial={{ opacity: 0, x: 24 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.55, delay: index * 0.07, ease: EASE }}
+    >
+      <motion.span
+        className="w-2 h-2 rounded-full bg-[#EC601B] mt-[10px] flex-shrink-0"
+        animate={{ scale: [1, 1.4, 1] }}
+        transition={{
+          duration: 2.5,
+          delay: index * 0.3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      <p
+        className={`font-poppins font-light leading-[1.85] text-[0.95rem] ${
+          light ? "text-white/80" : "text-[#1D2D44]/70"
+        }`}
+      >
+        {text}
+      </p>
+    </motion.div>
+  );
+}
+
+/* ─── Data ───────────────────────────────────────────────────────────────── */
 
 type ProcessStep =
   | { num: number; title: string; bullets: string[] }
@@ -43,6 +167,56 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
+/* ─── Step block component ───────────────────────────────────────────────── */
+
+function StepBlock({ step, index }: { step: ProcessStep; index: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  return (
+    <motion.div
+      ref={ref}
+      className="flex gap-5 py-5 border-b border-[#1D2D44]/10 last:border-b-0"
+      initial={{ opacity: 0, x: 24 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: EASE }}
+    >
+      <div className="flex flex-col items-center flex-shrink-0 pt-1">
+        <span className="font-poppins text-[#EC601B] font-semibold text-[0.85rem] tabular-nums leading-none">
+          {String(step.num).padStart(2, "0")}
+        </span>
+        {index < PROCESS_STEPS.length - 1 && (
+          <div className="w-px flex-1 min-h-[24px] bg-[#EC601B]/20 mt-2" />
+        )}
+      </div>
+      <div className="min-w-0 pb-2">
+        {"bullets" in step ? (
+          <>
+            <p className="font-poppins text-[#1D2D44] font-semibold text-[0.95rem] leading-snug">
+              {step.title}
+            </p>
+            <ul className="mt-3 space-y-2">
+              {step.bullets.map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EC601B]/50 mt-[9px] flex-shrink-0" />
+                  <span className="font-poppins text-[#1D2D44]/65 font-light text-[0.9rem] leading-[1.8]">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p className="font-poppins text-[#1D2D44]/65 font-light text-[0.95rem] leading-[1.85]">
+            {step.body}
+          </p>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Page ───────────────────────────────────────────────────────────────── */
+
 export default function TechDeploymentPage() {
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -61,7 +235,7 @@ export default function TechDeploymentPage() {
       />
 
       <main className="min-h-screen bg-white font-poppins">
-        {/* ── Hero ── */}
+        {/* ── Hero ──────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
           className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
@@ -121,146 +295,76 @@ export default function TechDeploymentPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── Overview ── */}
-        <section className="relative overflow-hidden bg-white px-6 py-16 sm:px-8 sm:py-20 lg:px-12">
-          <div className="relative mx-auto max-w-[1280px]">
-            <motion.div className="max-w-[900px]" {...fadeUp(0)}>
-              <div className="mb-5 flex items-center gap-3">
-                <div className="h-px w-8 bg-[#EC601B]" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.45em] text-[#EC601B]">
-                  Overview
-                </span>
+        {/* ── Overview ──────────────────────────────────────────────────── */}
+        <section className="py-20 sm:py-28 bg-white">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="relative overflow-hidden pb-2">
+              <Watermark text="Overview" />
+              <div className="relative z-10 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
+                <div className="lg:sticky lg:top-32">
+                  <SectionHeading>Tech Deployment</SectionHeading>
+                  <FadeUp delay={0.1}>
+                    <p className="font-poppins text-[0.9rem] font-light uppercase tracking-[0.3em] text-[#1D2D44]/35 mt-4 leading-relaxed">
+                      Pilot Projects &<br />
+                      Scalable Solutions
+                    </p>
+                  </FadeUp>
+                </div>
+                <FadeUp delay={0.12}>
+                  <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
+                    Technology Deployment (Pilot) projects offer scalable
+                    solutions to national challenges. These projects drive
+                    innovation, sustainability, and socio-economic progress in
+                    Kuwait and are designed to transform research into practical
+                    applications, supporting technology transfer, economic
+                    growth, and institutional collaboration.
+                  </p>
+                </FadeUp>
               </div>
-
-              <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
-                Technology Deployment (Pilot) projects offer scalable solutions
-                to national challenges. These projects drive innovation,
-                sustainability, and socio-economic progress in Kuwait and are
-                designed to transform research into practical applications,
-                supporting technology transfer, economic growth, and
-                institutional collaboration.
-              </p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Who Can Apply (blue band capped at 1280px like other bands) ── */}
-        <section className="bg-white px-6 py-7 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
-          <div className="relative mx-auto w-full max-w-[1280px] overflow-hidden bg-[#7DC0F1] px-6 py-7 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
-            {/* Dot grid texture */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-[0.12]"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle, rgba(29,45,68,0.35) 1px, transparent 1px)",
-                backgroundSize: "28px 28px",
-              }}
-            />
-            {/* Corner accent */}
-            <div
-              aria-hidden
-              className="absolute left-0 top-0 h-1 w-24 bg-[#1D2D44]/20"
-            />
-            <div
-              aria-hidden
-              className="absolute left-0 top-0 h-16 w-1 bg-[#1D2D44]/20"
-            />
-
-            <div className="relative">
-              {/* Section label */}
-              <motion.div
-                className="mb-4 flex items-center gap-3"
-                {...fadeUp(0)}
-              >
-                <div className="h-px w-8 bg-[#1D2D44]/40" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.45em] text-[#1D2D44]/60">
-                  Eligibility
-                </span>
-              </motion.div>
-
-              <motion.div className="max-w-[900px]" {...fadeUp(0.05)}>
-                <h2 className="font-poppins text-3xl font-black leading-tight tracking-tight text-[#1D2D44] sm:text-4xl">
-                  Who Can
-                  <br />
-                  <span className="text-[#EC601B]">Apply?</span>
-                </h2>
-
-                <p className="mt-4 font-poppins text-[15px] font-light leading-[1.85] text-[#1D2D44]/70">
-                  Any Kuwait based research institution, public entities and NGOs.
-                </p>
-              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* ── Process ── */}
-        <section className="relative overflow-hidden bg-white px-6 py-16 sm:px-8 sm:py-20 lg:px-12">
-          <div className="relative mx-auto max-w-[1280px]">
-            <motion.div {...fadeUp(0)}>
-              <div className="mb-5 flex items-center gap-3">
-                <div className="h-px w-8 bg-[#EC601B]" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.45em] text-[#EC601B]">
-                  Application Process
-                </span>
-              </div>
-
-              <h2 className="font-poppins text-3xl font-black leading-tight tracking-tight text-[#1D2D44] sm:text-4xl">
-                How the Process
-                <br />
-                Works
+        {/* ── Who Can Apply — light blue tint ───────────────────────────── */}
+        <section className="bg-[#BBDEFB40] py-24 relative overflow-hidden">
+          <Watermark text="Eligibility" />
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
+            <div className="lg:sticky lg:top-32">
+              <h2 className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight">
+                Who Can Apply?
               </h2>
-              <p className="mt-3 font-poppins text-[15px] font-light leading-relaxed text-[#1D2D44]/55 sm:text-[16px]">
-                Applications open year-round
+              <motion.div
+                className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+                initial={{ scaleX: 0, opacity: 0 }}
+                whileInView={{ scaleX: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
+              />
+            </div>
+            <FadeUp delay={0.1}>
+              <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/70 font-light">
+                Any Kuwait based research institution, public entities and NGOs.
               </p>
-            </motion.div>
+            </FadeUp>
+          </div>
+        </section>
 
-            <div className="mt-12 grid grid-cols-1 gap-0 md:grid-cols-2">
-              {PROCESS_STEPS.map((step, i) => (
-                <motion.div
-                  key={step.num}
-                  className="group relative border border-[#1D2D44]/08 p-8 transition-colors duration-300 hover:bg-[#1D2D44]/[0.02]"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.55, delay: i * 0.08, ease: EASE }}
-                >
-                  {/* Step number — large decorative */}
-                  <div className="mb-5 flex items-start justify-between">
-                    <span className="font-poppins text-[3.5rem] font-black leading-none text-[#EC601B]/15 transition-colors duration-300 group-hover:text-[#EC601B]/25">
-                      0{step.num}
-                    </span>
-                    {/* Orange corner on hover */}
-                    <div className="h-5 w-5 border-r-[1.5px] border-t-[1.5px] border-[#EC601B]/0 transition-colors duration-300 group-hover:border-[#EC601B]/50" />
-                  </div>
-
-                  {"bullets" in step ? (
-                    <>
-                      <p className="font-poppins text-[14px] font-medium leading-snug text-[#1D2D44] mb-4">
-                        {step.title}
-                      </p>
-                      <ul className="space-y-2.5">
-                        {step.bullets.map((item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-3 font-poppins text-[13.5px] font-light leading-relaxed text-[#1D2D44]/60"
-                          >
-                            <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#EC601B]" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <p className="font-poppins text-[14px] font-light leading-[1.85] text-[#1D2D44]/65">
-                      {step.body}
-                    </p>
-                  )}
-
-                  {/* Bottom orange line — grows on hover */}
-                  <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#EC601B] transition-all duration-500 group-hover:w-full" />
-                </motion.div>
-              ))}
+        {/* ── Application Process — orange section ──────────────────────── */}
+        <section className="bg-[#EC601B] py-24 relative overflow-hidden">
+          <Watermark text="Process" light />
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
+              <div className="lg:sticky lg:top-32">
+                <SectionHeadingLight>How the Process Works</SectionHeadingLight>
+                <p className="font-poppins text-base leading-[1.9] text-white/70 font-light mt-4">
+                  Applications open year-round
+                </p>
+              </div>
+              <div>
+                {PROCESS_STEPS.map((step, i) => (
+                  <StepBlockLight key={step.num} step={step} index={i} />
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -271,5 +375,53 @@ export default function TechDeploymentPage() {
         logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
       />
     </>
+  );
+}
+
+/* ─── Light variant of StepBlock for orange background ──────────────────── */
+
+function StepBlockLight({ step, index }: { step: ProcessStep; index: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  return (
+    <motion.div
+      ref={ref}
+      className="flex gap-5 py-5 border-b border-white/25 last:border-b-0"
+      initial={{ opacity: 0, x: 24 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: EASE }}
+    >
+      <div className="flex flex-col items-center flex-shrink-0 pt-1">
+        <span className="font-poppins text-white font-semibold text-[0.85rem] tabular-nums leading-none">
+          {String(step.num).padStart(2, "0")}
+        </span>
+        {index < PROCESS_STEPS.length - 1 && (
+          <div className="w-px flex-1 min-h-[24px] bg-white/30 mt-2" />
+        )}
+      </div>
+      <div className="min-w-0 pb-2">
+        {"bullets" in step ? (
+          <>
+            <p className="font-poppins text-white font-semibold text-[0.95rem] leading-snug">
+              {step.title}
+            </p>
+            <ul className="mt-3 space-y-2">
+              {step.bullets.map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/50 mt-[9px] flex-shrink-0" />
+                  <span className="font-poppins text-white/75 font-light text-[0.9rem] leading-[1.8]">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p className="font-poppins text-white/80 font-light text-[0.95rem] leading-[1.85]">
+            {step.body}
+          </p>
+        )}
+      </div>
+    </motion.div>
   );
 }
