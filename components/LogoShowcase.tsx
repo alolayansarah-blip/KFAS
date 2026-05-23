@@ -214,7 +214,8 @@
 // }
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { motion, useMotionValue, useAnimationFrame } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.2 };
@@ -223,170 +224,250 @@ const tiles = [
   {
     title: "The Scientific Center",
     href: "https://tsck.org.kw/",
-    image: "/image/sc.jpg",
     logo: "/image/logo_sc.png",
   },
   {
     title: "Sabah Al-Ahmad Center",
     href: "https://linktr.ee/sacgc_kw",
-    image: "/image/sabahAlahmad.jpg",
     logo: "/image/logo6.png",
   },
   {
     title: "Advancement of Sciences",
     href: "https://www.aspdkw.com/",
-    image: "/image/aspd.png",
     logo: "/image/logo4.png",
   },
   {
     title: "Dasman Diabetes Institute",
     href: "https://www.dasmaninstitute.org/",
-    image: "/image/DDI.jpg",
     logo: "/image/logo5.png",
   },
 ];
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: VIEWPORT,
-  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as const },
-});
+// ─── Single Marquee Row ───────────────────────────────────────────────────────
+
+function LogoMarquee({
+  speed = 1.0,
+  direction = "left",
+}: {
+  speed?: number;
+  direction?: "left" | "right";
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const isHovered = useRef(false);
+
+  // For right-direction rows, start at -half so the loop is seamless
+  useEffect(() => {
+    if (direction === "right" && trackRef.current) {
+      x.set(-trackRef.current.scrollWidth / 2);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useAnimationFrame(() => {
+    if (!trackRef.current) return;
+    const half = trackRef.current.scrollWidth / 2;
+    const activeSpeed = isHovered.current ? speed * 0.22 : speed;
+    const step = direction === "left" ? -activeSpeed : activeSpeed;
+    let next = x.get() + step;
+
+    // Seamless loop reset
+    if (direction === "left" && next <= -half) next = 0;
+    if (direction === "right" && next >= 0) next = -half;
+
+    x.set(next);
+  });
+
+  return (
+    <div
+      className="overflow-hidden"
+      onMouseEnter={() => {
+        isHovered.current = true;
+      }}
+      onMouseLeave={() => {
+        isHovered.current = false;
+      }}
+    >
+      <motion.div
+        ref={trackRef}
+        className="flex w-max items-center gap-20"
+        style={{ x }}
+      >
+        {/* Duplicate for seamless loop */}
+        {[...tiles, ...tiles].map((tile, i) => (
+          <a
+            key={i}
+            href={tile.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={tile.title}
+            className="group flex shrink-0 flex-col items-center gap-2.5"
+          >
+            <img
+              src={tile.logo}
+              alt={tile.title}
+              className="
+                h-20 w-auto max-w-[200px] object-contain
+                opacity-30 grayscale
+                transition-all duration-500 ease-out
+                group-hover:opacity-100 group-hover:grayscale-0
+                group-hover:drop-shadow-[0_0_18px_rgba(236,96,27,0.45)]
+                group-hover:scale-110
+              "
+            />
+            <span
+              className="
+                font-poppins text-[8.5px] font-semibold capitalize
+                tracking-[0.05em] text-[#1D2D44]/20
+                transition-all duration-400
+                group-hover:text-[#EC601B] group-hover:tracking-[0.08em]
+              "
+            >
+              {tile.title}
+            </span>
+          </a>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+// ─── Section ─────────────────────────────────────────────────────────────────
 
 export default function LogoShowcase() {
   return (
-    <section className="w-full bg-[#BBDEFB25] py-20 lg:py-28">
-      <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          {/* ── Left: Text ── */}
-          <div className="max-w-[480px]">
-            <motion.span
-              className="mb-4 flex items-center gap-3 font-poppins text-[10px] font-semibold uppercase tracking-[0.42em] text-[#EC601B]"
-              {...fadeUp(0)}
-            >
-              <span className="h-px w-8 bg-[#EC601B]" />
-              Our Partners
-            </motion.span>
+    <section className="relative w-full overflow-hidden bg-[#F5F9FD] py-20 lg:py-28">
+      {/*
+        ① Drifting ambient orbs — one warm (orange), one cool (blue).
+           They float slowly in opposite corners, giving the neutral
+           background a living, atmospheric quality without any imagery.
+      */}
+      <motion.div
+        className="pointer-events-none absolute -left-32 top-1/2 h-[480px] w-[480px]
+                   -translate-y-1/2 rounded-full opacity-40"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(236,96,27,0.12) 0%, transparent 70%)",
+          filter: "blur(48px)",
+        }}
+        animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+        transition={{
+          duration: 14,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "mirror",
+        }}
+      />
+      <motion.div
+        className="pointer-events-none absolute -right-32 top-1/2 h-[520px] w-[520px]
+                   -translate-y-1/2 rounded-full opacity-35"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(125,192,241,0.14) 0%, transparent 70%)",
+          filter: "blur(56px)",
+        }}
+        animate={{ x: [0, -45, 0], y: [0, 28, 0] }}
+        transition={{
+          duration: 17,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "mirror",
+        }}
+      />
 
-            <motion.h2
-              className="font-poppins text-3xl font-semibold leading-[1.15] tracking-tight text-[#1D2D44] sm:text-4xl lg:text-[2.6rem] flex flex-wrap items-baseline gap-x-2 gap-y-1"
-              {...fadeUp(0.07)}
-            >
-              <span>Building the Future</span>
-              <span className="font-extralight italic text-[#7DC0F1]">
-                Together
-              </span>
-            </motion.h2>
-
+      <div className="relative mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
+        {/* Text header */}
+        <div className="mb-14 text-center">
+          {/* Eyebrow */}
+          <motion.div
+            className="mb-4 flex items-center justify-center gap-3"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.6, ease: EASE }}
+          >
             <motion.div
-              className="mt-4 h-px w-full max-w-full origin-left bg-gradient-to-r from-[#EC601B]/35 via-[#7DC0F1]/15 to-transparent"
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
+              className="h-px bg-[#EC601B]"
+              initial={{ width: 0 }}
+              whileInView={{ width: 24 }}
               viewport={VIEWPORT}
-              transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
+              transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
             />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.45em] text-[#EC601B]">
+              Our Partners
+            </span>
+            <motion.div
+              className="h-px bg-[#EC601B]"
+              initial={{ width: 0 }}
+              whileInView={{ width: 24 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
+            />
+          </motion.div>
 
-            <motion.p
-              className="mt-6 font-poppins text-[14.5px] font-light leading-[1.9] text-[#1D2D44]/60"
-              {...fadeUp(0.18)}
-            >
-              KFAS collaborates with leading scientific and research
-              institutions across Kuwait, fostering innovation, knowledge
-              exchange, and impactful partnerships that advance the nation's
-              scientific landscape.
-            </motion.p>
-          </div>
+          {/* Heading */}
+          <motion.h2
+            className="font-poppins text-3xl font-semibold leading-[1.15] tracking-tight text-[#1D2D44] sm:text-4xl"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+          >
+            Building the Future{" "}
+            <span className="font-extralight italic text-[#7DC0F1]">
+              Together
+            </span>
+          </motion.h2>
 
-          {/* ── Right: 2×2 Card Grid ── */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            {tiles.map((tile, i) => (
-              <motion.a
-                key={tile.title}
-                href={tile.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden"
-                style={{ aspectRatio: "4/3" }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={VIEWPORT}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.1 + i * 0.08,
-                  ease: EASE,
-                }}
-              >
-                {/* Blurred base image — default state */}
-                <img
-                  src={tile.image}
-                  alt={tile.title}
-                  className="absolute inset-0 h-full w-full object-cover object-center"
-                  style={{ filter: "blur(6px) brightness(0.85)" }}
-                />
-
-                {/* White wash over blur */}
-                <div className="absolute inset-0 bg-white/55 transition-opacity duration-500 group-hover:opacity-0" />
-
-                {/* Sharp image — fades in on hover */}
-                <img
-                  src={tile.image}
-                  alt=""
-                  aria-hidden
-                  className="absolute inset-0 h-full w-full object-cover object-center opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105"
-                />
-
-                {/* Dark gradient for text legibility on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1D2D44]/70 via-[#1D2D44]/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-                {/* Logo — centered, large, always visible */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 transition-all duration-500 group-hover:opacity-0">
-                  <img
-                    src={tile.logo}
-                    alt={tile.title}
-                    className="h-20 w-auto max-w-[200px] object-contain sm:h-24 lg:h-[100px] lg:max-w-[240px]"
-                    style={{ filter: "brightness(0) saturate(0) invert(0.2)" }}
-                  />
-                  <p className="font-poppins text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1D2D44]/50">
-                    {tile.title}
-                  </p>
-                </div>
-
-                {/* Hover: logo (white) + title + visit */}
-                <div className="absolute inset-0 flex flex-col items-start justify-end p-5 opacity-0 transition-all duration-500 group-hover:opacity-100">
-                  <img
-                    src={tile.logo}
-                    alt={tile.title}
-                    className="mb-3 h-14 w-auto max-w-[160px] object-contain sm:h-16"
-                    style={{ filter: "brightness(0) invert(1)" }}
-                  />
-                  <div className="mb-1.5 h-[1.5px] w-6 bg-[#EC601B]" />
-                  <p className="font-poppins text-[13px] font-semibold leading-snug text-white">
-                    {tile.title}
-                  </p>
-                  <span className="mt-2 inline-flex items-center gap-1.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.15em] text-white/75">
-                    Visit
-                    <svg
-                      className="h-2.5 w-2.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2.5}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </span>
-                </div>
-
-                {/* Orange top-left corner accent on hover */}
-                <div className="absolute left-0 top-0 h-[2px] w-0 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
-              </motion.a>
-            ))}
-          </div>
+          {/* Body */}
+          <motion.p
+            className="mx-auto mt-5 max-w-[480px] font-poppins text-[14px]
+                       font-light leading-[1.9] text-[#1D2D44]/55"
+            initial={{ opacity: 0, filter: "blur(4px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.85, delay: 0.25, ease: EASE }}
+          >
+            KFAS collaborates with leading scientific and research institutions
+            across Kuwait, fostering innovation and impactful partnerships.
+          </motion.p>
         </div>
+
+        {/* ② Two marquee rows — opposite directions, different speeds.
+               Row 1 scrolls left at normal speed.
+               Row 2 scrolls right slightly slower.
+               The contrast creates a beautiful parallax depth effect.
+        */}
+        <motion.div
+          className="flex flex-col gap-10"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
+        >
+          {/* Edge fade masks applied to each row */}
+          {[
+            { speed: 1.0, direction: "left" as const },
+            { speed: 0.65, direction: "right" as const },
+          ].map(({ speed, direction }, rowIdx) => (
+            <div key={rowIdx} className="relative">
+              <div
+                className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28
+                           bg-gradient-to-r from-[#F5F9FD] to-transparent"
+              />
+              <div
+                className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28
+                           bg-gradient-to-l from-[#F5F9FD] to-transparent"
+              />
+              <LogoMarquee speed={speed} direction={direction} />
+            </div>
+          ))}
+        </motion.div>
+
+        {/* ③ Thin separator between the two rows — a hairline orange-to-blue
+               gradient that echoes the brand palette subtly.
+        */}
+        {/* (placed via gap-10 above; no extra element needed) */}
       </div>
     </section>
   );

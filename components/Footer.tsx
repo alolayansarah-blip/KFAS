@@ -65,7 +65,7 @@ const SOCIAL_LINKS = [
 ] as const;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-const VIEWPORT = { once: true, amount: 0.15 };
+const VIEWPORT = { once: true, amount: 0.1 };
 
 type NewsletterStatus = "idle" | "loading" | "success" | "error";
 
@@ -102,9 +102,45 @@ function Footer({
   };
 
   return (
-    <footer className="relative bg-[#1D2D44] overflow-hidden">
-      {/* Subtle top divider with brand gradient */}
-      <div className="h-[1.5px] w-full bg-gradient-to-r from-[#EC601B]/60 via-[#7DC0F1]/30 to-transparent" />
+    <footer className="relative bg-[#EC601B] overflow-hidden">
+      {/*
+        ① Ambient depth orbs — a darker warm shadow bottom-left and a
+           lighter highlight top-right, giving the flat orange depth
+           without imagery.
+      */}
+      <motion.div
+        className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(0,0,0,0.12) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+        animate={{ x: [0, 20, 0], y: [0, -20, 0] }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "mirror",
+        }}
+      />
+      <motion.div
+        className="pointer-events-none absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+        animate={{ x: [0, -20, 0], y: [0, 20, 0] }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "mirror",
+        }}
+      />
+
+      {/* Top divider */}
+      <div className="h-[1.5px] w-full bg-gradient-to-r from-white/40 via-white/15 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-16 lg:pt-20 pb-8">
         {/* Main grid */}
@@ -139,13 +175,13 @@ function Footer({
                   alt={logoText}
                   width={140}
                   height={140}
-                  className="object-contain w-28 h-28 sm:w-32 sm:h-32"
+                  className="object-contain w-28 h-28 sm:w-32 sm:h-32
+                             brightness-0 invert opacity-90"
                 />
               )}
             </Link>
 
-            {/* Social icons */}
-            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50">
               Follow Us
             </p>
             <div className="flex items-center gap-2">
@@ -156,7 +192,10 @@ function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
-                  className="group flex h-8 w-8 items-center justify-center border border-white/10 text-white/40 transition-all duration-300 hover:border-[#EC601B]/50 hover:text-[#EC601B]"
+                  className="group flex h-8 w-8 items-center justify-center
+                             border border-white/20 text-white/50
+                             transition-all duration-300
+                             hover:border-white hover:text-white hover:bg-white/10"
                 >
                   {social.icon}
                 </a>
@@ -175,18 +214,20 @@ function Footer({
               },
             }}
           >
-            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50">
               Explore
             </p>
-            <div className="mb-5 h-px w-8 bg-[#EC601B]/50" />
+            <div className="mb-5 h-px w-8 bg-white/30" />
             <ul className="space-y-3">
               {NAVIGATION_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group inline-flex items-center gap-2 text-[14px] font-light text-white/55 transition-all duration-300 hover:text-white"
+                    className="group inline-flex items-center gap-2
+                               text-[14px] font-light text-white/65
+                               transition-all duration-300 hover:text-white"
                   >
-                    <span className="h-[1px] w-0 bg-[#EC601B] transition-all duration-300 group-hover:w-3" />
+                    <span className="h-[1px] w-0 bg-white transition-all duration-300 group-hover:w-3" />
                     {link.label}
                   </Link>
                 </li>
@@ -205,11 +246,11 @@ function Footer({
               },
             }}
           >
-            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50">
               Subscribe
             </p>
-            <div className="mb-5 h-px w-8 bg-[#EC601B]/50" />
-            <p className="mb-5 text-[14px] font-light text-white/50 leading-relaxed">
+            <div className="mb-5 h-px w-8 bg-white/30" />
+            <p className="mb-5 text-[14px] font-light text-white/65 leading-relaxed">
               Sign up for our newsletter to stay updated on all the latest news
               and announcements.
             </p>
@@ -222,19 +263,26 @@ function Footer({
                 placeholder="Your email address"
                 required
                 disabled={status === "loading"}
-                className="w-full bg-transparent border-b border-white/20 pb-2 text-[14px] text-white placeholder-white/30 focus:outline-none focus:border-[#EC601B]/60 transition-colors duration-300 disabled:opacity-50"
+                className="w-full bg-transparent border-b border-white/30 pb-2
+                           text-[14px] text-white placeholder-white/35
+                           focus:outline-none focus:border-white/70
+                           transition-colors duration-300 disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={status === "loading"}
                 className="group inline-flex items-center gap-3"
               >
-                <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
-                <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-white">
+                <div className="h-[1.5px] w-5 bg-white transition-all duration-500 group-hover:w-8" />
+                <span
+                  className="text-[13px] font-medium tracking-[0.08em] text-white/80
+                                 transition-colors duration-300 group-hover:text-white"
+                >
                   {status === "loading" ? "Subscribing…" : "Subscribe"}
                 </span>
                 <svg
-                  className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-white"
+                  className="h-3 w-3 -translate-x-1 text-white/80 transition-all duration-300
+                             group-hover:translate-x-0 group-hover:text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -251,7 +299,9 @@ function Footer({
 
             {message && (
               <p
-                className={`mt-3 text-[12px] leading-relaxed ${status === "error" ? "text-red-300" : "text-green-300"}`}
+                className={`mt-3 text-[12px] leading-relaxed ${
+                  status === "error" ? "text-white/60" : "text-white"
+                }`}
               >
                 {message}
               </p>
@@ -269,13 +319,12 @@ function Footer({
               },
             }}
           >
-            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/30">
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50">
               Find Us
             </p>
-            <div className="mb-5 h-px w-8 bg-[#EC601B]/50" />
+            <div className="mb-5 h-px w-8 bg-white/30" />
 
-            {/* Map */}
-            <div className="aspect-[4/3] overflow-hidden border border-white/10 mb-4">
+            <div className="aspect-[4/3] overflow-hidden border border-white/15 mb-4">
               <iframe
                 src={CONTACT_INFO.mapEmbedUrl}
                 width="100%"
@@ -285,11 +334,11 @@ function Footer({
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="KFAS Location Map"
-                className="w-full h-full"
+                className="w-full h-full opacity-90"
               />
             </div>
 
-            <address className="not-italic text-[14px] font-light text-white/50 leading-relaxed mb-3">
+            <address className="not-italic text-[14px] font-light text-white/65 leading-relaxed mb-3">
               <p>{CONTACT_INFO.address}</p>
               <p>{CONTACT_INFO.city}</p>
             </address>
@@ -300,12 +349,16 @@ function Footer({
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-3"
             >
-              <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
-              <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-white">
+              <div className="h-[1.5px] w-5 bg-white transition-all duration-500 group-hover:w-8" />
+              <span
+                className="text-[13px] font-medium tracking-[0.08em] text-white/80
+                               transition-colors duration-300 group-hover:text-white"
+              >
                 View on Map
               </span>
               <svg
-                className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-white"
+                className="h-3 w-3 -translate-x-1 text-white/80 transition-all duration-300
+                           group-hover:translate-x-0 group-hover:text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -323,16 +376,16 @@ function Footer({
 
         {/* Bottom bar */}
         <motion.div
-          className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
+          className="border-t border-white/15 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={VIEWPORT}
           transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
         >
-          <p className="text-[12px] font-light text-white/30 tracking-wide">
+          <p className="text-[12px] font-light text-white/50 tracking-wide">
             © {currentYear} Kuwait Foundation for the Advancement of Sciences
           </p>
-          <p className="text-[12px] font-light text-white/20 tracking-wide">
+          <p className="text-[12px] font-light text-white/35 tracking-wide">
             Est. 1976
           </p>
         </motion.div>

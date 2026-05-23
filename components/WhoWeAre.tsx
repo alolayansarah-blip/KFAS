@@ -1,8 +1,15 @@
 "use client";
 
-import React, { memo, useRef } from "react";
+import React, { memo, useRef, useEffect } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+  useMotionValue,
+  animate,
+} from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
@@ -17,6 +24,64 @@ const STATS = [
   { value: "48+", label: "Years of Impact" },
   { value: "500+", label: "Research Grants" },
 ];
+
+// ─── Animated counter stat ────────────────────────────────────────────────────
+
+/*
+  ① Stat counter — each number counts up from 0 when scrolled into view.
+     The speed is proportional to the value so they feel organic, not mechanical.
+     Suffix ("+") is appended statically after the motion span.
+*/
+function AnimatedStat({
+  value,
+  label,
+  delay,
+}: {
+  value: string;
+  label: string;
+  delay: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+
+  // Split "500+" → numericVal=500, suffix="+"
+  const numMatch = value.match(/^(\d+)(.*)$/);
+  const numericVal = numMatch ? parseInt(numMatch[1], 10) : 0;
+  const suffix = numMatch ? numMatch[2] : "";
+
+  const count = useMotionValue(0);
+  const displayCount = useTransform(count, (v) => Math.round(v).toString());
+
+  useEffect(() => {
+    if (!isInView) return;
+    const controls = animate(count, numericVal, {
+      duration: numericVal > 200 ? 2.0 : 1.3,
+      ease: "easeOut",
+      delay,
+    });
+    return controls.stop;
+  }, [isInView, count, numericVal, delay]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ duration: 0.6, delay, ease: EASE }}
+    >
+      <div className="font-poppins text-lg font-bold tabular-nums text-[#EC601B]">
+        <motion.span>{displayCount}</motion.span>
+        {suffix}
+      </div>
+      <div className="mt-0.5 text-[10px] font-light uppercase tracking-[0.18em] text-[#1D2D44]/40">
+        {label}
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── WhoWeAre ─────────────────────────────────────────────────────────────────
 
 function WhoWeAre() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -48,10 +113,8 @@ function WhoWeAre() {
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
-
           {/* ── Left: Content ── */}
           <div className="flex flex-col">
-
             {/* Eyebrow */}
             <motion.div
               className="mb-5 flex items-center gap-3"
@@ -60,22 +123,34 @@ function WhoWeAre() {
               viewport={VIEWPORT}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <div className="h-px w-7 bg-[#EC601B]" />
+              {/*
+                ② Eyebrow rule draws in — width animates 0 → 28px,
+                   feeling like a brushstroke appearing before the label.
+              */}
+              <motion.div
+                className="h-px bg-[#EC601B]"
+                initial={{ width: 0 }}
+                whileInView={{ width: 28 }}
+                viewport={VIEWPORT}
+                transition={{ duration: 0.65, delay: 0.15, ease: EASE }}
+              />
               <span className="text-[10px] font-semibold uppercase tracking-[0.45em] text-[#EC601B]">
                 Who We Are
               </span>
             </motion.div>
 
-            {/* Title — elegant two-line + logo lockup */}
+            {/* Title — curtain reveal (same technique as Hero) */}
             <div
               ref={titleRef}
               className="mb-4 flex items-start gap-5"
               aria-label="Kuwait Foundation for the Advancement of Sciences"
             >
-              {/* Text lines */}
               <div className="flex flex-col gap-0.5 flex-1">
                 {TITLE_LINES.map(({ text, accent }, i) => (
-                  <div key={text} className="overflow-hidden">
+                  <div
+                    key={text}
+                    className="overflow-hidden pb-[0.1em] -mb-[0.1em]"
+                  >
                     <motion.span
                       className={[
                         "block font-poppins text-2xl font-semibold leading-tight tracking-tight sm:text-3xl lg:text-4xl",
@@ -104,9 +179,7 @@ function WhoWeAre() {
                 className="flex items-center gap-4 pt-1 self-stretch"
                 initial={{ opacity: 0, x: 10 }}
                 animate={
-                  isTitleInView
-                    ? { opacity: 1, x: 0 }
-                    : { opacity: 0, x: 10 }
+                  isTitleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 10 }
                 }
                 transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
               >
@@ -122,13 +195,16 @@ function WhoWeAre() {
               </motion.div>
             </div>
 
-            {/* Body */}
+            {/* Body
+                ③ Blur-to-clear reveal — same technique as Hero description.
+                   Information "comes into focus" as you read down the page.
+            */}
             <motion.p
               className="mb-6 font-poppins text-[15px] font-light leading-relaxed tracking-[0.01em] text-[#1D2D44]/60"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 18, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={VIEWPORT}
-              transition={{ duration: 0.7, delay: 0.45, ease: EASE }}
+              transition={{ duration: 0.85, delay: 0.45, ease: EASE }}
             >
               Established in 1976, KFAS is a private, non-profit organization
               that supports research, training, and development in STEAM
@@ -138,25 +214,20 @@ function WhoWeAre() {
               generations to spread knowledge and accelerate progress.
             </motion.p>
 
-            {/* Stats */}
-            <motion.div
-              className="mb-7 grid grid-cols-3 gap-4"
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={VIEWPORT}
-              transition={{ duration: 0.65, delay: 0.55, ease: EASE }}
-            >
-              {STATS.map(({ value, label }) => (
-                <div key={label}>
-                  <div className="font-poppins text-lg font-bold tabular-nums text-[#EC601B]">
-                    {value}
-                  </div>
-                  <div className="mt-0.5 text-[10px] font-light uppercase tracking-[0.18em] text-[#1D2D44]/40">
-                    {label}
-                  </div>
-                </div>
+            {/* Stats
+                ④ Each stat enters individually with stagger (not all at once),
+                   and the number counts up from 0 using useMotionValue.
+            */}
+            <div className="mb-7 grid grid-cols-3 gap-4">
+              {STATS.map(({ value, label }, i) => (
+                <AnimatedStat
+                  key={label}
+                  value={value}
+                  label={label}
+                  delay={0.55 + i * 0.12}
+                />
               ))}
-            </motion.div>
+            </div>
 
             {/* CTA */}
             <motion.div
@@ -199,21 +270,6 @@ function WhoWeAre() {
             viewport={VIEWPORT}
             transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
           >
-            <motion.div
-              className="absolute -left-3 -top-3 h-10 w-10 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/35 pointer-events-none"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={VIEWPORT}
-              transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-            />
-            <motion.div
-              className="absolute -bottom-3 -right-3 h-10 w-10 border-b-[1.5px] border-r-[1.5px] border-[#EC601B]/35 pointer-events-none"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={VIEWPORT}
-              transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-            />
-
             <div className="group relative overflow-hidden">
               <motion.div style={{ y: imageY }}>
                 <Image
@@ -228,7 +284,6 @@ function WhoWeAre() {
               </motion.div>
             </div>
           </motion.div>
-
         </div>
       </div>
     </section>

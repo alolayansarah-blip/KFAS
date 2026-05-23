@@ -1,12 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -39,7 +34,6 @@ export default function Hero({
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -49,13 +43,6 @@ export default function Hero({
   const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const contentOp = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.5], ["0%", "-5%"]);
-
-  const togglePlayPause = () => {
-    if (!videoRef.current) return;
-    isPlaying
-      ? videoRef.current.pause()
-      : videoRef.current.play().catch(() => {});
-  };
 
   const lines = titleEn ? splitLines(titleEn) : [];
 
@@ -67,21 +54,32 @@ export default function Hero({
       {/* ── Video ── */}
       <motion.div className="absolute inset-0 z-0" style={{ y: videoY }}>
         {video ? (
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster={videoPoster}
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ filter: "contrast(1.06) brightness(0.88) saturate(1.1)" }}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
+          /*
+            ① Ken Burns opening — video gently scales from 1.06 → 1 over ~3s.
+               Creates a cinematic "settling into focus" feel on load.
+          */
+          <motion.div
+            className="absolute inset-0"
+            initial={{ scale: 1.06 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 3.0, ease: [0.22, 1, 0.36, 1] }}
           >
-            <source src={video} type="video/mp4" />
-          </video>
+            <video
+              ref={videoRef}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              poster={videoPoster}
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{
+                filter: "contrast(1.06) brightness(0.88) saturate(1.1)",
+              }}
+            >
+              <source src={video} type="video/mp4" />
+            </video>
+          </motion.div>
         ) : (
           <div className="absolute inset-0 bg-[#1D2D44]" />
         )}
@@ -90,6 +88,30 @@ export default function Hero({
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{ background: "rgba(29, 45, 68, 0.50)" }}
+        />
+
+        {/*
+          ② Ambient warm orb — a slow-drifting radial orange glow anchored
+             to the lower-left. Breathes life into the still background without
+             competing with the video or text.
+        */}
+        <motion.div
+          className="absolute -bottom-32 -left-32 z-[12] pointer-events-none"
+          style={{
+            width: "700px",
+            height: "500px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(ellipse, rgba(236,96,27,0.13) 0%, transparent 68%)",
+            filter: "blur(48px)",
+          }}
+          animate={{ x: [0, 45, 0], y: [0, -35, 0] }}
+          transition={{
+            duration: 16,
+            repeat: Infinity,
+            ease: "easeInOut",
+            repeatType: "mirror",
+          }}
         />
 
         {/* Film grain */}
@@ -108,19 +130,26 @@ export default function Hero({
         style={{ opacity: contentOp, y: contentY }}
       >
         <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-12">
-          {/* Eyebrow */}
+          {/* Eyebrow
+              ③ Letter-spacing expands from tight → full tracking as it fades in.
+                 Feels like the text is "breathing out" into place.
+          */}
           {subtitle && (
             <motion.p
-              className="mb-5 text-[10px] font-semibold uppercase tracking-[0.5em] text-white/40"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.3, ease: EASE }}
+              className="mb-5 text-[10px] font-semibold uppercase text-white/40"
+              initial={{ opacity: 0, letterSpacing: "0.15em" }}
+              animate={{ opacity: 1, letterSpacing: "0.5em" }}
+              transition={{ duration: 1.2, delay: 0.3, ease: EASE }}
             >
               {subtitle}
             </motion.p>
           )}
 
-          {/* Large title — bigger on mobile now that nothing competes above it */}
+          {/* Large title
+              ④ Each line uses an overflow-hidden mask + y: "100%" → "0%" rise.
+                 This is the classic editorial/magazine "curtain reveal" —
+                 text climbs up into view from behind a hidden edge.
+          */}
           {lines.length > 0 && (
             <h1
               className="mb-6 font-poppins font-bold leading-[1.04] tracking-[-0.02em] text-white"
@@ -131,30 +160,57 @@ export default function Hero({
               aria-label={lines.join(" ")}
             >
               {lines.map((line, i) => (
-                <motion.span
+                /*
+                  The outer <span> is the clipping mask (overflow-hidden).
+                  The inner <motion.span> rises from 100% below into 0%.
+                */
+                <span
                   key={i}
-                  className="block"
-                  aria-hidden="true"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.85,
-                    delay: 0.45 + i * 0.12,
-                    ease: EASE,
-                  }}
+                  className="block overflow-hidden pb-[0.15em] -mb-[0.15em]"
                 >
-                  {line}
-                </motion.span>
+                  <motion.span
+                    className="block"
+                    aria-hidden="true"
+                    initial={{ y: "108%" }}
+                    animate={{ y: "0%" }}
+                    transition={{
+                      duration: 0.9,
+                      delay: 0.4 + i * 0.13,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    {line}
+                  </motion.span>
+                </span>
               ))}
             </h1>
           )}
 
-          {/* Orange rule */}
+          {/* Orange rule
+              ⑤ After the rule draws in, a warm glow blooms then settles —
+                 like a struck match fading to ember.
+          */}
           <motion.div
             className="mb-6 h-px bg-[#EC601B]"
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 40, opacity: 1 }}
-            transition={{ duration: 0.7, delay: 1.0, ease: EASE }}
+            initial={{
+              width: 0,
+              opacity: 0,
+              boxShadow: "0 0 0px rgba(236,96,27,0)",
+            }}
+            animate={{
+              width: 40,
+              opacity: 1,
+              boxShadow: [
+                "0 0 0px rgba(236,96,27,0)",
+                "0 0 14px rgba(236,96,27,0.85)",
+                "0 0 5px rgba(236,96,27,0.35)",
+              ],
+            }}
+            transition={{
+              width: { duration: 0.7, delay: 1.0, ease: EASE },
+              opacity: { duration: 0.7, delay: 1.0, ease: EASE },
+              boxShadow: { duration: 1.4, delay: 1.7, ease: "easeOut" },
+            }}
           />
 
           {/* Arabic */}
@@ -170,13 +226,16 @@ export default function Hero({
             </motion.p>
           )}
 
-          {/* Description */}
+          {/* Description
+              ⑥ Fades in through a soft blur → sharp reveal.
+                 Conveys the feeling of information coming into clarity.
+          */}
           {description && (
             <motion.p
               className="max-w-[48ch] font-poppins text-[13.5px] font-light leading-[2] tracking-[0.01em] text-white/45 sm:text-[15px] lg:text-[14px]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 1.15, ease: EASE }}
+              initial={{ opacity: 0, filter: "blur(6px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ duration: 1.0, delay: 1.15, ease: EASE }}
             >
               {description}
             </motion.p>
@@ -184,70 +243,39 @@ export default function Hero({
         </div>
       </motion.div>
 
-      {/* ── Play / Pause — bottom right ── */}
-      {video && (
-        <motion.button
-          type="button"
-          onClick={togglePlayPause}
-          aria-label={isPlaying ? "Pause video" : "Play video"}
-          className="absolute bottom-8 right-8 z-30 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/20 backdrop-blur-sm transition-colors duration-300 hover:border-[#EC601B]/40 hover:bg-[#EC601B]/10 sm:bottom-10 sm:right-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.6, ease: EASE }}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.94 }}
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {isPlaying ? (
-              <motion.svg
-                key="pause"
-                className="h-3 w-3 text-white"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.12 }}
-              >
-                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-              </motion.svg>
-            ) : (
-              <motion.svg
-                key="play"
-                className="ml-0.5 h-3 w-3 text-white"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.12 }}
-              >
-                <path d="M8 5v14l11-7z" />
-              </motion.svg>
-            )}
-          </AnimatePresence>
-        </motion.button>
-      )}
-
-      {/* ── Scroll indicator — centred bottom ── */}
+      {/* ── Scroll indicator — centred bottom
+          ⑦ Replaced the plain line with a refined chevron that bounces gently.
+             Minimal, universally understood, doesn't crowd the composition.
+      ── */}
       <motion.div
         className="absolute bottom-8 left-1/2 z-30 flex flex-col items-center gap-2"
-        initial={{ opacity: 0, x: "-50%" }}
-        animate={{ opacity: 1, x: "-50%" }}
+        style={{ x: "-50%" }}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.7, ease: EASE }}
       >
-        <motion.div
-          className="h-10 w-px"
-          style={{
-            background:
-              "linear-gradient(to bottom, transparent, rgba(255,255,255,0.35))",
-          }}
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
         <span className="text-[8px] font-light uppercase tracking-[0.45em] text-white/20">
           Scroll
         </span>
+        {/* Bouncing chevron */}
+        <motion.svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 text-white/30"
+          animate={{ y: [0, 6, 0] }}
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            repeatType: "loop",
+          }}
+        >
+          <path d="M6 9l6 6 6-6" />
+        </motion.svg>
       </motion.div>
     </section>
   );

@@ -478,11 +478,10 @@
 //     </motion.section>
 //   );
 // }
-
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import SplitText from "./SplitText";
 
 interface Stat {
@@ -511,6 +510,13 @@ export default function CounterSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const timersRef = useRef<NodeJS.Timeout[]>([]);
   const hasAnimatedRef = useRef(false);
+
+  /*
+    ① Counter fires only when section enters viewport —
+       previously it started immediately on data load regardless
+       of whether the user had scrolled down to see it.
+  */
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   useEffect(() => {
     async function fetchStats(retry = false) {
@@ -553,7 +559,9 @@ export default function CounterSection() {
     fetchStats();
   }, []);
 
+  /* Only start counting once section is actually visible */
   useEffect(() => {
+    if (!isInView) return;
     if (stats.length === 0) return;
     if (stats.every((s) => s.value === 0)) return;
     if (hasAnimatedRef.current) return;
@@ -602,14 +610,13 @@ export default function CounterSection() {
       timersRef.current.forEach((timer) => clearInterval(timer));
       timersRef.current = [];
     };
-  }, [stats]);
+  }, [stats, isInView]);
 
   const formatNumber = (num: number) => {
     const n = Math.round(Number(num) || 0);
     return n.toLocaleString();
   };
 
-  // ── Single section — no DOM swap, no opacity gate ──────────────────────────
   return (
     <section
       ref={sectionRef}
@@ -617,20 +624,41 @@ export default function CounterSection() {
     >
       {/* Background image */}
       <div className="absolute inset-0 bg-[url('/image/benduluim.png')] bg-cover bg-center bg-fixed" />
+
       {/* Orange overlay */}
       <div className="absolute inset-0 bg-[#EC601B]/80" />
-      {/* Subtle vignette */}
+
+      {/* Vignette */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#EC601B]/30 via-transparent to-[#EC601B]/20" />
+
+      {/*
+        ② Subtle ambient breathing — a slow-pulsing radial highlight
+           drifts across the background, giving the section a living warmth
+           without competing with the content.
+      */}
+      <motion.div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 30% 50%, rgba(255,255,255,0.06) 0%, transparent 70%)",
+        }}
+        animate={{ opacity: [0.6, 1, 0.6], x: ["0%", "4%", "0%"] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16">
+          {/*
+            ③ Eyebrow letterSpacing expands on entrance —
+               consistent with Hero and WhoWeAre motion language.
+          */}
           <motion.p
-            className="mb-4 text-[10px] font-semibold uppercase tracking-[0.42em] text-white/50"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            className="mb-4 text-[10px] font-semibold uppercase text-white/50"
+            initial={{ opacity: 0, y: 16, letterSpacing: "0.15em" }}
+            whileInView={{ opacity: 1, y: 0, letterSpacing: "0.42em" }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ duration: 1.1, ease: EASE }}
           >
             Since 1976
           </motion.p>
@@ -661,26 +689,57 @@ export default function CounterSection() {
           </motion.h2>
         </div>
 
-        {/* Stats Grid — no entry animation to avoid flash */}
+        {/* Stats Grid
+            ④ Cards enter with a left-to-right stagger — each card slides up
+               and fades in 70ms after the previous, creating a wave effect
+               across the row without feeling gimmicky.
+        */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4">
           {stats.map((stat, index) => (
-            <div
+            <motion.div
               key={index}
-              className="border border-white/15 bg-white/8 backdrop-blur-sm p-5 text-center"
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.65, delay: index * 0.07, ease: EASE }}
+              /*
+                ⑤ Card hover — lifts slightly and brightens its border,
+                   giving a tactile "pressable" quality without orange fill
+                   (which would clash with the orange background).
+              */
+              whileHover={{
+                y: -5,
+                borderColor: "rgba(255,255,255,0.35)",
+                transition: { duration: 0.3, ease: EASE },
+              }}
+              className="border border-white/15 bg-white/8 backdrop-blur-sm p-5 text-center cursor-default"
             >
               {/* Number */}
               <div className="mb-3 font-poppins text-3xl font-semibold tabular-nums text-white lg:text-4xl">
                 {loading ? "—" : formatNumber(counts[index] ?? stat.value)}
               </div>
 
-              {/* Divider */}
-              <div className="h-px w-8 bg-white/30 mx-auto mb-3" />
+              {/*
+                ⑥ Divider draws in from the center outward when the card
+                   enters view — a small but satisfying reveal detail.
+              */}
+              <motion.div
+                className="h-px bg-white/30 mx-auto mb-3"
+                initial={{ width: 0 }}
+                whileInView={{ width: 32 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.25 + index * 0.07,
+                  ease: EASE,
+                }}
+              />
 
               {/* Label */}
               <p className="font-poppins text-[10px] text-white/65 font-medium leading-tight uppercase tracking-widest">
                 {stat.label}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

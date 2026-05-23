@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, memo } from "react";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavItem } from "@/types";
@@ -31,28 +30,13 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     label: "Research",
     href: "/Research",
     children: [
-      {
-        label: "Grants",
-        href: "/research/grants",
-      },
+      { label: "Grants", href: "/research/grants" },
       { label: "Activities and Events", href: "/research/ActivitiesAndEvents" },
       { label: "Assigned Studies", href: "/research/AssignedStudies" },
-      {
-        label: "Scientific Conference Sponsorship",
-        href: "/research/SCS",
-      },
-      {
-        label: "Tech Deployment",
-        href: "/research/TechDeployment",
-      },
-      {
-        label: "R&D in Private Sector",
-        href: "/research/RandDPrivate",
-      },
-      {
-        label: "KFAS Research Portal",
-        href: "/research/KFASResearchPortal",
-      },
+      { label: "Scientific Conference Sponsorship", href: "/research/SCS" },
+      { label: "Tech Deployment", href: "/research/TechDeployment" },
+      { label: "R&D in Private Sector", href: "/research/RandDPrivate" },
+      { label: "KFAS Research Portal", href: "/research/KFASResearchPortal" },
     ],
   },
   {
@@ -131,7 +115,7 @@ interface HeaderProps {
   forceWhiteBackground?: boolean;
 }
 
-const EASE = [0.16, 1, 0.3, 1] as const;
+// ─── Sub-components ──────────────────────────────────────────────────────────
 
 const ChevronDown = ({
   isOpen,
@@ -170,7 +154,9 @@ const ChevronRight = () => (
 );
 
 const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => (
-  <div className="relative h-10 w-14 shrink-0">
+  <div
+    className={`relative h-10 w-14 shrink-0 transition-transform duration-500 ${isScrolled ? "scale-90" : "scale-100"}`}
+  >
     <img
       src={isScrolled ? "/image/50_gold.png" : "/image/50.png"}
       alt="KFAS 50 years"
@@ -205,27 +191,19 @@ const DropdownPanel = ({
   id?: string;
   labelledBy?: string;
   children: React.ReactNode;
-}) => (
-  <AnimatePresence>
-    {isOpen && (
-      <motion.div
-        id={id}
-        role="menu"
-        aria-labelledby={labelledBy}
-        className={`absolute top-full z-[111] -mt-2 min-w-[260px] bg-[#EC601B] pt-2 overflow-visible shadow-[0_12px_40px_rgba(236,96,27,0.30),0_4px_12px_rgba(0,0,0,0.08)] ${
-          align === "right" ? "right-0" : "left-0"
-        }`}
-        initial={{ opacity: 0, y: -10, scaleY: 0.94 }}
-        animate={{ opacity: 1, y: 0, scaleY: 1 }}
-        exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
-        transition={{ duration: 0.22, ease: EASE }}
-        style={{ transformOrigin: "top center" }}
-      >
-        {children}
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
+}) =>
+  isOpen ? (
+    <div
+      id={id}
+      role="menu"
+      aria-labelledby={labelledBy}
+      className={`absolute top-full z-[111] -mt-2 min-w-[260px] bg-[#EC601B] pt-2 overflow-visible shadow-[0_12px_40px_rgba(236,96,27,0.30),0_4px_12px_rgba(0,0,0,0.08)] ${
+        align === "right" ? "right-0" : "left-0"
+      }`}
+    >
+      {children}
+    </div>
+  ) : null;
 
 const DropdownLink = ({
   href,
@@ -307,13 +285,16 @@ const DesktopNavItem = memo(
             aria-haspopup="menu"
             aria-controls={isOpen ? menuId : undefined}
             onClick={onTriggerClick}
-            className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, isOpen)}`}
+            className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, isOpen)} relative`}
           >
             {item.label}
             <ChevronDown
               isOpen={isOpen}
               className="ml-0.5 h-3 w-3 opacity-80"
             />
+            {!isScrolled && isOpen && (
+              <span className="absolute bottom-0 left-2.5 right-2.5 h-px rounded-full bg-white/60" />
+            )}
           </button>
         ) : (
           <Link
@@ -365,33 +346,28 @@ const DesktopNavItem = memo(
                       </div>
                     </div>
 
-                    <AnimatePresence>
-                      {nestedOpenHref === child.href && (
-                        <motion.div
+                    {nestedOpenHref === child.href && (
+                        <div
                           role="menu"
                           aria-label={child.label}
                           className="absolute left-full top-0 z-[112] min-w-[260px] bg-[#FFF3EE] py-1 shadow-[4px_12px_32px_rgba(236,96,27,0.15)]"
                           style={{ borderLeft: "3px solid #7DC0F1" }}
-                          initial={{ opacity: 0, x: -8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -4 }}
-                          transition={{ duration: 0.14, ease: EASE }}
                           onMouseEnter={() => openNested(child.href)}
                           onMouseLeave={scheduleCloseNested}
                         >
                           {nested.map((sub) => (
-                            <Link
-                              key={navItemKey(sub)}
-                              href={sub.href}
-                              role="menuitem"
-                              className="block px-5 py-2.5 text-[14px] text-[#EC601B] whitespace-nowrap transition-colors duration-150 hover:bg-[#FEE9DC]"
-                            >
-                              {sub.label}
-                            </Link>
+                            <div key={navItemKey(sub)}>
+                              <Link
+                                href={sub.href}
+                                role="menuitem"
+                                className="block px-5 py-2.5 text-[14px] text-[#EC601B] whitespace-nowrap transition-colors duration-150 hover:bg-[#FEE9DC]"
+                              >
+                                {sub.label}
+                              </Link>
+                            </div>
                           ))}
-                        </motion.div>
+                        </div>
                       )}
-                    </AnimatePresence>
                   </div>
                 </div>
               );
@@ -467,20 +443,28 @@ const LanguageSwitcher = ({
 );
 
 const MobileNavItem = memo(
-  ({ item, onClose }: { item: NavItem; onClose: () => void }) => {
+  ({
+    item,
+    onClose,
+  }: {
+    item: NavItem;
+    onClose: () => void;
+  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [nestedOpen, setNestedOpen] = useState<string | null>(null);
 
     if (!item.children) {
       return (
-        <Link
-          href={item.href}
-          onClick={onClose}
-          className="flex items-center gap-2 px-2 py-3 text-[14.5px] font-normal text-gray-700 transition-all hover:text-[#EC601B] group"
-        >
-          <span className="h-4 w-0.5 rounded-full bg-[#EC601B] opacity-0 transition-opacity group-hover:opacity-40" />
-          {item.label}
-        </Link>
+        <div>
+          <Link
+            href={item.href}
+            onClick={onClose}
+            className="flex items-center gap-2 px-2 py-3 text-[14.5px] font-normal text-gray-700 transition-all hover:text-[#EC601B] group"
+          >
+            <span className="h-4 w-0.5 rounded-full bg-[#EC601B] opacity-0 transition-opacity group-hover:opacity-40" />
+            {item.label}
+          </Link>
+        </div>
       );
     }
 
@@ -507,16 +491,8 @@ const MobileNavItem = memo(
           />
         </button>
 
-        <AnimatePresence initial={false}>
-          {isOpen && (
-            <motion.div
-              key="children"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.22, ease: EASE }}
-              className="overflow-hidden"
-            >
+        {isOpen && (
+            <div className="overflow-hidden">
               <div className="mb-1 ml-3 mt-0.5 space-y-0 border-l-2 border-[#EC601B]/20 bg-[#FFF3EE] py-1.5 pl-3">
                 {item.children.map((child) => {
                   const hasNested = Boolean(child.children?.length);
@@ -524,14 +500,15 @@ const MobileNavItem = memo(
 
                   if (!hasNested) {
                     return (
-                      <Link
-                        key={navItemKey(child)}
-                        href={child.href}
-                        onClick={onClose}
-                        className="block px-3 py-2 text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
-                      >
-                        {child.label}
-                      </Link>
+                      <div key={navItemKey(child)}>
+                        <Link
+                          href={child.href}
+                          onClick={onClose}
+                          className="block px-3 py-2 text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
+                        >
+                          {child.label}
+                        </Link>
+                      </div>
                     );
                   }
 
@@ -563,16 +540,8 @@ const MobileNavItem = memo(
                         </button>
                       </div>
 
-                      <AnimatePresence initial={false}>
-                        {nestedOpen === nestedKey && child.children && (
-                          <motion.div
-                            key={nestedKey}
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.18, ease: EASE }}
-                            className="overflow-hidden"
-                          >
+                      {nestedOpen === nestedKey && child.children && (
+                          <div className="overflow-hidden">
                             <div className="border-t border-orange-100 bg-[#FFF3EE] py-1.5 pl-3">
                               {child.children.map((sub) => (
                                 <Link
@@ -585,21 +554,21 @@ const MobileNavItem = memo(
                                 </Link>
                               ))}
                             </div>
-                          </motion.div>
+                          </div>
                         )}
-                      </AnimatePresence>
                     </div>
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </div>
     );
   },
 );
 MobileNavItem.displayName = "MobileNavItem";
+
+// ─── Header ─────────────────────────────────────────────────────────────────
 
 function Header({
   logo,
@@ -615,7 +584,6 @@ function Header({
 
   const pathname = usePathname();
   const closeNavTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const prefersReducedMotion = useReducedMotion();
 
   const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
   const showWhiteBg = isScrolled || forceWhiteBackground;
@@ -731,76 +699,76 @@ function Header({
   }, [openDropdown, isLangOpen, clearCloseTimer]);
 
   return (
-    <motion.header
-      initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: prefersReducedMotion ? 0 : 0.6,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+    <header
       className={`fixed left-0 right-0 top-0 z-[100] w-full transition-all duration-500 [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)] ${
         showWhiteBg
           ? "bg-white/95 backdrop-blur-sm shadow-[0_1px_0_rgba(0,0,0,0.06),0_4px_20px_rgba(0,0,0,0.06)]"
           : "bg-transparent"
       }`}
     >
-      {/* Desktop */}
+      {/* Desktop ─────────────────────────────────────── */}
       <nav
         className={`kfas-nav-desktop hidden w-full max-w-7xl mx-auto px-4 lg:px-6 xl:px-8 md:block transition-all duration-500 [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)] ${
           showWhiteBg ? "py-2" : "py-3.5"
         }`}
       >
         <div className="flex items-center justify-between gap-4 lg:gap-6">
-          <Link
-            href="/"
-            className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
-          >
-            {logo ? (
-              <img
-                src={showWhiteBg ? "/image/logo_c.png" : logo}
-                alt={logoText}
-                className={`block w-auto object-contain transition-all duration-500 [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)] ${
-                  showWhiteBg ? "h-14" : "h-[4.5rem]"
-                }`}
-              />
-            ) : (
-              <span
-                className={`font-normal transition-all duration-500 ${showWhiteBg ? "text-xl text-black" : "text-2xl text-white"}`}
-              >
-                {logoText}
-              </span>
-            )}
-            <AnniversaryLogo isScrolled={showWhiteBg} />
-          </Link>
+          <div>
+            <Link
+              href="/"
+              className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-90"
+            >
+              {logo ? (
+                <img
+                  src={showWhiteBg ? "/image/logo_c.png" : logo}
+                  alt={logoText}
+                  className={`block w-auto object-contain transition-all duration-500 [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)] ${
+                    showWhiteBg ? "h-14" : "h-[4.5rem]"
+                  }`}
+                />
+              ) : (
+                <span
+                  className={`font-normal transition-all duration-500 ${showWhiteBg ? "text-xl text-black" : "text-2xl text-white"}`}
+                >
+                  {logoText}
+                </span>
+              )}
+              <AnniversaryLogo isScrolled={showWhiteBg} />
+            </Link>
+          </div>
 
           <div className="flex min-w-0 flex-1 items-center justify-end gap-x-1">
             {navItemsList.map((item) => (
-              <DesktopNavItem
-                key={navItemKey(item)}
-                item={item}
-                isScrolled={showWhiteBg}
-                isOpen={openDropdown === item.href}
-                onMouseEnter={() => item.children && openNav(item.href)}
-                onMouseLeave={scheduleClose}
-                onTriggerClick={() => toggleNav(item.href)}
-              />
+              <div key={navItemKey(item)}>
+                <DesktopNavItem
+                  item={item}
+                  isScrolled={showWhiteBg}
+                  isOpen={openDropdown === item.href}
+                  onMouseEnter={() => item.children && openNav(item.href)}
+                  onMouseLeave={scheduleClose}
+                  onTriggerClick={() => toggleNav(item.href)}
+                />
+              </div>
             ))}
-            <LanguageSwitcher
-              currentLanguage={currentLanguage}
-              isOpen={isLangOpen}
-              isScrolled={showWhiteBg}
-              onToggle={() => {
-                clearCloseTimer();
-                setOpenDropdown(null);
-                setIsLangOpen((v) => !v);
-              }}
-              onSelect={handleLanguageSelect}
-            />
+
+            <div>
+              <LanguageSwitcher
+                currentLanguage={currentLanguage}
+                isOpen={isLangOpen}
+                isScrolled={showWhiteBg}
+                onToggle={() => {
+                  clearCloseTimer();
+                  setOpenDropdown(null);
+                  setIsLangOpen((v) => !v);
+                }}
+                onSelect={handleLanguageSelect}
+              />
+            </div>
           </div>
         </div>
       </nav>
 
-      {/* Mobile */}
+      {/* Mobile ──────────────────────────────────────── */}
       <nav className="w-full bg-white shadow-[0_1px_0_rgba(0,0,0,0.05)] md:hidden">
         <div
           className="flex items-center justify-between px-5 py-3"
@@ -827,6 +795,7 @@ function Header({
             aria-controls="mobile-menu"
             className="p-2 text-gray-400 transition-colors hover:text-[#EC601B] active:scale-95"
           >
+            {/* Hamburger / close icon */}
             <svg
               className="h-6 w-6"
               fill="none"
@@ -846,15 +815,9 @@ function Header({
           </button>
         </div>
 
-        <AnimatePresence initial={false}>
-          {isMenuOpen && (
-            <motion.div
+        {isMenuOpen && (
+            <div
               id="mobile-menu"
-              key="mobile-menu"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: EASE }}
               className="overflow-hidden border-t border-gray-50 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
             >
               <div className="space-y-0 px-5 py-3 divide-y divide-gray-50">
@@ -897,11 +860,10 @@ function Header({
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </nav>
-    </motion.header>
+    </header>
   );
 }
 

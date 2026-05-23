@@ -184,7 +184,6 @@
 //     </motion.section>
 //   );
 // }
-
 "use client";
 
 import React, { useRef } from "react";
@@ -192,13 +191,6 @@ import { motion } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: VIEWPORT,
-  transition: { duration: 0.7, delay, ease: EASE },
-});
 
 const ArrowIcon = ({ className }: { className?: string }) => (
   <svg
@@ -261,37 +253,26 @@ export default function OurImpactStories() {
         {/* Header */}
         <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            {/* Eyebrow */}
-            <motion.p
-              className="mb-4 text-[11px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]"
-              {...fadeUp(0)}
-            >
-              Latest News
-            </motion.p>
-
             {/* Heading */}
             <motion.h2
               className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
-              {...fadeUp(0.1)}
-            >
-              Stories & Updates
-            </motion.h2>
-
-            {/* Divider */}
-            <motion.div
-              className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}
-              transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-            />
+              transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+            >
+              Recent News
+            </motion.h2>
           </div>
 
-          {/* All News CTA — matches site style */}
+          {/* All News CTA */}
           <motion.a
             href="#"
             className="group inline-flex items-center gap-3 self-start sm:self-auto shrink-0"
-            {...fadeUp(0.15)}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
           >
             <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
             <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
@@ -304,11 +285,7 @@ export default function OurImpactStories() {
         {/* News Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {sortedNews.map((item, index) => (
-            <motion.article
-              key={index}
-              {...fadeUp(0.1 + index * 0.1)}
-              className="group flex flex-col"
-            >
+            <article key={index} className="group flex flex-col">
               <a href={item.link} className="flex h-full flex-col">
                 {/* Image */}
                 <div className="relative overflow-hidden aspect-[16/10] mb-5">
@@ -317,7 +294,6 @@ export default function OurImpactStories() {
                     alt={item.title}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
-                  {/* Subtle overlay on hover */}
                   <div className="absolute inset-0 bg-[#1D2D44]/0 transition-all duration-500 group-hover:bg-[#1D2D44]/10" />
                 </div>
 
@@ -336,7 +312,7 @@ export default function OurImpactStories() {
                   {item.description}
                 </p>
 
-                {/* CTA — matches WhoWeAre / FlippedCardStack style */}
+                {/* CTA */}
                 <div className="mt-auto flex items-center gap-3">
                   <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
                   <span className="text-[12px] font-medium tracking-[0.08em] text-[#EC601B]">
@@ -345,7 +321,7 @@ export default function OurImpactStories() {
                   <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0" />
                 </div>
               </a>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>
