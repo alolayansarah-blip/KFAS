@@ -320,7 +320,7 @@ export default function InternationalCollaborativeResearchPage() {
           <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-32 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-5xl px-6 pb-16 pt-32 sm:px-8 lg:px-10"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
