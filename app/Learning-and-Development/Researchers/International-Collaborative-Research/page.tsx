@@ -320,7 +320,7 @@ export default function InternationalCollaborativeResearchPage() {
           <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-5xl px-6 pb-16 pt-32 sm:px-8 lg:px-10"
+            className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-32 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -359,7 +359,7 @@ export default function InternationalCollaborativeResearchPage() {
 
         {/* ─── Harvard Kennedy School ───────────────────────────────────────── */}
         <section className="bg-white py-20 sm:py-28">
-          <div className="mx-auto w-full max-w-5xl px-6 sm:px-8 lg:px-10">
+          <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at Harvard Kennedy School (HKS)"
               logoSrc="/image/Belfer.png"
@@ -420,7 +420,7 @@ export default function InternationalCollaborativeResearchPage() {
 
         {/* ─── ICTP ─────────────────────────────────────────────────────────── */}
         <section className="bg-[#BBDEFB25] py-20 sm:py-28">
-          <div className="mx-auto w-full max-w-5xl px-6 sm:px-8 lg:px-10">
+          <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at The International Centre for Theoretical Physics (ICTP)"
               logoSrc="/image/ICTP.png"
@@ -620,7 +620,7 @@ export default function InternationalCollaborativeResearchPage() {
 
         {/* ─── LSE ──────────────────────────────────────────────────────────── */}
         <section className="bg-white py-20 sm:py-28">
-          <div className="mx-auto w-full max-w-5xl px-6 sm:px-8 lg:px-10">
+          <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at the London School of Economics and Political Science (LSE)"
               logoSrc="/image/LSE.png"
