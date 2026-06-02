@@ -16,6 +16,10 @@ const BRAND = {
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+// Shared section shell classes
+const SECTION_X = "px-6 py-20 sm:px-8 sm:py-28 lg:px-12";
+const CONTAINER = "mx-auto max-w-[1280px]";
+
 // ─── FadeUp ──────────────────────────────────────────────────────────────────
 function FadeUp({
   children,
@@ -148,12 +152,83 @@ function SectionImage({
   );
 }
 
+// ─── StandardSection ──────────────────────────────────────────────────────────
+// Text column + centered image column. Pass full content (Eyebrow, SectionHeading,
+// body) as children, mirroring StickyImageSection's interface.
+// On mobile the text always renders first; `imageLeft` flips the desktop layout.
+function StandardSection({
+  children,
+  imageSrc,
+  imageAlt,
+  imageLeft = false,
+  background,
+  objectPosition = "center",
+  decorativeGlow,
+}: {
+  children: ReactNode;
+  imageSrc: string;
+  imageAlt: string;
+  imageLeft?: boolean;
+  background?: string;
+  objectPosition?: "center" | "top";
+  decorativeGlow?: ReactNode;
+}) {
+  const textCol = (
+    <FadeUp
+      className={`flex flex-col gap-6 ${imageLeft ? "order-1 lg:order-2" : ""}`}
+    >
+      {children}
+    </FadeUp>
+  );
+
+  const imageCol = (
+    <FadeUp
+      delay={0.15}
+      className={`flex justify-center ${imageLeft ? "order-2 lg:order-1" : ""}`}
+    >
+      <div className="w-full max-w-[420px]">
+        <SectionImage
+          src={imageSrc}
+          alt={imageAlt}
+          objectPosition={objectPosition}
+        />
+      </div>
+    </FadeUp>
+  );
+
+  return (
+    <section
+      className={`${SECTION_X} relative`}
+      style={background ? { background } : undefined}
+    >
+      {decorativeGlow}
+      <div className={`${CONTAINER} relative z-10`}>
+        <div
+          className={`grid items-center gap-12 lg:gap-24 ${
+            imageLeft ? "lg:grid-cols-[1fr_1.4fr]" : "lg:grid-cols-[1.4fr_1fr]"
+          }`}
+        >
+          {imageLeft ? (
+            <>
+              {imageCol}
+              {textCol}
+            </>
+          ) : (
+            <>
+              {textCol}
+              {imageCol}
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── StickyImageSection ───────────────────────────────────────────────────────
-// Reusable layout: scrolling text left, sticky image right.
+// Scrolling text + sticky image (desktop) with a normal image fallback (mobile).
 // IMPORTANT: section must NOT have overflow-hidden — it breaks position:sticky.
 function StickyImageSection({
-  eyebrow,
-  dark = false,
   background,
   decorativeGlow,
   children,
@@ -161,10 +236,8 @@ function StickyImageSection({
   imageAlt,
   imageLeft = false,
 }: {
-  eyebrow: string;
-  dark?: boolean;
   background?: string;
-  decorativeGlow?: React.ReactNode;
+  decorativeGlow?: ReactNode;
   children: ReactNode;
   imageSrc: string;
   imageAlt: string;
@@ -194,11 +267,11 @@ function StickyImageSection({
 
   return (
     <section
-      className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12 relative"
+      className={`${SECTION_X} relative`}
       style={background ? { background } : undefined}
     >
       {decorativeGlow}
-      <div className="mx-auto max-w-[1280px] relative z-10">
+      <div className={`${CONTAINER} relative z-10`}>
         <div
           className={`grid gap-12 lg:gap-24 ${
             imageLeft ? "lg:grid-cols-[1fr_1.4fr]" : "lg:grid-cols-[1.4fr_1fr]"
@@ -219,6 +292,19 @@ function StickyImageSection({
         </div>
       </div>
     </section>
+  );
+}
+
+// ─── Decorative glow ──────────────────────────────────────────────────────────
+function Glow({ position }: { position: "top-right" | "bottom-left" }) {
+  return (
+    <div
+      className={`pointer-events-none absolute w-[480px] h-[480px] rounded-full blur-3xl opacity-20 ${
+        position === "top-right" ? "-top-32 -right-32" : "-bottom-32 -left-32"
+      }`}
+      style={{ background: "white" }}
+      aria-hidden
+    />
   );
 }
 
@@ -324,7 +410,6 @@ export default function ActivitiesAndEventsPage() {
               loop
               playsInline
               preload="auto"
-              poster="/image/ActivitiesBanner2.png"
               aria-label="Activities and events"
             >
               <source src="/image/BannerActivites.mp4" type="video/mp4" />
@@ -347,146 +432,111 @@ export default function ActivitiesAndEventsPage() {
             />
           </motion.div>
 
+          {/* padding on the wrapper, max-width on the inner div — matches body sections */}
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
-            <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: EASE }}
-            >
-              <span>Research</span>
-              <span className="text-white/25">/</span>
-              <span>Activities &amp; Events</span>
-            </motion.div>
-
-            <div className="overflow-hidden">
-              <motion.h1
-                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
+            <div className={`${CONTAINER} w-full`}>
+              <motion.div
+                className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, ease: EASE }}
               >
-                Activities &amp; Events
-              </motion.h1>
-            </div>
+                <span>Research</span>
+                <span className="text-white/25">/</span>
+                <span>Activities &amp; Events</span>
+              </motion.div>
 
-            <motion.div
-              className="mt-5 h-[3px] w-[72px] origin-left rounded-full bg-[#EC601B]"
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-            />
+              <div className="overflow-hidden">
+                <motion.h1
+                  className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
+                >
+                  Activities &amp; Events
+                </motion.h1>
+              </div>
+
+              <motion.div
+                className="mt-5 h-[3px] w-[72px] origin-left rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
           </motion.div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
         {/* ── 1. STS ───────────────────────────────────────────────────── */}
-        <section className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12 bg-white">
-          <div className="mx-auto max-w-[1280px]">
-            <div className="grid items-center gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-24">
-              <FadeUp className="flex flex-col gap-6">
-                <Eyebrow label="STS" />
-                <SectionHeading>
-                  Science and Technology in Society (STS) Forum
-                </SectionHeading>
-                <div className="flex flex-col gap-4 mt-1">
-                  <BodyText>
-                    The Science and Technology in Society (STS) Forum is a
-                    leading global platform held annually in Kyoto, Japan,
-                    bringing together world leaders from science, industry, and
-                    policy to discuss how science and technology can address
-                    long‑term global challenges. The forum welcomes over a
-                    thousand participants each year, including Nobel laureates,
-                    ministers, university presidents, CEOs, and emerging young
-                    leaders. It aims to strengthen the positive impact of
-                    scientific progress while addressing its risks and societal
-                    implications.
-                  </BodyText>
-                  <BodyText>
-                    KFAS supports Kuwaiti researchers and professionals to
-                    participate in the STS Young Leaders Program, which invites
-                    outstanding individuals under 40 to engage directly with
-                    global experts. The program offers high‑level dialogue,
-                    exposure to international innovation trends, and
-                    opportunities to build lasting networks that contribute to
-                    Kuwait's scientific and technological development.
-                  </BodyText>
-                </div>
-              </FadeUp>
-
-              <FadeUp delay={0.15} className="flex justify-center">
-                <div className="w-full max-w-[420px]">
-                  <SectionImage
-                    src="/image/KfasBuilding2.png"
-                    alt="KFAS building"
-                  />
-                </div>
-              </FadeUp>
-            </div>
+        <StandardSection
+          imageSrc="/image/KfasBuilding2.png"
+          imageAlt="KFAS building"
+        >
+          <Eyebrow label="STS" />
+          <SectionHeading>
+            Science and Technology in Society (STS) Forum
+          </SectionHeading>
+          <div className="flex flex-col gap-4 mt-1">
+            <BodyText>
+              The Science and Technology in Society (STS) Forum is a leading
+              global platform held annually in Kyoto, Japan, bringing together
+              world leaders from science, industry, and policy to discuss how
+              science and technology can address long‑term global challenges.
+              The forum welcomes over a thousand participants each year,
+              including Nobel laureates, ministers, university presidents, CEOs,
+              and emerging young leaders. It aims to strengthen the positive
+              impact of scientific progress while addressing its risks and
+              societal implications.
+            </BodyText>
+            <BodyText>
+              KFAS supports Kuwaiti researchers and professionals to participate
+              in the STS Young Leaders Program, which invites outstanding
+              individuals under 40 to engage directly with global experts. The
+              program offers high‑level dialogue, exposure to international
+              innovation trends, and opportunities to build lasting networks
+              that contribute to Kuwait's scientific and technological
+              development.
+            </BodyText>
           </div>
-        </section>
+        </StandardSection>
 
         {/* ── 2. OES ───────────────────────────────────────────────────── */}
-        <section
-          className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12"
-          style={{ background: "#BBDEFB25" }}
+        <StandardSection
+          imageLeft
+          background={`${BRAND.lightBlue}25`}
+          imageSrc="/image/OES.png"
+          imageAlt="Oxford Energy Seminar"
         >
-          <div className="mx-auto max-w-[1280px]">
-            <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
-              <FadeUp
-                delay={0.15}
-                className="flex justify-center order-2 lg:order-1"
-              >
-                <div className="w-full max-w-[420px]">
-                  <SectionImage
-                    src="/image/OES.png"
-                    alt="Oxford Energy Seminar"
-                  />
-                </div>
-              </FadeUp>
-
-              <FadeUp className="flex flex-col gap-6 order-1 lg:order-2">
-                <Eyebrow label="OES" />
-                <SectionHeading>The Oxford Energy Seminar</SectionHeading>
-                <div className="flex flex-col gap-4 mt-1">
-                  <BodyText>
-                    It is a residential educational conference that brings
-                    together government officials, industry leaders, managers,
-                    and professionals involved in energy policy and
-                    decision-making. Widely recognized as an important
-                    international forum on energy, the seminar provides
-                    participants with an intensive overview of current
-                    developments, challenges, and opportunities shaping the
-                    global energy landscape and the energy transition.
-                  </BodyText>
-                  <BodyText>
-                    The program features lectures, discussions, and exchanges
-                    led by a diverse international panel of experts from
-                    governments, the energy industry, financial institutions,
-                    academia, and international organizations.
-                  </BodyText>
-                </div>
-              </FadeUp>
-            </div>
+          <Eyebrow label="OES" />
+          <SectionHeading>The Oxford Energy Seminar</SectionHeading>
+          <div className="flex flex-col gap-4 mt-1">
+            <BodyText>
+              It is a residential educational conference that brings together
+              government officials, industry leaders, managers, and
+              professionals involved in energy policy and decision-making.
+              Widely recognized as an important international forum on energy,
+              the seminar provides participants with an intensive overview of
+              current developments, challenges, and opportunities shaping the
+              global energy landscape and the energy transition.
+            </BodyText>
+            <BodyText>
+              The program features lectures, discussions, and exchanges led by a
+              diverse international panel of experts from governments, the
+              energy industry, financial institutions, academia, and
+              international organizations.
+            </BodyText>
           </div>
-        </section>
+        </StandardSection>
 
         {/* ── 3. RENAC — sticky image ───────────────────────────────────── */}
         <StickyImageSection
-          eyebrow="RENAC"
-          dark
           background={BRAND.orange}
-          decorativeGlow={
-            <div
-              className="pointer-events-none absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full blur-3xl opacity-20"
-              style={{ background: "white" }}
-              aria-hidden
-            />
-          }
+          decorativeGlow={<Glow position="top-right" />}
           imageSrc="/image/RENAC.jpg"
           imageAlt="RENAC renewable energy training"
         >
@@ -544,55 +594,39 @@ export default function ActivitiesAndEventsPage() {
         </StickyImageSection>
 
         {/* ── 4. CERN ──────────────────────────────────────────────────── */}
-        <section className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12 bg-white">
-          <div className="mx-auto max-w-[1280px]">
-            <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
-              <FadeUp
-                delay={0.15}
-                className="flex justify-center order-2 lg:order-1"
-              >
-                <div className="w-full max-w-[420px]">
-                  <SectionImage
-                    src="/image/KfasBuilding2.png"
-                    alt="CERN Summer Student Program"
-                  />
-                </div>
-              </FadeUp>
-
-              <FadeUp className="flex flex-col gap-6 order-1 lg:order-2">
-                <Eyebrow label="CERN" />
-                <SectionHeading>
-                  CERN (The European Organization for Nuclear Research) Summer
-                  Student Program
-                </SectionHeading>
-                <div className="flex flex-col gap-4 mt-1">
-                  <BodyText>
-                    KFAS fund students to participate in the prestigious summer
-                    training program at the CERN (European Organization for
-                    Nuclear Research) headquarters in Geneva, Switzerland.
-                    During their 8-week stay at CERN, these students worked
-                    alongside world-renowned scientists and researchers in the
-                    state-of-the-art research labs and accelerators.
-                  </BodyText>
-                  <BodyText>
-                    This hands-on experience allowed them to engage in
-                    groundbreaking scientific research and gain valuable
-                    insights into the advanced technologies used in particle
-                    physics and other related fields. Their time at CERN
-                    expanded their academic and practical knowledge and provided
-                    them with a unique opportunity to contribute to cutting-edge
-                    research in a global scientific community.
-                  </BodyText>
-                </div>
-              </FadeUp>
-            </div>
+        <StandardSection
+          imageLeft
+          imageSrc="/image/KfasBuilding2.png"
+          imageAlt="CERN Summer Student Program"
+        >
+          <Eyebrow label="CERN" />
+          <SectionHeading>
+            CERN (The European Organization for Nuclear Research) Summer Student
+            Program
+          </SectionHeading>
+          <div className="flex flex-col gap-4 mt-1">
+            <BodyText>
+              KFAS fund students to participate in the prestigious summer
+              training program at the CERN (European Organization for Nuclear
+              Research) headquarters in Geneva, Switzerland. During their 8-week
+              stay at CERN, these students worked alongside world-renowned
+              scientists and researchers in the state-of-the-art research labs
+              and accelerators.
+            </BodyText>
+            <BodyText>
+              This hands-on experience allowed them to engage in groundbreaking
+              scientific research and gain valuable insights into the advanced
+              technologies used in particle physics and other related fields.
+              Their time at CERN expanded their academic and practical knowledge
+              and provided them with a unique opportunity to contribute to
+              cutting-edge research in a global scientific community.
+            </BodyText>
           </div>
-        </section>
+        </StandardSection>
 
         {/* ── 5. AAAS — sticky image ────────────────────────────────────── */}
         <StickyImageSection
-          eyebrow="AAAS"
-          background="#BBDEFB25"
+          background={`${BRAND.lightBlue}25`}
           imageSrc="/image/AAAS.png"
           imageAlt="AAAS Annual Meeting"
         >
@@ -636,59 +670,38 @@ export default function ActivitiesAndEventsPage() {
         </StickyImageSection>
 
         {/* ── 6. Networking Events ─────────────────────────────────────── */}
-        <section
-          className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12 relative"
-          style={{ background: BRAND.orange }}
+        <StandardSection
+          imageLeft
+          background={BRAND.orange}
+          decorativeGlow={<Glow position="bottom-left" />}
+          objectPosition="top"
+          imageSrc="/image/N.E.png"
+          imageAlt="Researchers networking"
         >
-          {/* Decorative glow — isolated so it never blocks sticky on other sections */}
-          <div
-            className="pointer-events-none absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full blur-3xl opacity-20"
-            style={{ background: "white" }}
-            aria-hidden
-          />
-          <div className="mx-auto max-w-[1280px] relative z-10">
-            <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
-              <FadeUp
-                delay={0.15}
-                className="flex justify-center order-2 lg:order-1"
-              >
-                <div className="w-full max-w-[420px]">
-                  <SectionImage
-                    src="/image/N.E.png"
-                    alt="Researchers networking"
-                    objectPosition="top"
-                  />
-                </div>
-              </FadeUp>
-
-              <FadeUp className="flex flex-col gap-6 order-1 lg:order-2">
-                <Eyebrow label="Networking Events" dark />
-                <SectionHeading dark>Networking Events</SectionHeading>
-                <div className="flex flex-col gap-4 mt-1">
-                  <BodyText dark>
-                    Our networking activities aim to strengthen connections
-                    within the research community and foster a collaborative
-                    environment among researchers supported by the foundation.
-                    By bringing together scholars from diverse disciplines and
-                    institutions, these activities encourage the exchange of
-                    ideas, perspectives, and experiences that can inspire new
-                    research directions and partnerships.
-                  </BodyText>
-                  <BodyText dark>
-                    They also support professional development and help build
-                    lasting relationships among researchers, contributing to a
-                    dynamic research community and enhancing the broader impact
-                    of scientific research.
-                  </BodyText>
-                </div>
-              </FadeUp>
-            </div>
+          <Eyebrow label="Networking Events" dark />
+          <SectionHeading dark>Networking Events</SectionHeading>
+          <div className="flex flex-col gap-4 mt-1">
+            <BodyText dark>
+              Our networking activities aim to strengthen connections within the
+              research community and foster a collaborative environment among
+              researchers supported by the foundation. By bringing together
+              scholars from diverse disciplines and institutions, these
+              activities encourage the exchange of ideas, perspectives, and
+              experiences that can inspire new research directions and
+              partnerships.
+            </BodyText>
+            <BodyText dark>
+              They also support professional development and help build lasting
+              relationships among researchers, contributing to a dynamic
+              research community and enhancing the broader impact of scientific
+              research.
+            </BodyText>
           </div>
-        </section>
+        </StandardSection>
 
         {/* ── 7. Organized Events ──────────────────────────────────────── */}
-        <section className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12 bg-white">
-          <div className="mx-auto max-w-[1280px]">
+        <section className={`${SECTION_X} bg-white`}>
+          <div className={CONTAINER}>
             <FadeUp className="flex flex-col gap-3 mb-16">
               <Eyebrow label="Organized Events" />
               <SectionHeading>Organized Events</SectionHeading>
