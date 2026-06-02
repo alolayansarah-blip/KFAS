@@ -90,38 +90,41 @@ export default function AssignedStudiesPage() {
             />
           </motion.div>
 
+          {/* padding on the wrapper, max-width on the inner div — matches body sections */}
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
-            <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: EASE }}
-            >
-              <span>Research</span>
-              <span className="text-white/25">/</span>
-              <span>Assigned Studies</span>
-            </motion.div>
-
-            <div className="overflow-hidden">
-              <motion.h1
-                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
+            <div className="mx-auto w-full max-w-[1280px]">
+              <motion.div
+                className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, ease: EASE }}
               >
-                Assigned Studies
-              </motion.h1>
-            </div>
+                <span>Research</span>
+                <span className="text-white/25">/</span>
+                <span>Assigned Studies</span>
+              </motion.div>
 
-            <motion.div
-              className="mt-5 h-[3px] w-[72px] origin-left rounded-full bg-[#EC601B]"
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-            />
+              <div className="overflow-hidden">
+                <motion.h1
+                  className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
+                >
+                  Assigned Studies
+                </motion.h1>
+              </div>
+
+              <motion.div
+                className="mt-5 h-[3px] w-[72px] origin-left rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
           </motion.div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
