@@ -61,7 +61,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
           },
           {
             label: "Scientific Missions",
-            href: "/Learning-and-Development/Researchers/Scientific-Missions",
+            href: "/Learning-and-Development/Researchers/ScientificMissions",
           },
         ],
       },
