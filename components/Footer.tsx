@@ -382,7 +382,10 @@ function Footer({
           viewport={VIEWPORT}
           transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
         >
-          <p className="text-[12px] font-light text-white/50 tracking-wide">
+          <p
+            className="text-[12px] font-light text-white/50 tracking-wide"
+            suppressHydrationWarning
+          >
             © {currentYear} Kuwait Foundation for the Advancement of Sciences
           </p>
           <p className="text-[12px] font-light text-white/35 tracking-wide">

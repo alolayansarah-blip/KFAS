@@ -53,7 +53,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
           },
           {
             label: "Scholar Fellowship",
-            href: "/Learning-and-Development/Researchers/Scholar-Fellowship",
+            href: "/Learning-and-Development/Researchers/ScholarFellowship",
           },
           {
             label: "Scholarly Publication",
