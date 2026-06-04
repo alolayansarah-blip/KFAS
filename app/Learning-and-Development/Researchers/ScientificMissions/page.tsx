@@ -133,16 +133,8 @@ export default function ScientificMissionsPage() {
             }}
           />
           <div className="relative mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-            <motion.span
-              className="block h-[3px] w-12 rounded-full bg-[#EC601B]"
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, ease: EASE }}
-              style={{ transformOrigin: "left" }}
-            />
             <motion.p
-              className="mt-7 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
+              className="font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-70px" }}
