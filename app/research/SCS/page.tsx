@@ -215,13 +215,37 @@ export default function ScientificConferenceSponsorshipPage() {
                 </motion.li>
               ))}
             </ul>
+          </div>
+        </section>
 
-            <motion.p
-              className="mt-10 max-w-[900px] font-poppins text-[15px] font-medium leading-[1.85] text-[#1D2D44]/85 sm:text-[16px]"
-              {...fadeUp(0)}
+        {/* ── CTA ── */}
+        <section
+          id="apply"
+          className="scroll-mt-28 px-6 py-20 sm:px-8 sm:py-24 lg:px-12"
+          style={{ background: "#7DC0F1" }}
+        >
+          <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left">
+            <motion.h2
+              className="max-w-[30ch] font-poppins text-[1.5rem] font-semibold leading-[1.3] tracking-tight text-white sm:text-[2rem]"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.65, ease: EASE }}
             >
               Apply now and bring your initiative to life with KFAS support.
-            </motion.p>
+            </motion.h2>
+            <motion.a
+              href="#"
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-9 py-3.5 font-poppins text-[13px] font-semibold uppercase tracking-[0.18em] text-[#1D2D44] shadow-sm"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
+              whileHover={{ y: -3, scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Apply Now
+            </motion.a>
           </div>
         </section>
       </main>
