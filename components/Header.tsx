@@ -78,7 +78,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     children: [
       {
         label: "Activities and Events Sponsorship",
-        href: "/Science-and-Society/Activitities-and-Events-Sponsorship",
+        href: "/ScienceAndSociety/ActivitiesAndEventsSponsership",
       },
       { label: "Publications", href: "/Science-and-Society/Publications" },
       {
