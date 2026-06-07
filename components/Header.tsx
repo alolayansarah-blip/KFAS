@@ -83,7 +83,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       { label: "Publications", href: "/Science-and-Society/Publications" },
       {
         label: "Special Needs",
-        href: "/Science-and-Society/Special-needs",
+        href: "/ScienceAndSociety/SpecialNeeds",
       },
     ],
   },
