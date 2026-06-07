@@ -70,10 +70,6 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         href: "/Learning-and-Development/Professionals",
       },
       { label: "Youth", href: "/Learning-and-Development/Youth" },
-      {
-        label: "Special Needs",
-        href: "/Learning-and-Development/Special-needs",
-      },
     ],
   },
   {
@@ -81,14 +77,14 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
     href: "/Science-and-Society",
     children: [
       {
-        label: "Activity and Funding",
-        href: "/Science-and-Society/Activity-and-Funding",
-      },
-      {
-        label: "Activities and Events",
-        href: "/Science-and-Society/Activities-and-Events",
+        label: "Activities and Events Sponsorship",
+        href: "/Science-and-Society/Activitities-and-Events-Sponsorship",
       },
       { label: "Publications", href: "/Science-and-Society/Publications" },
+      {
+        label: "Special Needs",
+        href: "/Science-and-Society/Special-needs",
+      },
     ],
   },
   {
@@ -330,17 +326,23 @@ const DesktopNavItem = memo(
                     onMouseEnter={() => openNested(child.href)}
                     onMouseLeave={scheduleCloseNested}
                   >
-                    <div className="flex items-stretch">
-                      <Link
-                        href={child.href}
+                    <div
+                      className={`group flex items-stretch transition-colors duration-150 ${
+                        nestedOpenHref === child.href
+                          ? "bg-white/15"
+                          : "hover:bg-white/15"
+                      }`}
+                    >
+                      <span
                         role="menuitem"
-                        className="flex-1 px-5 py-2.5 text-[14px] text-white/90 transition-colors duration-150 hover:bg-white/15 hover:text-white whitespace-nowrap"
+                        aria-disabled="true"
+                        className="flex-1 px-5 py-2.5 text-[14px] text-white/90 cursor-default select-none whitespace-nowrap"
                       >
                         {child.label}
-                      </Link>
+                      </span>
                       <div
                         aria-hidden="true"
-                        className="flex shrink-0 items-center border-l border-white/10 px-3 text-[#7DC0F1]"
+                        className="flex shrink-0 items-center border-l border-white/10 px-3 text-[#7DC0F1] transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-white"
                       >
                         <ChevronRight />
                       </div>
@@ -515,13 +517,17 @@ const MobileNavItem = memo(
                   return (
                     <div key={navItemKey(child)} className="rounded-md">
                       <div className="flex items-stretch">
-                        <Link
-                          href={child.href}
-                          onClick={onClose}
-                          className="flex-1 rounded-l-md px-3 py-2 text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setNestedOpen((v) =>
+                              v === nestedKey ? null : nestedKey,
+                            )
+                          }
+                          className="flex-1 rounded-l-md px-3 py-2 text-left text-[13.5px] font-normal text-gray-600 cursor-default"
                         >
                           {child.label}
-                        </Link>
+                        </button>
                         <button
                           type="button"
                           aria-expanded={nestedOpen === nestedKey}
