@@ -80,7 +80,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         label: "Activities and Events Sponsorship",
         href: "/ScienceAndSociety/ActivitiesAndEventsSponsership",
       },
-      { label: "Publications", href: "/Science-and-Society/Publications" },
+      { label: "Publications", href: "https://www.aspdkw.com/" },
       {
         label: "Special Needs",
         href: "/ScienceAndSociety/SpecialNeeds",
