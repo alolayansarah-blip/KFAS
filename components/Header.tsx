@@ -48,10 +48,6 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         href: "/Learning-and-Development/Researchers",
         children: [
           {
-            label: "International Collaborative Research",
-            href: "/Learning-and-Development/Researchers/International-Collaborative-Research",
-          },
-          {
             label: "Scholar Fellowship",
             href: "/Learning-and-Development/Researchers/ScholarFellowship",
           },
@@ -62,6 +58,22 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
           {
             label: "Scientific Missions",
             href: "/Learning-and-Development/Researchers/ScientificMissions",
+          },
+          {
+            label: "Scholarship Bridging Grant",
+            href: "/Learning-and-Development/Researchers/ScholarshipBridgingGrant",
+          },
+          {
+            label: "Extension of Scholarship Bridging Grant",
+            href: "/Learning-and-Development/Researchers/ExtensionOfScholarshipBridgingGrant",
+          },
+          {
+            label: "PhD Students Supplementary Fund Grant",
+            href: "/Learning-and-Development/Researchers/PhDStudentsSupplementaryFundGrant",
+          },
+          {
+            label: "International Collaborative Research",
+            href: "/Learning-and-Development/Researchers/International-Collaborative-Research",
           },
         ],
       },
@@ -333,13 +345,13 @@ const DesktopNavItem = memo(
                           : "hover:bg-white/15"
                       }`}
                     >
-                      <span
+                      <Link
+                        href={child.href}
                         role="menuitem"
-                        aria-disabled="true"
-                        className="flex-1 px-5 py-2.5 text-[14px] text-white/90 cursor-default select-none whitespace-nowrap"
+                        className="flex-1 px-5 py-2.5 text-[14px] text-white/90 whitespace-nowrap transition-colors duration-150 hover:text-white"
                       >
                         {child.label}
-                      </span>
+                      </Link>
                       <div
                         aria-hidden="true"
                         className="flex shrink-0 items-center border-l border-white/10 px-3 text-[#7DC0F1] transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-white"
@@ -349,27 +361,27 @@ const DesktopNavItem = memo(
                     </div>
 
                     {nestedOpenHref === child.href && (
-                        <div
-                          role="menu"
-                          aria-label={child.label}
-                          className="absolute left-full top-0 z-[112] min-w-[260px] bg-[#FFF3EE] py-1 shadow-[4px_12px_32px_rgba(236,96,27,0.15)]"
-                          style={{ borderLeft: "3px solid #7DC0F1" }}
-                          onMouseEnter={() => openNested(child.href)}
-                          onMouseLeave={scheduleCloseNested}
-                        >
-                          {nested.map((sub) => (
-                            <div key={navItemKey(sub)}>
-                              <Link
-                                href={sub.href}
-                                role="menuitem"
-                                className="block px-5 py-2.5 text-[14px] text-[#EC601B] whitespace-nowrap transition-colors duration-150 hover:bg-[#FEE9DC]"
-                              >
-                                {sub.label}
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                      <div
+                        role="menu"
+                        aria-label={child.label}
+                        className="absolute left-full top-0 z-[112] min-w-[260px] bg-[#FFF3EE] py-1 shadow-[4px_12px_32px_rgba(236,96,27,0.15)]"
+                        style={{ borderLeft: "3px solid #7DC0F1" }}
+                        onMouseEnter={() => openNested(child.href)}
+                        onMouseLeave={scheduleCloseNested}
+                      >
+                        {nested.map((sub) => (
+                          <div key={navItemKey(sub)}>
+                            <Link
+                              href={sub.href}
+                              role="menuitem"
+                              className="block px-5 py-2.5 text-[14px] text-[#EC601B] whitespace-nowrap transition-colors duration-150 hover:bg-[#FEE9DC]"
+                            >
+                              {sub.label}
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -445,13 +457,7 @@ const LanguageSwitcher = ({
 );
 
 const MobileNavItem = memo(
-  ({
-    item,
-    onClose,
-  }: {
-    item: NavItem;
-    onClose: () => void;
-  }) => {
+  ({ item, onClose }: { item: NavItem; onClose: () => void }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [nestedOpen, setNestedOpen] = useState<string | null>(null);
 
@@ -494,80 +500,76 @@ const MobileNavItem = memo(
         </button>
 
         {isOpen && (
-            <div className="overflow-hidden">
-              <div className="mb-1 ml-3 mt-0.5 space-y-0 border-l-2 border-[#EC601B]/20 bg-[#FFF3EE] py-1.5 pl-3">
-                {item.children.map((child) => {
-                  const hasNested = Boolean(child.children?.length);
-                  const nestedKey = `${item.href}>${child.href}`;
+          <div className="overflow-hidden">
+            <div className="mb-1 ml-3 mt-0.5 space-y-0 border-l-2 border-[#EC601B]/20 bg-[#FFF3EE] py-1.5 pl-3">
+              {item.children.map((child) => {
+                const hasNested = Boolean(child.children?.length);
+                const nestedKey = `${item.href}>${child.href}`;
 
-                  if (!hasNested) {
-                    return (
-                      <div key={navItemKey(child)}>
-                        <Link
-                          href={child.href}
-                          onClick={onClose}
-                          className="block px-3 py-2 text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
-                        >
-                          {child.label}
-                        </Link>
-                      </div>
-                    );
-                  }
-
+                if (!hasNested) {
                   return (
-                    <div key={navItemKey(child)} className="rounded-md">
-                      <div className="flex items-stretch">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setNestedOpen((v) =>
-                              v === nestedKey ? null : nestedKey,
-                            )
-                          }
-                          className="flex-1 rounded-l-md px-3 py-2 text-left text-[13.5px] font-normal text-gray-600 cursor-default"
-                        >
-                          {child.label}
-                        </button>
-                        <button
-                          type="button"
-                          aria-expanded={nestedOpen === nestedKey}
-                          aria-label={`${child.label} submenu`}
-                          onClick={() =>
-                            setNestedOpen((v) =>
-                              v === nestedKey ? null : nestedKey,
-                            )
-                          }
-                          className="flex shrink-0 items-center border-l border-[#EC601B]/10 px-3 text-gray-300 hover:text-[#EC601B]"
-                        >
-                          <ChevronDown
-                            isOpen={nestedOpen === nestedKey}
-                            className="h-4 w-4"
-                          />
-                        </button>
-                      </div>
-
-                      {nestedOpen === nestedKey && child.children && (
-                          <div className="overflow-hidden">
-                            <div className="border-t border-orange-100 bg-[#FFF3EE] py-1.5 pl-3">
-                              {child.children.map((sub) => (
-                                <Link
-                                  key={navItemKey(sub)}
-                                  href={sub.href}
-                                  onClick={onClose}
-                                  className="block px-3 py-1.5 text-[13px] font-normal text-gray-500 transition-colors hover:text-[#EC601B]"
-                                >
-                                  {sub.label}
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        )}
+                    <div key={navItemKey(child)}>
+                      <Link
+                        href={child.href}
+                        onClick={onClose}
+                        className="block px-3 py-2 text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
+                      >
+                        {child.label}
+                      </Link>
                     </div>
                   );
-                })}
-              </div>
+                }
+
+                return (
+                  <div key={navItemKey(child)} className="rounded-md">
+                    <div className="flex items-stretch">
+                      <Link
+                        href={child.href}
+                        onClick={onClose}
+                        className="flex-1 rounded-l-md px-3 py-2 text-left text-[13.5px] font-normal text-gray-600 transition-colors hover:text-[#EC601B]"
+                      >
+                        {child.label}
+                      </Link>
+                      <button
+                        type="button"
+                        aria-expanded={nestedOpen === nestedKey}
+                        aria-label={`${child.label} submenu`}
+                        onClick={() =>
+                          setNestedOpen((v) =>
+                            v === nestedKey ? null : nestedKey,
+                          )
+                        }
+                        className="flex shrink-0 items-center border-l border-[#EC601B]/10 px-3 text-gray-300 hover:text-[#EC601B]"
+                      >
+                        <ChevronDown
+                          isOpen={nestedOpen === nestedKey}
+                          className="h-4 w-4"
+                        />
+                      </button>
+                    </div>
+
+                    {nestedOpen === nestedKey && child.children && (
+                      <div className="overflow-hidden">
+                        <div className="border-t border-orange-100 bg-[#FFF3EE] py-1.5 pl-3">
+                          {child.children.map((sub) => (
+                            <Link
+                              key={navItemKey(sub)}
+                              href={sub.href}
+                              onClick={onClose}
+                              className="block px-3 py-1.5 text-[13px] font-normal text-gray-500 transition-colors hover:text-[#EC601B]"
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          )}
+          </div>
+        )}
       </div>
     );
   },
@@ -822,52 +824,50 @@ function Header({
         </div>
 
         {isMenuOpen && (
-            <div
-              id="mobile-menu"
-              className="overflow-hidden border-t border-gray-50 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
-            >
-              <div className="space-y-0 px-5 py-3 divide-y divide-gray-50">
-                {navItemsList.map((item) => (
-                  <MobileNavItem
-                    key={navItemKey(item)}
-                    item={item}
-                    onClose={closeMobileMenu}
-                  />
+          <div
+            id="mobile-menu"
+            className="overflow-hidden border-t border-gray-50 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
+          >
+            <div className="space-y-0 px-5 py-3 divide-y divide-gray-50">
+              {navItemsList.map((item) => (
+                <MobileNavItem
+                  key={navItemKey(item)}
+                  item={item}
+                  onClose={closeMobileMenu}
+                />
+              ))}
+            </div>
+
+            <div className="border-t border-gray-50 px-5 pb-4 pt-3">
+              <p className="mb-2 px-2 text-[10px] font-medium uppercase tracking-[0.1em] text-gray-300">
+                Language
+              </p>
+              <div className="space-y-0.5">
+                {LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.code}
+                    type="button"
+                    onClick={() => {
+                      handleLanguageSelect(lang.code);
+                      closeMobileMenu();
+                    }}
+                    className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-[14px] font-normal transition-colors ${
+                      currentLanguage === lang.code
+                        ? "bg-[#EC601B] text-white rounded-lg"
+                        : "text-gray-600 hover:text-[#EC601B]"
+                    }`}
+                  >
+                    <span className="text-base leading-none">{lang.flag}</span>
+                    <span>{lang.label}</span>
+                    {currentLanguage === lang.code && (
+                      <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
+                    )}
+                  </button>
                 ))}
               </div>
-
-              <div className="border-t border-gray-50 px-5 pb-4 pt-3">
-                <p className="mb-2 px-2 text-[10px] font-medium uppercase tracking-[0.1em] text-gray-300">
-                  Language
-                </p>
-                <div className="space-y-0.5">
-                  {LANGUAGES.map((lang) => (
-                    <button
-                      key={lang.code}
-                      type="button"
-                      onClick={() => {
-                        handleLanguageSelect(lang.code);
-                        closeMobileMenu();
-                      }}
-                      className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-[14px] font-normal transition-colors ${
-                        currentLanguage === lang.code
-                          ? "bg-[#EC601B] text-white rounded-lg"
-                          : "text-gray-600 hover:text-[#EC601B]"
-                      }`}
-                    >
-                      <span className="text-base leading-none">
-                        {lang.flag}
-                      </span>
-                      <span>{lang.label}</span>
-                      {currentLanguage === lang.code && (
-                        <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
-          )}
+          </div>
+        )}
       </nav>
     </header>
   );
