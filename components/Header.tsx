@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback, memo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { NavItem } from "@/types";
 
 const SCROLL_THRESHOLD = 50;
 const NAV_CLOSE_DELAY_MS = 220;
 const LANG_STORAGE_KEY = "kfas-lang";
 const HREF_OUR_TEAM = "/about/our-team";
+const SEARCH_HREF = "/search";
 
 function navItemKey(item: NavItem) {
   return `${item.href}::${item.label}`;
@@ -161,6 +162,22 @@ const ChevronRight = () => (
   </svg>
 );
 
+const SearchIcon = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.3-4.3" />
+  </svg>
+);
+
 const AnniversaryLogo = ({ isScrolled }: { isScrolled: boolean }) => (
   <div
     className={`relative h-10 w-14 shrink-0 transition-transform duration-500 ${isScrolled ? "scale-90" : "scale-100"}`}
@@ -186,6 +203,23 @@ function navLinkColor(isScrolled: boolean, isActive: boolean): string {
     ? "bg-white/15 text-white"
     : "text-white/85 hover:text-white hover:bg-white/10";
 }
+
+const SearchButton = ({
+  isScrolled,
+  onClick,
+}: {
+  isScrolled: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-label="Search the website"
+    className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, false)}`}
+  >
+    <SearchIcon className="h-[18px] w-[18px]" />
+  </button>
+);
 
 const DropdownPanel = ({
   isOpen,
@@ -591,6 +625,7 @@ function Header({
   const [currentLanguage, setCurrentLanguage] = useState("en");
 
   const pathname = usePathname();
+  const router = useRouter();
   const closeNavTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
@@ -642,6 +677,14 @@ function Header({
   }, []);
 
   const closeMobileMenu = useCallback(() => setIsMenuOpen(false), []);
+
+  const goToSearch = useCallback(() => {
+    clearCloseTimer();
+    setOpenDropdown(null);
+    setIsLangOpen(false);
+    setIsMenuOpen(false);
+    router.push(SEARCH_HREF);
+  }, [clearCloseTimer, router]);
 
   useEffect(() => {
     setOpenDropdown(null);
@@ -760,6 +803,10 @@ function Header({
             ))}
 
             <div>
+              <SearchButton isScrolled={showWhiteBg} onClick={goToSearch} />
+            </div>
+
+            <div>
               <LanguageSwitcher
                 currentLanguage={currentLanguage}
                 isOpen={isLangOpen}
@@ -795,32 +842,43 @@ function Header({
             <AnniversaryLogo isScrolled />
           </Link>
 
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen((v) => !v)}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-            className="p-2 text-gray-400 transition-colors hover:text-[#EC601B] active:scale-95"
-          >
-            {/* Hamburger / close icon */}
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2.5"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={goToSearch}
+              aria-label="Search the website"
+              className="p-2 text-gray-400 transition-colors hover:text-[#EC601B] active:scale-95"
             >
-              {isMenuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+              <SearchIcon className="h-6 w-6" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen((v) => !v)}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+              className="p-2 text-gray-400 transition-colors hover:text-[#EC601B] active:scale-95"
+            >
+              {/* Hamburger / close icon */}
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2.5"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                {isMenuOpen ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {isMenuOpen && (

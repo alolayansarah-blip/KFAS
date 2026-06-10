@@ -202,7 +202,7 @@ function FaqRow({
         alt={imageAlt}
         fill
         sizes="50vw"
-        className="object-cover object-center transition-transform duration-[1200ms] ease-out hover:scale-105"
+        className="object-cover object-center transition-transform duration-[1.2s] ease-out hover:scale-105"
       />
       {/* bottom caption overlay */}
       <div
