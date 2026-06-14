@@ -1,8 +1,14 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, useEffect, type ReactNode } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useInView,
+} from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -19,6 +25,11 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 // Shared section shell classes
 const SECTION_X = "px-6 py-20 sm:px-8 sm:py-28 lg:px-12";
 const CONTAINER = "mx-auto max-w-[1280px]";
+
+// Sticky offset of the JumpTo bar (≈ your Header height). The sections use a
+// scroll-margin-top of HEADER_H + bar height (~56px) so their titles never hide
+// under the bar when jumped to. Tune HEADER_H to match your Header if needed.
+const HEADER_H = 72;
 
 // ─── FadeUp ──────────────────────────────────────────────────────────────────
 function FadeUp({
@@ -157,6 +168,7 @@ function SectionImage({
 // body) as children, mirroring StickyImageSection's interface.
 // On mobile the text always renders first; `imageLeft` flips the desktop layout.
 function StandardSection({
+  id,
   children,
   imageSrc,
   imageAlt,
@@ -165,6 +177,7 @@ function StandardSection({
   objectPosition = "center",
   decorativeGlow,
 }: {
+  id?: string;
   children: ReactNode;
   imageSrc: string;
   imageAlt: string;
@@ -198,7 +211,8 @@ function StandardSection({
 
   return (
     <section
-      className={`${SECTION_X} relative`}
+      id={id}
+      className={`${SECTION_X} relative scroll-mt-[128px]`}
       style={background ? { background } : undefined}
     >
       {decorativeGlow}
@@ -229,6 +243,7 @@ function StandardSection({
 // Scrolling text + sticky image (desktop) with a normal image fallback (mobile).
 // IMPORTANT: section must NOT have overflow-hidden — it breaks position:sticky.
 function StickyImageSection({
+  id,
   background,
   decorativeGlow,
   children,
@@ -236,6 +251,7 @@ function StickyImageSection({
   imageAlt,
   imageLeft = false,
 }: {
+  id?: string;
   background?: string;
   decorativeGlow?: ReactNode;
   children: ReactNode;
@@ -267,7 +283,8 @@ function StickyImageSection({
 
   return (
     <section
-      className={`${SECTION_X} relative`}
+      id={id}
+      className={`${SECTION_X} relative scroll-mt-[128px]`}
       style={background ? { background } : undefined}
     >
       {decorativeGlow}
@@ -305,6 +322,259 @@ function Glow({ position }: { position: "top-right" | "bottom-left" }) {
       style={{ background: "white" }}
       aria-hidden
     />
+  );
+}
+
+// ─── JumpTo nav ───────────────────────────────────────────────────────────────
+// Sticky in-page nav placed directly after the hero. Smooth-scrolls to each
+// topic and highlights the active section via IntersectionObserver.
+const JUMP_LINKS = [
+  { id: "sts", label: "STS Forum" },
+  { id: "oes", label: "Oxford Energy Seminar" },
+  { id: "renac", label: "RENAC Training" },
+  { id: "cern", label: "CERN Program" },
+  { id: "aaas", label: "AAAS Meeting" },
+  { id: "networking", label: "Networking Events" },
+  { id: "organized", label: "Organized Events" },
+];
+
+function JumpTo() {
+  const [active, setActive] = useState<string>("");
+  const [open, setOpen] = useState(false); // mobile dropdown
+  const [headerH, setHeaderH] = useState(HEADER_H); // measured at runtime
+  const navRef = useRef<HTMLElement>(null);
+
+  // Measure the real Header height so the sticky bar pins flush against it on
+  // every breakpoint (the mobile header is shorter than the desktop one).
+  useEffect(() => {
+    const measure = () => {
+      const header = document.querySelector("header");
+      if (header) setHeaderH(header.getBoundingClientRect().height);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  // Close the mobile dropdown on outside tap
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("touchstart", onDown);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("touchstart", onDown);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    // Scroll-position based detection. Ratio-based observers fail on very tall
+    // sections (e.g. Organized Events) because the section never fills enough of
+    // the viewport to cross a ratio threshold. Instead we pick the last section
+    // whose top has passed the trigger line, with a bottom-of-page guard so the
+    // final section always highlights.
+    let frame = 0;
+
+    const update = () => {
+      const trigger = headerH + 72; // header + bar height + small offset
+
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+
+      if (atBottom) {
+        setActive(JUMP_LINKS[JUMP_LINKS.length - 1].id);
+        return;
+      }
+
+      let current = "";
+      for (const link of JUMP_LINKS) {
+        const el = document.getElementById(link.id);
+        if (el && el.getBoundingClientRect().top <= trigger) {
+          current = link.id;
+        }
+      }
+      setActive(current);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [headerH]);
+
+  const handleClick = (id: string) => {
+    setOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const activeLabel =
+    JUMP_LINKS.find((l) => l.id === active)?.label ?? "Select a topic";
+
+  return (
+    <motion.nav
+      ref={navRef}
+      className="sticky z-40 border-b bg-white/95 backdrop-blur"
+      style={{ top: headerH, borderColor: `${BRAND.navy}14` }}
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: EASE }}
+    >
+      <div className={`${CONTAINER} px-6 sm:px-8 lg:px-12`}>
+        {/* ── Desktop: inline horizontal row ──────────────────────────── */}
+        <div className="hidden items-stretch lg:flex">
+          {/* Label */}
+          <div className="flex items-center gap-2.5 pr-4 shrink-0">
+            <span
+              className="h-3.5 w-[3px] rounded-full"
+              style={{ background: BRAND.orange }}
+            />
+            <span
+              className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: BRAND.navy }}
+            >
+              Jump To
+            </span>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="shrink-0"
+              aria-hidden
+            >
+              <path
+                d="M9 6l6 6-6 6"
+                stroke={`${BRAND.navy}55`}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          {/* Links */}
+          <div className="flex items-center gap-1 overflow-x-auto py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {JUMP_LINKS.map((link) => {
+              const isActive = active === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => handleClick(link.id)}
+                  className="group relative whitespace-nowrap px-3 py-1.5 font-poppins text-[13px] font-medium transition-colors"
+                  style={{ color: isActive ? BRAND.orange : `${BRAND.navy}B0` }}
+                >
+                  {link.label}
+                  <span
+                    className="absolute bottom-0 left-3 right-3 h-[2px] origin-left rounded-full transition-transform duration-300"
+                    style={{
+                      background: BRAND.orange,
+                      transform: isActive ? "scaleX(1)" : "scaleX(0)",
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── Mobile: dropdown menu ───────────────────────────────────── */}
+        <div className="relative lg:hidden">
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            className="flex w-full items-center gap-2.5 py-3"
+          >
+            <span
+              className="h-3.5 w-[3px] shrink-0 rounded-full"
+              style={{ background: BRAND.orange }}
+            />
+            <span
+              className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] shrink-0"
+              style={{ color: BRAND.navy }}
+            >
+              Jump To
+            </span>
+            <span
+              className="ml-1 truncate font-poppins text-[13px] font-medium"
+              style={{ color: active ? BRAND.orange : `${BRAND.navy}80` }}
+            >
+              {activeLabel}
+            </span>
+            <motion.svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="ml-auto shrink-0"
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              aria-hidden
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                stroke={BRAND.navy}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+          </button>
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                className="absolute left-0 right-0 top-full z-50 overflow-hidden border bg-white shadow-lg"
+                style={{ borderColor: `${BRAND.navy}14` }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.28, ease: EASE }}
+              >
+                <div className="flex flex-col py-1.5">
+                  {JUMP_LINKS.map((link) => {
+                    const isActive = active === link.id;
+                    return (
+                      <button
+                        key={link.id}
+                        onClick={() => handleClick(link.id)}
+                        className="flex items-center gap-3 px-1 py-2.5 text-left font-poppins text-[14px] font-medium transition-colors"
+                        style={{
+                          color: isActive ? BRAND.orange : BRAND.navy,
+                        }}
+                      >
+                        <span
+                          className="h-4 w-[3px] shrink-0 rounded-full transition-opacity"
+                          style={{
+                            background: BRAND.orange,
+                            opacity: isActive ? 1 : 0,
+                          }}
+                        />
+                        {link.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.nav>
   );
 }
 
@@ -472,8 +742,12 @@ export default function ActivitiesAndEventsPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
+        {/* ── Jump To ──────────────────────────────────────────────────── */}
+        <JumpTo />
+
         {/* ── 1. STS ───────────────────────────────────────────────────── */}
         <StandardSection
+          id="sts"
           imageSrc="/image/KfasBuilding2.png"
           imageAlt="KFAS building"
         >
@@ -507,6 +781,7 @@ export default function ActivitiesAndEventsPage() {
 
         {/* ── 2. OES ───────────────────────────────────────────────────── */}
         <StandardSection
+          id="oes"
           imageLeft
           background={`${BRAND.lightBlue}25`}
           imageSrc="/image/OES.png"
@@ -535,66 +810,59 @@ export default function ActivitiesAndEventsPage() {
 
         {/* ── 3. RENAC — sticky image ───────────────────────────────────── */}
         <StickyImageSection
+          id="renac"
           background={BRAND.orange}
           decorativeGlow={<Glow position="top-right" />}
           imageSrc="/image/RENAC.jpg"
           imageAlt="RENAC renewable energy training"
         >
           <Eyebrow label="RENAC" dark />
-          <SectionHeading dark>
-            RENAC – online training in renewable energy and energy efficiency.
-          </SectionHeading>
+          <SectionHeading dark>RENAC Training Programs</SectionHeading>
           <div className="flex flex-col gap-4 mt-1">
             <BodyText dark>
-              The Renewables Academy (RENAC) in Berlin is one of the world's
-              leading institutions for professional training and capacity
-              building in renewable energy and energy efficiency. As part of its
-              commitment to developing national expertise in clean energy, KFAS
-              sponsors Kuwaiti students to enroll in RENAC's 6‑month online
-              training program in renewable energy and energy efficiency. This
-              program provides a structured, in‑depth learning experience
-              covering core technologies, system design, energy policy, and
-              practical applications within the global renewable energy sector.
+              The Research Capacity Building Directorate collaborates with RENAC
+              (Renewables Academy) to provide both online and in person training
+              opportunities in renewable energy and energy efficiency. The
+              Renewables Academy (RENAC) in Berlin is one of the world's leading
+              institutions for professional training and capacity building in
+              renewable energy and energy efficiency.
             </BodyText>
             <BodyText dark>
-              Through this sponsorship, participants gain access to high‑quality
+              As part of its commitment to developing national expertise in
+              clean energy, KFAS sponsors Kuwaiti students to enroll in RENAC's
+              six month online training program in renewable energy and energy
+              efficiency. The program provides a structured and in depth
+              learning experience covering core technologies, system design,
+              energy policy, and practical applications within the global
+              renewable energy sector.
+            </BodyText>
+            <BodyText dark>
+              Through this sponsorship, participants gain access to high quality
               online modules, expert instruction, and internationally recognized
-              training materials—equipping them with the skills needed to
+              training materials, equipping them with the skills needed to
               contribute to Kuwait's transition toward sustainable energy
-              solutions. The program serves as an important steppingstone for
+              solutions. The program serves as an important stepping stone for
               emerging engineers, scientists, and energy professionals seeking
               to build technical competency and advance their careers in the
               renewable energy field.
             </BodyText>
-            <div
-              className="border-l-2 pl-5 pt-1 flex flex-col gap-3 mt-1"
-              style={{ borderColor: "rgba(255,255,255,0.4)" }}
-            >
-              <p className="font-poppins text-[11px] font-semibold uppercase tracking-[0.22em] text-white">
-                In-person training RENAC course
-              </p>
-              <BodyText dark>
-                KFAS‑sponsored graduates of the renewable energy and energy
-                efficiency online course offered by RENAC were selected for an
-                additional, advanced training opportunity through the Research
-                Capacity Building Section. These graduates attended a one‑week,
-                in‑person program at RENAC's training center in Berlin, titled
-                "On‑grid and Off‑grid PV Systems: Practical PVsyst Training."
-              </BodyText>
-              <BodyText dark>
-                This hands‑on course provided participants with practical
-                experience in designing, analyzing, and evaluating photovoltaic
-                systems using industry‑standard tools and applications. The
-                training built on the knowledge gained in the online program,
-                enabling participants to deepen their technical skills and
-                expand their professional capabilities in renewable energy.
-              </BodyText>
-            </div>
+            <BodyText dark>
+              In addition to the online program, selected graduates may be
+              offered the opportunity to participate in advanced in person
+              training at RENAC's training center in Berlin. These specialized
+              courses provide hands on experience in the design, analysis, and
+              evaluation of renewable energy systems using industry standard
+              tools and applications. Building on the knowledge acquired through
+              the online program, the in person training further strengthens
+              participants' technical expertise and professional capabilities in
+              the renewable energy sector{" "}
+            </BodyText>
           </div>
         </StickyImageSection>
 
         {/* ── 4. CERN ──────────────────────────────────────────────────── */}
         <StandardSection
+          id="cern"
           imageLeft
           imageSrc="/image/KfasBuilding2.png"
           imageAlt="CERN Summer Student Program"
@@ -626,6 +894,7 @@ export default function ActivitiesAndEventsPage() {
 
         {/* ── 5. AAAS — sticky image ────────────────────────────────────── */}
         <StickyImageSection
+          id="aaas"
           background={`${BRAND.lightBlue}25`}
           imageSrc="/image/AAAS.png"
           imageAlt="AAAS Annual Meeting"
@@ -671,6 +940,7 @@ export default function ActivitiesAndEventsPage() {
 
         {/* ── 6. Networking Events ─────────────────────────────────────── */}
         <StandardSection
+          id="networking"
           imageLeft
           background={BRAND.orange}
           decorativeGlow={<Glow position="bottom-left" />}
@@ -700,7 +970,10 @@ export default function ActivitiesAndEventsPage() {
         </StandardSection>
 
         {/* ── 7. Organized Events ──────────────────────────────────────── */}
-        <section className={`${SECTION_X} bg-white`}>
+        <section
+          id="organized"
+          className={`${SECTION_X} bg-white scroll-mt-[128px]`}
+        >
           <div className={CONTAINER}>
             <FadeUp className="flex flex-col gap-3 mb-16">
               <Eyebrow label="Organized Events" />
@@ -734,11 +1007,13 @@ export default function ActivitiesAndEventsPage() {
               />
 
               <EventRowWithImage
-                title="Informative session at KIMS"
+                title="Informative Session for the Research Community"
                 imageSrc="/image/KIMS.png"
-                imageAlt="Informative session at KIMS"
+                imageAlt="Informative Session for the Research Community"
                 imageRight
-                body="The KIMS Information Session was a tailored presentation delivered to the Kuwait Institute for Medical Specialization (KIMS), the national body responsible for postgraduate medical training in Kuwait. The session introduced KIMS-affiliated researchers and trainees to the research-support offerings available through the Research & Technology Directorate (RTD). It provided an overview of KFAS's mission and vision, demonstrated how to use the Pure Portal to access research outputs, track impact, and identify collaborators, and highlighted the tools and platforms available to support grants, networking, outreach, and broader research engagement. The session served to help medical researchers better navigate KFAS's research ecosystem and access opportunities for national and international collaboration."
+                body="The Research Capacity Building Directorate delivered an informative session aimed at the scientific community to introduce KFAS’s research support ecosystem and available services.
+The session provided an overview of KFAS’s mission and vision, and highlighted the range of research support offerings available through the Research and Technology Directorate (RTD). It also demonstrated how to use the Pure Portal to access research outputs, track impact, and identify potential collaborators.
+In addition, the session introduced the tools and platforms available to support grants, networking, outreach, and broader research engagement. Overall, the session aimed to strengthen awareness of KFAS resources and enhance researchers’ ability to navigate the national research ecosystem and access opportunities for collaboration at both national and international levels."
                 delay={0.18}
               />
 
