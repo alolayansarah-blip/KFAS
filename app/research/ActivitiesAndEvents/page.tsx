@@ -1,6 +1,13 @@
 "use client";
 
-import { useRef, useState, useEffect, type ReactNode } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  type ReactNode,
+} from "react";
 import Image from "next/image";
 import {
   motion,
@@ -26,10 +33,16 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const SECTION_X = "px-6 py-20 sm:px-8 sm:py-28 lg:px-12";
 const CONTAINER = "mx-auto max-w-[1280px]";
 
-// Sticky offset of the JumpTo bar (≈ your Header height). The sections use a
-// scroll-margin-top of HEADER_H + bar height (~56px) so their titles never hide
-// under the bar when jumped to. Tune HEADER_H to match your Header if needed.
-const HEADER_H = 72;
+// ─── JumpTo tuning ─────────────────────────────────────────────────────────────
+const HEADER_H = 72; // fallback header height until measured
+const BAR_FALLBACK_H = 56; // fallback JumpTo bar height until measured
+const JUMP_TRIGGER_MARGIN = 8; // px past the bar before a section counts as active
+const MOBILE_QUERY = "(max-width: 1023px)";
+const MOBILE_CLOSE_DELAY = 320; // ms — let the dropdown finish closing before scrolling
+
+// Sections read this CSS var (set by JumpTo at runtime) for their scroll-margin-top.
+const JUMP_SCROLL_VAR = "--activities-jump-scroll-mt";
+const SECTION_SCROLL_MT = `scroll-mt-[var(${JUMP_SCROLL_VAR},128px)]`;
 
 // ─── FadeUp ──────────────────────────────────────────────────────────────────
 function FadeUp({
@@ -212,7 +225,7 @@ function StandardSection({
   return (
     <section
       id={id}
-      className={`${SECTION_X} relative scroll-mt-[128px]`}
+      className={`${SECTION_X} relative ${SECTION_SCROLL_MT}`}
       style={background ? { background } : undefined}
     >
       {decorativeGlow}
@@ -284,7 +297,7 @@ function StickyImageSection({
   return (
     <section
       id={id}
-      className={`${SECTION_X} relative scroll-mt-[128px]`}
+      className={`${SECTION_X} relative ${SECTION_SCROLL_MT}`}
       style={background ? { background } : undefined}
     >
       {decorativeGlow}
@@ -326,8 +339,9 @@ function Glow({ position }: { position: "top-right" | "bottom-left" }) {
 }
 
 // ─── JumpTo nav ───────────────────────────────────────────────────────────────
-// Sticky in-page nav placed directly after the hero. Smooth-scrolls to each
-// topic and highlights the active section via IntersectionObserver.
+// Sticky in-page nav placed directly after the hero. Horizontal row on desktop,
+// tappable dropdown on mobile. Smooth-scrolls to each topic and highlights the
+// active section on scroll.
 const JUMP_LINKS = [
   { id: "sts", label: "STS Forum" },
   { id: "oes", label: "Oxford Energy Seminar" },
@@ -344,44 +358,72 @@ function JumpTo() {
   const [headerH, setHeaderH] = useState(HEADER_H); // measured at runtime
   const navRef = useRef<HTMLElement>(null);
 
-  // Measure the real Header height so the sticky bar pins flush against it on
-  // every breakpoint (the mobile header is shorter than the desktop one).
-  useEffect(() => {
+  // Distance from the top of the viewport to the bottom of the sticky stack
+  // (header + bar). Used both for jump targets and active-section detection.
+  const getJumpOffset = useCallback(
+    () => headerH + (navRef.current?.offsetHeight ?? BAR_FALLBACK_H),
+    [headerH],
+  );
+
+  const scrollToSection = useCallback(
+    (id: string) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const top =
+        el.getBoundingClientRect().top + window.scrollY - getJumpOffset();
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    },
+    [getJumpOffset],
+  );
+
+  // Measure header + bar height before paint; keep the section scroll-margin
+  // CSS var in sync via ResizeObserver.
+  useLayoutEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+
     const measure = () => {
-      const header = document.querySelector("header");
-      if (header) setHeaderH(header.getBoundingClientRect().height);
+      const headerHeight = header.getBoundingClientRect().height;
+      const barHeight = navRef.current?.offsetHeight ?? BAR_FALLBACK_H;
+      setHeaderH(headerHeight);
+      document.documentElement.style.setProperty(
+        JUMP_SCROLL_VAR,
+        `${headerHeight + barHeight}px`,
+      );
     };
+
     measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(header);
+    if (navRef.current) ro.observe(navRef.current);
+
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      document.documentElement.style.removeProperty(JUMP_SCROLL_VAR);
+    };
   }, []);
 
-  // Close the mobile dropdown on outside tap
+  // Close the mobile dropdown when tapping outside it
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent | TouchEvent) => {
+    const onDocClick = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", onDown);
-    document.addEventListener("touchstart", onDown);
-    return () => {
-      document.removeEventListener("mousedown", onDown);
-      document.removeEventListener("touchstart", onDown);
-    };
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
   }, [open]);
 
+  // Highlight the last section whose top has passed the trigger line, with a
+  // bottom-of-page guard so the final (tall) section always highlights.
   useEffect(() => {
-    // Scroll-position based detection. Ratio-based observers fail on very tall
-    // sections (e.g. Organized Events) because the section never fills enough of
-    // the viewport to cross a ratio threshold. Instead we pick the last section
-    // whose top has passed the trigger line, with a bottom-of-page guard so the
-    // final section always highlights.
     let frame = 0;
 
     const update = () => {
-      const trigger = headerH + 72; // header + bar height + small offset
+      const trigger = getJumpOffset() + JUMP_TRIGGER_MARGIN;
 
       const atBottom =
         window.innerHeight + window.scrollY >=
@@ -415,11 +457,18 @@ function JumpTo() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [headerH]);
+  }, [getJumpOffset]);
 
   const handleClick = (id: string) => {
+    setActive(id);
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    // On mobile, wait for the dropdown close animation before scrolling — iOS
+    // can cancel a scroll fired while layout is still animating.
+    if (window.matchMedia(MOBILE_QUERY).matches) {
+      setTimeout(() => scrollToSection(id), MOBILE_CLOSE_DELAY);
+    } else {
+      requestAnimationFrame(() => scrollToSection(id));
+    }
   };
 
   const activeLabel =
@@ -430,11 +479,11 @@ function JumpTo() {
       ref={navRef}
       className="sticky z-40 border-b bg-white/95 backdrop-blur"
       style={{ top: headerH, borderColor: `${BRAND.navy}14` }}
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: EASE }}
     >
-      <div className={`${CONTAINER} px-6 sm:px-8 lg:px-12`}>
+      <div className={`${CONTAINER} px-6 py-1.5 sm:px-8 sm:py-2 lg:px-12`}>
         {/* ── Desktop: inline horizontal row ──────────────────────────── */}
         <div className="hidden items-stretch lg:flex">
           {/* Label */}
@@ -468,7 +517,7 @@ function JumpTo() {
           </div>
 
           {/* Links */}
-          <div className="flex items-center gap-1 overflow-x-auto py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-center gap-1 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {JUMP_LINKS.map((link) => {
               const isActive = active === link.id;
               return (
@@ -497,7 +546,7 @@ function JumpTo() {
           <button
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="flex w-full items-center gap-2.5 py-3"
+            className="flex w-full items-center gap-2.5 py-0.5"
           >
             <span
               className="h-3.5 w-[3px] shrink-0 rounded-full"
@@ -545,17 +594,15 @@ function JumpTo() {
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.28, ease: EASE }}
               >
-                <div className="flex flex-col py-1.5">
+                <div className="flex flex-col pt-0.5 pb-1">
                   {JUMP_LINKS.map((link) => {
                     const isActive = active === link.id;
                     return (
                       <button
                         key={link.id}
                         onClick={() => handleClick(link.id)}
-                        className="flex items-center gap-3 px-1 py-2.5 text-left font-poppins text-[14px] font-medium transition-colors"
-                        style={{
-                          color: isActive ? BRAND.orange : BRAND.navy,
-                        }}
+                        className="flex items-center gap-3 px-1 py-2 text-left font-poppins text-[14px] font-medium transition-colors"
+                        style={{ color: isActive ? BRAND.orange : BRAND.navy }}
                       >
                         <span
                           className="h-4 w-[3px] shrink-0 rounded-full transition-opacity"
@@ -738,11 +785,9 @@ export default function ActivitiesAndEventsPage() {
               />
             </div>
           </motion.div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── Jump To ──────────────────────────────────────────────────── */}
+        {/* ── Jump To (flush below hero — no extra white band) ─────────── */}
         <JumpTo />
 
         {/* ── 1. STS ───────────────────────────────────────────────────── */}
@@ -972,7 +1017,7 @@ export default function ActivitiesAndEventsPage() {
         {/* ── 7. Organized Events ──────────────────────────────────────── */}
         <section
           id="organized"
-          className={`${SECTION_X} bg-white scroll-mt-[128px]`}
+          className={`${SECTION_X} bg-white ${SECTION_SCROLL_MT}`}
         >
           <div className={CONTAINER}>
             <FadeUp className="flex flex-col gap-3 mb-16">

@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect, useLayoutEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useTransform,
   useInView,
@@ -14,6 +15,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+// Sticky offset for JumpTo (measured at runtime; see JumpTo).
+const HEADER_H = 72;
+const JUMP_SCROLL_VAR = "--icr-jump-scroll-mt";
+const SECTION_SCROLL_MT = `scroll-mt-[var(${JUMP_SCROLL_VAR},128px)]`;
+const JUMP_CONTAINER = "mx-auto w-full max-w-7xl";
 
 /* Palette — navy #1D2D44 · orange #EC601B · sky #7DC0F1 · paper #FAFAF8 */
 
@@ -279,6 +286,264 @@ function Opportunity({
   );
 }
 
+// ─── JumpTo nav ───────────────────────────────────────────────────────────────
+// Sticky in-page nav placed directly after the hero. Horizontal row on desktop,
+// tappable dropdown on mobile. Smooth-scrolls to each chapter, highlights the
+// active one, and measures the real Header height so it pins flush on every
+// breakpoint.
+const JUMP_LINKS = [
+  { id: "hks", label: "Harvard Kennedy School" },
+  { id: "ictp", label: "ICTP" },
+  { id: "lse", label: "LSE" },
+];
+
+function JumpTo() {
+  const [active, setActive] = useState<string>("");
+  const [open, setOpen] = useState(false);
+  const [headerH, setHeaderH] = useState(HEADER_H);
+  const navRef = useRef<HTMLElement>(null);
+
+  const getJumpOffset = useCallback(() => {
+    const barHeight = navRef.current?.offsetHeight ?? 48;
+    return headerH + barHeight;
+  }, [headerH]);
+
+  const scrollToSection = useCallback(
+    (id: string) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const offset = getJumpOffset();
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    },
+    [getJumpOffset],
+  );
+
+  useLayoutEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+
+    const measure = () => {
+      const headerHeight = header.getBoundingClientRect().height;
+      setHeaderH(headerHeight);
+      const barHeight = navRef.current?.offsetHeight ?? 48;
+      document.documentElement.style.setProperty(
+        JUMP_SCROLL_VAR,
+        `${headerHeight + barHeight}px`,
+      );
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(header);
+    if (navRef.current) ro.observe(navRef.current);
+
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      document.documentElement.style.removeProperty(JUMP_SCROLL_VAR);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [open]);
+
+  useEffect(() => {
+    let frame = 0;
+
+    const update = () => {
+      const trigger = getJumpOffset() + 8;
+
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+
+      if (atBottom) {
+        setActive(JUMP_LINKS[JUMP_LINKS.length - 1].id);
+        return;
+      }
+
+      let current = "";
+      for (const link of JUMP_LINKS) {
+        const el = document.getElementById(link.id);
+        if (el && el.getBoundingClientRect().top <= trigger) {
+          current = link.id;
+        }
+      }
+      setActive(current);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [getJumpOffset]);
+
+  const handleClick = (id: string) => {
+    setActive(id);
+    setOpen(false);
+    const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+    if (isMobile) {
+      setTimeout(() => scrollToSection(id), 320);
+    } else {
+      requestAnimationFrame(() => scrollToSection(id));
+    }
+  };
+
+  const activeLabel =
+    JUMP_LINKS.find((l) => l.id === active)?.label ?? "Select a topic";
+
+  return (
+    <motion.nav
+      ref={navRef}
+      className="sticky z-40 border-b border-[#1D2D44]/10 bg-white/95 backdrop-blur"
+      style={{ top: headerH }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: EASE }}
+    >
+      <div
+        className={`${JUMP_CONTAINER} px-6 py-1.5 sm:px-8 sm:py-2 lg:px-12`}
+      >
+        {/* ── Desktop: inline horizontal row ──────────────────────────── */}
+        <div className="hidden items-stretch lg:flex">
+          <div className="flex items-center gap-2.5 pr-4 shrink-0">
+            <span className="h-3.5 w-[3px] rounded-full bg-[#EC601B]" />
+            <span className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] text-[#1D2D44]">
+              Jump To
+            </span>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="shrink-0"
+              aria-hidden
+            >
+              <path
+                d="M9 6l6 6-6 6"
+                stroke="#1D2D44"
+                strokeOpacity="0.35"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div className="flex items-center gap-1 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {JUMP_LINKS.map((link) => {
+              const isActive = active === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => handleClick(link.id)}
+                  className="group relative whitespace-nowrap px-3 py-1.5 font-poppins text-[13px] font-medium transition-colors"
+                  style={{ color: isActive ? "#EC601B" : "#1D2D44B0" }}
+                >
+                  {link.label}
+                  <span
+                    className="absolute bottom-0 left-3 right-3 h-[2px] origin-left rounded-full bg-[#EC601B] transition-transform duration-300"
+                    style={{ transform: isActive ? "scaleX(1)" : "scaleX(0)" }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── Mobile: dropdown menu ───────────────────────────────────── */}
+        <div className="relative lg:hidden">
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            className="flex w-full items-center gap-2.5 py-0.5"
+          >
+            <span className="h-3.5 w-[3px] shrink-0 rounded-full bg-[#EC601B]" />
+            <span className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] text-[#1D2D44] shrink-0">
+              Jump To
+            </span>
+            <span
+              className="ml-1 truncate font-poppins text-[13px] font-medium"
+              style={{ color: active ? "#EC601B" : "#1D2D4480" }}
+            >
+              {activeLabel}
+            </span>
+            <motion.svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="ml-auto shrink-0"
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              aria-hidden
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                stroke="#1D2D44"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+          </button>
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                className="absolute left-0 right-0 top-full z-50 overflow-hidden border border-[#1D2D44]/10 bg-white shadow-lg"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.28, ease: EASE }}
+              >
+                <div className="flex flex-col pt-0.5 pb-1">
+                  {JUMP_LINKS.map((link) => {
+                    const isActive = active === link.id;
+                    return (
+                      <button
+                        key={link.id}
+                        onClick={() => handleClick(link.id)}
+                        className="flex items-center gap-3 px-1 py-2 text-left font-poppins text-[14px] font-medium transition-colors"
+                        style={{ color: isActive ? "#EC601B" : "#1D2D44" }}
+                      >
+                        <span
+                          className="h-4 w-[3px] shrink-0 rounded-full bg-[#EC601B] transition-opacity"
+                          style={{ opacity: isActive ? 1 : 0 }}
+                        />
+                        {link.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.nav>
+  );
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function InternationalCollaborativeResearchPage() {
   const heroRef = useRef(null);
@@ -353,12 +618,13 @@ export default function InternationalCollaborativeResearchPage() {
               style={{ width: 76 }}
             />
           </motion.div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
+        {/* ─── Jump To (flush below hero) ─────────────────────────────────── */}
+        <JumpTo />
+
         {/* ─── Harvard Kennedy School ───────────────────────────────────────── */}
-        <section className="bg-white py-20 sm:py-28">
+        <section id="hks" className={`bg-white py-20 ${SECTION_SCROLL_MT} sm:py-28`}>
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at Harvard Kennedy School (HKS)"
@@ -419,7 +685,10 @@ export default function InternationalCollaborativeResearchPage() {
         </section>
 
         {/* ─── ICTP ─────────────────────────────────────────────────────────── */}
-        <section className="bg-[#BBDEFB25] py-20 sm:py-28">
+        <section
+          id="ictp"
+          className={`bg-[#BBDEFB25] py-20 ${SECTION_SCROLL_MT} sm:py-28`}
+        >
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at The International Centre for Theoretical Physics (ICTP)"
@@ -619,7 +888,7 @@ export default function InternationalCollaborativeResearchPage() {
         </section>
 
         {/* ─── LSE ──────────────────────────────────────────────────────────── */}
-        <section className="bg-white py-20 sm:py-28">
+        <section id="lse" className={`bg-white py-20 ${SECTION_SCROLL_MT} sm:py-28`}>
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at the London School of Economics and Political Science (LSE)"
