@@ -42,36 +42,6 @@ const SEARCH_NAV: NavItem[] = [
       {
         label: "Researchers",
         href: "/Learning-and-Development/Researchers",
-        children: [
-          {
-            label: "Scholar Fellowship",
-            href: "/Learning-and-Development/Researchers/ScholarFellowship",
-          },
-          {
-            label: "Scholarly Publication",
-            href: "/Learning-and-Development/Researchers/Scholarly-Publication",
-          },
-          {
-            label: "Scientific Missions",
-            href: "/Learning-and-Development/Researchers/ScientificMissions",
-          },
-          {
-            label: "Scholarship Bridging Grant",
-            href: "/Learning-and-Development/Researchers/ScholarshipBridgingGrant",
-          },
-          {
-            label: "Extension of Scholarship Bridging Grant",
-            href: "/Learning-and-Development/Researchers/ExtensionOfScholarshipBridgingGrant",
-          },
-          {
-            label: "PhD Students Supplementary Fund Grant",
-            href: "/Learning-and-Development/Researchers/PhDStudentsSupplementaryFundGrant",
-          },
-          {
-            label: "International Collaborative Research",
-            href: "/Learning-and-Development/Researchers/International-Collaborative-Research",
-          },
-        ],
       },
       {
         label: "Professionals",
@@ -105,11 +75,66 @@ const SEARCH_NAV: NavItem[] = [
 ];
 
 // ── Pages NOT in the header nav (Contact, Careers...). NO Home here. ──────────
-const EXTRA_PAGES: SearchItem[] = [
-  // Example — uncomment / edit for your real pages:
-  // { title: "Contact Us", description: "Get in touch with KFAS.", url: "/contact", category: "Contact", keywords: ["contact", "email", "phone", "address", "reach", "support"] },
-  // { title: "Careers", description: "Work at KFAS.", url: "/careers", category: "Careers", keywords: ["jobs", "career", "hiring", "vacancy", "work"] },
+const RESEARCHER_PROGRAMS: SearchItem[] = [
+  {
+    title: "International Collaborative Research",
+    description:
+      "Funding that enables Kuwaiti researchers to collaborate with leading international institutions on joint research projects.",
+    url: "/Learning-and-Development/Researchers/International-Collaborative-Research",
+    category: "Researchers",
+    keywords: ["international", "collaboration", "joint research", "global"],
+  },
+  {
+    title: "Scholar Fellowship",
+    description:
+      "Fellowship opportunities that support researchers in advancing their academic and scientific careers.",
+    url: "/Learning-and-Development/Researchers/ScholarFellowship",
+    category: "Researchers",
+    keywords: ["fellowship", "scholar", "scholarship", "career"],
+  },
+  {
+    title: "Scholarly Publication",
+    description:
+      "Support for publishing high-quality scientific research in reputable journals and outlets.",
+    url: "/Learning-and-Development/Researchers/Scholarly-Publication",
+    category: "Researchers",
+    keywords: ["publish", "paper", "journal", "research paper", "publication"],
+  },
+  {
+    title: "Scientific Missions",
+    description:
+      "Grants enabling researchers to participate in scientific missions, conferences, and field activities.",
+    url: "/Learning-and-Development/Researchers/ScientificMissions",
+    category: "Researchers",
+    keywords: ["missions", "conference", "field", "travel"],
+  },
+  {
+    title: "Scholarship Bridging Grant",
+    description:
+      "Bridging support for scholars transitioning between academic stages or programs.",
+    url: "/Learning-and-Development/Researchers/ScholarshipBridgingGrant",
+    category: "Researchers",
+    keywords: ["bridging", "scholarship", "grant", "transition"],
+  },
+  {
+    title: "Extension of Scholarship Bridging Grant",
+    description:
+      "Extended bridging support for eligible scholars who require additional time to complete their objectives.",
+    url: "/Learning-and-Development/Researchers/ExtensionOfScholarshipBridgingGrant",
+    category: "Researchers",
+    keywords: ["extension", "bridging", "scholarship", "grant"],
+  },
+  {
+    title: "PhD Students Supplementary Fund Grant",
+    description:
+      "Supplementary funding for PhD students to support research needs and doctoral studies.",
+    url: "/Learning-and-Development/Researchers/PhDStudentsSupplementaryFundGrant",
+    category: "Researchers",
+    keywords: ["phd", "doctoral", "supplementary", "students", "fund"],
+  },
 ];
+
+const EXTRA_PAGES: SearchItem[] = [...RESEARCHER_PROGRAMS];
 
 // ── Extra keywords per URL (synonyms, abbreviations, Arabic terms…) ───────────
 const KEYWORDS: Record<string, string[]> = {
@@ -127,17 +152,6 @@ const KEYWORDS: Record<string, string[]> = {
   ],
   "/research/SCS": ["conference", "sponsorship", "scs", "event funding"],
   "/research/KFASResearchPortal": ["portal", "login", "submit", "apply online"],
-  "/Learning-and-Development/Researchers/Scholarly-Publication": [
-    "publish",
-    "paper",
-    "journal",
-    "research paper",
-  ],
-  "/Learning-and-Development/Researchers/ScholarFellowship": [
-    "fellowship",
-    "scholar",
-    "scholarship",
-  ],
   "/Learning-and-Development/Youth": ["students", "school", "young", "kids"],
   "/ScienceAndSociety/SpecialNeeds": [
     "disability",
@@ -173,8 +187,6 @@ const DESCRIPTIONS: Record<string, string> = {
   "/research/TechDeployment": "Technology deployment programs.",
   "/research/RandDPrivate": "R&D support in the private sector.",
   "/research/KFASResearchPortal": "Access the KFAS research portal.",
-  "/Learning-and-Development/Researchers/Scholarly-Publication":
-    "Support for scholarly and research publications.",
   "/ScienceAndSociety/ActivitiesAndEventsSponsership":
     "Sponsorship for scientific activities and events.",
   "/ScienceAndSociety/SpecialNeeds": "Support programs for special needs.",

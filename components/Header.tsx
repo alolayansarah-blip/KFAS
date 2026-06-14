@@ -47,36 +47,6 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       {
         label: "Researchers",
         href: "/Learning-and-Development/Researchers",
-        children: [
-          {
-            label: "Scholar Fellowship",
-            href: "/Learning-and-Development/Researchers/ScholarFellowship",
-          },
-          {
-            label: "Scholarly Publication",
-            href: "/Learning-and-Development/Researchers/Scholarly-Publication",
-          },
-          {
-            label: "Scientific Missions",
-            href: "/Learning-and-Development/Researchers/ScientificMissions",
-          },
-          {
-            label: "Scholarship Bridging Grant",
-            href: "/Learning-and-Development/Researchers/ScholarshipBridgingGrant",
-          },
-          {
-            label: "Extension of Scholarship Bridging Grant",
-            href: "/Learning-and-Development/Researchers/ExtensionOfScholarshipBridgingGrant",
-          },
-          {
-            label: "PhD Students Supplementary Fund Grant",
-            href: "/Learning-and-Development/Researchers/PhDStudentsSupplementaryFundGrant",
-          },
-          {
-            label: "International Collaborative Research",
-            href: "/Learning-and-Development/Researchers/International-Collaborative-Research",
-          },
-        ],
       },
       {
         label: "Professionals",

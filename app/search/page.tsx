@@ -52,7 +52,7 @@ export default function SearchPage() {
               }}
             />
             <div
-              aria-hidden
+              aria-hid
               className="absolute inset-0"
               style={{
                 background:
