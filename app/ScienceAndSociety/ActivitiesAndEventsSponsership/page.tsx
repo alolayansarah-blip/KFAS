@@ -1,7 +1,18 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from "react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -16,6 +27,17 @@ const BRAND = {
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const CONTAINER = "mx-auto max-w-[1280px]";
+
+// ─── JumpTo tuning ─────────────────────────────────────────────────────────────
+const HEADER_H = 72; // fallback header height until measured
+const BAR_FALLBACK_H = 56; // fallback JumpTo bar height until measured
+const JUMP_TRIGGER_MARGIN = 8; // px past the bar before a section counts as active
+const MOBILE_QUERY = "(max-width: 1023px)";
+const MOBILE_CLOSE_DELAY = 320; // ms — let the dropdown finish closing before scrolling
+
+// Sections read this CSS var (set by JumpTo at runtime) for their scroll-margin-top.
+const JUMP_SCROLL_VAR = "--sponsorship-jump-scroll-mt";
+const SECTION_SCROLL_MT = `scroll-mt-[var(${JUMP_SCROLL_VAR},128px)]`;
 
 // ─── Image placeholder ─────────────────────────────────────────────────────────
 // Swap each placeholder for a real photo by replacing the inner block with:
@@ -86,6 +108,291 @@ function ImagePlaceholder({
         aria-hidden
       />
     </div>
+  );
+}
+
+// ─── JumpTo nav ───────────────────────────────────────────────────────────────
+// Sticky in-page nav placed directly after the hero. Horizontal row on desktop,
+// tappable dropdown on mobile. Smooth-scrolls to each topic and highlights the
+// active section on scroll.
+const JUMP_LINKS = [
+  { id: "overview", label: "Overview" },
+  { id: "objectives", label: "Objectives" },
+  { id: "citizen-science", label: "Citizen Science" },
+  { id: "science-communication", label: "Science Communication" },
+  { id: "apply", label: "Apply" },
+];
+
+function JumpTo() {
+  const [active, setActive] = useState<string>("");
+  const [open, setOpen] = useState(false); // mobile dropdown
+  const [headerH, setHeaderH] = useState(HEADER_H); // measured at runtime
+  const navRef = useRef<HTMLElement>(null);
+
+  // Distance from the top of the viewport to the bottom of the sticky stack
+  // (header + bar). Used both for jump targets and active-section detection.
+  const getJumpOffset = useCallback(
+    () => headerH + (navRef.current?.offsetHeight ?? BAR_FALLBACK_H),
+    [headerH],
+  );
+
+  const scrollToSection = useCallback(
+    (id: string) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const top =
+        el.getBoundingClientRect().top + window.scrollY - getJumpOffset();
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    },
+    [getJumpOffset],
+  );
+
+  // Measure header + bar height before paint; keep the section scroll-margin
+  // CSS var in sync via ResizeObserver.
+  useLayoutEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+
+    const measure = () => {
+      const headerHeight = header.getBoundingClientRect().height;
+      const barHeight = navRef.current?.offsetHeight ?? BAR_FALLBACK_H;
+      setHeaderH(headerHeight);
+      document.documentElement.style.setProperty(
+        JUMP_SCROLL_VAR,
+        `${headerHeight + barHeight}px`,
+      );
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(header);
+    if (navRef.current) ro.observe(navRef.current);
+
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      document.documentElement.style.removeProperty(JUMP_SCROLL_VAR);
+    };
+  }, []);
+
+  // Close the mobile dropdown when tapping outside it
+  useEffect(() => {
+    if (!open) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [open]);
+
+  // Highlight the last section whose top has passed the trigger line, with a
+  // bottom-of-page guard so the final section always highlights.
+  useEffect(() => {
+    let frame = 0;
+
+    const update = () => {
+      const trigger = getJumpOffset() + JUMP_TRIGGER_MARGIN;
+
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+
+      if (atBottom) {
+        setActive(JUMP_LINKS[JUMP_LINKS.length - 1].id);
+        return;
+      }
+
+      let current = "";
+      for (const link of JUMP_LINKS) {
+        const el = document.getElementById(link.id);
+        if (el && el.getBoundingClientRect().top <= trigger) {
+          current = link.id;
+        }
+      }
+      setActive(current);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [getJumpOffset]);
+
+  const handleClick = (id: string) => {
+    setActive(id);
+    setOpen(false);
+    // On mobile, wait for the dropdown close animation before scrolling — iOS
+    // can cancel a scroll fired while layout is still animating.
+    if (window.matchMedia(MOBILE_QUERY).matches) {
+      setTimeout(() => scrollToSection(id), MOBILE_CLOSE_DELAY);
+    } else {
+      requestAnimationFrame(() => scrollToSection(id));
+    }
+  };
+
+  const activeLabel =
+    JUMP_LINKS.find((l) => l.id === active)?.label ?? "Select a topic";
+
+  return (
+    <motion.nav
+      ref={navRef}
+      className="sticky z-40 border-b bg-white/95 backdrop-blur"
+      style={{ top: headerH, borderColor: `${BRAND.navy}14` }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: EASE }}
+    >
+      <div className={`${CONTAINER} px-6 py-1.5 sm:px-8 sm:py-2 lg:px-12`}>
+        {/* ── Desktop: inline horizontal row ──────────────────────────── */}
+        <div className="hidden items-stretch lg:flex">
+          {/* Label */}
+          <div className="flex items-center gap-2.5 pr-4 shrink-0">
+            <span
+              className="h-3.5 w-[3px] rounded-full"
+              style={{ background: BRAND.orange }}
+            />
+            <span
+              className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: BRAND.navy }}
+            >
+              Jump To
+            </span>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="shrink-0"
+              aria-hidden
+            >
+              <path
+                d="M9 6l6 6-6 6"
+                stroke={`${BRAND.navy}55`}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          {/* Links */}
+          <div className="flex items-center gap-1 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {JUMP_LINKS.map((link) => {
+              const isActive = active === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => handleClick(link.id)}
+                  className="group relative whitespace-nowrap px-3 py-1.5 font-poppins text-[13px] font-medium transition-colors"
+                  style={{ color: isActive ? BRAND.orange : `${BRAND.navy}B0` }}
+                >
+                  {link.label}
+                  <span
+                    className="absolute bottom-0 left-3 right-3 h-[2px] origin-left rounded-full transition-transform duration-300"
+                    style={{
+                      background: BRAND.orange,
+                      transform: isActive ? "scaleX(1)" : "scaleX(0)",
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── Mobile: dropdown menu ───────────────────────────────────── */}
+        <div className="relative lg:hidden">
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            className="flex w-full items-center gap-2.5 py-0.5"
+          >
+            <span
+              className="h-3.5 w-[3px] shrink-0 rounded-full"
+              style={{ background: BRAND.orange }}
+            />
+            <span
+              className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] shrink-0"
+              style={{ color: BRAND.navy }}
+            >
+              Jump To
+            </span>
+            <span
+              className="ml-1 truncate font-poppins text-[13px] font-medium"
+              style={{ color: active ? BRAND.orange : `${BRAND.navy}80` }}
+            >
+              {activeLabel}
+            </span>
+            <motion.svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="ml-auto shrink-0"
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              aria-hidden
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                stroke={BRAND.navy}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+          </button>
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                className="absolute left-0 right-0 top-full z-50 overflow-hidden border bg-white shadow-lg"
+                style={{ borderColor: `${BRAND.navy}14` }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.28, ease: EASE }}
+              >
+                <div className="flex flex-col pt-0.5 pb-1">
+                  {JUMP_LINKS.map((link) => {
+                    const isActive = active === link.id;
+                    return (
+                      <button
+                        key={link.id}
+                        onClick={() => handleClick(link.id)}
+                        className="flex items-center gap-3 px-1 py-2 text-left font-poppins text-[14px] font-medium transition-colors"
+                        style={{ color: isActive ? BRAND.orange : BRAND.navy }}
+                      >
+                        <span
+                          className="h-4 w-[3px] shrink-0 rounded-full transition-opacity"
+                          style={{
+                            background: BRAND.orange,
+                            opacity: isActive ? 1 : 0,
+                          }}
+                        />
+                        {link.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.nav>
   );
 }
 
@@ -171,14 +478,15 @@ export default function ActivitiesAndEventsSponsershipPage() {
               />
             </div>
           </motion.div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
+
+        {/* ── Jump To (flush below hero — no extra white band) ─────────── */}
+        <JumpTo />
 
         {/* ── Overview ─────────────────────────────────────────────────── */}
         <section
           id="overview"
-          className="scroll-mt-28 px-6 py-20 sm:px-8 sm:py-28 lg:px-12"
+          className={`${SECTION_SCROLL_MT} px-6 py-20 sm:px-8 sm:py-28 lg:px-12`}
         >
           <div className={CONTAINER}>
             <motion.p
@@ -201,7 +509,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
         {/* ── Objectives — two-column grid (image + list) ──────────────── */}
         <section
           id="objectives"
-          className="scroll-mt-28 px-6 pb-20 sm:px-8 sm:pb-28 lg:px-12"
+          className={`${SECTION_SCROLL_MT} px-6 pb-20 sm:px-8 sm:pb-28 lg:px-12`}
         >
           <div className={CONTAINER}>
             <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -286,7 +594,10 @@ export default function ActivitiesAndEventsSponsershipPage() {
         </section>
 
         {/* Citizen Science Grants — image left / text right */}
-        <section className="px-6 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <section
+          id="citizen-science"
+          className={`${SECTION_SCROLL_MT} px-6 py-16 sm:px-8 sm:py-20 lg:px-12`}
+        >
           <div className={CONTAINER}>
             <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <motion.div
@@ -356,7 +667,8 @@ export default function ActivitiesAndEventsSponsershipPage() {
 
         {/* Science Communication Grant — text left / image right */}
         <section
-          className="px-6 py-16 sm:px-8 sm:py-20 lg:px-12"
+          id="science-communication"
+          className={`${SECTION_SCROLL_MT} px-6 py-16 sm:px-8 sm:py-20 lg:px-12`}
           style={{ background: `${BRAND.lightBlue}20` }}
         >
           <div className={CONTAINER}>
@@ -570,7 +882,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
         {/* ── CTA ──────────────────────────────────────────────────────── */}
         <section
           id="apply"
-          className="scroll-mt-28 px-6 py-20 sm:px-8 sm:py-24 lg:px-12"
+          className={`${SECTION_SCROLL_MT} px-6 py-20 sm:px-8 sm:py-24 lg:px-12`}
           style={{ background: "#7DC0F1" }}
         >
           <div
