@@ -68,14 +68,14 @@ export default function SearchPage() {
             style={{ opacity: heroOpacity }}
           >
             <div className="mx-auto w-full max-w-[1280px]">
-              <motion.p
+              {/* <motion.p
                 className="mb-4 font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50"
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease: EASE }}
               >
                 Search
-              </motion.p>
+              </motion.p> */}
 
               <div className="overflow-hidden">
                 <motion.h1
@@ -84,7 +84,7 @@ export default function SearchPage() {
                   animate={{ y: 0 }}
                   transition={{ duration: 0.75, delay: 0.12, ease: EASE }}
                 >
-                  Search the Website
+                  Search
                 </motion.h1>
               </div>
 

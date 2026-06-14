@@ -502,7 +502,6 @@
 //     </motion.div>
 //   );
 // }
-
 "use client";
 
 import React, { useRef } from "react";
@@ -595,6 +594,7 @@ export default function AboutKfasPage() {
               alt="Who We Are"
               fill
               priority
+              quality={65}
               sizes="100vw"
               className="object-cover object-[center_80%] scale-110"
             />
@@ -721,6 +721,7 @@ export default function AboutKfasPage() {
                     alt="KFAS building with KFAS signage"
                     width={640}
                     height={400}
+                    sizes="420px"
                     className="w-full max-w-[420px] h-auto object-contain opacity-85"
                   />
                 </div>
@@ -818,10 +819,12 @@ export default function AboutKfasPage() {
                     className={`relative ${index % 2 === 1 ? "lg:order-2" : ""}`}
                   >
                     <div className="relative overflow-hidden aspect-[16/10] group">
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                       />
                       <div className="absolute inset-0 bg-[#1D2D44]/20 transition-all duration-500 group-hover:bg-[#1D2D44]/5" />
                       <div className="absolute -left-2 -top-2 h-8 w-8 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none" />

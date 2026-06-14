@@ -240,6 +240,7 @@ export default function OurHistoryPage() {
               alt="Our History"
               fill
               priority
+              quality={65}
               sizes="100vw"
               className="object-cover object-center scale-110"
             />
@@ -367,7 +368,7 @@ export default function OurHistoryPage() {
 
                   return (
                     <motion.div
-                      key={index}
+                      key={`${milestone.year}-${milestone.title}`}
                       className={`relative flex flex-col lg:flex-row ${isEven ? "" : "lg:flex-row-reverse"}`}
                       initial={{ opacity: 0, y: 24 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -414,10 +415,12 @@ export default function OurHistoryPage() {
                       <div className="lg:w-1/2 lg:px-10 mt-5 lg:mt-0 flex items-center">
                         {hasImage && (
                           <div className="relative w-full overflow-hidden aspect-[16/10] group">
-                            <img
-                              src={milestone.image}
+                            <Image
+                              src={milestone.image as string}
                               alt={milestone.imageAlt || milestone.title}
-                              className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
+                              fill
+                              sizes="(max-width: 1024px) 100vw, 50vw"
+                              className={`object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
                                 milestone.image === "/image/ShaikhJaber.jpeg"
                                   ? "grayscale"
                                   : ""
@@ -472,9 +475,8 @@ export default function OurHistoryPage() {
             </div>
           </div>
         </section>
-
-        <Footer />
       </main>
+      <Footer />
     </>
   );
 }
