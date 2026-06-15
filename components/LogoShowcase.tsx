@@ -6,7 +6,66 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.2 };
 
-const tiles = [
+type PartnerTile = {
+  title: string;
+  description: string;
+  href: string;
+  image: string;
+  logo?: string;
+  placeholder?: boolean;
+};
+
+function PartnerLogoPlaceholder({
+  title,
+  className = "",
+  active = false,
+  large = false,
+}: {
+  title: string;
+  className?: string;
+  active?: boolean;
+  large?: boolean;
+}) {
+  return (
+    <div
+      className={[
+        "flex items-center justify-center rounded border border-dashed border-white/25 bg-white/[0.06]",
+        large
+          ? "h-full min-h-[88px] w-full max-w-[300px] px-6"
+          : "h-full w-full max-w-[140px] px-3",
+        active ? "opacity-100" : "opacity-45",
+        className,
+      ].join(" ")}
+      aria-hidden
+    >
+      <div className="flex flex-col items-center gap-2 text-center">
+        <svg
+          className={large ? "h-8 w-8 text-white/35" : "h-6 w-6 text-white/35"}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z"
+          />
+        </svg>
+        <span
+          className={[
+            "font-medium uppercase tracking-[0.14em] text-white/40",
+            large ? "text-[11px]" : "text-[9px]",
+          ].join(" ")}
+        >
+          {title}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const tiles: PartnerTile[] = [
   {
     title: "The Scientific Center",
     description:
@@ -39,6 +98,24 @@ const tiles = [
     image: "/image/DDI.jpg",
     logo: "/image/logo5.png",
   },
+  // ===== NEW PARTNER #5 — replace title/description/href/image/logo =====
+  {
+    title: "Partner Five",
+    description:
+      "Placeholder description for the fifth partner. Replace this line with your own copy.",
+    href: "https://example.com/",
+    image: "/image/KFASBuilding3.png",
+    placeholder: true,
+  },
+  // ===== NEW PARTNER #6 — replace title/description/href/image/logo =====
+  {
+    title: "Partner Six",
+    description:
+      "Placeholder description for the sixth partner. Replace this line with your own copy.",
+    href: "https://example.com/",
+    image: "/image/KFASBuilding3.png",
+    placeholder: true,
+  },
 ];
 
 export default function LogoShowcase() {
@@ -67,17 +144,17 @@ export default function LogoShowcase() {
             alt=""
             aria-hidden
             className="absolute inset-0 h-full w-full object-cover object-center"
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.9, ease: EASE }}
           />
         </AnimatePresence>
 
-        {/* Elegant gradient anchored on #7DC0F1 */}
+        {/* Elegant gradient anchored on #7DC0F1 — lifts slightly on hover so the photo reads */}
         <div
           className="absolute inset-0 bg-gradient-to-br from-[#7DC0F1] via-[#488FCC] to-[#16263b] transition-opacity duration-700"
-          style={{ opacity: isDefault ? 0.9 : 0.82 }}
+          style={{ opacity: isDefault ? 0.92 : 0.8 }}
         />
         {/* Soft radial glow for depth */}
         <div
@@ -88,16 +165,16 @@ export default function LogoShowcase() {
           }}
         />
         {/* Left veil so the text column stays crisp */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0f1c2e]/70 via-[#0f1c2e]/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f1c2e]/75 via-[#0f1c2e]/15 to-transparent" />
       </div>
 
       {/* ---------- Content ---------- */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 lg:items-center">
-          {/* ===== LEFT : heading + dynamic info ===== */}
+          {/* ===== LEFT : heading + dynamic info (compact) ===== */}
           <div className="lg:pr-8">
             <motion.p
-              className="mb-3 text-[10px] font-semibold uppercase tracking-[0.42em] text-white/40"
+              className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.42em] text-white/45"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}
@@ -107,7 +184,7 @@ export default function LogoShowcase() {
             </motion.p>
 
             <motion.h2
-              className="mb-5 font-poppins text-3xl sm:text-4xl lg:text-5xl font-semibold text-white leading-tight tracking-tight"
+              className="mb-4 font-poppins text-3xl sm:text-4xl font-semibold text-white leading-[1.1] tracking-tight"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}
@@ -120,7 +197,7 @@ export default function LogoShowcase() {
             </motion.h2>
 
             <motion.div
-              className="mb-8 h-px w-40 origin-left bg-gradient-to-r from-[#EC601B]/70 via-[#7DC0F1]/40 to-transparent"
+              className="mb-6 h-px w-28 origin-left bg-gradient-to-r from-[#EC601B]/70 via-[#7DC0F1]/40 to-transparent"
               initial={{ opacity: 0, scaleX: 0 }}
               whileInView={{ opacity: 1, scaleX: 1 }}
               viewport={VIEWPORT}
@@ -128,7 +205,7 @@ export default function LogoShowcase() {
             />
 
             {/* Dynamic partner info — swaps on hover */}
-            <div className="min-h-[210px] sm:min-h-[180px]">
+            <div className="min-h-[220px] sm:min-h-[200px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
@@ -137,10 +214,28 @@ export default function LogoShowcase() {
                   exit={{ opacity: 0, y: -14 }}
                   transition={{ duration: 0.45, ease: EASE }}
                 >
-                  <h3 className="mb-4 font-poppins text-2xl sm:text-3xl font-semibold text-white">
+                  {/* Active partner mark — ties the panel to the grid */}
+                  <div className="mb-4 flex h-20 items-center sm:h-24 lg:h-28">
+                    {active.placeholder ? (
+                      <PartnerLogoPlaceholder
+                        title={active.title}
+                        large
+                        active
+                      />
+                    ) : (
+                      <img
+                        src={active.logo}
+                        alt={active.title}
+                        className="h-full w-auto max-w-[280px] object-contain object-left"
+                        style={{ filter: "brightness(0) invert(1)" }}
+                      />
+                    )}
+                  </div>
+
+                  <h3 className="mb-3 font-poppins text-2xl sm:text-3xl font-semibold text-white">
                     {active.title}
                   </h3>
-                  <p className="mb-7 max-w-md text-[15px] font-light leading-relaxed text-white/75">
+                  <p className="mb-6 max-w-sm text-[14px] font-light leading-relaxed text-white/75">
                     {active.description}
                   </p>
                   <a
@@ -169,10 +264,10 @@ export default function LogoShowcase() {
             </div>
           </div>
 
-          {/* ===== RIGHT : 2x2 logo grid ===== */}
-          <div className="grid grid-cols-2 gap-4 sm:gap-5">
+          {/* ===== RIGHT : logo grid (2 cols on mobile, 3 cols from sm) ===== */}
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-4">
             {tiles.map((tile, index) => {
-              const active = activeIndex === index;
+              const isActive = activeIndex === index;
               return (
                 <motion.a
                   key={tile.title}
@@ -180,48 +275,57 @@ export default function LogoShowcase() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onMouseEnter={() => setHoveredIndex(index)}
-                  className="group relative flex cursor-pointer flex-col items-center justify-center overflow-hidden"
+                  className={`group relative block cursor-pointer ${
+                    isActive ? "z-20" : ""
+                  }`}
                   initial={{ opacity: 0, y: 28 }}
                   animate={
                     isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }
                   }
                   transition={{
-                    duration: 0.6,
-                    delay: 0.2 + index * 0.1,
+                    duration: 0.55,
+                    delay: 0.2 + index * 0.08,
                     ease: EASE,
                   }}
                 >
                   <div
-                    className={`relative flex aspect-square w-full flex-col items-center justify-center px-4 py-6 border transition-all duration-500 ${
-                      active
-                        ? "border-[#EC601B]/60 bg-white/10 backdrop-blur-sm shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)]"
-                        : "border-white/10 bg-white/[0.04] hover:bg-white/[0.07]"
+                    className={`relative flex aspect-square w-full flex-col items-center justify-center px-3 py-5 border transition-all duration-500 ${
+                      isActive
+                        ? "scale-[1.07] border-[#EC601B]/60 bg-white/10 backdrop-blur-sm"
+                        : "border-white/12 bg-white/[0.04] hover:bg-white/[0.07]"
                     }`}
                   >
                     {/* Orange top bar */}
                     <div
                       className={`absolute top-0 left-0 right-0 h-[2px] origin-left bg-[#EC601B] transition-transform duration-500 ${
-                        active ? "scale-x-100" : "scale-x-0"
+                        isActive ? "scale-x-100" : "scale-x-0"
                       }`}
                     />
 
                     {/* Logo */}
-                    <div className="flex h-24 w-full items-center justify-center md:h-36">
-                      <img
-                        src={tile.logo}
-                        alt={tile.title}
-                        className="h-full w-auto max-w-[160px] object-contain transition-all duration-500 md:max-w-[220px]"
-                        style={{
-                          filter: "brightness(0) invert(1)",
-                          opacity: active ? 1 : 0.5,
-                        }}
-                      />
+                    <div className="flex h-16 w-full items-center justify-center md:h-20">
+                      {tile.placeholder ? (
+                        <PartnerLogoPlaceholder
+                          title={tile.title}
+                          active={isActive}
+                        />
+                      ) : (
+                        <img
+                          src={tile.logo}
+                          alt={tile.title}
+                          className="h-full w-auto max-w-[140px] object-contain transition-all duration-500"
+                          style={{
+                            filter: "brightness(0) invert(1)",
+                            opacity: isActive ? 1 : 0.45,
+                          }}
+                        />
+                      )}
                     </div>
 
                     {/* Caption */}
                     <p
-                      className={`mt-4 text-center text-[11px] font-medium leading-snug transition-colors duration-300 ${
-                        active ? "text-white" : "text-white/45"
+                      className={`mt-3 text-center text-[10.5px] font-medium leading-snug transition-colors duration-300 ${
+                        isActive ? "text-white" : "text-white/45"
                       }`}
                     >
                       {tile.title}
@@ -236,6 +340,7 @@ export default function LogoShowcase() {
     </section>
   );
 }
+//--------------------------------------------------Code for Marquee--------------------------------------------------
 // "use client";
 
 // import { useRef, useEffect } from "react";

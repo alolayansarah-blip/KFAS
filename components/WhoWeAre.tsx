@@ -21,7 +21,7 @@ const TITLE_LINES = [
 
 const STATS = [
   { value: "1976", label: "Founded" },
-  { value: "48+", label: "Years of Impact" },
+  { value: "50", label: "Years of Impact" },
   { value: "500+", label: "Research Grants" },
 ];
 
