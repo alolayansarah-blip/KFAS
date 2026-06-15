@@ -13,8 +13,8 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as const },
+  viewport: { once: true, margin: "-60px" },
+  transition: { duration: 0.6, delay, ease: EASE },
 });
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -32,9 +32,22 @@ const STEPS = [
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
-function Divider() {
+// Editorial section head: orange kicker, then title — sticky in the left rail
+function SectionHead({ title }: { title: string }) {
   return (
-    <div className="mt-5 h-px bg-gradient-to-r from-[#EC601B]/40 via-[#BBDEFB40] to-transparent" />
+    <div className="lg:sticky lg:top-28">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.65, ease: EASE }}
+      >
+        <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+        <h2 className="mt-5 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem]">
+          {title}
+        </h2>
+      </motion.div>
+    </div>
   );
 }
 
@@ -130,21 +143,17 @@ export default function AssignedStudiesPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── Overview ── */}
-        <section className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12 bg-white">
+        {/* ── Overview (full-width intro) ── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div className="max-w-[900px]" {...fadeUp(0)}>
-              <div className="mb-6 flex items-center gap-3">
-                <span className="h-px w-8 shrink-0 bg-[#EC601B]" />
-                <span className="font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
-                  Overview
-                </span>
-              </div>
-
-              <h2 className="font-poppins text-[1.55rem] font-semibold leading-[1.3] tracking-tight text-[#1D2D44] sm:text-[1.8rem]">
+            <motion.div className="max-w-[860px]" {...fadeUp(0)}>
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <span className="mt-5 block font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
+                Overview
+              </span>
+              <h2 className="mt-3 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem]">
                 Assigned Studies
               </h2>
-              <Divider />
 
               <p className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
                 They are commissioned studies targeting specific thematic areas
@@ -158,35 +167,32 @@ export default function AssignedStudiesPage() {
           </div>
         </section>
 
-        {/* ── Process ── */}
-        <section className="px-6 py-20 sm:px-8 sm:py-24 lg:px-12 border-t border-[#1D2D44]/10 bg-[#BBDEFB40]">
+        {/* ── Process (two-column rail) ── */}
+        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div className="max-w-[900px]" {...fadeUp(0.05)}>
-              <h3 className="font-poppins text-[1.2rem] font-semibold leading-tight text-[#1D2D44] sm:text-[1.3rem]">
-                How the process works
-              </h3>
-              <Divider />
-            </motion.div>
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead title="How the process works" />
+              </div>
 
-            <div className="mt-8 grid gap-5 lg:grid-cols-2">
-              {STEPS.map(({ id, body }, i) => (
-                <motion.article
-                  key={id}
-                  {...fadeUp(0.1 + i * 0.06)}
-                  className="border bg-white p-6 sm:p-7"
-                  style={{ borderColor: "rgba(29,45,68,0.12)" }}
-                >
-                  <div className="mb-4 flex items-center gap-3">
-                    <span className="inline-flex h-8 min-w-8 items-center justify-center bg-[#EC601B] px-2 font-poppins text-[11px] font-bold tracking-[0.18em] text-white">
-                      {id}
-                    </span>
-                    <div className="h-px w-10 bg-[#EC601B]/40" />
-                  </div>
-                  <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
-                    {body}
-                  </p>
-                </motion.article>
-              ))}
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <ul className="divide-y divide-[#1D2D44]/10 border-t border-[#1D2D44]/10">
+                  {STEPS.map(({ id, body }, i) => (
+                    <motion.li
+                      key={id}
+                      {...fadeUp(0.05 + i * 0.08)}
+                      className="group/li flex gap-5 py-7 sm:gap-7 sm:py-9"
+                    >
+                      <span className="shrink-0 pt-1 font-poppins text-[12px] font-bold tracking-[0.2em] text-[#EC601B]">
+                        {id}
+                      </span>
+                      <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+                        {body}
+                      </p>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
