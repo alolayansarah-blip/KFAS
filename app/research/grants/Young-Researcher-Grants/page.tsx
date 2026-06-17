@@ -503,8 +503,8 @@ export default function YoungResearcherGrantsPage() {
                 </>,
                 <>
                   <span className="font-semibold text-white">
-                    Individuals with at least a bachelor&apos;s degree (less than
-                    33 years of age), are eligible to apply
+                    Individuals with at least a bachelor&apos;s degree (less
+                    than 33 years of age), are eligible to apply
                   </span>{" "}
                   under the supervision of a qualified mentor (holding a PhD
                   degree or equivalent) at local institutions or entities.

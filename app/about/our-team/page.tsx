@@ -231,7 +231,7 @@ export default function OurTeamPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Our Team  
+                Our Team
               </motion.h1>
             </div>
             <motion.div

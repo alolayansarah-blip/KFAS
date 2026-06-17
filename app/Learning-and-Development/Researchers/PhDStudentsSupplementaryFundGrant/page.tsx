@@ -297,17 +297,17 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
               viewport={{ once: true, margin: "-70px" }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              This program is designed to support Kuwaiti PhD candidates enrolled
-              at local or internationally recognized universities by providing
-              supplementary funding to help them complete their doctoral research
-              successfully. The Supplementary Grant provides valuable support for
-              research-related expenses, enabling students to focus on delivering
-              high-quality scientific work during their postgraduate studies. The
-              grant covers essential research costs such as tools, equipment,
-              consumables, specialized software, laboratory analysis fees, and
-              other similar needs directly related to the student&rsquo;s PhD
-              research. Please note that the grant does not cover tuition fees,
-              salaries, or personal benefits.
+              This program is designed to support Kuwaiti PhD candidates
+              enrolled at local or internationally recognized universities by
+              providing supplementary funding to help them complete their
+              doctoral research successfully. The Supplementary Grant provides
+              valuable support for research-related expenses, enabling students
+              to focus on delivering high-quality scientific work during their
+              postgraduate studies. The grant covers essential research costs
+              such as tools, equipment, consumables, specialized software,
+              laboratory analysis fees, and other similar needs directly related
+              to the student&rsquo;s PhD research. Please note that the grant
+              does not cover tuition fees, salaries, or personal benefits.
             </motion.p>
 
             <motion.div

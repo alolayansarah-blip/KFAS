@@ -1,6 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect, useLayoutEffect, useCallback } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import {
@@ -420,9 +426,7 @@ function JumpTo() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: EASE }}
     >
-      <div
-        className={`${JUMP_CONTAINER} px-6 py-1.5 sm:px-8 sm:py-2 lg:px-12`}
-      >
+      <div className={`${JUMP_CONTAINER} px-6 py-1.5 sm:px-8 sm:py-2 lg:px-12`}>
         {/* ── Desktop: inline horizontal row ──────────────────────────── */}
         <div className="hidden items-stretch lg:flex">
           <div className="flex items-center gap-2.5 pr-4 shrink-0">
@@ -624,7 +628,10 @@ export default function InternationalCollaborativeResearchPage() {
         <JumpTo />
 
         {/* ─── Harvard Kennedy School ───────────────────────────────────────── */}
-        <section id="hks" className={`bg-white py-20 ${SECTION_SCROLL_MT} sm:py-28`}>
+        <section
+          id="hks"
+          className={`bg-white py-20 ${SECTION_SCROLL_MT} sm:py-28`}
+        >
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at Harvard Kennedy School (HKS)"
@@ -888,7 +895,10 @@ export default function InternationalCollaborativeResearchPage() {
         </section>
 
         {/* ─── LSE ──────────────────────────────────────────────────────────── */}
-        <section id="lse" className={`bg-white py-20 ${SECTION_SCROLL_MT} sm:py-28`}>
+        <section
+          id="lse"
+          className={`bg-white py-20 ${SECTION_SCROLL_MT} sm:py-28`}
+        >
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
               title="The Kuwait Program at the London School of Economics and Political Science (LSE)"

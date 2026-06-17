@@ -341,9 +341,7 @@ export default function ScholarshipBridgingGrantPage() {
                     className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
                   >
                     <Mark />
-                    <span>
-                      {typeof item === "string" ? item : item.text}
-                    </span>
+                    <span>{typeof item === "string" ? item : item.text}</span>
                   </li>
                 ))}
               </motion.ul>

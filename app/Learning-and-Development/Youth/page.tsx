@@ -342,7 +342,10 @@ export default function YouthPage() {
                   transition={{ duration: 0.6, delay: gi * 0.1, ease: EASE }}
                   whileHover={{ y: -6 }}
                 >
-                  <div className="h-1 w-full" style={{ background: BRAND.orange }} />
+                  <div
+                    className="h-1 w-full"
+                    style={{ background: BRAND.orange }}
+                  />
                   <div className="flex flex-col gap-5 px-7 py-8">
                     <h3
                       className="font-poppins text-[16px] font-semibold leading-snug"

@@ -132,12 +132,13 @@ export default function ScholarlyPublicationPage() {
               transition={{ duration: 0.7, ease: EASE }}
             >
               A reward of appreciation amounting to Kuwaiti Dinars Five Hundred
-              (KD 500) shall be granted to participants who have received support
-              through any of the following programs: PhD Supplementary Fund,
-              Scientific Mission Grant, Research Fellowship Grant, or Scholarship
-              Bridging Grant, and have subsequently published their research work
-              in international periodicals and journals ranked within the top 50%
-              (Q1 or Q2) according to the Journal Citation Reports (JCR).
+              (KD 500) shall be granted to participants who have received
+              support through any of the following programs: PhD Supplementary
+              Fund, Scientific Mission Grant, Research Fellowship Grant, or
+              Scholarship Bridging Grant, and have subsequently published their
+              research work in international periodicals and journals ranked
+              within the top 50% (Q1 or Q2) according to the Journal Citation
+              Reports (JCR).
             </motion.p>
           </div>
         </section>
@@ -178,8 +179,8 @@ export default function ScholarlyPublicationPage() {
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Published a scientific paper in a Q1 or Q2 journal, according
-                    to the{" "}
+                    Published a scientific paper in a Q1 or Q2 journal,
+                    according to the{" "}
                     <a
                       href="https://jcr.clarivate.com/jcr/home"
                       target="_blank"
