@@ -410,8 +410,8 @@ interface FooterProps {
   logoText?: string;
 }
 
-// ⬇️ Replace with your real form link (Google Form, Microsoft Form, etc.)
-const SIGNUP_FORM_URL = "https://forms.gle/your-form-link";
+// forms link for newsletter subscription
+const SIGNUP_FORM_URL = "https://kfas.formstack.com/forms/subscribe_to_kfas";
 
 const NAVIGATION_LINKS = [
   { label: "Who We Are", href: "/AboutKfas" },
