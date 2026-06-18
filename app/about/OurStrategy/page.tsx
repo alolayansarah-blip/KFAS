@@ -36,14 +36,15 @@ export default function OurStrategyPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/benduluim.png"
+              src="/image/Strategy.png"
               alt="Our Strategy"
               fill
               priority
               sizes="100vw"
-              className="object-cover object-center scale-110"
+              className="scale-105 object-cover object-[center_58%]"
             />
             <div
+              aria-hidden
               className="absolute inset-0"
               style={{
                 background:
@@ -51,6 +52,7 @@ export default function OurStrategyPage() {
               }}
             />
             <div
+              aria-hidden
               className="absolute inset-0"
               style={{
                 background:
@@ -73,9 +75,9 @@ export default function OurStrategyPage() {
               <span className="text-white/25">/</span>
             </motion.div>
 
-            <div className="overflow-hidden">
+            <div className="overflow-hidden pb-2">
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{

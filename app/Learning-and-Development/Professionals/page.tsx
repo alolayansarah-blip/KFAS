@@ -948,7 +948,7 @@ export default function ProfessionalsPage() {
               <ProgramCard
                 title="Abroad Courses"
                 body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in programs already offered by academic institutions. This would allow participants to interact and exchange knowledge with other participants from around the world."
-                imageSrc="/image/KfasBuilding2.png"
+                imageSrc="/image/Abroad.png"
                 applyHref="https://learn.kfas.org.kw/"
                 index={1}
               />

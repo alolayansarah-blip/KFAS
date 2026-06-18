@@ -156,11 +156,26 @@ function SectionImage({
   src,
   alt,
   objectPosition = "center",
+  fit = "cover",
 }: {
   src: string;
   alt: string;
   objectPosition?: "center" | "top";
+  fit?: "cover" | "contain";
 }) {
+  if (fit === "contain") {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={420}
+        height={420}
+        sizes="(max-width: 1024px) 90vw, 420px"
+        className="h-auto w-full object-contain transition-transform duration-700 hover:scale-[1.02]"
+      />
+    );
+  }
+
   return (
     <div className="relative w-full aspect-[4/3] overflow-hidden">
       <Image
@@ -188,6 +203,7 @@ function StandardSection({
   imageLeft = false,
   background,
   objectPosition = "center",
+  imageFit = "cover",
   decorativeGlow,
 }: {
   id?: string;
@@ -197,6 +213,7 @@ function StandardSection({
   imageLeft?: boolean;
   background?: string;
   objectPosition?: "center" | "top";
+  imageFit?: "cover" | "contain";
   decorativeGlow?: ReactNode;
 }) {
   const textCol = (
@@ -217,6 +234,7 @@ function StandardSection({
           src={imageSrc}
           alt={imageAlt}
           objectPosition={objectPosition}
+          fit={imageFit}
         />
       </div>
     </FadeUp>
@@ -793,8 +811,9 @@ export default function ActivitiesAndEventsPage() {
         {/* ── 1. STS ───────────────────────────────────────────────────── */}
         <StandardSection
           id="sts"
-          imageSrc="/image/KfasBuilding2.png"
-          imageAlt="KFAS building"
+          imageSrc="/image/STS.png"
+          imageAlt="STS"
+          imageFit="contain"
         >
           <Eyebrow label="STS" />
           <SectionHeading>
@@ -829,7 +848,7 @@ export default function ActivitiesAndEventsPage() {
           id="oes"
           imageLeft
           background={`${BRAND.lightBlue}25`}
-          imageSrc="/image/OES.png"
+          imageSrc="/image/Oxford.png"
           imageAlt="Oxford Energy Seminar"
         >
           <Eyebrow label="OES" />
@@ -909,8 +928,9 @@ export default function ActivitiesAndEventsPage() {
         <StandardSection
           id="cern"
           imageLeft
-          imageSrc="/image/KfasBuilding2.png"
+          imageSrc="/image/CERN.png"
           imageAlt="CERN Summer Student Program"
+          imageFit="contain"
         >
           <Eyebrow label="CERN" />
           <SectionHeading>
@@ -1028,7 +1048,7 @@ export default function ActivitiesAndEventsPage() {
             <div className="flex flex-col gap-5">
               <EventRowWithImage
                 title="CERN Scientific CV writing workshop"
-                imageSrc="/image/KfasBuilding2.png"
+                imageSrc="/image/CERN2.jpg"
                 imageAlt="CERN Scientific CV writing workshop"
                 body="The CERN (The European Organization for Nuclear Research) CV Workshop is a scientific CV-writing session organized by KFAS to help Kuwaiti students prepare strong, competitive CVs for the CERN Summer Student Training Program. It teaches students how to present their academic, research, and technical experience in a way that meets CERN's strict application requirements, while also guiding them on structure, clarity, and relevance. The workshop is open to eligible Kuwaiti bachelor and master's students in Physics, Computer Science, Mathematics, or Engineering, and often includes practical guidance, post-session CV reviews, and insights from former CERN participants. As part of KFAS's collaboration, the workshop supports national capacity-building by ensuring applicants are well-prepared before applying."
                 delay={0}
@@ -1036,7 +1056,7 @@ export default function ActivitiesAndEventsPage() {
 
               <EventRowWithImage
                 title="Artificial Intelligence Empowering Research Workshop Led by Elsevier"
-                imageSrc="/image/KfasBuilding2.png"
+                imageSrc="/image/Artificial.png"
                 imageAlt="Artificial Intelligence Empowering Research Workshop Led by Elsevier"
                 imageRight
                 body={`The Elsevier Workshop was a full-day training session titled "AI Empowering Research," delivered by Elsevier experts and hosted by KFAS. It explored how artificial intelligence was transforming research, publishing, and research management. The workshop covered key topics such as GenAI in research management and its limitations, AI-driven publishing workflows, how leading organizations were using AI, as well as pitfalls, best practices, and research integrity in the context of AI adoption. Participants also received practical, hands-on training with Elsevier's AI tools, applying them in group exercises—including preparing a mock funding proposal. Designed for Kuwaiti researchers, academics, and research administrators, the workshop formed part of KFAS's broader efforts to strengthen national research capacity and promote the responsible use of AI in scientific work.`}
@@ -1045,7 +1065,7 @@ export default function ActivitiesAndEventsPage() {
 
               <EventRowWithImage
                 title="Research & Technology Directorate Networking Day"
-                imageSrc="/image/KfasBuilding2.png"
+                imageSrc="/image/Research.png"
                 imageAlt="Research & Technology Directorate Networking Day"
                 body={`The RTD Research Networking Day was an open, full-day event that provided researchers with the opportunity to engage directly with teams, ask questions, explore available programs, and discuss potential collaborations. The day featured open networking sessions, informational booths, and a special lecture titled "The Art of Crafting a Proposal: From Start to Finish," which guided attendees on developing strong research proposals. The event aimed to create a productive space for researchers to exchange ideas, receive guidance, and build connections across the research community.`}
                 delay={0.12}

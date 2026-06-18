@@ -36,7 +36,7 @@ export default function OurHistoryPage() {
       title: "The Kuwait Prize",
       description:
         "KFAS launched the Kuwait Prize to recognize major scientific contributions and strengthen research excellence across Kuwait and the Arab world.",
-      image: "/image/KuwaitPrizes.jpg",
+      image: "/image/KuwaitPrizelogo.png",
       imageAlt: "Kuwait Prize",
     },
     {
@@ -98,7 +98,7 @@ export default function OurHistoryPage() {
       title: "Dasman Diabetes Institute (DDI)",
       description:
         "KFAS established Dasman Diabetes Institute to reduce diabetes burden in Kuwait through research, training, education, and health awareness programs.",
-      image: "/image/2006Dasman.png",
+      image: "/image/DDI2.png",
       imageAlt: "Dasman Diabetes Institute",
     },
     {
@@ -114,7 +114,7 @@ export default function OurHistoryPage() {
       title: "KFAS Innovation Challenge",
       description:
         "KFAS launched the Innovation Challenge to help organizations build innovation capability through structured executive learning and project development.",
-      image: "/image/2013.png",
+      image: "/image/KFASInnovation.png",
       imageAlt: "KFAS Innovation Challenge",
     },
     {
@@ -156,7 +156,7 @@ export default function OurHistoryPage() {
       title: "PURE Research Portal",
       description:
         'KFAS launched the \"PURE\" portal to showcase funded projects and research outputs, and to enable discovery of expertise and collaboration opportunities.',
-      image: "/image/2024-pure.png",
+      image: "/image/2024.png",
       imageAlt: "PURE Research Portal",
     },
     {

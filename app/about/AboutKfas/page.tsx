@@ -525,14 +525,14 @@ const CENTERS = [
     title: "The Scientific Center",
     description:
       "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness.",
-    image: "/image/sc3.jpg",
+    image: "/image/SCNew2.png",
     href: "https://tsck.org.kw/",
   },
   {
     title: "Dasman Diabetes Institute",
     description:
       "Developing research projects, educational programs, and awareness-raising initiatives that improve society and combat diabetes.",
-    image: "/image/DDI.jpg",
+    image: "/image/DDI1.png",
     href: "https://www.dasmaninstitute.org/",
   },
   {

@@ -78,7 +78,7 @@ export default function AssignedStudiesPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/KfasBuilding2.png"
+              src="/image/Assigned.jpg"
               alt="Assigned Studies"
               fill
               priority

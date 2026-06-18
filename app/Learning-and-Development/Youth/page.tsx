@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -176,27 +177,33 @@ export default function YouthPage() {
           className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            <div
-              className="absolute inset-0 scale-110"
-              style={{ background: BRAND.navy }}
-              aria-hidden
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
-              }}
-              aria-hidden
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
-              }}
-              aria-hidden
-            />
+            <div className="absolute inset-0 bg-[#1D2D44]">
+              <Image
+                src="/image/Youth.jpg"
+                alt="Youth engaged in hands-on learning and development"
+                fill
+                priority
+                quality={90}
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                }}
+                aria-hidden
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+                }}
+                aria-hidden
+              />
+            </div>
           </motion.div>
 
           <motion.div

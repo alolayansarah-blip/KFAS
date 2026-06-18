@@ -71,7 +71,7 @@ const tiles: PartnerTile[] = [
     description:
       "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness.",
     href: "https://tsck.org.kw/",
-    image: "/image/sc.jpg",
+    image: "/image/SCNew.png",
     logo: "/image/logo_sc.png",
   },
   {
@@ -95,7 +95,7 @@ const tiles: PartnerTile[] = [
     description:
       "Developing research projects, educational programs, and awareness-raising initiatives that improve society and combat diabetes.",
     href: "https://www.dasmaninstitute.org/",
-    image: "/image/DDI.jpg",
+    image: "/image/DDI1.png",
     logo: "/image/logo5.png",
   },
   // ===== NEW PARTNER #5 — replace title/description/href/image/logo =====

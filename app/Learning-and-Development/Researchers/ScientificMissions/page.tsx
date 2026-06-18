@@ -42,7 +42,6 @@ export default function ScientificMissionsPage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(heroScroll, [0, 1], ["0%", "20%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.75], [1, 0]);
 
   return (
@@ -55,20 +54,21 @@ export default function ScientificMissionsPage() {
           ref={heroRef}
           className="relative flex min-h-[440px] items-end justify-start overflow-hidden bg-[#1D2D44] h-[62vh]"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <div className="absolute inset-0 bg-[#1D2D44]">
             <Image
-              src="/image/FundamentalResearchGrants.png"
+              src="/image/SM.jpg"
               alt="Scientific missions and research collaboration"
               fill
               priority
+              quality={90}
               sizes="100vw"
-              className="scale-110 object-cover object-center"
+              className="object-cover object-center"
             />
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
               }}
               aria-hidden
             />
@@ -76,11 +76,11 @@ export default function ScientificMissionsPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+                  "linear-gradient(to top, rgba(29,45,68,0.50) 0%, transparent 45%)",
               }}
               aria-hidden
             />
-          </motion.div>
+          </div>
 
           <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
 

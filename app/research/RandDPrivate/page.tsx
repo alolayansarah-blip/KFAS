@@ -2,102 +2,22 @@
 
 import { useRef, type ReactNode } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* ─── Shared primitives ─────────────────────────────────────────────────── */
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-60px" },
+  transition: { duration: 0.6, delay, ease: EASE },
+});
 
-function FadeUp({
-  children,
-  delay = 0,
-  className = "",
-}: {
-  children: ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-70px" });
-  return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0, y: 36 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: EASE }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-function SectionHeading({ children }: { children: ReactNode }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  return (
-    <div ref={ref} className="mb-10">
-      <motion.h2
-        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, ease: EASE }}
-      >
-        {children}
-      </motion.h2>
-      <motion.div
-        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-        transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-      />
-    </div>
-  );
-}
-
-function SectionHeadingLight({ children }: { children: ReactNode }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  return (
-    <div ref={ref} className="mb-10">
-      <motion.h2
-        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight"
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, ease: EASE }}
-      >
-        {children}
-      </motion.h2>
-      <motion.div
-        className="mt-5 h-px origin-left bg-white/30"
-        style={{ width: 48 }}
-        initial={{ scaleX: 0 }}
-        animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 0.55, delay: 0.3, ease: EASE }}
-      />
-    </div>
-  );
-}
-
-/* ─── Watermark text ─────────────────────────────────────────────────────── */
-
-function Watermark({ text, light = false }: { text: string; light?: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={`pointer-events-none select-none absolute bottom-0 right-0 font-poppins font-black uppercase leading-none tracking-tighter overflow-hidden ${
-        light ? "text-white/[0.025]" : "text-[#1D2D44]/[0.025]"
-      }`}
-      style={{ fontSize: "clamp(4.5rem, 13vw, 11rem)", lineHeight: 0.85 }}
-    >
-      {text}
-    </span>
-  );
-}
-
-/* ─── Data ───────────────────────────────────────────────────────────────── */
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
 const GRANT_FOCUS_ITEMS = [
   "Product research & development",
@@ -193,6 +113,13 @@ const APPLICATION_PROCESS_STEPS = [
   },
 ] as const;
 
+const DURING_PROJECT_ITEMS = [
+  "Regular status update meetings",
+  "Milestone-based deliverables and payments",
+  "Ongoing interaction from KFAS team",
+  "Support with project adjustments, if needed",
+] as const;
+
 const AFTER_PROJECT_FOCUS_ITEMS = [
   "Measuring business and technological impact",
   "Capturing lessons learned",
@@ -224,137 +151,139 @@ const READY_TO_START_ITEMS = [
 
 const READY_TO_START_EMAIL = "research@kfas.org.kw";
 
-/* ─── Animated bullet row ────────────────────────────────────────────────── */
+// ─── Shared UI ────────────────────────────────────────────────────────────────
 
-function BulletRow({
-  text,
-  index,
-  light = false,
-}: {
-  text: string;
-  index: number;
-  light?: boolean;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  return (
-    <motion.div
-      ref={ref}
-      className={`flex gap-5 py-5 border-b ${
-        light ? "border-white/25" : "border-[#1D2D44]/10"
-      }`}
-      initial={{ opacity: 0, x: 24 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.07, ease: EASE }}
-    >
-      <motion.span
-        className="w-2 h-2 rounded-full bg-[#EC601B] mt-[10px] flex-shrink-0"
-        animate={{ scale: [1, 1.4, 1] }}
-        transition={{
-          duration: 2.5,
-          delay: index * 0.3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <p
-        className={`font-poppins font-light leading-[1.85] text-[0.95rem] ${
-          light ? "text-white/80" : "text-[#1D2D44]/70"
-        }`}
-      >
-        {text}
-      </p>
-    </motion.div>
-  );
-}
-
-/* ─── Grant type block ───────────────────────────────────────────────────── */
-
-function GrantTypeBlock({
+// Editorial section head: orange kicker, then title (+ optional intro) — sticky in the left rail
+function SectionHead({
   title,
-  subtitle,
-  bullets,
-  index,
+  intro,
+  children,
 }: {
   title: string;
-  subtitle: string;
-  bullets: readonly string[];
-  index: number;
+  intro?: string;
+  children?: ReactNode;
 }) {
   return (
-    <div className="py-8 border-b border-white/25 last:border-b-0">
-      <p className="font-poppins text-white font-semibold text-[1rem] sm:text-[1.05rem] leading-snug">
-        {index + 1}. {title}
-      </p>
-      <p className="mt-2 font-poppins text-white/75 font-light leading-[1.85] text-[0.95rem]">
-        {subtitle}
-      </p>
-      <ul className="mt-4 space-y-2">
-        {bullets.map((line, i) => (
-          <li key={i} className="flex items-start gap-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50 mt-[9px] flex-shrink-0" />
-            <span className="font-poppins text-white/70 font-light text-[0.9rem] leading-[1.8]">
-              {line}
-            </span>
-          </li>
-        ))}
-      </ul>
+    <div className="lg:sticky lg:top-28">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.65, ease: EASE }}
+      >
+        <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+        <h2 className="mt-5 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem]">
+          {title}
+        </h2>
+        {intro && (
+          <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
+            {intro}
+          </p>
+        )}
+        {children}
+      </motion.div>
     </div>
   );
 }
 
-/* ─── Application step row ───────────────────────────────────────────────── */
-
-function StepBlock({
-  step,
-  index,
-}: {
-  step: (typeof APPLICATION_PROCESS_STEPS)[number];
-  index: number;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
+// Refined hairline list marker (grows on hover of its row)
+function Mark() {
   return (
-    <motion.div
-      ref={ref}
-      className="flex gap-5 py-5 border-b border-[#1D2D44]/10 last:border-b-0"
-      initial={{ opacity: 0, x: 24 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.08, ease: EASE }}
-    >
-      <div className="flex flex-col items-center flex-shrink-0 pt-1">
-        <span className="font-poppins text-[#EC601B] font-semibold text-[0.85rem] tabular-nums leading-none">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        {index < APPLICATION_PROCESS_STEPS.length - 1 && (
-          <div className="w-px flex-1 min-h-[24px] bg-[#EC601B]/20 mt-2" />
-        )}
-      </div>
-      <div className="min-w-0 pb-2">
-        <p className="font-poppins text-[#1D2D44] font-semibold text-[0.95rem] leading-snug">
-          {step.title}
-        </p>
-        {"lead" in step && step.lead && (
-          <p className="mt-2 font-poppins text-[#1D2D44]/55 font-light text-[0.9rem] leading-[1.8]">
-            {step.lead}
-          </p>
-        )}
-        <ul className="mt-3 space-y-2">
-          {step.bullets.map((line, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#EC601B]/50 mt-[9px] flex-shrink-0" />
-              <span className="font-poppins text-[#1D2D44]/65 font-light text-[0.9rem] leading-[1.8]">
-                {line}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </motion.div>
+    <span className="mt-[13px] h-px w-3.5 shrink-0 bg-[#EC601B] transition-all duration-300 group-hover/li:w-6" />
   );
 }
 
-/* ─── Page ───────────────────────────────────────────────────────────────── */
+// Simple divide-y list of bullet strings inside the right rail
+function RailList({ items }: { items: readonly string[] }) {
+  return (
+    <ul className="divide-y divide-[#1D2D44]/10 border-t border-[#1D2D44]/10">
+      {items.map((body, i) => (
+        <motion.li
+          key={i}
+          {...fadeUp(0.05 + i * 0.08)}
+          className="group/li flex gap-5 py-7 sm:gap-7 sm:py-9"
+        >
+          <Mark />
+          <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+            {body}
+          </p>
+        </motion.li>
+      ))}
+    </ul>
+  );
+}
+
+// ─── Image placeholder ──────────────────────────────────────────────────────
+// Swap each placeholder for a real photo by replacing the block between the
+// REPLACE markers with:
+//   <Image src="/image/your-photo.jpg" alt="…" fill className="object-cover" />
+// (or a plain <img src="…" className="absolute inset-0 h-full w-full object-cover" />)
+function ImagePlaceholder({
+  ratio = "aspect-[4/3]",
+  label = "Image",
+  className = "",
+}: {
+  ratio?: string;
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`relative w-full overflow-hidden border ${ratio} ${className}`}
+      style={{ borderColor: "#1D2D4414" }}
+    >
+      {/* ── REPLACE FROM HERE ────────────────────────────────────────── */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(135deg, #7DC0F145 0%, #1D2D4412 100%)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 opacity-[0.5]"
+        style={{
+          backgroundImage: "radial-gradient(#1D2D4418 1px, transparent 1px)",
+          backgroundSize: "16px 16px",
+        }}
+        aria-hidden
+      />
+      <div className="absolute inset-0 grid place-items-center">
+        <div className="flex flex-col items-center gap-3">
+          <svg
+            width="34"
+            height="34"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#1D2D44"
+            strokeOpacity="0.4"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.6" />
+            <path d="m21 15-5-5L5 21" />
+          </svg>
+          <span
+            className="font-poppins text-[10px] font-semibold uppercase tracking-[0.3em]"
+            style={{ color: "#1D2D4455" }}
+          >
+            {label}
+          </span>
+        </div>
+      </div>
+      {/* ── REPLACE TO HERE ──────────────────────────────────────────── */}
+
+      {/* corner accent */}
+      <span
+        className="absolute left-0 top-0 h-1 w-10 bg-[#EC601B]"
+        aria-hidden
+      />
+    </div>
+  );
+}
 
 export default function RandDPrivatePage() {
   const heroRef = useRef<HTMLElement>(null);
@@ -374,7 +303,7 @@ export default function RandDPrivatePage() {
       />
 
       <main className="min-h-screen bg-white font-poppins">
-        {/* ── Hero (unchanged) ──────────────────────────────────────────── */}
+        {/* ── Hero ──────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
           className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
@@ -384,7 +313,7 @@ export default function RandDPrivatePage() {
             style={{ y: heroY }}
           >
             <Image
-              src="/image/RandD.png"
+              src="/image/RandD.jpg"
               alt=""
               fill
               priority
@@ -396,12 +325,16 @@ export default function RandDPrivatePage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "radial-gradient(ellipse 85% 55% at 75% 15%, rgba(125,192,241,0.22), transparent 60%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent"
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+              }}
             />
           </motion.div>
 
@@ -442,320 +375,312 @@ export default function RandDPrivatePage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── Overview + What is the Grant ──────────────────────────────── */}
-        <section className="py-20 sm:py-28 bg-white">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 space-y-16 sm:space-y-20">
-            {/* Overview */}
-            <div className="relative overflow-hidden pb-2">
-              <Watermark text="Overview" />
-              <SectionHeading>
+        {/* ── Overview (full-width editorial lead) ──────────────────────── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <motion.div {...fadeUp()}>
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
+                Overview
+              </p>
+              <h2 className="mt-4 max-w-3xl font-poppins text-[1.7rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[2.1rem]">
                 Empowering Innovation in Kuwait&apos;s Private Sector
-              </SectionHeading>
-              <div className="relative z-10 mt-8 space-y-6 max-w-3xl">
-                <FadeUp delay={0.1}>
-                  <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
-                    KFAS supports Kuwaiti companies in strengthening their
-                    competitiveness, productivity, and long-term growth through
-                    science, technology, and innovation.
-                  </p>
-                </FadeUp>
-                <FadeUp delay={0.18}>
-                  <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
-                    Our{" "}
-                    <span className="font-semibold text-[#1D2D44]">
-                      Private Sector R&amp;D Co-Funding Grants
-                    </span>{" "}
-                    are designed to help companies transform ideas into
-                    impactful solutions by sharing risk, accelerating
-                    innovation, and connecting businesses with local and
-                    international knowledge providers.
-                  </p>
-                </FadeUp>
-              </div>
-            </div>
-
-            {/* What is the grant */}
-            <div className="relative overflow-hidden pb-2">
-              <Watermark text="Grant" />
-              <div className="relative z-10 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-                <div className="lg:sticky lg:top-32">
-                  <SectionHeading>
-                    What is the Private Sector R&amp;D Co-Funding Grant?
-                  </SectionHeading>
-                  <FadeUp delay={0.1}>
-                    <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-4">
-                      The KFAS Private Sector R&amp;D Co-Funding Grant supports
-                      applied research, technology development, and innovation
-                      projects that deliver clear business and national impact.
-                      Grants are co-funded, meaning KFAS partners with companies
-                      to jointly fund projects that advance innovation.
-                    </p>
-                  </FadeUp>
-                  <FadeUp delay={0.2}>
-                    <p className="mt-6 font-poppins text-[0.9rem] font-light leading-[1.85] text-[#1D2D44]/50">
-                      Projects typically focus on:
-                    </p>
-                  </FadeUp>
-                </div>
-                <div>
-                  {GRANT_FOCUS_ITEMS.map((text, i) => (
-                    <BulletRow key={i} text={text} index={i} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Grant Types — orange section ──────────────────────────────── */}
-        <section className="bg-[#EC601B] py-24 relative overflow-hidden">
-          <Watermark text="Types" light />
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-              <div className="lg:sticky lg:top-32">
-                <SectionHeadingLight>Grant Types</SectionHeadingLight>
-                <p className="font-poppins text-base leading-[1.9] text-white/70 font-light mt-4">
-                  Two pathways designed to match the scale and ambition of your
-                  innovation project:
-                </p>
-              </div>
-              <div>
-                {GRANT_TYPES.map((grant, i) => (
-                  <GrantTypeBlock
-                    key={grant.title}
-                    title={grant.title}
-                    subtitle={grant.subtitle}
-                    bullets={grant.bullets}
-                    index={i}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Who Can Apply — light blue tint ───────────────────────────── */}
-        <section className="bg-[#BBDEFB40] py-24 relative overflow-hidden">
-          <Watermark text="Eligibility" />
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-            <div className="lg:sticky lg:top-32">
-              <h2 className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight">
-                Who Can Apply?
               </h2>
-              <motion.div
-                className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
-                initial={{ scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-              />
-              <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-6">
-                You should consider applying if your organisation:
-              </p>
-            </div>
-            <div>
-              {WHO_CAN_APPLY_ITEMS.map((text, i) => (
-                <BulletRow key={i} text={text} index={i} />
-              ))}
+            </motion.div>
+
+            <div className="mt-8 max-w-3xl space-y-6">
+              <motion.p
+                {...fadeUp(0.1)}
+                className="font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70"
+              >
+                KFAS supports Kuwaiti companies in strengthening their
+                competitiveness, productivity, and long-term growth through
+                science, technology, and innovation.
+              </motion.p>
+              <motion.p
+                {...fadeUp(0.18)}
+                className="font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70"
+              >
+                Our{" "}
+                <span className="font-semibold text-[#1D2D44]">
+                  Private Sector R&amp;D Co-Funding Grants
+                </span>{" "}
+                are designed to help companies transform ideas into impactful
+                solutions by sharing risk, accelerating innovation, and
+                connecting businesses with local and international knowledge
+                providers.
+              </motion.p>
             </div>
           </div>
         </section>
 
-        {/* ── What We Look For + Application Process ─────────────────────── */}
-        <section className="py-20 sm:py-28 bg-white">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 space-y-20">
-            {/* What we look for */}
-            <div className="relative overflow-hidden pb-2">
-              <Watermark text="Selection" />
-              <div className="relative z-10 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-                <div className="lg:sticky lg:top-32">
-                  <SectionHeading>What We Look For</SectionHeading>
-                  <FadeUp delay={0.1}>
-                    <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-4">
-                      Applications are assessed based on:
-                    </p>
-                  </FadeUp>
-                </div>
-                <div>
-                  {WHAT_WE_LOOK_FOR_ITEMS.map((text, i) => (
-                    <BulletRow key={i} text={text} index={i} />
+        {/* ── What is the grant (rail · tint) ───────────────────────────── */}
+        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead title="What is the Private Sector R&D Co-Funding Grant?">
+                  <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
+                    The KFAS Private Sector R&amp;D Co-Funding Grant supports
+                    applied research, technology development, and innovation
+                    projects that deliver clear business and national impact.
+                    Grants are co-funded, meaning KFAS partners with companies
+                    to jointly fund projects that advance innovation.
+                  </p>
+                  <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/55">
+                    Projects typically focus on:
+                  </p>
+                </SectionHead>
+              </div>
+
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <RailList items={GRANT_FOCUS_ITEMS} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Grant Types (rail · white) ────────────────────────────────── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="Grant Types"
+                  intro="Two pathways designed to match the scale and ambition of your innovation project:"
+                />
+              </div>
+
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <div className="divide-y divide-[#1D2D44]/10 border-t border-[#1D2D44]/10">
+                  {GRANT_TYPES.map((grant, i) => (
+                    <motion.div
+                      key={grant.title}
+                      {...fadeUp(0.05 + i * 0.08)}
+                      className="py-7 sm:py-9"
+                    >
+                      <h3 className="font-poppins text-[1.05rem] font-semibold leading-snug text-[#1D2D44]">
+                        {grant.title}
+                      </h3>
+                      <p className="mt-2 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+                        {grant.subtitle}
+                      </p>
+                      <ul className="mt-4 space-y-3">
+                        {grant.bullets.map((line, j) => (
+                          <li key={j} className="group/li flex gap-4">
+                            <Mark />
+                            <span className="font-poppins text-[14.5px] font-light leading-[1.85] text-[#1D2D44]/70">
+                              {line}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
                   ))}
                 </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Application process */}
-            <div className="relative overflow-hidden pb-2">
-              <Watermark text="Process" />
-              <div className="relative z-10 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-                <div className="lg:sticky lg:top-32">
-                  <SectionHeading>
-                    How the Application Process Works
-                  </SectionHeading>
-                  <FadeUp delay={0.1}>
-                    <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-4">
-                      We follow a clear, staged process to support applicants
-                      throughout their journey:
-                    </p>
-                  </FadeUp>
-                </div>
-                <div>
+        {/* ── Who Can Apply (rail · tint) ───────────────────────────────── */}
+        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="Who Can Apply?"
+                  intro="You should consider applying if your organisation:"
+                />
+              </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <RailList items={WHO_CAN_APPLY_ITEMS} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── What We Look For (rail · white) ───────────────────────────── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="What We Look For"
+                  intro="Applications are assessed based on:"
+                />
+              </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <RailList items={WHAT_WE_LOOK_FOR_ITEMS} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Application Process (rail · tint · numbered steps) ─────────── */}
+        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="How the Application Process Works"
+                  intro="We follow a clear, staged process to support applicants throughout their journey:"
+                />
+              </div>
+
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <ul className="divide-y divide-[#1D2D44]/10 border-t border-[#1D2D44]/10">
                   {APPLICATION_PROCESS_STEPS.map((step, i) => (
-                    <StepBlock key={step.title} step={step} index={i} />
+                    <motion.li
+                      key={step.title}
+                      {...fadeUp(0.05 + i * 0.08)}
+                      className="flex gap-5 py-7 sm:gap-7 sm:py-9"
+                    >
+                      <span className="shrink-0 pt-1 font-poppins text-[12px] font-bold tracking-[0.2em] text-[#EC601B]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="font-poppins text-[1.05rem] font-semibold leading-snug text-[#1D2D44]">
+                          {step.title}
+                        </p>
+                        {"lead" in step && step.lead && (
+                          <p className="mt-2 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/60">
+                            {step.lead}
+                          </p>
+                        )}
+                        <ul className="mt-4 space-y-3">
+                          {step.bullets.map((line, j) => (
+                            <li key={j} className="group/li flex gap-4">
+                              <Mark />
+                              <span className="font-poppins text-[14.5px] font-light leading-[1.85] text-[#1D2D44]/70">
+                                {line}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.li>
                   ))}
-                </div>
+                </ul>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── During the Project — light blue tint ─────────────────────── */}
-        <section className="bg-[#BBDEFB40] py-24 relative overflow-hidden">
-          <Watermark text="Monitoring" />
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-            <div className="lg:sticky lg:top-32">
-              <h2 className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight">
-                During the Project: Monitoring &amp; Support
-              </h2>
-              <motion.div
-                className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
-                initial={{ scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-              />
-              <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-6">
-                KFAS works closely with funded companies through:
-              </p>
-            </div>
-            <div>
-              {[
-                "Regular status update meetings",
-                "Milestone-based deliverables and payments",
-                "Ongoing interaction from KFAS team",
-                "Support with project adjustments, if needed",
-              ].map((text, i) => (
-                <BulletRow key={i} text={text} index={i} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── After the Project — dark navy section ─────────────────────── */}
-        <section className="bg-[#1D2D44] py-24 relative overflow-hidden">
-          <Watermark text="Impact" light />
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-              <div className="lg:sticky lg:top-32">
-                <SectionHeadingLight>
-                  After the Project: Outcomes &amp; Impact
-                </SectionHeadingLight>
-                <p className="font-poppins text-base leading-[1.9] text-white/60 font-light mt-4">
-                  At project completion, companies submit final deliverables and
-                  reports. KFAS focuses on:
-                </p>
+        {/* ── During the Project (rail · white) ─────────────────────────── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="During the Project: Monitoring & Support"
+                  intro="KFAS works closely with funded companies through:"
+                />
               </div>
-              <div>
-                {AFTER_PROJECT_FOCUS_ITEMS.map((text, i) => (
-                  <BulletRow key={i} text={text} index={i} light />
-                ))}
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <RailList items={DURING_PROJECT_ITEMS} />
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── Why Partner + Success Stories ─────────────────────────────── */}
-        <section className="py-20 sm:py-28 bg-white">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 space-y-20">
-            {/* Why Partner */}
-            <div className="relative overflow-hidden pb-2">
-              <Watermark text="Partnership" />
-              <div className="relative z-10 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-                <div className="lg:sticky lg:top-32">
-                  <SectionHeading>Why Partner with KFAS?</SectionHeading>
-                </div>
-                <div>
-                  {PARTNER_WITH_KFAS_ITEMS.map((text, i) => (
-                    <BulletRow key={i} text={text} index={i} />
-                  ))}
-                </div>
+        {/* ── After the Project (rail · tint) ───────────────────────────── */}
+        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="After the Project: Outcomes & Impact"
+                  intro="At project completion, companies submit final deliverables and reports. KFAS focuses on:"
+                />
+              </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <RailList items={AFTER_PROJECT_FOCUS_ITEMS} />
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Success Stories */}
-            <div className="relative overflow-hidden pb-2">
-              <Watermark text="Stories" />
-              <div className="relative z-10">
-                <SectionHeading>Success Stories &amp; Impact</SectionHeading>
-                <FadeUp delay={0.05}>
-                  <p className="mt-2 mb-10 font-poppins text-[0.9rem] font-light italic leading-relaxed text-[#1D2D44]/45 border-l-2 border-[#EC601B]/30 pl-4">
+        {/* ── Why Partner (rail · white) ────────────────────────────────── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead title="Why Partner with KFAS?" />
+              </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <RailList items={PARTNER_WITH_KFAS_ITEMS} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Success Stories (rail · tint) ─────────────────────────────── */}
+        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead title="Success Stories & Impact">
+                  <p className="mt-5 border-l-2 border-[#EC601B]/30 pl-4 font-poppins text-[0.9rem] font-light italic leading-relaxed text-[#1D2D44]/45">
                     (This is something we can add so people can see previous
                     projects)
                   </p>
-                </FadeUp>
+                </SectionHead>
+              </div>
 
-                <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-                  <div className="lg:sticky lg:top-32">
-                    <FadeUp delay={0.08}>
-                      <h3 className="font-poppins text-xl font-semibold text-[#1D2D44] leading-snug">
-                        Turning Innovation into Results
-                      </h3>
-                      <p className="mt-4 font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light">
-                        This section can showcase how KFAS-supported projects
-                        have helped companies:
-                      </p>
-                    </FadeUp>
-                  </div>
-                  <div>
-                    {SUCCESS_STORIES_IMPACT_ITEMS.map((text, i) => (
-                      <BulletRow key={i} text={text} index={i} />
-                    ))}
-                  </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <motion.div {...fadeUp(0.08)}>
+                  <h3 className="font-poppins text-[1.15rem] font-semibold leading-snug text-[#1D2D44]">
+                    Turning Innovation into Results
+                  </h3>
+                  <p className="mt-3 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
+                    This section can showcase how KFAS-supported projects have
+                    helped companies:
+                  </p>
+                </motion.div>
+                <div className="mt-4">
+                  <RailList items={SUCCESS_STORIES_IMPACT_ITEMS} />
                 </div>
               </div>
+            </div>
+
+            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[0, 1, 2].map((i) => (
+                <motion.div key={i} {...fadeUp(0.05 + i * 0.08)}>
+                  <ImagePlaceholder
+                    ratio="aspect-[4/3]"
+                    label="Previous Project"
+                  />
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ── Ready to Start — light blue tint ─────────────────────────── */}
-        <section className="bg-[#BBDEFB40] py-24 relative overflow-hidden">
-          <Watermark text="Apply" />
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
-              <div className="lg:sticky lg:top-32">
-                <h2 className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight">
-                  Ready to Start?
-                </h2>
-                <motion.div
-                  className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
-                  initial={{ scaleX: 0, opacity: 0 }}
-                  whileInView={{ scaleX: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
+        {/* ── Ready to Start (rail · white) ─────────────────────────────── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="Ready to Start?"
+                  intro="Companies interested in applying are encouraged to:"
                 />
-                <FadeUp delay={0.12}>
-                  <p className="mt-6 font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light">
-                    Companies interested in applying are encouraged to:
-                  </p>
-                </FadeUp>
               </div>
-              <div>
-                {READY_TO_START_ITEMS.map((text, i) => (
-                  <BulletRow key={i} text={text} index={i} />
-                ))}
-                <FadeUp delay={0.25}>
-                  <p className="mt-10 font-poppins text-[0.95rem] leading-[1.85] text-[#1D2D44]/70">
-                    <span className="font-semibold text-[#1D2D44]">
-                      Contact:
-                    </span>{" "}
-                    <a
-                      href={`mailto:${READY_TO_START_EMAIL}`}
-                      className="font-medium text-[#EC601B] underline decoration-[#EC601B]/35 underline-offset-[5px] transition-colors hover:text-[#d45510] hover:decoration-[#d45510]/50"
-                    >
-                      {READY_TO_START_EMAIL}
-                    </a>
-                  </p>
-                </FadeUp>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <RailList items={READY_TO_START_ITEMS} />
+                <motion.p
+                  {...fadeUp(0.25)}
+                  className="mt-9 font-poppins text-[0.95rem] leading-[1.85] text-[#1D2D44]/70"
+                >
+                  <span className="font-semibold text-[#1D2D44]">Contact:</span>{" "}
+                  <a
+                    href={`mailto:${READY_TO_START_EMAIL}`}
+                    className="font-medium text-[#EC601B] underline decoration-[#EC601B]/35 underline-offset-[5px] transition-colors hover:text-[#d45510] hover:decoration-[#d45510]/50"
+                  >
+                    {READY_TO_START_EMAIL}
+                  </a>
+                </motion.p>
               </div>
             </div>
           </div>
