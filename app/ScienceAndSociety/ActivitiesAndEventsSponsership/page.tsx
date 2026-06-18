@@ -7,6 +7,7 @@ import {
   useLayoutEffect,
   useCallback,
 } from "react";
+import Image from "next/image";
 import {
   motion,
   AnimatePresence,
@@ -420,27 +421,33 @@ export default function ActivitiesAndEventsSponsershipPage() {
           className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            <div
-              className="absolute inset-0 scale-110"
-              style={{ background: BRAND.navy }}
-              aria-hidden
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
-              }}
-              aria-hidden
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
-              }}
-              aria-hidden
-            />
+            <div className="absolute inset-0 bg-[#1D2D44]">
+              <Image
+                src="/image/ActivitiesAndEventsSpon.jpg"
+                alt="KFAS-sponsored activities and events engagement"
+                fill
+                priority
+                quality={90}
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                }}
+                aria-hidden
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+                }}
+                aria-hidden
+              />
+            </div>
           </motion.div>
 
           <motion.div
@@ -520,7 +527,23 @@ export default function ActivitiesAndEventsSponsershipPage() {
                 transition={{ duration: 0.7, ease: EASE }}
                 whileHover={{ y: -8 }}
               >
-                <ImagePlaceholder ratio="aspect-[5/6]" label="Objectives" />
+                <div
+                  className="relative aspect-[4/3] w-full overflow-hidden border"
+                  style={{ borderColor: `${BRAND.navy}14` }}
+                >
+                  <Image
+                    src="/image/Objective.png"
+                    alt="STEAM activities and community engagement at sponsored events"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 640px"
+                    className="object-cover object-[center_72%]"
+                  />
+                  <span
+                    className="absolute left-0 top-0 h-1 w-10"
+                    style={{ background: BRAND.orange }}
+                    aria-hidden
+                  />
+                </div>
               </motion.div>
 
               <motion.div
@@ -607,10 +630,23 @@ export default function ActivitiesAndEventsSponsershipPage() {
                 transition={{ duration: 0.7, ease: EASE }}
                 whileHover={{ y: -8 }}
               >
-                <ImagePlaceholder
-                  ratio="aspect-[4/3]"
-                  label="Citizen Science"
-                />
+                <div
+                  className="relative aspect-[4/3] w-full overflow-hidden border"
+                  style={{ borderColor: `${BRAND.navy}14` }}
+                >
+                  <Image
+                    src="/image/Citizen%20.png"
+                    alt="Community stargazing event with public telescope observation"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 640px"
+                    className="object-cover object-center"
+                  />
+                  <span
+                    className="absolute left-0 top-0 h-1 w-10"
+                    style={{ background: BRAND.orange }}
+                    aria-hidden
+                  />
+                </div>
               </motion.div>
 
               <motion.div

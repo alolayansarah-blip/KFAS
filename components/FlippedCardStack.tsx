@@ -82,18 +82,18 @@ function Card({
         >
           {/* Image — visible strip on mobile; hover reveal on desktop */}
           <div
-            className="pointer-events-none absolute inset-y-0 right-0 w-[34%] sm:inset-0 sm:w-full sm:opacity-0 sm:transition-[opacity,transform] sm:duration-700 sm:ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:opacity-[0.85]"
+            className="pointer-events-none absolute inset-y-0 right-0 w-[34%] sm:inset-0 sm:w-full sm:opacity-0 sm:transition-[opacity_transform] sm:duration-700 sm:ease-[cubic-bezier(0.16_1_0.3_1)] sm:group-hover:opacity-[0.85]"
           >
             <Image
               src={image}
               alt=""
               fill
               sizes="(max-width: 640px) 40vw, 33vw"
-              className="object-cover sm:scale-105 sm:transition-transform sm:duration-700 sm:ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:scale-100"
+              className="object-cover sm:scale-105 sm:transition-transform sm:duration-700 sm:ease-[cubic-bezier(0.16_1_0.3_1)] sm:group-hover:scale-100"
             />
             <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#EC601B]/60 to-[#EC601B] sm:hidden" />
             <div
-              className="absolute inset-0 bg-[#1D2D44]/0 transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:bg-transparent sm:group-hover:bg-[#1D2D44]/50"
+              className="absolute inset-0 bg-[#1D2D44]/0 transition-colors duration-700 ease-[cubic-bezier(0.16_1_0.3_1)] sm:bg-transparent sm:group-hover:bg-[#1D2D44]/50"
             />
           </div>
 

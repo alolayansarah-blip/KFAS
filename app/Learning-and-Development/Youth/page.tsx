@@ -85,12 +85,16 @@ function ProgramSection({
   title,
   body,
   imageLabel,
+  imageSrc,
+  imageAlt,
   imageLeft = false,
   background,
 }: {
   title: string;
   body: string;
   imageLabel: string;
+  imageSrc?: string;
+  imageAlt?: string;
   imageLeft?: boolean;
   background?: string;
 }) {
@@ -134,7 +138,22 @@ function ProgramSection({
       transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
       whileHover={{ y: -8 }}
     >
-      <ImagePlaceholder label={imageLabel} />
+      {imageSrc ? (
+        <div
+          className="group relative aspect-[4/3] w-full overflow-hidden border"
+          style={{ borderColor: `${BRAND.navy}14` }}
+        >
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? imageLabel}
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      ) : (
+        <ImagePlaceholder label={imageLabel} />
+      )}
     </motion.div>
   );
 
@@ -422,12 +441,16 @@ export default function YouthPage() {
         <ProgramSection
           title="Generation Science"
           imageLabel="Generation Science"
+          imageSrc="/image/Generation.png"
+          imageAlt="Students exploring STEM through virtual reality"
           body="Generation Science summer program empowers students in grades 7 to 12 to become ambassadors of STEM awareness and innovation within their schools and communities. By placing youth at the forefront of science and technology engagement, the program sparks a passion for discovery and motivates students to pursue STEM education and careers, ultimately contributing to building a strong, future-ready workforce. Student leaders represent their schools as the voice of STEM. They join a dynamic national cohort of young changemakers, receiving targeted leadership training, collaborating on STEM initiatives, and providing meaningful input to educators, industry professionals, and decision-makers across educational institutions, industry, and government."
         />
 
         <ProgramSection
           title="Science Month"
           imageLabel="Science Month"
+          imageSrc="/image/ScienceMonth.png"
+          imageAlt="Science Month community event with youth activities"
           imageLeft
           background={`${BRAND.lightBlue}20`}
           body="Science Month is a national initiative that celebrates science, technology, and innovation through a diverse program of events and activities across Kuwait. The initiative brings together students, educators, researchers, and the wider community to explore the role of science in everyday life. Through workshops, exhibitions, talks, and interactive experiences, Science Month aims to inspire curiosity, promote scientific thinking, and encourage youth to pursue STEM fields. By fostering collaboration among local and international partners, the initiative contributes to building a vibrant science culture and supporting Kuwait’s knowledge-based future."
@@ -436,6 +459,8 @@ export default function YouthPage() {
         <ProgramSection
           title="Science Bus"
           imageLabel="Science Bus"
+          imageSrc="/image/SciencesBus.png"
+          imageAlt="Students learning inside the mobile Science Bus laboratory"
           body="The Science Bus brings interactive science experiences directly to schools and communities across Kuwait. Designed as a mobile learning platform, the Science Bus delivers engaging, hands-on activities that make science accessible, fun, and relevant to everyday life. Through immersive demonstrations and guided experiments, the program aims to spark curiosity, inspire young minds, and promote interest in STEM fields. By reaching diverse audiences nationwide, the Science Bus plays a key role in expanding access to quality science education and fostering a culture of discovery."
         />
       </main>
