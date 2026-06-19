@@ -811,7 +811,7 @@ export default function ActivitiesAndEventsPage() {
         {/* ── 1. STS ───────────────────────────────────────────────────── */}
         <StandardSection
           id="sts"
-          imageSrc="/image/STS.png"
+          imageSrc="/image/sts.webp"
           imageAlt="STS"
           imageFit="contain"
         >
@@ -1056,7 +1056,7 @@ export default function ActivitiesAndEventsPage() {
 
               <EventRowWithImage
                 title="Artificial Intelligence Empowering Research Workshop Led by Elsevier"
-                imageSrc="/image/Artificial.png"
+                imageSrc="/image/Artificial.webp"
                 imageAlt="Artificial Intelligence Empowering Research Workshop Led by Elsevier"
                 imageRight
                 body={`The Elsevier Workshop was a full-day training session titled "AI Empowering Research," delivered by Elsevier experts and hosted by KFAS. It explored how artificial intelligence was transforming research, publishing, and research management. The workshop covered key topics such as GenAI in research management and its limitations, AI-driven publishing workflows, how leading organizations were using AI, as well as pitfalls, best practices, and research integrity in the context of AI adoption. Participants also received practical, hands-on training with Elsevier's AI tools, applying them in group exercises—including preparing a mock funding proposal. Designed for Kuwaiti researchers, academics, and research administrators, the workshop formed part of KFAS's broader efforts to strengthen national research capacity and promote the responsible use of AI in scientific work.`}
@@ -1065,7 +1065,7 @@ export default function ActivitiesAndEventsPage() {
 
               <EventRowWithImage
                 title="Research & Technology Directorate Networking Day"
-                imageSrc="/image/Research.png"
+                imageSrc="/image/13new.webp"
                 imageAlt="Research & Technology Directorate Networking Day"
                 body={`The RTD Research Networking Day was an open, full-day event that provided researchers with the opportunity to engage directly with teams, ask questions, explore available programs, and discuss potential collaborations. The day featured open networking sessions, informational booths, and a special lecture titled "The Art of Crafting a Proposal: From Start to Finish," which guided attendees on developing strong research proposals. The event aimed to create a productive space for researchers to exchange ideas, receive guidance, and build connections across the research community.`}
                 delay={0.12}
