@@ -232,6 +232,7 @@ export default function GrantsPage() {
             >
               <span>Research</span>
               <span className="text-white/25">/</span>
+              <span>Grants</span>
             </motion.div>
             <div className="overflow-hidden">
               <motion.h1
@@ -251,34 +252,33 @@ export default function GrantsPage() {
             />
           </motion.div>
 
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-0 bg-white" />
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </div>
 
-        {/* ── Overview band ── */}
-        <section className="bg-[#7DC0F1] px-6 pb-14 pt-10 sm:px-8 sm:pb-16 sm:pt-12 lg:px-12">
-          <div className="mx-auto max-w-[1280px] text-center">
-            <motion.h2
-              className="mb-6 font-poppins text-2xl sm:text-3xl font-semibold text-white leading-tight tracking-tight"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: EASE }}
-            >
-              KFAS Grant Programs Overview
-            </motion.h2>
+        {/* ── Overview ── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-24 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
             <motion.div
-              className="mb-6 h-px w-10 bg-white/40 mx-auto"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
-            />
-            <motion.p
-              className="mx-auto max-w-4xl text-justify font-poppins text-[15px] font-light leading-[1.9] text-white/85"
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: EASE, delay: 0.1 }}
+              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <h2 className="mt-5 font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight text-[#1D2D44]">
+                KFAS Grant Programs Overview
+              </h2>
+            </motion.div>
+            <motion.p
+              className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.65,
+                delay: 0.05,
+                ease: [0.16, 1, 0.3, 1],
+              }}
             >
               The Kuwait Foundation for the Advancement of Sciences (KFAS)
               offers a diverse portfolio of grant programs designed to support

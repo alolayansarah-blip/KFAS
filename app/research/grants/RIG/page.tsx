@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
@@ -71,6 +72,98 @@ function RailSection({
   );
 }
 
+// ─── Grant program switcher (transfer between the 5 grant pages) ─────────────
+// Drop this same <GrantTabs /> into all five grant pages — the active tab is
+// detected automatically from the URL, so no per-page edits are needed.
+const GRANT_PAGES = [
+  { label: "Research Infrastructure Grants", href: "/research/grants/RIG" },
+  {
+    label: "Applied Research Grants",
+    href: "/research/grants/Applied-Research-Grants",
+  },
+  {
+    label: "Fundamental Research Grants",
+    href: "/research/grants/Fundamental-Research-Grants",
+  },
+  {
+    label: "Young Researcher Grants",
+    href: "/research/grants/Young-Researcher-Grants",
+  },
+  {
+    label: "Policy Research Grants",
+    href: "/research/grants/Policy-Research-Grants",
+  },
+];
+
+function GrantTabs() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const activeHref =
+    GRANT_PAGES.find(
+      (p) => pathname === p.href || pathname?.startsWith(p.href + "/"),
+    )?.href ?? "";
+
+  return (
+    <nav
+      aria-label="Grant programs"
+      // Sticky offset: if your Header is fixed/sticky, change top-0 to the
+      // header height (e.g. top-[88px]) so this bar rests just beneath it.
+      className="sticky top-0 z-30 border-b border-[#1D2D44]/[0.08] bg-white/90 backdrop-blur"
+    >
+      <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
+        {/* Mobile: dropdown */}
+        <div className="py-3 lg:hidden">
+          <label htmlFor="grant-switcher" className="sr-only">
+            Jump to grant program
+          </label>
+          <select
+            id="grant-switcher"
+            value={activeHref}
+            onChange={(e) => router.push(e.target.value)}
+            className="w-full border border-[#1D2D44]/15 bg-white px-4 py-3 font-poppins text-[14px] font-medium text-[#1D2D44] focus:border-[#EC601B] focus:outline-none"
+          >
+            {GRANT_PAGES.map((p) => (
+              <option key={p.href} value={p.href}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Desktop: tabs */}
+        <ul className="hidden items-stretch gap-8 overflow-x-auto lg:flex">
+          {GRANT_PAGES.map((p) => {
+            const active = p.href === activeHref;
+            return (
+              <li key={p.href} className="shrink-0">
+                <Link
+                  href={p.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`group relative flex items-center whitespace-nowrap py-5 font-poppins text-[12.5px] font-medium tracking-[0.02em] transition-colors ${
+                    active
+                      ? "text-[#EC601B]"
+                      : "text-[#1D2D44]/55 hover:text-[#1D2D44]"
+                  }`}
+                >
+                  {p.label}
+                  <span
+                    aria-hidden
+                    className={`absolute inset-x-0 bottom-0 h-[2px] origin-left bg-[#EC601B] transition-transform duration-300 ${
+                      active
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-50"
+                    }`}
+                  />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </nav>
+  );
+}
+
 const focusAreas = [
   "Health-related infrastructures",
   "General Science infrastructures",
@@ -117,7 +210,7 @@ export default function RigPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[600px] items-center justify-start overflow-hidden"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -188,6 +281,9 @@ export default function RigPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
+        {/* ── Grant program switcher ── */}
+        <GrantTabs />
+
         {/* ── Overview ── */}
         <section className="px-6 py-20 sm:px-8 sm:py-24 lg:px-12 bg-white">
           <div className="mx-auto max-w-[1280px]">
@@ -200,7 +296,7 @@ export default function RigPage() {
                 Research Infrastructure Grants
               </h2>
             </motion.div>
-            <div className="mt-7 max-w-3xl space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+            <div className="mt-7 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
               <motion.p {...fadeUp(0.05)}>
                 The Kuwait Foundation for the Advancement of Sciences (KFAS)
                 provides grants for research infrastructure proposals. The
