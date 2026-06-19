@@ -560,7 +560,7 @@ export default function OurHistoryPage() {
       title: "The Scientific Center (TSCK)",
       description:
         "KFAS established The Scientific Center as a major national platform for STEM learning and public engagement through interactive exhibits and scientific experiences.",
-      image: "/image/2000tsck.jpg",
+      image: "/image/ScienceCenter.webp",
       imageAlt: "The Scientific Center",
     },
     {

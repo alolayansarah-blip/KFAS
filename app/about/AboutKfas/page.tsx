@@ -493,7 +493,7 @@ const CENTERS = [
     title: "The Scientific Center",
     description:
       "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness.",
-    image: "/image/SCNew2.png",
+    image: "/image/ScientificCenter.webp",
     href: "https://tsck.org.kw/",
   },
   {
