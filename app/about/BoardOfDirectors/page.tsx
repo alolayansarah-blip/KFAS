@@ -475,7 +475,7 @@ export default function BoardOfDirectorsPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <img
-              src="/image/KfasBuilding2.png"
+              src="/image/KFASBuilding.webp"
               alt="Board of Directors"
               className="w-full h-full object-cover object-[center_15%] scale-110"
             />

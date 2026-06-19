@@ -35,11 +35,8 @@ function ProfileCard({
 }) {
   const isVertical = layout === "vertical";
 
-  const imgSize = large
-    ? "w-48 h-48 sm:w-56 sm:h-56"
-    : compact
-      ? "w-36 h-36 sm:w-40 sm:h-40"
-      : "w-44 h-44 sm:w-52 sm:h-52";
+  // Uniform image size for every card — no size variants, no cropping.
+  const imgSize = "w-44 h-44 sm:w-52 sm:h-52";
 
   if (isVertical) {
     return (
@@ -52,16 +49,18 @@ function ProfileCard({
         >
           <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
           <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
-          <div className={`relative overflow-hidden ${imgSize}`}>
+          <div
+            className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
+          >
             {usePlaceholder ? (
-              <div className="w-full h-full flex items-center justify-center bg-[#1D2D44]/05 text-[#1D2D44]/20">
+              <div className="w-full h-full flex items-center justify-center bg-[#1D2D44]/[0.05] text-[#1D2D44]/20">
                 <User className="w-16 h-16" strokeWidth={1} />
               </div>
             ) : (
               <img
                 src={imageSrc}
                 alt={imageAlt}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             )}
           </div>
@@ -103,16 +102,18 @@ function ProfileCard({
       >
         <div className="absolute -left-2 -top-2 h-7 w-7 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
         <div className="absolute -bottom-2 -right-2 h-7 w-7 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
-        <div className="relative overflow-hidden w-44 h-44 sm:w-52 sm:h-52">
+        <div
+          className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
+        >
           {usePlaceholder ? (
-            <div className="w-full h-full flex items-center justify-center bg-[#1D2D44]/05 text-[#1D2D44]/20">
+            <div className="w-full h-full flex items-center justify-center bg-[#1D2D44]/[0.05] text-[#1D2D44]/20">
               <User className="w-16 h-16" strokeWidth={1} />
             </div>
           ) : (
             <img
               src={imageSrc}
               alt={imageAlt}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           )}
         </div>
@@ -187,7 +188,7 @@ export default function OurTeamPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <img
-              src="/image/KfasBuilding2.png"
+              src="/image/KFASBuilding.webp"
               alt="Our Team"
               className="w-full h-full object-cover object-[center_15%] scale-110"
             />

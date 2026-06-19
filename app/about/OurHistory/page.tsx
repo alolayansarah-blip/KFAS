@@ -645,7 +645,7 @@ export default function OurHistoryPage() {
       title: "PURE Research Portal",
       description:
         'KFAS launched the \"PURE\" portal to showcase funded projects and research outputs, and to enable discovery of expertise and collaboration opportunities.',
-      image: "/image/pure.webp",
+      image: "/image/Pure.webp",
       imageAlt: "PURE Research Portal",
     },
     {
