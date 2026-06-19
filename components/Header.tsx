@@ -35,7 +35,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       { label: "Activities and Events", href: "/research/ActivitiesAndEvents" },
       { label: "Assigned Studies", href: "/research/AssignedStudies" },
       { label: "Scientific Conference Sponsorship", href: "/research/SCS" },
-      { label: "Tech Deployment", href: "/research/TechDeployment" },
+      { label: "Technology Deployment", href: "/research/TechDeployment" },
       { label: "R&D in Private Sector", href: "/research/RandDPrivate" },
       { label: "KFAS Research Portal", href: "/research/KFASResearchPortal" },
     ],

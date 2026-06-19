@@ -306,19 +306,19 @@ export default function RandDPrivatePage() {
         {/* ── Hero ──────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden"
         >
           <motion.div
             className="absolute inset-0 bg-[#1D2D44]"
             style={{ y: heroY }}
           >
             <Image
-              src="/image/RandD.jpg"
+              src="/image/RandD.webp"
               alt=""
               fill
               priority
               sizes="100vw"
-              className="object-cover object-center brightness-[0.92] contrast-[1.02]"
+              className="scale-105 object-cover object-center brightness-[0.92] contrast-[1.02]"
             />
             <div
               aria-hidden
@@ -339,7 +339,7 @@ export default function RandDPrivatePage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div

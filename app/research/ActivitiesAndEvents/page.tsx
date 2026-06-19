@@ -735,20 +735,17 @@ export default function ActivitiesAndEventsPage() {
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            <video
-              className="absolute inset-0 h-full w-full scale-110 object-cover object-center"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-label="Activities and events"
-            >
-              <source src="/image/BannerActivites.mp4" type="video/mp4" />
-            </video>
+            <Image
+              src="/image/ActivitiesAndEvents.webp"
+              alt="Activities and events"
+              fill
+              priority
+              sizes="100vw"
+              className="scale-105 object-cover object-center"
+            />
             <div
               className="absolute inset-0"
               style={{
@@ -769,7 +766,7 @@ export default function ActivitiesAndEventsPage() {
 
           {/* padding on the wrapper, max-width on the inner div — matches body sections */}
           <motion.div
-            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <div className={`${CONTAINER} w-full`}>

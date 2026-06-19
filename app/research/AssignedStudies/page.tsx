@@ -74,16 +74,16 @@ export default function AssignedStudiesPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/Assigned.jpg"
+              src="/image/AssignedBanner.webp"
               alt="Assigned Studies"
               fill
               priority
               sizes="100vw"
-              className="scale-110 object-cover object-center"
+              className="scale-105 object-cover object-center"
             />
             <div
               aria-hidden
@@ -105,7 +105,7 @@ export default function AssignedStudiesPage() {
 
           {/* padding on the wrapper, max-width on the inner div — matches body sections */}
           <motion.div
-            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <div className="mx-auto w-full max-w-[1280px]">
@@ -120,9 +120,9 @@ export default function AssignedStudiesPage() {
                 <span>Assigned Studies</span>
               </motion.div>
 
-              <div className="overflow-hidden">
+              <div className="overflow-hidden pb-[0.12em]">
                 <motion.h1
-                  className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                  className="text-left font-poppins text-4xl font-bold leading-[1.12] tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
