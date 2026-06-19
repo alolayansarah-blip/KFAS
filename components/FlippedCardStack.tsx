@@ -19,24 +19,29 @@ function useHoverCapable() {
   return hoverCapable;
 }
 
+const FALLBACK_IMAGE = "/image/KFASBuilding3.png";
+
 const CARDS = [
   {
     title: "Research Grants",
     href: "/research/grants",
     label: "Explore",
-    image: "/image/RandD.png",
+    image: "/image/Research.webp",
+    fallbackImage: FALLBACK_IMAGE,
   },
   {
     title: "Learning & Development",
     href: "/Learning-and-Development",
     label: "Discover",
     image: "/image/OES.png",
+    fallbackImage: FALLBACK_IMAGE,
   },
   {
     title: "Our Publications",
     href: "https://www.aspdkw.com/",
     label: "Browse",
     image: "/image/Publication.webp",
+    fallbackImage: FALLBACK_IMAGE,
   },
 ];
 
@@ -63,6 +68,7 @@ function Card({
   href,
   label,
   image,
+  fallbackImage,
   delay,
   index,
   isLast,
@@ -72,9 +78,14 @@ function Card({
   isLast: boolean;
 }) {
   const hoverCapable = useHoverCapable();
+  const [imgSrc, setImgSrc] = useState(image);
   const isExternal = href.startsWith("http");
   const linkClass =
     "block h-full rounded-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+
+  useEffect(() => {
+    setImgSrc(image);
+  }, [image]);
 
   const cardInner = (
         <div
@@ -85,11 +96,16 @@ function Card({
             className="pointer-events-none absolute inset-y-0 right-0 w-[34%] sm:inset-0 sm:w-full sm:opacity-0 sm:transition-[opacity_transform] sm:duration-700 sm:ease-[cubic-bezier(0.16_1_0.3_1)] sm:group-hover:opacity-[0.85]"
           >
             <Image
-              src={image}
+              src={imgSrc}
               alt=""
               fill
               sizes="(max-width: 640px) 40vw, 33vw"
               className="object-cover sm:scale-105 sm:transition-transform sm:duration-700 sm:ease-[cubic-bezier(0.16_1_0.3_1)] sm:group-hover:scale-100"
+              onError={() => {
+                if (fallbackImage && imgSrc !== fallbackImage) {
+                  setImgSrc(fallbackImage);
+                }
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#EC601B]/60 to-[#EC601B] sm:hidden" />
             <div

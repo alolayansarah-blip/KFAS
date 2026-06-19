@@ -262,7 +262,12 @@ function WhoWeAre() {
             </motion.div>
           </div>
 
-          {/* ── Right: Image ── */}
+          {/* ── Right: Image ──
+              Lighter, editorial treatment: a soft navy veil that lifts on
+              hover so the photo sits gently on the white section instead of
+              reading as a solid block, plus orange/blue corner accents that
+              tie it to the rest of the site. quality={65} keeps the bytes down.
+          */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, y: 24 }}
@@ -270,18 +275,31 @@ function WhoWeAre() {
             viewport={VIEWPORT}
             transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
           >
-            <div className="group relative overflow-hidden">
-              <motion.div style={{ y: imageY }}>
-                <Image
-                  src="/image/WhoWe3.png"
-                  alt="KFAS — Kuwait Foundation for the Advancement of Sciences"
-                  width={1600}
-                  height={1000}
-                  sizes="(max-width: 1024px) 90vw, 45vw"
-                  className="h-auto w-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
-                  priority={false}
-                />
-              </motion.div>
+            <div className="group relative">
+              {/* Image + veil — full photo, no crop */}
+              <div className="relative overflow-hidden">
+                <motion.div className="relative" style={{ y: imageY }}>
+                  <Image
+                    src="/image/GroupPage.webp"
+                    alt="KFAS — Kuwait Foundation for the Advancement of Sciences"
+                    width={1600}
+                    height={1000}
+                    sizes="(max-width: 1024px) 90vw, 45vw"
+                    quality={65}
+                    className="h-auto w-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
+                    priority={false}
+                  />
+                </motion.div>
+
+                {/* Flat wash — softens the photo, clears on hover */}
+                <div className="pointer-events-none absolute inset-0 bg-[#1D2D44]/15 transition-colors duration-500 group-hover:bg-[#1D2D44]/[0.04]" />
+                {/* Bottom gradient — grounds the image and adds depth */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1D2D44]/30 via-transparent to-transparent" />
+              </div>
+
+              {/* Corner accents — same editorial vocabulary as the rest of the site */}
+              <div className="pointer-events-none absolute -left-2.5 -top-2.5 h-9 w-9 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/45" />
+              <div className="pointer-events-none absolute -bottom-2.5 -right-2.5 h-9 w-9 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/40" />
             </div>
           </motion.div>
         </div>

@@ -13,7 +13,70 @@ type PartnerTile = {
   image: string;
   logo?: string;
   placeholder?: boolean;
+  /** Default true — set false for logos with dark/colored artwork (e.g. SACA) */
+  logoInvert?: boolean;
+  /** White pill behind logo when invert is off */
+  logoLightBg?: boolean;
+  panelLogoMaxWidth?: number;
+  panelLogoScale?: number;
 };
+
+function PartnerLogo({
+  tile,
+  large = false,
+  active = true,
+}: {
+  tile: PartnerTile;
+  large?: boolean;
+  active?: boolean;
+}) {
+  if (!tile.logo) return null;
+
+  const invert = tile.logoInvert !== false;
+  const largeClass = "h-full w-auto object-contain object-left";
+  const img = (
+    <img
+      src={tile.logo}
+      alt={tile.title}
+      className={
+        large
+          ? largeClass
+          : "mx-auto max-h-[40px] w-auto max-w-[110px] object-contain transition-all duration-500 sm:max-h-[46px]"
+      }
+      style={{
+        ...(invert ? { filter: "brightness(0) invert(1)" } : {}),
+        opacity: invert ? (active ? 1 : 0.5) : active ? 1 : 0.85,
+        ...(large
+          ? {
+              maxWidth: tile.panelLogoMaxWidth ?? 280,
+              ...(tile.panelLogoScale
+                ? {
+                    transform: `scale(${tile.panelLogoScale})`,
+                    transformOrigin: "left center",
+                  }
+                : {}),
+            }
+          : {}),
+      }}
+    />
+  );
+
+  if (tile.logoLightBg) {
+    return (
+      <div
+        className={
+          large
+            ? "rounded-md bg-white px-3 py-2 shadow-sm"
+            : "rounded bg-white/95 px-2 py-1.5 shadow-sm"
+        }
+      >
+        {img}
+      </div>
+    );
+  }
+
+  return img;
+}
 
 function PartnerLogoPlaceholder({
   title,
@@ -31,16 +94,16 @@ function PartnerLogoPlaceholder({
       className={[
         "flex items-center justify-center rounded border border-dashed border-white/25 bg-white/[0.06]",
         large
-          ? "h-full min-h-[88px] w-full max-w-[300px] px-6"
-          : "h-full w-full max-w-[140px] px-3",
-        active ? "opacity-100" : "opacity-45",
+          ? "h-full min-h-[72px] w-full max-w-[240px] px-6"
+          : "h-full w-full max-w-[120px] px-3",
+        active ? "opacity-100" : "opacity-50",
         className,
       ].join(" ")}
       aria-hidden
     >
       <div className="flex flex-col items-center gap-2 text-center">
         <svg
-          className={large ? "h-8 w-8 text-white/35" : "h-6 w-6 text-white/35"}
+          className={large ? "h-7 w-7 text-white/35" : "h-5 w-5 text-white/35"}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -71,16 +134,18 @@ const tiles: PartnerTile[] = [
     description:
       "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness.",
     href: "https://tsck.org.kw/",
-    image: "/image/SCNew.png",
-    logo: "/image/logo_sc.png",
+    image: "/image/SCNew.webp",
+    logo: "/image/TSCKLogo.png",
   },
   {
     title: "Sabah Al-Ahmad Center",
     description:
       "A center dedicated to nurturing talent and creativity in young individuals under the Kuwait Foundation for the Advancement of Sciences.",
     href: "https://linktr.ee/sacgc_kw",
-    image: "/image/sabahAlahmad.jpg",
-    logo: "/image/logo6.png",
+    image: "/image/SAAC.webp",
+    logo: "/image/SACA.png",
+    panelLogoMaxWidth: 300,
+    panelLogoScale: 1.35,
   },
   {
     title: "Advancement of Sciences",
@@ -88,33 +153,33 @@ const tiles: PartnerTile[] = [
       "An advanced research and development center focused on innovation, scientific excellence, and the dissemination of knowledge.",
     href: "https://www.aspdkw.com/",
     image: "/image/aspd.png",
-    logo: "/image/logo4.png",
+    logo: "/image/aspdlogo.png",
   },
   {
     title: "Dasman Diabetes Institute",
     description:
       "Developing research projects, educational programs, and awareness-raising initiatives that improve society and combat diabetes.",
     href: "https://www.dasmaninstitute.org/",
-    image: "/image/DDI1.png",
-    logo: "/image/logo5.png",
+    image: "/image/DDI.webp",
+    logo: "/image/DDIlogo.png",
   },
   // ===== NEW PARTNER #5 — replace title/description/href/image/logo =====
   {
-    title: "Partner Five",
+    title: "Kuwait National Space Research Center",
     description:
-      "Placeholder description for the fifth partner. Replace this line with your own copy.",
-    href: "https://example.com/",
-    image: "/image/KFASBuilding3.png",
-    placeholder: true,
+      "Kuwait's national center for space research, advancing scientific exploration, technology, and human-capital development under KFAS auspices.",
+    href: "http://www.knsrc.org.kw/",
+    image: "/image/NSRC.webp",
+    logo: "/image/NSRClogo.png",
   },
   // ===== NEW PARTNER #6 — replace title/description/href/image/logo =====
   {
-    title: "Partner Six",
+    title: "Sheikh Abdullah Al Salem Cultural Centre",
     description:
-      "Placeholder description for the sixth partner. Replace this line with your own copy.",
-    href: "https://example.com/",
-    image: "/image/KFASBuilding3.png",
-    placeholder: true,
+      "One of the world's largest cultural complexes, housing museums of natural history, science, space, and Arabic Islamic science with over 1,100 exhibits.",
+    href: "https://booking.ascckw.com/ticket-selection",
+    image: "/image/AbdullahAlsalemBuilding.jpg",
+    logo: "/image/ABdullahAlsalem.png",
   },
 ];
 
@@ -154,7 +219,7 @@ export default function LogoShowcase() {
         {/* Elegant gradient anchored on #7DC0F1 — lifts slightly on hover so the photo reads */}
         <div
           className="absolute inset-0 bg-gradient-to-br from-[#7DC0F1] via-[#488FCC] to-[#16263b] transition-opacity duration-700"
-          style={{ opacity: isDefault ? 0.92 : 0.8 }}
+          style={{ opacity: isDefault ? 0.92 : 0.62 }}
         />
         {/* Soft radial glow for depth */}
         <div
@@ -215,7 +280,7 @@ export default function LogoShowcase() {
                   transition={{ duration: 0.45, ease: EASE }}
                 >
                   {/* Active partner mark — ties the panel to the grid */}
-                  <div className="mb-4 flex h-20 items-center sm:h-24 lg:h-28">
+                  <div className="mb-5 flex h-14 items-center overflow-visible sm:h-16 lg:h-[72px]">
                     {active.placeholder ? (
                       <PartnerLogoPlaceholder
                         title={active.title}
@@ -223,12 +288,7 @@ export default function LogoShowcase() {
                         active
                       />
                     ) : (
-                      <img
-                        src={active.logo}
-                        alt={active.title}
-                        className="h-full w-auto max-w-[280px] object-contain object-left"
-                        style={{ filter: "brightness(0) invert(1)" }}
-                      />
+                      <PartnerLogo tile={active} large active />
                     )}
                   </div>
 
@@ -289,9 +349,9 @@ export default function LogoShowcase() {
                   }}
                 >
                   <div
-                    className={`relative flex aspect-square w-full flex-col items-center justify-center px-3 py-5 border transition-all duration-500 ${
+                    className={`relative flex aspect-square w-full flex-col items-center justify-center px-4 py-6 border transition-all duration-500 ${
                       isActive
-                        ? "scale-[1.07] border-[#EC601B]/60 bg-white/10 backdrop-blur-sm"
+                        ? "scale-[1.05] border-[#EC601B]/60 bg-white/10 backdrop-blur-sm"
                         : "border-white/12 bg-white/[0.04] hover:bg-white/[0.07]"
                     }`}
                   >
@@ -303,28 +363,20 @@ export default function LogoShowcase() {
                     />
 
                     {/* Logo */}
-                    <div className="flex h-16 w-full items-center justify-center md:h-20">
+                    <div className="flex h-12 w-full items-center justify-center sm:h-14">
                       {tile.placeholder ? (
                         <PartnerLogoPlaceholder
                           title={tile.title}
                           active={isActive}
                         />
                       ) : (
-                        <img
-                          src={tile.logo}
-                          alt={tile.title}
-                          className="h-full w-auto max-w-[140px] object-contain transition-all duration-500"
-                          style={{
-                            filter: "brightness(0) invert(1)",
-                            opacity: isActive ? 1 : 0.45,
-                          }}
-                        />
+                        <PartnerLogo tile={tile} active={isActive} />
                       )}
                     </div>
 
                     {/* Caption */}
                     <p
-                      className={`mt-3 text-center text-[10.5px] font-medium leading-snug transition-colors duration-300 ${
+                      className={`mt-3.5 text-center text-[10.5px] font-medium leading-snug transition-colors duration-300 ${
                         isActive ? "text-white" : "text-white/45"
                       }`}
                     >
