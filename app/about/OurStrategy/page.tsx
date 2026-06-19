@@ -25,11 +25,17 @@ export default function OurStrategyPage() {
   const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
+  const pillars = [
+    { label: "Pillar 1", title: "Robust Research Ecosystem" },
+    { label: "Pillar 2", title: "Viable Innovation" },
+    { label: "Pillar 3", title: "Human Ingenuity" },
+  ];
+
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
       <main className="min-h-screen bg-white font-poppins">
-        {/* ── Hero ── */}
+        {/* ── Hero — cinematic ── */}
         <section
           ref={heroRef}
           className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px]"
@@ -40,8 +46,9 @@ export default function OurStrategyPage() {
               alt="Our Strategy"
               fill
               priority
+              quality={65}
               sizes="100vw"
-              className="scale-105 object-cover object-[center_58%]"
+              className="scale-[1.15] object-cover object-[center_58%]"
             />
             <div
               aria-hidden
@@ -109,11 +116,19 @@ export default function OurStrategyPage() {
         {/* ── Content ── */}
         <section className="bg-white py-20 sm:py-28">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            {/* Editorial lead-in */}
+            <motion.div className="mb-12" {...fadeUp(0)}>
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]">
+                Overview
+              </p>
+            </motion.div>
+
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-16 items-start">
               {/* Left — body copy */}
               <div className="space-y-6">
                 <motion.p
-                  className="text-base text-justify font-light capitalize leading-[1.9] text-[#1D2D44]/65"
+                  className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0)}
                 >
                   With its strategy for 2025-2029, the Kuwait Foundation for the
@@ -150,7 +165,7 @@ export default function OurStrategyPage() {
                 </motion.p>
 
                 <motion.p
-                  className="text-base text-justify font-light capitalize leading-[1.9] text-[#1D2D44]/65"
+                  className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0.05)}
                 >
                   To catalyze{" "}
@@ -161,7 +176,7 @@ export default function OurStrategyPage() {
                 </motion.p>
 
                 <motion.p
-                  className="text-base text-justify font-light capitalize leading-[1.9] text-[#1D2D44]/65"
+                  className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0.1)}
                 >
                   To invest in Kuwait's{" "}
@@ -174,7 +189,7 @@ export default function OurStrategyPage() {
                 </motion.p>
 
                 <motion.p
-                  className="text-base text-justify font-light capitalize leading-[1.9] text-[#1D2D44]/65"
+                  className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0.15)}
                 >
                   Building on the momentum of recent initiatives to modernize
@@ -191,6 +206,20 @@ export default function OurStrategyPage() {
                   optimizing our operations and developing a positive
                   organizational culture.
                 </motion.p>
+
+                <motion.div {...fadeUp(0.18)} className="mt-6">
+                  <div className="relative aspect-[3/4] w-full max-w-md overflow-hidden group">
+                    <Image
+                      src="/image/KFASCover.webp"
+                      alt="KFAS Strategy 2025–2029"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 448px"
+                      className="object-contain"
+                    />
+                    <div className="pointer-events-none absolute -left-2 -top-2 h-8 w-8 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40" />
+                    <div className="pointer-events-none absolute -bottom-2 -right-2 h-8 w-8 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35" />
+                  </div>
+                </motion.div>
 
                 {/* Download CTA */}
                 <motion.div {...fadeUp(0.2)}>
@@ -220,20 +249,18 @@ export default function OurStrategyPage() {
                 </motion.div>
               </div>
 
-              {/* Right — three pillars card */}
+              {/* Right — three pillars rail */}
               <motion.div
                 className="hidden lg:flex flex-col gap-4 sticky top-32"
                 {...fadeUp(0.2)}
               >
-                {[
-                  { label: "Pillar 1", title: "Robust Research Ecosystem" },
-                  { label: "Pillar 2", title: "Viable Innovation" },
-                  { label: "Pillar 3", title: "Human Ingenuity" },
-                ].map(({ label, title }, i) => (
+                {pillars.map(({ label, title }, i) => (
                   <div
                     key={i}
-                    className="relative border border-[#1D2D44]/08 p-5"
+                    className="group relative overflow-hidden border border-[#1D2D44]/[0.08] p-5 transition-colors duration-300 hover:border-[#EC601B]/30"
                   >
+                    {/* Animated orange spine */}
+                    <span className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-[#EC601B] transition-transform duration-500 group-hover:scale-y-100" />
                     {i === 0 && (
                       <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none" />
                     )}
@@ -250,14 +277,21 @@ export default function OurStrategyPage() {
                 ))}
               </motion.div>
             </div>
+          </div>
+        </section>
 
-            {/* Strategy diagram */}
-            <motion.img
-              src="/image/KFAS_Strategy.png"
-              alt="KFAS strategy diagram"
-              className="mt-16 w-full max-w-7xl mx-auto"
-              {...fadeUp(0.1)}
-            />
+        {/* ── Strategy diagram ── */}
+        <section className="bg-[#7DC0F1]/[0.06] py-20 sm:py-28">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <motion.div className="relative mx-auto max-w-6xl" {...fadeUp(0.1)}>
+              <div className="pointer-events-none absolute -left-2.5 -top-2.5 h-10 w-10 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40" />
+              <div className="pointer-events-none absolute -bottom-2.5 -right-2.5 h-10 w-10 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35" />
+              <img
+                src="/image/KFAS_Strategy.png"
+                alt="KFAS strategy diagram"
+                className="w-full"
+              />
+            </motion.div>
           </div>
         </section>
       </main>

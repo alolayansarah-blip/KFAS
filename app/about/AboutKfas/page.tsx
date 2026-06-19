@@ -568,7 +568,7 @@ export default function AboutKfasPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/AboutKFASBanner.webp"
+              src="/image/AboutKFAS2.webp"
               alt="Who We Are"
               fill
               priority
