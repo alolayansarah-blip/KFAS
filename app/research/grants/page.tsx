@@ -24,7 +24,7 @@ const GRANT_TYPES: GrantType[] = [
     description:
       "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for research infrastructure proposals. The Research Infrastructure Grant (RIG) will support and invest in public research centers and laboratories in Kuwait.",
     applyHref: "/research/grants/RIG",
-    imageSrc: "/image/RIG1.jpg",
+    imageSrc: "/image/Research.webp",
     imageAlt:
       "Researchers collaborating in a laboratory with microscope and equipment",
   },
@@ -188,7 +188,7 @@ export default function GrantsPage() {
         {/* ── Hero ── */}
         <div
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden bg-[#1D2D44]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div
             className="absolute inset-0 scale-110"
@@ -221,7 +221,7 @@ export default function GrantsPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div

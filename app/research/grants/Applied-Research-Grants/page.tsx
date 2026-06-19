@@ -16,24 +16,58 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as const },
 });
 
-function SectionHeading({
+// ─── Sticky rail heading ────────────────────────────────────────────────────
+function SectionHead({ title }: { title: ReactNode }) {
+  return (
+    <div className="lg:sticky lg:top-28">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.65, ease: EASE }}
+      >
+        <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+        <h2 className="mt-5 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem]">
+          {title}
+        </h2>
+      </motion.div>
+    </div>
+  );
+}
+
+// ─── Hairline list marker (grows on row hover) ──────────────────────────────
+function Mark() {
+  return (
+    <span
+      aria-hidden
+      className="mt-[0.7rem] block h-px w-6 shrink-0 bg-[#EC601B]/70 transition-all duration-500 group-hover:w-10"
+    />
+  );
+}
+
+// ─── Two-column rail section ────────────────────────────────────────────────
+function RailSection({
+  title,
+  tint = false,
   children,
-  light = false,
 }: {
+  title: ReactNode;
+  tint?: boolean;
   children: ReactNode;
-  light?: boolean;
 }) {
   return (
-    <motion.div {...fadeUp(0)}>
-      <h2
-        className={`font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight ${light ? "text-white" : "text-[#1D2D44]"}`}
-      >
-        {children}
-      </h2>
-      <div
-        className={`mt-5 h-px bg-gradient-to-r ${light ? "from-[#EC601B]/70 via-white/20 to-transparent" : "from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"}`}
-      />
-    </motion.div>
+    <section
+      className={`px-6 py-20 sm:px-8 sm:py-24 lg:px-12 ${tint ? "bg-[#7DC0F1]/[0.06]" : "bg-white"}`}
+    >
+      <div className="mx-auto max-w-[1280px]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-4">
+            <SectionHead title={title} />
+          </div>
+          <div className="lg:col-span-8">{children}</div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -114,7 +148,7 @@ export default function AppliedResearchGrantsPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -144,7 +178,7 @@ export default function AppliedResearchGrantsPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -186,396 +220,331 @@ export default function AppliedResearchGrantsPage() {
         </section>
 
         {/* ── Overview ── */}
-        <section className="px-6 py-16 sm:px-8 sm:py-20 lg:px-12">
+        <section className="px-6 py-20 sm:px-8 sm:py-24 lg:px-12 bg-white">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div className="max-w-3xl" {...fadeUp(0)}>
-              <h2 className="font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight text-[#1D2D44]">
+            <motion.div {...fadeUp(0)}>
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]">
+                Overview
+              </p>
+              <h2 className="mt-4 font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight text-[#1D2D44]">
                 Applied Research Grants
               </h2>
-              <motion.div
-                className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
-                initial={{ scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-              />
-              <div className="mt-7 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-                <p>
-                  The Kuwait Foundation for the Advancement of Sciences (KFAS)
-                  provides grants for Applied Research Proposals. Applied
-                  Research is directed towards creating practical solutions to
-                  specific problems for specific end-users/stakeholders through
-                  innovation in practice, products, or procedures. Proposals of
-                  this type should include concrete plans for implementation,
-                  engagement, and real-world impact. The outcomes of this
-                  research may lead to commercialization of products, generation
-                  of patents, or the potential to produce relevant policies, or
-                  clinical and service applications.
-                </p>
-                <p>
-                  All submitted proposals should aim to generate solutions and
-                  outcomes that advance a scientific field, promote innovative
-                  approaches or methodologies, and support the development of
-                  new technologies.
-                </p>
-              </div>
             </motion.div>
+            <div className="mt-7 max-w-3xl space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+              <motion.p {...fadeUp(0.05)}>
+                The Kuwait Foundation for the Advancement of Sciences (KFAS)
+                provides grants for Applied Research Proposals. Applied Research
+                is directed towards creating practical solutions to specific
+                problems for specific end-users/stakeholders through innovation
+                in practice, products, or procedures. Proposals of this type
+                should include concrete plans for implementation, engagement,
+                and real-world impact. The outcomes of this research may lead to
+                commercialization of products, generation of patents, or the
+                potential to produce relevant policies, or clinical and service
+                applications.
+              </motion.p>
+              <motion.p {...fadeUp(0.1)}>
+                All submitted proposals should aim to generate solutions and
+                outcomes that advance a scientific field, promote innovative
+                approaches or methodologies, and support the development of new
+                technologies.
+              </motion.p>
+            </div>
           </div>
         </section>
 
         {/* ── 2026 Call ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#BBDEFB40]">
-          <div className="mx-auto max-w-[1280px]">
-            <SectionHeading>
-              KFAS 2026 First Call for Research Proposals for Applied,
-              Fundamental, Policy and Young Researcher Proposals
-            </SectionHeading>
-            <div className="mt-8 space-y-5 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-              <motion.div {...fadeUp(0.05)}>
-                <p>
-                  The Kuwait Foundation for the Advancement of Sciences invites
-                  competitive research proposals to be submitted starting on
-                  the:
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.1)}>
-                <p className="font-semibold text-[#1D2D44]">
-                  15th of January to 15th of April 2026, by midnight Kuwait
-                  time.
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.15)}>
-                <CtaLink href="https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2F2025%2F1st%20CALL%20FOR%20PROPOSAL%202026%20%2D%20Final%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS%2F2025&p=true&ga=1">
-                  KFAS 2026 First Call for Research Proposals
-                </CtaLink>
-              </motion.div>
-              <motion.div {...fadeUp(0.2)}>
-                <p className="border-l-2 border-[#EC601B]/40 pl-4 pt-1 text-[#1D2D44]/75">
-                  Please note that only applications that are submitted through
-                  the{" "}
-                  <a
-                    href="https://grants.kfas.org.kw/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40"
-                  >
-                    KFAS Research Grants Management System
-                  </a>{" "}
-                  are accepted, as manual submission of proposals is not
-                  accepted. Any application missing major requirements by the
-                  closing date of the cycle will be marked as incomplete and
-                  declined.
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.25)}>
-                <p>
-                  It is recommended that researchers submit their application
-                  early on the call announcement to ensure that there is
-                  adequate time to complete the submission, should any
-                  documentation be missing.
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Focus Areas ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12">
-          <div className="mx-auto max-w-[1280px]">
-            <SectionHeading>Focus Areas and Domains</SectionHeading>
-            <div className="mt-7 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-              <motion.div {...fadeUp(0.05)}>
-                <p>
-                  All submitted proposals should aim to generate solutions and
-                  outcomes that advance a scientific field, promote innovative
-                  approaches or methodologies, or support the development of new
-                  technologies and policy development.
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.1)}>
-                <p>
-                  In addition to the below specified research domains, KFAS
-                  invites competitive proposals on general topics related to
-                  science, technology and innovation (STI), however priority
-                  will be given to the specified domains below:
-                </p>
-              </motion.div>
-            </div>
-            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {focusAreas.map((label, i) => (
-                <motion.div
-                  key={label}
-                  className="flex flex-col items-start gap-3 border border-[#7DC0F1]/30 bg-[#BBDEFB]/10 p-5"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
-                >
-                  <p className="font-poppins text-[13px] font-medium leading-snug text-[#1D2D44]">
-                    {label}
-                  </p>
-                  <div className="mt-auto h-[2px] w-6 bg-[#EC601B]" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Funded Project Examples ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#BBDEFB40]">
-          <div className="mx-auto max-w-[1280px]">
-            <SectionHeading>
-              Funded Project Examples on KFAS Research Portal
-            </SectionHeading>
-            <div className="mt-8 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-              <motion.div {...fadeUp(0.05)}>
-                <p>
-                  The KFAS Research Portal is a research information management
-                  system that connects researchers and collaborators, showcasing
-                  the expertise and ongoing projects of those working in
-                  partnership with KFAS across various scholarly fields.
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.1)}>
-                <p>KFAS Research Portal Link</p>
-              </motion.div>
-              <motion.div {...fadeUp(0.15)}>
-                <p>
-                  Visit the &apos;Projects and Impact&apos; section of the KFAS
-                  Research Portal to discover a range of successful KFAS-funded
-                  projects, both ongoing and completed, from Applied,
-                  Fundamental, Policy, and Young Researcher grants.
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Attachments ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12">
-          <div className="mx-auto max-w-[1280px]">
-            <SectionHeading>
-              Attachments and proposal requirements
-            </SectionHeading>
-            <motion.div {...fadeUp(0.05)} className="mt-7">
-              <p className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-                All details, conditions and information on the scope of funding
-                and proposal requirements can be found in the following
-                attachments:
-              </p>
+        <RailSection
+          tint
+          title="KFAS 2026 First Call for Research Proposals for Applied, Fundamental, Policy and Young Researcher Proposals"
+        >
+          <div className="space-y-5 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+            <motion.p {...fadeUp(0.05)}>
+              The Kuwait Foundation for the Advancement of Sciences invites
+              competitive research proposals to be submitted starting on the:
+            </motion.p>
+            <motion.p className="font-semibold text-[#1D2D44]" {...fadeUp(0.1)}>
+              15th of January to 15th of April 2026, by midnight Kuwait time.
+            </motion.p>
+            <motion.div {...fadeUp(0.15)}>
+              <CtaLink href="https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2F2025%2F1st%20CALL%20FOR%20PROPOSAL%202026%20%2D%20Final%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS%2F2025&p=true&ga=1">
+                KFAS 2026 First Call for Research Proposals
+              </CtaLink>
             </motion.div>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              {attachmentItems.map((doc, i) => (
-                <motion.a
-                  key={doc.label}
-                  href={doc.href}
+            <motion.div {...fadeUp(0.2)}>
+              <p className="border-l-2 border-[#EC601B]/40 pl-4 pt-1 text-[#1D2D44]/75">
+                Please note that only applications that are submitted through
+                the{" "}
+                <a
+                  href="https://grants.kfas.org.kw/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center justify-between border border-[#1D2D44]/08 p-5 transition-all hover:bg-[#BBDEFB]/20"
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: i * 0.08 }}
+                  className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-[#7DC0F1]/15">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                      >
-                        <path
-                          d="M4 2h6l4 4v8H4V2z"
-                          stroke="#56A0D7"
-                          strokeWidth="1.2"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M10 2v4h4"
-                          stroke="#56A0D7"
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                        />
-                        <path
-                          d="M6 9h4M6 11.5h2.5"
-                          stroke="#56A0D7"
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </div>
-                    <span className="font-poppins text-[14px] font-medium text-[#1D2D44]">
-                      {doc.label}
-                    </span>
-                  </div>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    className="shrink-0 opacity-20 transition-opacity group-hover:opacity-100"
-                  >
-                    <path
-                      d="M2 7h10M7 2l5 5-5 5"
-                      stroke="#EC601B"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </motion.a>
-              ))}
-            </div>
-            <div className="mt-8 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-              <motion.div {...fadeUp(0.2)}>
-                <p>
-                  In addition to the proposal submission, applicant is required
-                  to do the following:
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.25)}>
-                <p>
-                  To upload, through the Grant Management System (GMS), a Letter
-                  of Intent written by the institute/organization to which the
-                  applicant is affiliated, indicating approval of submitting the
-                  proposal to KFAS. (
-                  <a
-                    href="https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2FSample%20Letter%20of%20Intent%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS&p=true&ga=1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
-                  >
-                    sample of letter of intent
-                  </a>
-                  ).
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.3)}>
-                <p>
-                  Failure to comply may result in noncompliance consequences for
-                  both the applicant and their institution, including declining
-                  proposal funding, as well as negatively impacting any future
-                  funding requests.
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Eligibility — navy ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#1D2D44]">
-          <div className="mx-auto max-w-[1280px]">
-            <SectionHeading light>
-              General Eligibility for Proposal Submissions
-            </SectionHeading>
-            <ul className="mt-8 space-y-5">
-              {[
-                <>
-                  Researchers and scientists from the following sectors are
-                  eligible to apply:
-                  <ul className="mt-3 space-y-2 pl-2">
-                    {[
-                      "Research & Higher Education sector",
-                      "Public/Governmental sector",
-                      "Not-for-Profit Companies and Civil Society Organizations (CSOs)",
-                    ].map((sub, j) => (
-                      <li key={j} className="flex items-start gap-3">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
-                        <span>{sub}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </>,
-                "Private sector applicants are eligible to apply for Policy Research Proposal Grant only.",
-                "Researchers and scientists from international academic and research institutes may apply for research grants only through a Kuwaiti institution, and the project must demonstrate substantial collaboration with a Kuwait-based research team.",
-                "Applicants must clearly outline all co-funding schemes in the application's budget proposal and include it in the letter of intent. Proposals that do not provide clear evidence of co-funding and the required letter of intent will be considered incomplete.",
-              ].map((item, i) => (
-                <motion.li
-                  key={i}
-                  className="flex items-start gap-4 font-poppins text-[15px] leading-[1.9] text-white/65 font-light"
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: i * 0.08 }}
-                >
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
-                  <span>{item}</span>
-                </motion.li>
-              ))}
-            </ul>
-            <motion.div {...fadeUp(0.25)} className="mt-8">
-              <p className="font-poppins text-[15px] leading-[1.9] text-white/40 font-light">
-                Applicants are strongly encouraged to review all criteria and
-                ensure eligibility, prior to proposal submission.
+                  KFAS Research Grants Management System
+                </a>{" "}
+                are accepted, as manual submission of proposals is not accepted.
+                Any application missing major requirements by the closing date
+                of the cycle will be marked as incomplete and declined.
               </p>
             </motion.div>
+            <motion.p {...fadeUp(0.25)}>
+              It is recommended that researchers submit their application early
+              on the call announcement to ensure that there is adequate time to
+              complete the submission, should any documentation be missing.
+            </motion.p>
           </div>
-        </section>
+        </RailSection>
+
+        {/* ── Focus Areas ── */}
+        <RailSection title="Focus Areas and Domains">
+          <div className="space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+            <motion.p {...fadeUp(0.05)}>
+              All submitted proposals should aim to generate solutions and
+              outcomes that advance a scientific field, promote innovative
+              approaches or methodologies, or support the development of new
+              technologies and policy development.
+            </motion.p>
+            <motion.p {...fadeUp(0.1)}>
+              In addition to the below specified research domains, KFAS invites
+              competitive proposals on general topics related to science,
+              technology and innovation (STI), however priority will be given to
+              the specified domains below:
+            </motion.p>
+          </div>
+          <div className="mt-6 divide-y divide-[#1D2D44]/[0.08]">
+            {focusAreas.map((label, i) => (
+              <motion.div
+                key={label}
+                className="group flex items-center gap-5 py-5"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <span className="h-px w-6 shrink-0 bg-[#EC601B]/70 transition-all duration-500 group-hover:w-10" />
+                <p className="font-poppins text-[15px] font-medium leading-snug text-[#1D2D44]">
+                  {label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </RailSection>
+
+        {/* ── Funded Project Examples ── */}
+        <RailSection
+          tint
+          title="Funded Project Examples on KFAS Research Portal"
+        >
+          <div className="space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+            <motion.p {...fadeUp(0.05)}>
+              The KFAS Research Portal is a research information management
+              system that connects researchers and collaborators, showcasing the
+              expertise and ongoing projects of those working in partnership
+              with KFAS across various scholarly fields.
+            </motion.p>
+            <motion.p {...fadeUp(0.1)}>KFAS Research Portal Link</motion.p>
+            <motion.p {...fadeUp(0.15)}>
+              Visit the &apos;Projects and Impact&apos; section of the KFAS
+              Research Portal to discover a range of successful KFAS-funded
+              projects, both ongoing and completed, from Applied, Fundamental,
+              Policy, and Young Researcher grants.
+            </motion.p>
+          </div>
+        </RailSection>
+
+        {/* ── Attachments ── */}
+        <RailSection title="Attachments and proposal requirements">
+          <motion.p
+            className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
+            {...fadeUp(0.05)}
+          >
+            All details, conditions and information on the scope of funding and
+            proposal requirements can be found in the following attachments:
+          </motion.p>
+          <div className="mt-6 divide-y divide-[#1D2D44]/[0.08]">
+            {attachmentItems.map((doc, i) => (
+              <motion.a
+                key={doc.label}
+                href={doc.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between gap-4 py-5"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: i * 0.08 }}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-[#7DC0F1]/15">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M4 2h6l4 4v8H4V2z"
+                        stroke="#56A0D7"
+                        strokeWidth="1.2"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M10 2v4h4"
+                        stroke="#56A0D7"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M6 9h4M6 11.5h2.5"
+                        stroke="#56A0D7"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <span className="font-poppins text-[14px] font-medium text-[#1D2D44] transition-colors group-hover:text-[#EC601B]">
+                    {doc.label}
+                  </span>
+                </div>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  className="shrink-0 opacity-20 transition-opacity group-hover:opacity-100"
+                >
+                  <path
+                    d="M2 7h10M7 2l5 5-5 5"
+                    stroke="#EC601B"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </motion.a>
+            ))}
+          </div>
+          <div className="mt-8 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+            <motion.p {...fadeUp(0.2)}>
+              In addition to the proposal submission, applicant is required to
+              do the following:
+            </motion.p>
+            <motion.p {...fadeUp(0.25)}>
+              To upload, through the Grant Management System (GMS), a Letter of
+              Intent written by the institute/organization to which the
+              applicant is affiliated, indicating approval of submitting the
+              proposal to KFAS. (
+              <a
+                href="https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2FSample%20Letter%20of%20Intent%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS&p=true&ga=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+              >
+                sample of letter of intent
+              </a>
+              ).
+            </motion.p>
+            <motion.p {...fadeUp(0.3)}>
+              Failure to comply may result in noncompliance consequences for
+              both the applicant and their institution, including declining
+              proposal funding, as well as negatively impacting any future
+              funding requests.
+            </motion.p>
+          </div>
+        </RailSection>
+
+        {/* ── Eligibility ── */}
+        <RailSection tint title="General Eligibility for Proposal Submissions">
+          <div className="divide-y divide-[#1D2D44]/[0.08]">
+            {[
+              <>
+                Researchers and scientists from the following sectors are
+                eligible to apply:
+                <ul className="mt-3 space-y-2 pl-2">
+                  {[
+                    "Research & Higher Education sector",
+                    "Public/Governmental sector",
+                    "Not-for-Profit Companies and Civil Society Organizations (CSOs)",
+                  ].map((sub, j) => (
+                    <li key={j} className="flex items-start gap-3">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
+                      <span>{sub}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>,
+              "Private sector applicants are eligible to apply for Policy Research Proposal Grant only.",
+              "Researchers and scientists from international academic and research institutes may apply for research grants only through a Kuwaiti institution, and the project must demonstrate substantial collaboration with a Kuwait-based research team.",
+              "Applicants must clearly outline all co-funding schemes in the application's budget proposal and include it in the letter of intent. Proposals that do not provide clear evidence of co-funding and the required letter of intent will be considered incomplete.",
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                className="group flex gap-5 py-6 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
+                initial={{ opacity: 0, x: -12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: i * 0.08 }}
+              >
+                <Mark />
+                <div className="min-w-0 flex-1">{item}</div>
+              </motion.div>
+            ))}
+          </div>
+          <motion.p
+            className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/50 font-light"
+            {...fadeUp(0.25)}
+          >
+            Applicants are strongly encouraged to review all criteria and ensure
+            eligibility, prior to proposal submission.
+          </motion.p>
+        </RailSection>
 
         {/* ── Grant Application Portal ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-20 lg:px-12">
-          <div className="mx-auto max-w-[1280px]">
-            <SectionHeading>Grant Application Portal</SectionHeading>
-            <div className="mt-8 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-              <motion.div {...fadeUp(0.05)}>
-                <p>
-                  All applications must be submitted online through the{" "}
-                  <a
-                    href="https://grants.kfas.org.kw/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
-                  >
-                    KFAS Research Grants Management System
-                  </a>
-                  .
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.1)}>
-                <p>
-                  If you are new to the portal, start with the following clip
-                  for instructions on applying. Click below for the KFAS
-                  Research Grants Management System tutorial.
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.15)}>
-                <CtaLink href="https://kfas.sharepoint.com/sites/GrantsSystemTraining/_layouts/15/stream.aspx?id=%2Fsites%2FGrantsSystemTraining%2FShared%20Documents%2FGeneral%2FApplicant%20portal%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E3b78bc20%2Daeff%2D4105%2D9d2a%2D06055df91dfd">
-                  GMS Tutorial
-                </CtaLink>
-              </motion.div>
-            </div>
+        <RailSection title="Grant Application Portal">
+          <div className="space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
+            <motion.p {...fadeUp(0.05)}>
+              All applications must be submitted online through the{" "}
+              <a
+                href="https://grants.kfas.org.kw/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+              >
+                KFAS Research Grants Management System
+              </a>
+              .
+            </motion.p>
+            <motion.p {...fadeUp(0.1)}>
+              If you are new to the portal, start with the following clip for
+              instructions on applying. Click below for the KFAS Research Grants
+              Management System tutorial.
+            </motion.p>
+            <motion.div {...fadeUp(0.15)}>
+              <CtaLink href="https://kfas.sharepoint.com/sites/GrantsSystemTraining/_layouts/15/stream.aspx?id=%2Fsites%2FGrantsSystemTraining%2FShared%20Documents%2FGeneral%2FApplicant%20portal%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E3b78bc20%2Daeff%2D4105%2D9d2a%2D06055df91dfd">
+                GMS Tutorial
+              </CtaLink>
+            </motion.div>
           </div>
-        </section>
+        </RailSection>
 
         {/* ── Contact ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 border-t border-[#1D2D44]/08">
-          <div className="mx-auto max-w-[1280px]">
-            <SectionHeading>Contact</SectionHeading>
-            <div className="mt-8 space-y-3 font-poppins text-[15px] text-[#1D2D44]/65 font-light">
-              <motion.div {...fadeUp(0.05)}>
-                <p>
-                  If you have any inquiries, please email us at:{" "}
-                  <a
-                    href="mailto:research@kfas.org.kw"
-                    className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
-                  >
-                    research@kfas.org.kw
-                  </a>
-                </p>
-              </motion.div>
-              <motion.div {...fadeUp(0.1)}>
-                <p>Telephone: (+965) 22278125 or 22278126</p>
-              </motion.div>
-              <motion.div {...fadeUp(0.15)}>
-                <p className="pt-2 text-[#1D2D44]/45">
-                  KFAS decisions regarding research grants are final, and not
-                  subject to appeal.
-                </p>
-              </motion.div>
-            </div>
+        <RailSection tint title="Contact">
+          <div className="space-y-3 font-poppins text-[15px] text-[#1D2D44]/65 font-light">
+            <motion.p {...fadeUp(0.05)}>
+              If you have any inquiries, please email us at:{" "}
+              <a
+                href="mailto:research@kfas.org.kw"
+                className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+              >
+                research@kfas.org.kw
+              </a>
+            </motion.p>
+            <motion.p {...fadeUp(0.1)}>
+              Telephone: (+965) 22278125 or 22278126
+            </motion.p>
+            <motion.p className="pt-2 text-[#1D2D44]/45" {...fadeUp(0.15)}>
+              KFAS decisions regarding research grants are final, and not
+              subject to appeal.
+            </motion.p>
           </div>
-        </section>
+        </RailSection>
       </main>
       <Footer
         logo="/image/logoFooter.png"
