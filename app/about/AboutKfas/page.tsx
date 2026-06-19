@@ -521,7 +521,7 @@ const CENTERS = [
     title: "Kuwait National Space Research Center",
     description:
       "Kuwait's national center for space research, advancing scientific exploration, technology, and human-capital development under KFAS auspices.",
-    image: "/image/NSRCBack.JPG",
+    image: "/image/NSRC.webp",
     href: "http://www.knsrc.org.kw/",
   },
   {
@@ -568,7 +568,7 @@ export default function AboutKfasPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/AboutKFASBanner2.jpg"
+              src="/image/AboutKFASBanner.webp"
               alt="Who We Are"
               fill
               priority
