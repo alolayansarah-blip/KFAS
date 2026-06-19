@@ -521,7 +521,7 @@ const CENTERS = [
     title: "Kuwait National Space Research Center",
     description:
       "Kuwait's national center for space research, advancing scientific exploration, technology, and human-capital development under KFAS auspices.",
-    image: "/image/NSRC.webp",
+    image: "/image/NSRC2.webp",
     href: "http://www.knsrc.org.kw/",
   },
   {

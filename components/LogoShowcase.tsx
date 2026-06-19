@@ -169,7 +169,7 @@ const tiles: PartnerTile[] = [
     description:
       "Kuwait's national center for space research, advancing scientific exploration, technology, and human-capital development under KFAS auspices.",
     href: "http://www.knsrc.org.kw/",
-    image: "/image/NSRC.webp",
+    image: "/image/NSRC2.webp",
     logo: "/image/NSRClogo.png",
   },
   // ===== NEW PARTNER #6 — replace title/description/href/image/logo =====
