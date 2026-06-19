@@ -564,11 +564,11 @@ export default function AboutKfasPage() {
         {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px]"
+          className="relative overflow-hidden flex items-center justify-start h-[540px]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/AboutKFAS2.webp"
+              src="/image/aboutKFAS.webp"
               alt="Who We Are"
               fill
               priority
@@ -594,9 +594,9 @@ export default function AboutKfasPage() {
             />
           </motion.div>
 
-          {/* Content — padded for fixed header height */}
+          {/* Content — vertically centered, left-aligned */}
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}

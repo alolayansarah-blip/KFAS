@@ -142,11 +142,8 @@ function ProfileCard({
   large?: boolean;
   onClick?: () => void;
 }) {
-  const imgSize = large
-    ? "w-48 h-48 sm:w-56 sm:h-56"
-    : compact
-      ? "w-36 h-36 sm:w-40 sm:h-40"
-      : "w-44 h-44 sm:w-48 sm:h-48";
+  // Uniform image size for every card — all the same.
+  const imgSize = "w-44 h-44 sm:w-52 sm:h-52";
 
   const content = (
     <div
@@ -471,7 +468,7 @@ export default function BoardOfDirectorsPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px]"
+          className="relative overflow-hidden flex items-center justify-start h-[540px]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <img
@@ -496,7 +493,7 @@ export default function BoardOfDirectorsPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div

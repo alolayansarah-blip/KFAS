@@ -118,12 +118,12 @@ export default function AppliedResearchGrantsPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/applied.png"
+              src="/image/AppliedResearchGrants.webp"
               alt="Students collaborating on robotics and applied research"
               fill
               priority
               sizes="100vw"
-              className="scale-110 object-cover object-center"
+              className="object-cover object-[center_48%]"
             />
             <div
               className="absolute inset-0"

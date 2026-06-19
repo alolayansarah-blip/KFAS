@@ -34,7 +34,7 @@ const GRANT_TYPES: GrantType[] = [
     description:
       "Supporting research projects that translate scientific findings into practical solutions for industry and society.",
     applyHref: "/research/grants/Applied-Research-Grants",
-    imageSrc: "/image/applied1.png",
+    imageSrc: "/image/AppliedResearchGrants.webp",
     imageAlt:
       "Students and mentor working on robotics and applied research equipment",
   },

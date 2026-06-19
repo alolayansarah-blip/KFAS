@@ -38,11 +38,11 @@ export default function OurStrategyPage() {
         {/* ── Hero — cinematic ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px]"
+          className="relative overflow-hidden flex items-center justify-start h-[540px]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/Strategy.png"
+              src="/image/Strategy.webp"
               alt="Our Strategy"
               fill
               priority
@@ -69,7 +69,7 @@ export default function OurStrategyPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
