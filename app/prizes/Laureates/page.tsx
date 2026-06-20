@@ -748,72 +748,65 @@ export default function LaureatesPage() {
         {/* ============================== HERO ============================== */}
         <section
           ref={heroRef}
-          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/Laureates.webp"
+              src="/image/Prizes1.png"
               alt="KFAS laureates"
               fill
               priority
-              quality={90}
               sizes="100vw"
-              className="scale-105 object-cover object-center"
+              className="object-cover object-[center_40%] scale-[1.06] brightness-[0.98] contrast-[1.02]"
             />
             <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
-              }}
+              className="absolute inset-0 pointer-events-none"
               aria-hidden
-            />
-            <div
-              className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+                background: [
+                  "linear-gradient(128deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
+                  "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
+                  "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
+                ].join(", "),
               }}
-              aria-hidden
             />
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full px-6 py-12 sm:px-8 lg:px-12"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
-            <div className="mx-auto w-full max-w-[1280px]">
-              <motion.div
-                className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, ease: EASE }}
+            <motion.div
+              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: EASE }}
+            >
+              <Link href="/prizes" className="transition hover:text-white/80">
+                Prizes
+              </Link>
+              <span className="text-white/25">/</span>
+              <span className="text-white/80">Laureates</span>
+            </motion.div>
+
+            <div className="overflow-hidden">
+              <motion.h1
+                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_0_2px_28px_rgba(0,0,0,0.45),_0_1px_2px_rgba(0,0,0,0.35)]"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
               >
-                <Link href="/prizes" className="transition hover:text-white/80">
-                  Prizes
-                </Link>
-                <span className="text-white/25">/</span>
-                <span className="text-white/80">Laureates</span>
-              </motion.div>
-
-              <div className="overflow-hidden">
-                <motion.h1
-                  className="text-left font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
-                >
-                  Laureates
-                </motion.h1>
-              </div>
-
-              <motion.div
-                className="mt-5 h-[3px] w-[72px] origin-left rounded-full bg-[#EC601B]"
-                initial={{ scaleX: 0, opacity: 0 }}
-                animate={{ scaleX: 1, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              />
+                Laureates
+              </motion.h1>
             </div>
+
+            <motion.div
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              style={{ width: 72 }}
+            />
           </motion.div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
