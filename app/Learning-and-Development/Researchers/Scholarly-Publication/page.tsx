@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -50,17 +51,26 @@ export default function ScholarlyPublicationPage() {
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
 
       <main className="min-h-screen bg-white font-poppins selection:bg-[#EC601B] selection:text-white">
-        {/* ─── Hero (no image) ───────────────────────────────────────────── */}
+        {/* ─── Hero ──────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
           className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
+            <Image
+              src="/image/scholarlyPub.webp"
+              alt="Scholarly publication and research recognition"
+              fill
+              priority
+              quality={90}
+              sizes="100vw"
+              className="scale-105 object-cover object-center"
+            />
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(108deg, #1D2D44 0%, #22344f 45%, #1a2942 100%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
               }}
               aria-hidden
             />
@@ -68,7 +78,7 @@ export default function ScholarlyPublicationPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+                  "linear-gradient(to top, rgba(29,45,68,0.50) 0%, transparent 45%)",
               }}
               aria-hidden
             />

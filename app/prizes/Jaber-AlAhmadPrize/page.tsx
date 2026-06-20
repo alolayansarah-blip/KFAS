@@ -277,6 +277,7 @@ export default function JaberAlAhmadPrizePage() {
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
+  const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
 
   return (
     <>
@@ -285,21 +286,32 @@ export default function JaberAlAhmadPrizePage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px] bg-[#1D2D44]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#121820]"
         >
-          <div
-            className="absolute inset-0 pointer-events-none"
-            aria-hidden
-            style={{
-              background: [
-                "linear-gradient(118deg, rgba(72,143,204,0.42) 0%, rgba(72,143,204,0.14) 48%, transparent 72%)",
-                "linear-gradient(to bottom, rgba(29,45,68,0.28) 0%, rgba(29,45,68,0.4) 50%, rgba(29,45,68,0.52) 100%)",
-              ].join(", "),
-            }}
-          />
+          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+            <Image
+              src="/image/Prizes1.png"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-[center_40%] scale-[1.06] brightness-[0.98] contrast-[1.02]"
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              aria-hidden
+              style={{
+                background: [
+                  "linear-gradient(128deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
+                  "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
+                  "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
+                ].join(", "),
+              }}
+            />
+          </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -312,21 +324,31 @@ export default function JaberAlAhmadPrizePage() {
               <span className="text-white/25">/</span>
             </motion.div>
 
-            <h1 className="font-poppins flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-4 lg:gap-x-6 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]">
-              <div className="overflow-hidden shrink-0">
+            <h1 className="font-poppins flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.1] [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]">
+              <div className="overflow-hidden">
                 <motion.span
                   className="block"
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
                 >
-                  Jaber Al-Ahmad Prize
+                  Jaber Al-Ahmad
+                </motion.span>
+              </div>
+              <div className="overflow-hidden">
+                <motion.span
+                  className="block"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.32, ease: EASE }}
+                >
+                  Prize
                 </motion.span>
               </div>
               <motion.span
-                className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-light text-white/90 tracking-normal max-w-[20ch] sm:max-w-none"
-                initial={{ opacity: 0, x: 28 }}
-                animate={{ opacity: 1, x: 0 }}
+                className="text-base sm:text-lg lg:text-xl font-light text-white/90 tracking-normal"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.72, ease: EASE }}
               >
                 for Young Researchers

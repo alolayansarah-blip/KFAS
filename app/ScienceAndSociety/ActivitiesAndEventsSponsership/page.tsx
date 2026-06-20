@@ -493,23 +493,45 @@ export default function ActivitiesAndEventsSponsershipPage() {
         {/* ── Overview ─────────────────────────────────────────────────── */}
         <section
           id="overview"
-          className={`${SECTION_SCROLL_MT} px-6 py-20 sm:px-8 sm:py-28 lg:px-12`}
+          className={`relative overflow-hidden bg-white ${SECTION_SCROLL_MT} px-6 py-20 sm:px-8 sm:py-28 lg:px-12`}
         >
-          <div className={CONTAINER}>
-            <motion.p
-              className="mx-auto max-w-[60ch] text-justify font-poppins text-[19px] sm:text-[22px] font-light leading-[1.7]"
-              style={{ color: BRAND.navy }}
-              initial={{ opacity: 0, y: 24 }}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            style={{
+              background:
+                "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
+            }}
+          />
+          <div className={`relative ${CONTAINER}`}>
+            <motion.div
+              className="max-w-3xl"
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.65, delay: 0.05, ease: EASE }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.7, ease: EASE }}
             >
-              KFAS provides grants to support impactful events and activities
-              that promote science, technology, and innovation across Kuwait.
-              This offering aims to engage the community, inspire youth, and
-              strengthen the culture of scientific thinking through interactive
-              and educational experiences.
-            </motion.p>
+              <span
+                className="block h-[3px] w-9 rounded-full"
+                style={{ background: BRAND.orange }}
+              />
+              <p
+                className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em]"
+                style={{ color: BRAND.orange }}
+              >
+                Overview
+              </p>
+              <p
+                className="mt-7 font-poppins text-[15px] font-light leading-[1.95]"
+                style={{ color: `${BRAND.navy}B3` }}
+              >
+                KFAS provides grants to support impactful events and activities
+                that promote science, technology, and innovation across Kuwait.
+                This offering aims to engage the community, inspire youth, and
+                strengthen the culture of scientific thinking through
+                interactive and educational experiences.
+              </p>
+            </motion.div>
           </div>
         </section>
 
@@ -532,7 +554,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
                   style={{ borderColor: `${BRAND.navy}14` }}
                 >
                   <Image
-                    src="/image/Objective.png"
+                    src="/image/obj.webp"
                     alt="STEAM activities and community engagement at sponsored events"
                     fill
                     sizes="(max-width: 1024px) 100vw, 640px"

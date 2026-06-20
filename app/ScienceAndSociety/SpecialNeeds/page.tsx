@@ -18,79 +18,29 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 const CONTAINER = "mx-auto max-w-[1280px]";
 
-// ─── Image placeholder ─────────────────────────────────────────────────────────
-// Swap each placeholder for a real photo by replacing the inner block with:
-//   <Image src="/image/your-photo.jpg" alt="…" fill className="object-cover" />
-// (or a plain <img src="…" className="absolute inset-0 h-full w-full object-cover" />)
-// Pass ratio="" + a height class (e.g. className="h-full") to let a grid cell size it.
-function ImagePlaceholder({
-  ratio = "aspect-[4/3]",
-  label = "Image",
-  className = "",
-}: {
-  ratio?: string;
-  label?: string;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`group relative w-full overflow-hidden border ${ratio} ${className}`}
-      style={{ borderColor: `${BRAND.navy}14` }}
-    >
-      {/* ── REPLACE FROM HERE ────────────────────────────────────────── */}
-      <div
-        className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-        style={{
-          background: `linear-gradient(135deg, ${BRAND.lightBlue}45 0%, ${BRAND.navy}12 100%)`,
-        }}
-        aria-hidden
-      />
-      <div
-        className="absolute inset-0 opacity-[0.5]"
-        style={{
-          backgroundImage: `radial-gradient(${BRAND.navy}18 1px, transparent 1px)`,
-          backgroundSize: "16px 16px",
-        }}
-        aria-hidden
-      />
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="flex flex-col items-center gap-3">
-          <svg
-            width="34"
-            height="34"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={`${BRAND.navy}`}
-            strokeOpacity="0.4"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.6" />
-            <path d="m21 15-5-5L5 21" />
-          </svg>
-          <span
-            className="font-poppins text-[10px] font-semibold uppercase tracking-[0.3em]"
-            style={{ color: `${BRAND.navy}55` }}
-          >
-            {label}
-          </span>
-        </div>
-      </div>
-      {/* ── REPLACE TO HERE ──────────────────────────────────────────── */}
-    </div>
-  );
-}
-
-// Gallery tiles — adjust label / span per image. `span` controls the mosaic shape.
+// Gallery tiles — `span` controls the mosaic shape.
 const GALLERY = [
-  { label: "Feature", span: "col-span-2 row-span-2" },
-  { label: "Image" },
-  { label: "Image" },
-  { label: "Image" },
-  { label: "Image" },
+  {
+    src: "/image/spacialneeds2.webp",
+    alt: "KFAS special needs program community engagement",
+    span: "col-span-2 row-span-2",
+  },
+  {
+    src: "/image/specialNeeds.webp",
+    alt: "Inclusive support and accessibility for special needs",
+  },
+  {
+    src: "/image/specialneeds3.webp",
+    alt: "Special needs educational and outreach activities",
+  },
+  {
+    src: "/image/specialneeds4.webp",
+    alt: "Assistive technology and inclusion initiatives",
+  },
+  {
+    src: "/image/specialneeds1.webp",
+    alt: "Special needs capacity-building programs",
+  },
 ];
 
 // ─── Page ────────────────────────────────────────────────────────────────────
@@ -114,18 +64,18 @@ export default function SpecialNeedsPage() {
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden bg-[#121820]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <div className="absolute inset-0 bg-[#1D2D44]">
               <Image
-                src="/image/SpecialNeeds.jpg"
+                src="/image/specialNeeds.webp"
                 alt="Inclusive support and accessibility for special needs"
                 fill
                 priority
                 quality={90}
                 sizes="100vw"
-                className="object-cover object-center"
+                className="scale-105 object-cover object-center"
               />
               <div
                 className="absolute inset-0"
@@ -147,7 +97,7 @@ export default function SpecialNeedsPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <div className={`${CONTAINER} w-full`}>
@@ -235,7 +185,7 @@ export default function SpecialNeedsPage() {
             <div className="grid grid-cols-2 gap-4 [grid-auto-rows:150px] sm:gap-5 sm:[grid-auto-rows:200px] lg:grid-cols-4">
               {GALLERY.map((item, i) => (
                 <motion.div
-                  key={i}
+                  key={item.src}
                   className={`h-full ${item.span ?? ""}`}
                   initial={{ opacity: 0, scale: 0.96 }}
                   whileInView={{ opacity: 1, scale: 1 }}
@@ -243,11 +193,23 @@ export default function SpecialNeedsPage() {
                   transition={{ duration: 0.55, delay: i * 0.06, ease: EASE }}
                   whileHover={{ y: -6 }}
                 >
-                  <ImagePlaceholder
-                    ratio=""
-                    label={item.label}
-                    className="h-full"
-                  />
+                  <div
+                    className="group relative h-full w-full overflow-hidden border"
+                    style={{ borderColor: `${BRAND.navy}14` }}
+                  >
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span
+                      className="absolute left-0 top-0 h-1 w-10"
+                      style={{ background: BRAND.orange }}
+                      aria-hidden
+                    />
+                  </div>
                 </motion.div>
               ))}
             </div>

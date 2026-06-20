@@ -570,20 +570,30 @@ export default function InternationalCollaborativeResearchPage() {
           className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            {/* subtle navy depth gradients (no photo) */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(102deg, rgba(15,24,40,0.55) 0%, rgba(29,45,68,0.20) 50%, transparent 100%)",
-              }}
+            <Image
+              src="/image/intCollabs.webp"
+              alt="International collaborative research"
+              fill
+              priority
+              quality={90}
+              sizes="100vw"
+              className="scale-105 object-cover object-center"
             />
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(15,24,40,0.45) 0%, transparent 46%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
               }}
+              aria-hidden
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.50) 0%, transparent 45%)",
+              }}
+              aria-hidden
             />
           </motion.div>
 

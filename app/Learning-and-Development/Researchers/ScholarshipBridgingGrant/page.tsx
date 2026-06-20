@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -165,7 +167,7 @@ export default function ScholarshipBridgingGrantPage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
@@ -179,19 +181,23 @@ export default function ScholarshipBridgingGrantPage() {
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex h-[62vh] min-h-[440px] items-end justify-start overflow-hidden bg-[#1D2D44]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            <div
-              className="absolute inset-0 scale-110"
-              style={{ background: "#1D2D44" }}
-              aria-hidden
+            <Image
+              src="/image/Bridging.png"
+              alt="Scholarship bridging grant for researchers"
+              fill
+              priority
+              quality={90}
+              sizes="100vw"
+              className="object-cover object-center"
             />
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(102deg, rgba(15,24,40,0.85) 0%, rgba(29,45,68,0.55) 46%, rgba(29,45,68,0.20) 76%, transparent 100%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
               }}
               aria-hidden
             />
@@ -199,7 +205,7 @@ export default function ScholarshipBridgingGrantPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(15,24,40,0.60) 0%, transparent 46%)",
+                  "linear-gradient(to top, rgba(29,45,68,0.50) 0%, transparent 45%)",
               }}
               aria-hidden
             />
@@ -208,7 +214,7 @@ export default function ScholarshipBridgingGrantPage() {
           <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-32 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -219,17 +225,24 @@ export default function ScholarshipBridgingGrantPage() {
             >
               <span>Learning &amp; Development</span>
               <span className="text-white/30">/</span>
-              <span className="text-white/80">Researchers</span>
+              <Link
+                href="/Learning-and-Development/Researchers"
+                className="text-white/80 transition-colors hover:text-white"
+              >
+                Researchers
+              </Link>
             </motion.div>
 
-            <div className="overflow-hidden pb-1">
+            <div className="overflow-hidden pb-[0.12em]">
               <motion.h1
-                className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)]"
+                className="font-poppins text-3xl font-bold leading-[1.12] tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)]"
                 initial={{ y: "108%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                Scholarship Bridging Grant
+                Scholarship Bridging
+                <br />
+                Grant
               </motion.h1>
             </div>
 

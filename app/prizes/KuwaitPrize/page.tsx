@@ -316,11 +316,11 @@ export default function KuwaitPrizesPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px] bg-[#121820]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/KuwaitPrizee.jpg"
+              src="/image/Prizes1.png"
               alt=""
               fill
               priority
@@ -341,7 +341,7 @@ export default function KuwaitPrizesPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
+            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div

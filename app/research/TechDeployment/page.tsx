@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -161,21 +162,30 @@ export default function TechDeploymentPage() {
           ref={heroRef}
           className="relative flex h-[540px] items-center justify-start overflow-hidden"
         >
-          <motion.div
-            className="absolute inset-0 bg-[#1D2D44]"
-            style={{ y: heroY }}
-          >
+          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+            <Image
+              src="/image/techD.webp"
+              alt="Technology deployment and innovation"
+              fill
+              priority
+              sizes="100vw"
+              className="scale-110 object-cover object-[center_70%]"
+            />
             <div
               aria-hidden
               className="absolute inset-0"
               style={{
                 background:
-                  "radial-gradient(ellipse 85% 55% at 75% 15%, rgba(125,192,241,0.22), transparent 60%)",
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
+              }}
             />
           </motion.div>
 
@@ -194,14 +204,16 @@ export default function TechDeploymentPage() {
               <span>Technology Deployment</span>
             </motion.div>
 
-            <div className="overflow-hidden">
+            <div className="overflow-hidden pb-[0.12em]">
               <motion.h1
-                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                className="text-left font-poppins text-4xl font-bold leading-[1.12] tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Technology Deployment
+                Technology
+                <br />
+                Deployment
               </motion.h1>
             </div>
 
