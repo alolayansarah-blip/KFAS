@@ -60,74 +60,6 @@ function Mark() {
   );
 }
 
-// Swappable image placeholder.
-// To use a real photo: delete everything between the REPLACE markers and drop in
-// an <Image fill className="object-cover" ... /> (the wrapper already clips it).
-function ImagePlaceholder({
-  ratio = "aspect-[4/3]",
-  label = "Image",
-  className = "",
-}: {
-  ratio?: string;
-  label?: string;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`group relative w-full overflow-hidden border border-[#1D2D44]/[0.08] ${ratio} ${className}`}
-    >
-      {/* ── REPLACE FROM HERE ────────────────────────────────────────── */}
-      <div
-        className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(125,192,241,0.27) 0%, rgba(29,45,68,0.07) 100%)",
-        }}
-        aria-hidden
-      />
-      <div
-        className="absolute inset-0 opacity-50"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(29,45,68,0.10) 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
-        }}
-        aria-hidden
-      />
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="flex flex-col items-center gap-3">
-          <svg
-            width="34"
-            height="34"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#1D2D44"
-            strokeOpacity="0.4"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.6" />
-            <path d="m21 15-5-5L5 21" />
-          </svg>
-          <span className="font-poppins text-[10px] font-semibold uppercase tracking-[0.3em] text-[#1D2D44]/[0.55]">
-            {label}
-          </span>
-        </div>
-      </div>
-      {/* ── REPLACE TO HERE ──────────────────────────────────────────── */}
-
-      {/* corner accent */}
-      <span
-        className="absolute left-0 top-0 z-10 h-1 w-10 bg-[#EC601B]"
-        aria-hidden
-      />
-    </div>
-  );
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ScientificConferenceSponsorshipPage() {
@@ -155,8 +87,8 @@ export default function ScientificConferenceSponsorshipPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/KFASBuilding3.jpg"
-              alt="Scientific Conference Sponsorship — KFAS building"
+              src="/image/SCS.jpeg"
+              alt="Scientific Conference Sponsorship"
               fill
               priority
               quality={65}
@@ -242,7 +174,15 @@ export default function ScientificConferenceSponsorshipPage() {
               </motion.div>
 
               <motion.div {...fadeUp(0.1)}>
-                <ImagePlaceholder ratio="aspect-[4/3]" label="Conference" />
+                <div className="group relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
+                  <Image
+                    src="/image/ScS2.jpeg"
+                    alt="Audience at a scientific conference in Kuwait"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
               </motion.div>
             </div>
           </div>

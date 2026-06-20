@@ -24,54 +24,6 @@ const APPLICATION_URL =
 const inlineLink =
   "font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40";
 
-// ─── Image placeholder ─────────────────────────────────────────────────────────
-function ImagePlaceholder({ label = "Image" }: { label?: string }) {
-  return (
-    <div className="group relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/08">
-      <div
-        className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(187,222,251,0.45) 0%, rgba(29,45,68,0.12) 100%)",
-        }}
-        aria-hidden
-      />
-      <div
-        className="absolute inset-0 opacity-[0.5]"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(29,45,68,0.18) 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
-        }}
-        aria-hidden
-      />
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="flex flex-col items-center gap-3">
-          <svg
-            width="34"
-            height="34"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#1D2D44"
-            strokeOpacity="0.4"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.6" />
-            <path d="m21 15-5-5L5 21" />
-          </svg>
-          <span className="font-poppins text-[10px] font-semibold uppercase tracking-[0.3em] text-[#1D2D44]/55">
-            {label}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Section head ──────────────────────────────────────────────────────────────
 function SectionHead({ title }: { title: string }) {
   return (
@@ -332,7 +284,15 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
               transition={{ duration: 0.7, ease: EASE }}
               whileHover={{ y: -8 }}
             >
-              <ImagePlaceholder label="PhD Students Supplementary Fund Grant" />
+              <div className="group relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/08">
+                <Image
+                  src="/image/PhD2.jpeg"
+                  alt="PhD students collaborating on research at a desk with books and a tablet"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
             </motion.div>
           </div>
         </section>

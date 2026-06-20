@@ -4,22 +4,47 @@ import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { LAUREATES, type Laureate, type PrizeKey } from "@/src/data/laureates";
 
 /* ------------------------------------------------------------------ */
-/*  Motion + brand constants                                           */
+/*  Motion + brand                                                     */
 /* ------------------------------------------------------------------ */
-
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
-const NAVY = "#1D2D44";
 const ORANGE = "#EC601B";
+const RECENT_YEARS = 4; // how many year-blocks show before "Show all"
 
 /* ------------------------------------------------------------------ */
-/*  Editorial primitives (kept inline per the page convention)         */
+/*  Prize metadata (short copy)                                        */
 /* ------------------------------------------------------------------ */
+const PRIZES: { key: PrizeKey; name: string; tab: string; line: string }[] = [
+  {
+    key: "kuwait",
+    name: "Kuwait Prize",
+    tab: "Kuwait Prize",
+    line: "For distinguished Arab researchers, awarded annually since 1979.",
+  },
+  {
+    key: "jaber",
+    name: "Jaber Al-Ahmad Award",
+    tab: "Jaber Al-Ahmad",
+    line: "For outstanding young Kuwaiti researchers.",
+  },
+  {
+    key: "sumait",
+    name: "Al-Sumait Prize",
+    tab: "Al-Sumait",
+    line: "For African development in health, food security, and education.",
+  },
+];
+const PRIZE_LABEL: Record<PrizeKey, string> = {
+  kuwait: "Kuwait Prize",
+  jaber: "Jaber Al-Ahmad",
+  sumait: "Al-Sumait",
+};
 
+/* ------------------------------------------------------------------ */
+/*  Editorial primitives                                               */
+/* ------------------------------------------------------------------ */
 function SectionHead({
   kicker,
   title,
@@ -32,10 +57,7 @@ function SectionHead({
   return (
     <div className="lg:sticky lg:top-28">
       <div className="flex items-center gap-3">
-        <span
-          className="h-3 w-8 rounded-sm"
-          style={{ backgroundColor: ORANGE }}
-        />
+        <span className="h-3 w-8 rounded-sm" style={{ backgroundColor: ORANGE }} />
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1D2D44]/70">
           {kicker}
         </span>
@@ -52,320 +74,138 @@ function SectionHead({
   );
 }
 
-function Mark({
-  title,
-  children,
-}: {
-  title: string;
-  children?: React.ReactNode;
-}) {
-  return (
-    <li className="flex gap-4 py-5">
-      <span
-        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-        style={{ backgroundColor: ORANGE }}
-      />
-      <div>
-        <h3 className="text-lg font-semibold text-[#1D2D44]">{title}</h3>
-        {children ? (
-          <p className="mt-1.5 text-[15px] leading-relaxed text-[#1D2D44]/70">
-            {children}
-          </p>
-        ) : null}
+/* Portrait placeholder — dot grid, icon, orange corner accent.
+   When a real photo exists on the record, it renders instead.        */
+function Portrait({ src, name }: { src?: string; name: string }) {
+  if (src) {
+    return (
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm bg-[#1D2D44]/[0.04]">
+        {/* REPLACE FROM HERE — real portrait */}
+        <Image
+          src={src}
+          alt={name}
+          fill
+          sizes="(min-width:1024px) 22vw, (min-width:640px) 30vw, 45vw"
+          loading="lazy"
+          className="object-cover"
+        />
+        {/* REPLACE TO HERE */}
       </div>
-    </li>
-  );
-}
-
-function ImagePlaceholder({ label }: { label: string }) {
+    );
+  }
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#1D2D44]/[0.04]">
-      {/* dot-grid */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(29,45,68,0.16) 1px, transparent 1px)",
-          backgroundSize: "12px 12px",
-        }}
-      />
+    <div
+      className="relative aspect-[4/5] w-full overflow-hidden rounded-sm bg-[#1D2D44]/[0.03]"
+      style={{
+        backgroundImage:
+          "radial-gradient(rgba(29,45,68,0.10) 1px, transparent 1px)",
+        backgroundSize: "14px 14px",
+      }}
+    >
       {/* orange corner accent */}
       <span
-        className="absolute left-0 top-0 h-6 w-6"
+        className="absolute left-0 top-0 h-7 w-7"
         style={{
-          borderTop: `3px solid ${ORANGE}`,
-          borderLeft: `3px solid ${ORANGE}`,
+          backgroundColor: ORANGE,
+          clipPath: "polygon(0 0, 100% 0, 0 100%)",
         }}
       />
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center">
+      {/* portrait icon */}
+      <div className="absolute inset-0 flex items-center justify-center">
         <svg
-          width="26"
-          height="26"
+          width="44"
+          height="44"
           viewBox="0 0 24 24"
           fill="none"
-          stroke={NAVY}
-          strokeWidth="1.4"
-          className="opacity-50"
+          stroke="#1D2D44"
+          strokeOpacity="0.28"
+          strokeWidth="1.5"
         >
           <circle cx="12" cy="8" r="4" />
-          <path d="M4 21c0-4 3.5-6 8-6s8 2 8 6" />
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
         </svg>
-        <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#1D2D44]/45">
-          {label}
-        </span>
       </div>
-      {/* REPLACE FROM HERE */}
-      {/* Swap this ImagePlaceholder for a portrait:
-          <Image src={laureate.image!} alt={laureate.name} fill sizes="160px"
-                 className="object-contain" loading="lazy" /> */}
-      {/* REPLACE TO HERE */}
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Data model                                                         */
-/*  NOTE: This array is the single source of truth for the roll.       */
-/*  Replace / extend with the official KFAS laureate list, and add an  */
-/*  `image` path per entry to render a portrait instead of the         */
-/*  placeholder. Citations are paraphrased summaries — verify each.    */
+/*  Featured card                                                      */
 /* ------------------------------------------------------------------ */
-
-type PrizeKey = "kuwait" | "jaber" | "sumait";
-
-interface Prize {
-  key: PrizeKey;
-  name: string;
-  short: string;
-  blurb: string;
-}
-
-interface Laureate {
-  id: string;
-  name: string;
-  country: string;
-  field: string;
-  prize: PrizeKey;
-  year: number;
-  edition?: string;
-  citation: string;
-  image?: string; // e.g. "/image/laureates/ashraf-ibrahim.webp"
-}
-
-const PRIZES: Prize[] = [
-  {
-    key: "kuwait",
-    name: "Kuwait Prize",
-    short: "Kuwait Prize",
-    blurb:
-      "Awarded annually since 1979 to Kuwaiti and Arab researchers across four fields, with a biennial fifth field in emerging specialized sciences.",
-  },
-  {
-    key: "jaber",
-    name: "Jaber Al-Ahmad Award for Young Researchers",
-    short: "Jaber Al-Ahmad",
-    blurb:
-      "Honours Kuwaiti PhD holders for outstanding early-career contributions across engineering, natural, life, and social sciences.",
-  },
-  {
-    key: "sumait",
-    name: "Al-Sumait Prize",
-    short: "Al-Sumait",
-    blurb:
-      "Recognises work that drives measurable progress for African development in health, food security, and education.",
-  },
-];
-
-const LAUREATES: Laureate[] = [
-  // ---- Kuwait Prize — 43rd edition (2024) ----
-  {
-    id: "kp-2024-ibrahim",
-    name: "Prof. Ashraf Ibrahim",
-    country: "Jordan",
-    field: "Basic Sciences — Biological Sciences",
-    prize: "kuwait",
-    year: 2024,
-    edition: "43rd Kuwait Prize",
-    citation:
-      "Pioneering diagnostic and therapeutic approaches in translational medicine for chronic and complex diseases.",
-  },
-  {
-    id: "kp-2024-farhat",
-    name: "Prof. Charbel Farhat",
-    country: "Lebanon",
-    field: "Applied Sciences — Engineering Sciences",
-    prize: "kuwait",
-    year: 2024,
-    edition: "43rd Kuwait Prize",
-    citation:
-      "Advances in computational aerosciences and aircraft structural engineering.",
-  },
-  {
-    id: "kp-2024-kafafi",
-    name: "Prof. Zeidan Kafafi",
-    country: "Jordan",
-    field: "Arts, Humanities & Literature",
-    prize: "kuwait",
-    year: 2024,
-    edition: "43rd Kuwait Prize",
-    citation:
-      "Contributions to archaeology and the civilizational history of the Arab region.",
-  },
-
-  // ---- Kuwait Prize — earlier ----
-  {
-    id: "kp-2019-jamal",
-    name: "Prof. Amaney Jamal",
-    country: "United States",
-    field: "Economics & Social Sciences",
-    prize: "kuwait",
-    year: 2019,
-    edition: "Kuwait Prize",
-    citation:
-      "Scholarship in political science and democratization in the Arab world.",
-  },
-
-  // ---- Jaber Al-Ahmad Award — 36th edition (2025) ----
-  {
-    id: "ja-2025-qahim",
-    name: "Dr. Yousef Al-Qahim",
-    country: "Kuwait",
-    field: "Engineering Sciences",
-    prize: "jaber",
-    year: 2025,
-    edition: "36th Jaber Al-Ahmad Award",
-    citation: "Applied engineering solutions serving the oil and gas sectors.",
-  },
-  {
-    id: "ja-2025-khazi",
-    name: "Dr. Yousef Al-Khazi",
-    country: "Kuwait",
-    field: "Natural Sciences & Mathematics",
-    prize: "jaber",
-    year: 2025,
-    edition: "36th Jaber Al-Ahmad Award",
-    citation: "Distinguished research in mathematics and the natural sciences.",
-  },
-  {
-    id: "ja-2025-azmi",
-    name: "Dr. Aisha Al-Azmi",
-    country: "Kuwait",
-    field: "Social Sciences & Humanities",
-    prize: "jaber",
-    year: 2025,
-    edition: "36th Jaber Al-Ahmad Award",
-    citation:
-      "Developing educational policy and improving the efficiency of education systems.",
-  },
-  {
-    id: "ja-2025-behbehani",
-    name: "Dr. Hussein Behbehani",
-    country: "Kuwait",
-    field: "Life Sciences",
-    prize: "jaber",
-    year: 2025,
-    edition: "36th Jaber Al-Ahmad Award",
-    citation: "Distinguished scientific research in the biological sciences.",
-  },
-
-  // ---- Al-Sumait Prize ----
-  {
-    id: "as-marsh",
-    name: "Prof. Kevin Marsh",
-    country: "United Kingdom",
-    field: "Health",
-    prize: "sumait",
-    year: 2017,
-    edition: "Al-Sumait Prize for Health",
-    citation:
-      "Sustained efforts to control and eradicate malaria across Africa.",
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Filter chips                                                       */
-/* ------------------------------------------------------------------ */
-
-const FILTERS: { key: PrizeKey | "all"; label: string }[] = [
-  { key: "all", label: "All laureates" },
-  { key: "kuwait", label: "Kuwait Prize" },
-  { key: "jaber", label: "Jaber Al-Ahmad" },
-  { key: "sumait", label: "Al-Sumait" },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Sub-components                                                     */
-/* ------------------------------------------------------------------ */
-
-function LaureateRow({
-  laureate,
-  index,
-}: {
-  laureate: Laureate;
-  index: number;
-}) {
+function FeaturedCard({ l }: { l: Laureate }) {
   return (
-    <motion.li
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: EASE, delay: index * 0.05 }}
-      className="flex flex-col gap-5 py-7 sm:flex-row sm:items-start sm:gap-7"
-    >
-      {/* portrait — object-contain in a uniform box */}
-      <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-sm border border-[#1D2D44]/[0.08] bg-white">
-        {laureate.image ? (
-          <Image
-            src={laureate.image}
-            alt={laureate.name}
-            fill
-            sizes="128px"
-            className="object-contain"
-            loading="lazy"
-          />
-        ) : (
-          <ImagePlaceholder label="Portrait" />
-        )}
-      </div>
+    <figure className="group">
+      <Portrait src={l.image} name={l.name} />
+      <figcaption className="mt-4">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#EC601B]">
+          {PRIZE_LABEL[l.prize]} · {l.year}
+        </span>
+        <h3 className="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-[#1D2D44]">
+          {l.name}
+        </h3>
+        <p className="mt-1 text-sm text-[#1D2D44]/60">
+          {l.field}
+          {l.country ? ` · ${l.country}` : ""}
+        </p>
+      </figcaption>
+    </figure>
+  );
+}
 
+/* ------------------------------------------------------------------ */
+/*  Laureate row + year group                                          */
+/* ------------------------------------------------------------------ */
+function LaureateRow({ l }: { l: Laureate }) {
+  return (
+    <li className="flex flex-col gap-1.5 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <h3 className="text-xl font-semibold tracking-tight text-[#1D2D44]">
-            {laureate.name}
-          </h3>
-          <span className="text-sm text-[#1D2D44]/55">{laureate.country}</span>
-        </div>
-
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center rounded-full bg-[#7DC0F1]/[0.18] px-3 py-1 text-xs font-medium text-[#1D2D44]">
-            {laureate.field}
+          <span className="text-lg font-semibold tracking-tight text-[#1D2D44]">
+            {l.name}
           </span>
-          {laureate.edition ? (
-            <span className="text-xs font-medium uppercase tracking-[0.12em] text-[#1D2D44]/45">
-              {laureate.edition}
+          {l.country ? (
+            <span className="text-sm text-[#1D2D44]/55">{l.country}</span>
+          ) : null}
+          {l.status === "shared" ? (
+            <span className="rounded-full border border-[#1D2D44]/[0.12] px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-[#1D2D44]/55">
+              Shared
             </span>
           ) : null}
         </div>
 
-        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[#1D2D44]/75">
-          {laureate.citation}
-        </p>
+        {l.nameAr ? (
+          <div dir="rtl" className="mt-0.5 text-sm text-[#1D2D44]/45">
+            {l.nameAr}
+          </div>
+        ) : null}
+
+        {l.brief ? (
+          <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#1D2D44]/70">
+            {l.brief}
+          </p>
+        ) : null}
       </div>
-    </motion.li>
+
+      <div className="flex shrink-0 items-center gap-2">
+        <span className="inline-flex items-center rounded-full bg-[#7DC0F1]/[0.18] px-3 py-1 text-xs font-medium text-[#1D2D44]">
+          {l.field}
+        </span>
+      </div>
+    </li>
   );
 }
 
 function YearGroup({ year, items }: { year: number; items: Laureate[] }) {
   return (
-    <div className="grid grid-cols-1 gap-4 border-t border-[#1D2D44]/[0.08] py-2 sm:grid-cols-[5rem_1fr] sm:gap-8">
-      {/* year index numeral */}
-      <div className="pt-7">
-        <span className="text-3xl font-semibold tabular-nums tracking-tight text-[#1D2D44]/85">
+    <div className="grid grid-cols-1 gap-2 border-t border-[#1D2D44]/[0.08] py-3 sm:grid-cols-[4.5rem_1fr] sm:gap-8">
+      <div className="pt-5">
+        <span className="text-2xl font-semibold tabular-nums tracking-tight text-[#1D2D44]/85">
           {year}
         </span>
       </div>
       <ul className="divide-y divide-[#1D2D44]/[0.08]">
-        {items.map((l, i) => (
-          <LaureateRow key={l.id} laureate={l} index={i} />
+        {items.map((l) => (
+          <LaureateRow key={l.id} l={l} />
         ))}
       </ul>
     </div>
@@ -375,35 +215,79 @@ function YearGroup({ year, items }: { year: number; items: Laureate[] }) {
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
-
 export default function LaureatesPage() {
-  const [filter, setFilter] = useState<PrizeKey | "all">("all");
+  const [prize, setPrize] = useState<PrizeKey>("kuwait");
+  const [field, setField] = useState<string>("all");
+  const [query, setQuery] = useState<string>("");
+  const [showAll, setShowAll] = useState(false);
 
   const introRef = useRef(null);
   const introInView = useInView(introRef, { once: true, margin: "-80px" });
-  const prizeRef = useRef(null);
-  const prizeInView = useInView(prizeRef, { once: true, margin: "-80px" });
+  const featRef = useRef(null);
+  const featInView = useInView(featRef, { once: true, margin: "-80px" });
 
-  // group filtered laureates by year (descending)
+  // totals per prize
+  const totals = useMemo(() => {
+    const t: Record<PrizeKey, number> = { kuwait: 0, jaber: 0, sumait: 0 };
+    for (const l of LAUREATES) t[l.prize]++;
+    return t;
+  }, []);
+
+  // featured = most recent award year across all prizes (cap 8)
+  const featured = useMemo(() => {
+    const maxYear = Math.max(...LAUREATES.map((l) => l.year));
+    return LAUREATES.filter((l) => l.year === maxYear).slice(0, 8);
+  }, []);
+
+  // fields within the active prize
+  const fields = useMemo(() => {
+    const set = new Set<string>();
+    for (const l of LAUREATES) if (l.prize === prize) set.add(l.field);
+    return [...set].sort();
+  }, [prize]);
+
+  // filtered + grouped by year (desc)
   const grouped = useMemo(() => {
-    const list =
-      filter === "all"
-        ? LAUREATES
-        : LAUREATES.filter((l) => l.prize === filter);
-
+    const q = query.trim().toLowerCase();
+    const list = LAUREATES.filter(
+      (l) =>
+        l.prize === prize &&
+        (field === "all" || l.field === field) &&
+        (q === "" ||
+          l.name.toLowerCase().includes(q) ||
+          (l.nameAr ?? "").includes(query.trim()) ||
+          (l.country ?? "").toLowerCase().includes(q))
+    );
     const byYear = new Map<number, Laureate[]>();
     for (const l of list) {
       const arr = byYear.get(l.year) ?? [];
       arr.push(l);
       byYear.set(l.year, arr);
     }
-    return [...byYear.entries()].sort((a, b) => b[0] - a[0]);
-  }, [filter]);
+    return {
+      count: list.length,
+      groups: [...byYear.entries()].sort((a, b) => b[0] - a[0]),
+    };
+  }, [prize, field, query]);
+
+  // collapse: show only recent year-blocks unless searching / filtering / expanded
+  const isBrowsingAll = query.trim() === "" && field === "all" && !showAll;
+  const visibleGroups = isBrowsingAll
+    ? grouped.groups.slice(0, RECENT_YEARS)
+    : grouped.groups;
+  const hiddenCount =
+    grouped.count -
+    visibleGroups.reduce((n, [, items]) => n + items.length, 0);
+
+  function selectPrize(p: PrizeKey) {
+    setPrize(p);
+    setField("all");
+    setQuery("");
+    setShowAll(false);
+  }
 
   return (
-    <>
-      <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
-      <main className="min-h-screen bg-white font-poppins">
+    <main className="bg-white">
       {/* ============================== HERO ============================== */}
       <section className="relative h-[540px] w-full overflow-hidden">
         <Image
@@ -419,7 +303,7 @@ export default function LaureatesPage() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(90deg, rgba(29,45,68,0.86) 0%, rgba(29,45,68,0.62) 45%, rgba(29,45,68,0.30) 100%)",
+              "linear-gradient(90deg, rgba(29,45,68,0.88) 0%, rgba(29,45,68,0.64) 45%, rgba(29,45,68,0.32) 100%)",
           }}
         />
         <div className="relative mx-auto flex h-full max-w-[1280px] items-center justify-start px-6 py-12 lg:px-8">
@@ -442,22 +326,19 @@ export default function LaureatesPage() {
             <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
               Laureates
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-              The researchers and scholars KFAS has honoured for advancing
-              science, society, and human knowledge.
-            </p>
           </div>
         </div>
       </section>
 
-      {/* ============================== INTRO ============================== */}
+      {/* ============================== INTRO — PRIZES AT KFAS ============================== */}
       <section ref={introRef} className="bg-white">
-        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-4">
               <SectionHead
                 kicker="Since 1979"
-                title="Recognising scientific excellence"
+                title="Prizes at KFAS"
+                intro="Three programmes recognising scientific excellence across the Arab world and Africa."
               />
             </div>
 
@@ -467,179 +348,179 @@ export default function LaureatesPage() {
               transition={{ duration: 0.6, ease: EASE }}
               className="lg:col-span-8"
             >
-              <p className="text-lg leading-relaxed text-[#1D2D44]/80">
-                For more than four decades KFAS has honoured Kuwaiti and Arab
-                researchers whose work has reshaped their fields and served
-                their societies. Its awards celebrate achievement and inspire
-                the next generation to pursue scientific careers.
-              </p>
-
-              {/* restrained hairline metadata strip */}
-              <dl className="mt-10 grid grid-cols-3 divide-x divide-[#1D2D44]/[0.08] border-y border-[#1D2D44]/[0.08]">
-                {[
-                  { v: "43+", l: "Prize editions" },
-                  { v: "130+", l: "Laureates honoured" },
-                  { v: "5", l: "Fields of award" },
-                ].map((s) => (
-                  <div key={s.l} className="px-5 py-6 first:pl-0">
-                    <dd className="text-3xl font-semibold tracking-tight text-[#1D2D44]">
-                      {s.v}
-                    </dd>
-                    <dt className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-[#1D2D44]/55">
-                      {s.l}
-                    </dt>
+              <div className="grid grid-cols-1 divide-y divide-[#1D2D44]/[0.08] border-y border-[#1D2D44]/[0.08] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {PRIZES.map((p, idx) => (
+                  <div key={p.key} className={`py-7 sm:px-6 ${idx === 0 ? "sm:pl-0" : ""}`}>
+                    <div className="text-4xl font-semibold tracking-tight text-[#1D2D44]">
+                      {totals[p.key]}
+                    </div>
+                    <div className="mt-3 text-base font-semibold text-[#1D2D44]">
+                      {p.name}
+                    </div>
+                    <p className="mt-1.5 text-sm leading-relaxed text-[#1D2D44]/65">
+                      {p.line}
+                    </p>
                   </div>
                 ))}
-              </dl>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ============================== PRIZE PROGRAMS ============================== */}
-      <section ref={prizeRef} className="bg-[#7DC0F1]/[0.06]">
-        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-28">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-4">
-              <SectionHead
-                kicker="The awards"
-                title="Three programmes, one mission"
-                intro="Each programme recognises a distinct community of researchers — from established Arab scholars to Kuwait's emerging talent."
-              />
+      {/* ============================== FEATURED ============================== */}
+      <section ref={featRef} className="bg-[#7DC0F1]/[0.06]">
+        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="h-3 w-8 rounded-sm" style={{ backgroundColor: ORANGE }} />
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1D2D44]/70">
+                  Most recent
+                </span>
+              </div>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#1D2D44] sm:text-4xl">
+                Latest laureates
+              </h2>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={prizeInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, ease: EASE }}
-              className="lg:col-span-8"
-            >
-              <ul className="divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]">
-                {PRIZES.map((p) => (
-                  <Mark key={p.key} title={p.name}>
-                    {p.blurb}
-                  </Mark>
-                ))}
-              </ul>
-            </motion.div>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={featInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4"
+          >
+            {featured.map((l) => (
+              <FeaturedCard key={l.id} l={l} />
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* ============================== THE HONOR ROLL ============================== */}
+      {/* ============================== WINNERS (ARCHIVE) ============================== */}
       <section className="bg-white">
-        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-4">
               <SectionHead
                 kicker="The honour roll"
-                title="Every laureate"
-                intro="Filter by programme. Names are grouped by award year."
+                title="Browse all laureates"
+                intro="Pick a programme, filter by field, or search a name."
               />
             </div>
 
             <div className="lg:col-span-8">
-              {/* filter chips */}
-              <div className="mb-8 flex flex-wrap gap-2">
-                {FILTERS.map((f) => {
-                  const active = filter === f.key;
+              {/* prize tabs */}
+              <div className="flex flex-wrap gap-x-6 gap-y-2 border-b border-[#1D2D44]/[0.10]">
+                {PRIZES.map((p) => {
+                  const active = p.key === prize;
                   return (
                     <button
-                      key={f.key}
-                      onClick={() => setFilter(f.key)}
-                      className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                      key={p.key}
+                      onClick={() => selectPrize(p.key)}
+                      className={`-mb-px border-b-2 pb-3 pt-1 text-sm font-semibold transition ${
                         active
-                          ? "bg-[#1D2D44] text-white"
-                          : "bg-[#1D2D44]/[0.05] text-[#1D2D44]/75 hover:bg-[#1D2D44]/[0.10]"
+                          ? "border-[#EC601B] text-[#1D2D44]"
+                          : "border-transparent text-[#1D2D44]/50 hover:text-[#1D2D44]/80"
                       }`}
-                      aria-pressed={active}
                     >
-                      {f.label}
+                      {p.tab}
+                      <span className="ml-2 text-xs font-normal text-[#1D2D44]/40">
+                        {totals[p.key]}
+                      </span>
                     </button>
                   );
                 })}
               </div>
 
+              {/* controls */}
+              <div className="mt-6 flex flex-col gap-4">
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search by name or country…"
+                  className="w-full rounded-sm border border-[#1D2D44]/[0.14] bg-white px-4 py-2.5 text-sm text-[#1D2D44] outline-none transition placeholder:text-[#1D2D44]/40 focus:border-[#EC601B]"
+                />
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setField("all")}
+                    className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
+                      field === "all"
+                        ? "bg-[#1D2D44] text-white"
+                        : "bg-white text-[#1D2D44]/70 hover:bg-[#1D2D44]/[0.06]"
+                    }`}
+                  >
+                    All fields
+                  </button>
+                  {fields.map((f) => (
+                    <button
+                      key={f}
+                      onClick={() => setField(f)}
+                      className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
+                        field === f
+                          ? "bg-[#1D2D44] text-white"
+                          : "bg-white text-[#1D2D44]/70 hover:bg-[#1D2D44]/[0.06]"
+                      }`}
+                    >
+                      {f}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* count */}
+              <p className="mt-6 text-xs font-medium uppercase tracking-[0.12em] text-[#1D2D44]/45">
+                {grouped.count} {grouped.count === 1 ? "laureate" : "laureates"}
+              </p>
+
               {/* roll */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={filter}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  key={`${prize}-${field}-${query}-${showAll}`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3, ease: EASE }}
+                  className="mt-3"
                 >
-                  {grouped.length === 0 ? (
+                  {visibleGroups.length === 0 ? (
                     <p className="border-t border-[#1D2D44]/[0.08] py-12 text-[#1D2D44]/55">
-                      No laureates to show for this programme yet.
+                      No laureates match this filter.
                     </p>
                   ) : (
-                    grouped.map(([year, items]) => (
+                    visibleGroups.map(([year, items]) => (
                       <YearGroup key={year} year={year} items={items} />
                     ))
                   )}
                 </motion.div>
               </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ============================== NOMINATION CTA ============================== */}
-      <section className="bg-[#7DC0F1]/[0.06]">
-        <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-28">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-4">
-              <SectionHead
-                kicker="Take part"
-                title="Nominate a researcher"
-                intro="Nominations open ahead of each award cycle and are reviewed by specialised juries and the Awards Council."
-              />
-            </div>
-
-            <div className="lg:col-span-8">
-              <ul className="divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]">
-                <Mark title="Eligibility">
-                  Criteria vary by programme — Arab researchers worldwide for
-                  the Kuwait Prize, Kuwaiti PhD holders for the Jaber Al-Ahmad
-                  Award.
-                </Mark>
-                <Mark title="Review">
-                  Candidates are assessed by field-specific arbitration and
-                  selection committees before Board approval.
-                </Mark>
-                <Mark title="Recognition">
-                  Laureates receive a cash award, a medal, and a certificate of
-                  recognition at the annual ceremony.
-                </Mark>
-              </ul>
-
-              <Link
-                href="/prizes/nominate"
-                className="group mt-10 inline-flex items-center gap-2 rounded-sm bg-[#EC601B] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#d45415]"
-              >
-                Start a nomination
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="transition-transform group-hover:translate-x-0.5"
+              {/* show all */}
+              {isBrowsingAll && hiddenCount > 0 ? (
+                <button
+                  onClick={() => setShowAll(true)}
+                  className="group mt-8 inline-flex items-center gap-2 border-t border-[#1D2D44]/[0.08] pt-8 text-sm font-semibold text-[#1D2D44]"
                 >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </Link>
+                  Show all {grouped.count} laureates
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={ORANGE}
+                    strokeWidth="2"
+                    className="transition-transform group-hover:translate-y-0.5"
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+              ) : null}
             </div>
           </div>
         </div>
       </section>
-      </main>
-      <Footer
-        logo="/image/logoFooter.png"
-        logoText="Kuwait Foundation for the Advancement of Sciences (KFAS)"
-      />
-    </>
+    </main>
   );
 }

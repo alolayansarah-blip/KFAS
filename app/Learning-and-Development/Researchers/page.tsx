@@ -145,8 +145,8 @@ export default function ResearchersPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/Research.webp"
-              alt="Researchers supported by KFAS learning and development programs"
+              src="/image/Researcher.jpeg"
+              alt="Researcher in a university research facility"
               fill
               priority
               quality={90}
