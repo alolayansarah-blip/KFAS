@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useRef, useState, useLayoutEffect, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -72,8 +72,6 @@ function RailSection({
   );
 }
 
-const HEADER_H = 72;
-
 // ─── Grant program switcher (transfer between the 5 grant pages) ─────────────
 // Drop this same <GrantTabs /> into all five grant pages — the active tab is
 // detected automatically from the URL, so no per-page edits are needed.
@@ -100,38 +98,15 @@ const GRANT_PAGES = [
 function GrantTabs() {
   const pathname = usePathname();
   const router = useRouter();
-  const [headerH, setHeaderH] = useState(HEADER_H);
-  const navRef = useRef<HTMLElement>(null);
   const activeHref =
     GRANT_PAGES.find(
       (p) => pathname === p.href || pathname?.startsWith(p.href + "/"),
     )?.href ?? "";
 
-  useLayoutEffect(() => {
-    const header = document.querySelector("header");
-    if (!header) return;
-
-    const measure = () => {
-      setHeaderH(header.getBoundingClientRect().height);
-    };
-
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(header);
-
-    window.addEventListener("resize", measure);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
   return (
     <nav
-      ref={navRef}
       aria-label="Grant programs"
-      className="sticky z-30 border-b border-[#1D2D44]/[0.08] bg-white/90 backdrop-blur"
-      style={{ top: headerH }}
+      className="border-b border-[#1D2D44]/[0.08] bg-white"
     >
       <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
         <div className="py-2.5 lg:hidden">
