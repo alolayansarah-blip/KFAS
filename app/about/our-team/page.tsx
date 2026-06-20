@@ -279,7 +279,7 @@ export default function OurTeamPage() {
         {/* ── Deputy Directors General ── */}
         <section ref={deputiesRef} className="bg-white pb-20">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 justify-items-center">
               <ProfileCard
                 imageSrc="/image/DrSalehAlqgeely.png"
                 imageAlt="Saleh A. Alaqely"
@@ -287,6 +287,8 @@ export default function OurTeamPage() {
                 title="Deputy Director General - Support Services"
                 isInView={isDeputiesInView}
                 animationDelay={0}
+                layout="vertical"
+                showAccents
               />
               <ProfileCard
                 imageSrc="/image/DrFahadAlfadhli.png"
@@ -295,6 +297,8 @@ export default function OurTeamPage() {
                 title="Deputy Director General - Scientific Programs"
                 isInView={isDeputiesInView}
                 animationDelay={0.1}
+                layout="vertical"
+                showAccents
               />
             </div>
           </div>
