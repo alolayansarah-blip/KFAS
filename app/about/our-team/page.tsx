@@ -21,7 +21,6 @@ function ProfileCard({
   layout = "horizontal",
   compact = false,
   large = false,
-  showAccents = false,
 }: {
   imageSrc?: string;
   imageAlt: string;
@@ -33,7 +32,6 @@ function ProfileCard({
   layout?: "horizontal" | "vertical";
   compact?: boolean;
   large?: boolean;
-  showAccents?: boolean;
 }) {
   const isVertical = layout === "vertical";
 
@@ -48,12 +46,8 @@ function ProfileCard({
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: animationDelay, ease: EASE }}
         >
-          {showAccents && (
-            <>
-              <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
-              <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
-            </>
-          )}
+          <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
+          <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
           <div
             className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
           >
@@ -104,12 +98,8 @@ function ProfileCard({
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
         transition={{ duration: 0.6, delay: animationDelay, ease: EASE }}
       >
-        {showAccents && (
-          <>
-            <div className="absolute -left-2 -top-2 h-7 w-7 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
-            <div className="absolute -bottom-2 -right-2 h-7 w-7 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
-          </>
-        )}
+        <div className="absolute -left-2 -top-2 h-7 w-7 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
+        <div className="absolute -bottom-2 -right-2 h-7 w-7 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
         <div
           className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
         >
@@ -270,7 +260,6 @@ export default function OurTeamPage() {
                 isInView={isInView}
                 layout="vertical"
                 large
-                showAccents
               />
             </div>
           </div>
@@ -288,7 +277,6 @@ export default function OurTeamPage() {
                 isInView={isDeputiesInView}
                 animationDelay={0}
                 layout="vertical"
-                showAccents
               />
               <ProfileCard
                 imageSrc="/image/DrFahadAlfadhli.png"
@@ -298,7 +286,6 @@ export default function OurTeamPage() {
                 isInView={isDeputiesInView}
                 animationDelay={0.1}
                 layout="vertical"
-                showAccents
               />
             </div>
           </div>
