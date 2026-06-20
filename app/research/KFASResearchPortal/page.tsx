@@ -218,7 +218,7 @@ function FaqRow({
         alt={imageAlt}
         fill
         sizes="50vw"
-        className="object-contain object-center transition-transform duration-[1.2s] ease-out hover:scale-105"
+        className="object-contain object-center transition-transform duration-1200 ease-out hover:scale-105"
       />
     </motion.div>
   );
