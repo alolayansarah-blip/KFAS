@@ -151,16 +151,17 @@ export default function ScientificConferenceSponsorshipPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/SCSBanner.png"
-              alt="Scientific Conference Sponsorship"
+              src="/image/KFASBuilding3.jpg"
+              alt="Scientific Conference Sponsorship — KFAS building"
               fill
               priority
+              quality={65}
               sizes="100vw"
-              className="scale-110 object-cover object-center"
+              className="scale-110 object-cover object-[center_22%]"
             />
             <div
               aria-hidden
@@ -182,7 +183,7 @@ export default function ScientificConferenceSponsorshipPage() {
 
           {/* padding on the wrapper, max-width on the inner div — matches body sections */}
           <motion.div
-            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <div className="mx-auto w-full max-w-[1280px]">
@@ -193,8 +194,8 @@ export default function ScientificConferenceSponsorshipPage() {
                 transition={{ duration: 0.55, ease: EASE }}
               >
                 <span>Research</span>
-                <span className="text-white/25">/</span>
-                <span>Scientific Conference Sponsorship</span>
+                {/* <span className="text-white/25">/</span>
+                <span>Scientific Conference Sponsorship</span> */}
               </motion.div>
 
               <div className="overflow-hidden">
