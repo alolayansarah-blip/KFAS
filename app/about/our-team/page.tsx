@@ -21,6 +21,7 @@ function ProfileCard({
   layout = "horizontal",
   compact = false,
   large = false,
+  showAccents = false,
 }: {
   imageSrc?: string;
   imageAlt: string;
@@ -32,10 +33,10 @@ function ProfileCard({
   layout?: "horizontal" | "vertical";
   compact?: boolean;
   large?: boolean;
+  showAccents?: boolean;
 }) {
   const isVertical = layout === "vertical";
 
-  // Uniform image size for every card — no size variants, no cropping.
   const imgSize = "w-44 h-44 sm:w-52 sm:h-52";
 
   if (isVertical) {
@@ -47,8 +48,12 @@ function ProfileCard({
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: animationDelay, ease: EASE }}
         >
-          <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
-          <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
+          {showAccents && (
+            <>
+              <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
+              <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
+            </>
+          )}
           <div
             className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
           >
@@ -91,7 +96,6 @@ function ProfileCard({
     );
   }
 
-  // Horizontal layout
   return (
     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
       <motion.div
@@ -100,8 +104,12 @@ function ProfileCard({
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
         transition={{ duration: 0.6, delay: animationDelay, ease: EASE }}
       >
-        <div className="absolute -left-2 -top-2 h-7 w-7 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
-        <div className="absolute -bottom-2 -right-2 h-7 w-7 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
+        {showAccents && (
+          <>
+            <div className="absolute -left-2 -top-2 h-7 w-7 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
+            <div className="absolute -bottom-2 -right-2 h-7 w-7 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
+          </>
+        )}
         <div
           className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
         >
@@ -262,6 +270,7 @@ export default function OurTeamPage() {
                 isInView={isInView}
                 layout="vertical"
                 large
+                showAccents
               />
             </div>
           </div>
@@ -294,7 +303,7 @@ export default function OurTeamPage() {
         {/* ── Chief Officers ── */}
         <section ref={officersRef} className="bg-white pb-20">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-12 justify-items-center max-w-3xl mx-auto">
               <ProfileCard
                 imageSrc="/image/AbdullahBuQmashah.png"
                 imageAlt="Abdullah S. Abu Qumasha"
@@ -311,15 +320,6 @@ export default function OurTeamPage() {
                 title="Chief Enterprise Development Officer"
                 isInView={isOfficersInView}
                 animationDelay={0.1}
-                layout="vertical"
-              />
-              <ProfileCard
-                imageSrc="/image/AliBuMjdad.png"
-                imageAlt="Ali Y. Bumajdad"
-                name="Ali Y. Bumajdad"
-                title="Chief Research & Technology Officer"
-                isInView={isOfficersInView}
-                animationDelay={0.2}
                 layout="vertical"
               />
             </div>
