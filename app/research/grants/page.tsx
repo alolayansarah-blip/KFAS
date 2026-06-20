@@ -232,7 +232,7 @@ export default function GrantsPage() {
             >
               <span>Research</span>
               <span className="text-white/25">/</span>
-              <span>Grants</span>
+              {/* <span>Grants</span> */}
             </motion.div>
             <div className="overflow-hidden">
               <motion.h1

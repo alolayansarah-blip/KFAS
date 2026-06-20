@@ -184,7 +184,7 @@ export default function OurTeamPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-end justify-start h-[60vh] min-h-[420px]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <img
@@ -209,7 +209,7 @@ export default function OurTeamPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-14 pt-28"
+            className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div

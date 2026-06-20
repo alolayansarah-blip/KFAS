@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, useLayoutEffect, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -101,6 +101,8 @@ function CtaLink({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
+const HEADER_H = 72;
+
 // ─── Grant program switcher (transfer between the 5 grant pages) ─────────────
 // Drop this same <GrantTabs /> into all five grant pages — the active tab is
 // detected automatically from the URL, so no per-page edits are needed.
@@ -127,29 +129,49 @@ const GRANT_PAGES = [
 function GrantTabs() {
   const pathname = usePathname();
   const router = useRouter();
+  const [headerH, setHeaderH] = useState(HEADER_H);
+  const navRef = useRef<HTMLElement>(null);
   const activeHref =
     GRANT_PAGES.find(
       (p) => pathname === p.href || pathname?.startsWith(p.href + "/"),
     )?.href ?? "";
 
+  useLayoutEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+
+    const measure = () => {
+      setHeaderH(header.getBoundingClientRect().height);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(header);
+
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
   return (
     <nav
+      ref={navRef}
       aria-label="Grant programs"
-      // Sticky offset: if your Header is fixed/sticky, change top-0 to the
-      // header height (e.g. top-[88px]) so this bar rests just beneath it.
-      className="sticky top-0 z-30 border-b border-[#1D2D44]/[0.08] bg-white/90 backdrop-blur"
+      className="sticky z-30 border-b border-[#1D2D44]/[0.08] bg-white/90 backdrop-blur"
+      style={{ top: headerH }}
     >
       <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
-        {/* Mobile: dropdown */}
-        <div className="py-3 lg:hidden">
+        <div className="py-2.5 lg:hidden">
           <label htmlFor="grant-switcher" className="sr-only">
-            Jump to grant program
+            Jump to another grant program
           </label>
           <select
             id="grant-switcher"
             value={activeHref}
             onChange={(e) => router.push(e.target.value)}
-            className="w-full border border-[#1D2D44]/15 bg-white px-4 py-3 font-poppins text-[14px] font-medium text-[#1D2D44] focus:border-[#EC601B] focus:outline-none"
+            className="w-full border border-[#1D2D44]/15 bg-white px-4 py-2.5 font-poppins text-[13px] font-medium text-[#1D2D44] focus:border-[#EC601B] focus:outline-none"
           >
             {GRANT_PAGES.map((p) => (
               <option key={p.href} value={p.href}>
@@ -159,30 +181,21 @@ function GrantTabs() {
           </select>
         </div>
 
-        {/* Desktop: tabs */}
-        <ul className="hidden items-stretch gap-8 overflow-x-auto lg:flex">
+        <ul className="hidden grid-cols-2 gap-2 py-2.5 sm:grid-cols-3 lg:grid">
           {GRANT_PAGES.map((p) => {
             const active = p.href === activeHref;
             return (
-              <li key={p.href} className="shrink-0">
+              <li key={p.href}>
                 <Link
                   href={p.href}
                   aria-current={active ? "page" : undefined}
-                  className={`group relative flex items-center whitespace-nowrap py-5 font-poppins text-[12.5px] font-medium tracking-[0.02em] transition-colors ${
+                  className={`block rounded-full border px-3 py-2 text-center font-poppins text-[11.5px] font-medium leading-snug tracking-[0.01em] transition-all duration-300 sm:text-[12px] ${
                     active
-                      ? "text-[#EC601B]"
-                      : "text-[#1D2D44]/55 hover:text-[#1D2D44]"
+                      ? "border-[#EC601B] bg-[#EC601B] text-white"
+                      : "border-[#1D2D44]/15 text-[#1D2D44]/65 hover:border-[#EC601B] hover:text-[#EC601B]"
                   }`}
                 >
                   {p.label}
-                  <span
-                    aria-hidden
-                    className={`absolute inset-x-0 bottom-0 h-[2px] origin-left bg-[#EC601B] transition-transform duration-300 ${
-                      active
-                        ? "scale-x-100"
-                        : "scale-x-0 group-hover:scale-x-50"
-                    }`}
-                  />
                 </Link>
               </li>
             );
@@ -288,8 +301,8 @@ export default function AppliedResearchGrantsPage() {
               >
                 Grants
               </Link>
-              <span className="text-white/25">/</span>
-              <span>Applied Research</span>
+              {/* <span className="text-white/25">/</span> */}
+              {/* <span>Applied Research</span> */}
             </motion.div>
             <div className="overflow-hidden">
               <motion.h1
