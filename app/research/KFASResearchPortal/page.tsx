@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
@@ -97,23 +97,49 @@ const FAQ_ITEMS = [
   },
 ];
 
-// ─── Shared UI ────────────────────────────────────────────────────────────────
+// ─── Shared UI (editorial) ─────────────────────────────────────────────────────
 
-function Divider() {
+// Sticky rail head: orange kicker bar, title, optional intro
+function SectionHead({
+  title,
+  intro,
+  children,
+}: {
+  title: string;
+  intro?: string;
+  children?: ReactNode;
+}) {
   return (
-    <div className="mt-5 h-px bg-gradient-to-r from-[#EC601B]/40 via-[#BBDEFB40] to-transparent" />
+    <div className="lg:sticky lg:top-28">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.65, ease: EASE }}
+      >
+        <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+        <h2 className="mt-5 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem]">
+          {title}
+        </h2>
+        {intro && (
+          <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
+            {intro}
+          </p>
+        )}
+        {children}
+      </motion.div>
+    </div>
   );
 }
 
-function Bullet({ faded = false }: { faded?: boolean }) {
+// Hairline list marker (grows on row hover)
+function Mark() {
   return (
-    <span
-      className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${faded ? "bg-[#EC601B]/40" : "bg-[#EC601B]"}`}
-    />
+    <span className="mt-[13px] h-px w-3.5 shrink-0 bg-[#EC601B] transition-all duration-300 group-hover/li:w-6" />
   );
 }
 
-// ─── FAQ Row ──────────────────────────────────────────────────────────────────
+// ─── FAQ Row (orange section — kept) ────────────────────────────────────────────
 
 function FaqRow({
   item,
@@ -122,8 +148,7 @@ function FaqRow({
   item: (typeof FAQ_ITEMS)[number];
   index: number;
 }) {
-  const { label, question, answer, image, imageAlt, imageCaption, reverse } =
-    item;
+  const { label, question, answer, image, imageAlt, reverse } = item;
 
   const textCell = (
     <motion.div
@@ -133,16 +158,6 @@ function FaqRow({
       viewport={{ once: true }}
       transition={{ duration: 0.75, delay: 0.1, ease: EASE }}
     >
-      {/* subtle radial highlight */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.07) 0%, transparent 65%)",
-        }}
-      />
-
       {/* label */}
       <motion.span
         className="mb-5 flex items-center gap-3 font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50"
@@ -188,7 +203,8 @@ function FaqRow({
     </motion.div>
   );
 
-  // hidden on mobile (below sm), visible on sm and above
+  // hidden on mobile (below sm), visible on sm and above.
+  // object-contain so the full screenshot shows without cropping.
   const imageCell = (
     <motion.div
       className="relative overflow-hidden hidden sm:block"
@@ -202,20 +218,8 @@ function FaqRow({
         alt={imageAlt}
         fill
         sizes="50vw"
-        className="object-cover object-center transition-transform duration-[1.2s] ease-out hover:scale-105"
+        className="object-contain object-center transition-transform duration-[1.2s] ease-out hover:scale-105"
       />
-      {/* bottom caption overlay */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 h-24 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(236,96,27,0.7) 0%, transparent 100%)",
-        }}
-      />
-      <span className="absolute bottom-3 left-5 font-poppins text-[10px] font-semibold uppercase tracking-[0.2em] text-white/65">
-        {imageCaption}
-      </span>
     </motion.div>
   );
 
@@ -270,7 +274,7 @@ export default function KFASResearchPortalPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -279,7 +283,7 @@ export default function KFASResearchPortalPage() {
               fill
               priority
               sizes="100vw"
-              className="scale-110 object-cover object-center"
+              className="scale-105 object-cover object-center"
             />
             <div
               aria-hidden
@@ -300,7 +304,7 @@ export default function KFASResearchPortalPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-[1280px] px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -321,7 +325,9 @@ export default function KFASResearchPortalPage() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                KFAS Research Portal
+                KFAS Research
+                <br />
+                Portal
               </motion.h1>
             </div>
 
@@ -336,23 +342,19 @@ export default function KFASResearchPortalPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── Overview ── */}
-        <section className="px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+        {/* ── Overview (full-width editorial lead) ── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div className="max-w-[880px]" {...fadeUp(0)}>
-              <div className="mb-6 flex items-center gap-3">
-                <span className="h-px w-8 shrink-0 bg-[#EC601B]" />
-                <span className="font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
-                  Overview
-                </span>
-              </div>
-
-              <h2 className="font-poppins text-[1.55rem] font-semibold leading-[1.3] tracking-tight text-[#1D2D44] sm:text-[1.8rem]">
+            <motion.div className="max-w-3xl" {...fadeUp(0)}>
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
+                Overview
+              </p>
+              <h2 className="mt-4 font-poppins text-[1.7rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[2.1rem]">
                 The Gateway to Impactful Research in Kuwait
               </h2>
-              <Divider />
 
-              <p className="mt-7 font-poppins text-[14.5px] font-light leading-[1.9] text-[#1D2D44]/65">
+              <p className="mt-7 font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70">
                 The KFAS Research Portal serves as an open window, that
                 showcases all the research and impactful achievements of KFAS.
                 This innovative research information management system offers
@@ -391,43 +393,37 @@ export default function KFASResearchPortalPage() {
           </div>
         </section>
 
-        {/* ── Paving the Way ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#BBDEFB40]">
+        {/* ── Paving the Way (rail · tint) ── */}
+        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div {...fadeUp(0)}>
-              <h2 className="font-poppins text-2xl font-semibold leading-tight tracking-tight text-[#1D2D44] sm:text-3xl">
-                KFAS: Paving the Way
-              </h2>
-              <Divider />
-            </motion.div>
-
-            <motion.p
-              className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65"
-              {...fadeUp(0.05)}
-            >
-              KFAS supports Kuwait&apos;s Research Community, both individually
-              and institutionally. The KFAS Research Portal aims to:
-            </motion.p>
-
-            <ul className="mt-5 space-y-3">
-              {PORTAL_AIMS.map((item, i) => (
-                <motion.li
-                  key={item}
-                  className="flex items-start gap-4 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65"
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: i * 0.07 }}
-                >
-                  <Bullet />
-                  <span>{item}</span>
-                </motion.li>
-              ))}
-            </ul>
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="KFAS: Paving the Way"
+                  intro="KFAS supports Kuwait's Research Community, both individually and institutionally. The KFAS Research Portal aims to:"
+                />
+              </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <ul className="divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]">
+                  {PORTAL_AIMS.map((item, i) => (
+                    <motion.li
+                      key={item}
+                      {...fadeUp(0.05 + i * 0.08)}
+                      className="group/li flex gap-5 py-7 sm:gap-7 sm:py-9"
+                    >
+                      <Mark />
+                      <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+                        {item}
+                      </p>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* ── FAQ (redesigned) ── */}
+        {/* ── FAQ (orange section — kept) ── */}
         <section className="overflow-hidden bg-[#EC601B] px-6 sm:px-8 lg:px-12">
           <div className="mx-auto w-full max-w-[1280px]">
             {FAQ_ITEMS.map((item, i) => (
@@ -436,127 +432,117 @@ export default function KFASResearchPortalPage() {
           </div>
         </section>
 
-        {/* ── Portal Showcases ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 bg-[#BBDEFB40]">
+        {/* ── Portal Showcases (rail · white) ── */}
+        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div {...fadeUp(0)}>
-              <h2 className="font-poppins text-2xl font-semibold leading-tight tracking-tight text-[#1D2D44] sm:text-3xl">
-                KFAS Research Portal:
-              </h2>
-              <Divider />
-            </motion.div>
-
-            <motion.p
-              className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65"
-              {...fadeUp(0.05)}
-            >
-              The portal showcases the following:
-            </motion.p>
-
-            <ul className="mt-5 space-y-5">
-              {PORTAL_SHOWCASES.map(({ title, body }, i) => (
-                <motion.li
-                  key={title}
-                  className="flex items-start gap-4 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65"
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: i * 0.07 }}
-                >
-                  <Bullet />
-                  <span>
-                    <span className="font-semibold text-[#1D2D44]">
-                      {title}:{" "}
-                    </span>
-                    {body}
-                  </span>
-                </motion.li>
-              ))}
-
-              {/* Research Performance Metrics (nested) */}
-              <motion.li
-                className="flex items-start gap-4 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65"
-                initial={{ opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: 0.21 }}
-              >
-                <Bullet />
-                <span className="flex w-full flex-col gap-1">
-                  <span>
-                    <span className="font-semibold text-[#1D2D44]">
-                      Research Performance Metrics:{" "}
-                    </span>
-                    The portal also provides:
-                  </span>
-                  <ul className="mt-3 space-y-3">
-                    {PERFORMANCE_METRICS.map(({ title, body }) => (
-                      <li key={title} className="flex items-start gap-3">
-                        <Bullet faded />
-                        <span>
-                          <span className="font-semibold text-[#1D2D44]">
-                            {title}:{" "}
-                          </span>
-                          {body}
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead
+                  title="KFAS Research Portal:"
+                  intro="The portal showcases the following:"
+                />
+              </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <ul className="divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]">
+                  {PORTAL_SHOWCASES.map(({ title, body }, i) => (
+                    <motion.li
+                      key={title}
+                      {...fadeUp(0.05 + i * 0.08)}
+                      className="group/li flex gap-5 py-7 sm:gap-7 sm:py-9"
+                    >
+                      <Mark />
+                      <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+                        <span className="font-semibold text-[#1D2D44]">
+                          {title}:{" "}
                         </span>
-                      </li>
-                    ))}
-                  </ul>
-                </span>
-              </motion.li>
-            </ul>
+                        {body}
+                      </p>
+                    </motion.li>
+                  ))}
+
+                  {/* Research Performance Metrics (nested) */}
+                  <motion.li
+                    {...fadeUp(0.05 + PORTAL_SHOWCASES.length * 0.08)}
+                    className="group/li flex gap-5 py-7 sm:gap-7 sm:py-9"
+                  >
+                    <Mark />
+                    <div className="min-w-0 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+                      <span>
+                        <span className="font-semibold text-[#1D2D44]">
+                          Research Performance Metrics:{" "}
+                        </span>
+                        The portal also provides:
+                      </span>
+                      <ul className="mt-3 space-y-3">
+                        {PERFORMANCE_METRICS.map(({ title, body }) => (
+                          <li key={title} className="flex items-start gap-3">
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
+                            <span>
+                              <span className="font-semibold text-[#1D2D44]">
+                                {title}:{" "}
+                              </span>
+                              {body}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.li>
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* ── Contact ── */}
-        <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-12 border-t border-[#1D2D44]/08">
+        {/* ── Contact (rail · tint) ── */}
+        <section className="border-t border-[#1D2D44]/[0.08] bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div {...fadeUp(0)}>
-              <h2 className="font-poppins text-2xl font-semibold leading-tight tracking-tight text-[#1D2D44] sm:text-3xl">
-                Contact Us:
-              </h2>
-              <Divider />
-            </motion.div>
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead title="Contact Us:" />
+              </div>
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <div className="space-y-3 font-poppins text-[15px] font-light text-[#1D2D44]/65">
+                  <motion.p {...fadeUp(0.05)}>
+                    If you have any inquiries, please email us at:{" "}
+                    <a
+                      href="mailto:pure@kfas.org.kw"
+                      className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+                    >
+                      pure@kfas.org.kw
+                    </a>
+                  </motion.p>
 
-            <div className="mt-8 space-y-3 font-poppins text-[15px] font-light text-[#1D2D44]/65">
-              <motion.p {...fadeUp(0.05)}>
-                If you have any inquiries, please email us at:{" "}
-                <a
-                  href="mailto:pure@kfas.org.kw"
-                  className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
-                >
-                  pure@kfas.org.kw
-                </a>
-              </motion.p>
+                  <motion.p {...fadeUp(0.1)}>
+                    Telephone:{" "}
+                    <a
+                      href="tel:+96522278125"
+                      className="font-medium text-[#1D2D44] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:text-[#EC601B]"
+                    >
+                      (+965) 22278125
+                    </a>{" "}
+                    or{" "}
+                    <a
+                      href="tel:+96522278126"
+                      className="font-medium text-[#1D2D44] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:text-[#EC601B]"
+                    >
+                      22278126
+                    </a>
+                  </motion.p>
 
-              <motion.p {...fadeUp(0.1)}>
-                Telephone:{" "}
-                <a
-                  href="tel:+96522278125"
-                  className="font-medium text-[#1D2D44] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:text-[#EC601B]"
-                >
-                  (+965) 22278125
-                </a>{" "}
-                or{" "}
-                <a
-                  href="tel:+96522278126"
-                  className="font-medium text-[#1D2D44] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:text-[#EC601B]"
-                >
-                  22278126
-                </a>
-              </motion.p>
-
-              <motion.p
-                className="pt-6 text-[15px] font-light leading-[1.85] sm:text-[16px]"
-                {...fadeUp(0.15)}
-              >
-                Stay engaged, stay connected and let the
-                <br />
-                <span className="font-semibold text-[#1D2D44]">
-                  KFAS Research Portal
-                </span>{" "}
-                be your gateway to impactful research
-              </motion.p>
+                  <motion.p
+                    className="pt-6 text-[15px] font-light leading-[1.85] sm:text-[16px]"
+                    {...fadeUp(0.15)}
+                  >
+                    Stay engaged, stay connected and let the
+                    <br />
+                    <span className="font-semibold text-[#1D2D44]">
+                      KFAS Research Portal
+                    </span>{" "}
+                    be your gateway to impactful research
+                  </motion.p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

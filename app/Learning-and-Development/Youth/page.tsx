@@ -193,18 +193,18 @@ export default function YouthPage() {
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden bg-[#121820]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <div className="absolute inset-0 bg-[#1D2D44]">
               <Image
-                src="/image/Youth.jpg"
+                src="/image/youth.webp"
                 alt="Youth engaged in hands-on learning and development"
                 fill
                 priority
                 quality={90}
                 sizes="100vw"
-                className="object-cover object-center"
+                className="scale-105 object-cover object-center"
               />
               <div
                 className="absolute inset-0"
@@ -226,7 +226,7 @@ export default function YouthPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <div className={`${CONTAINER} w-full`}>

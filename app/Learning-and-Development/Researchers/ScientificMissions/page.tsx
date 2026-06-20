@@ -2,6 +2,7 @@
 
 import { Fragment, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -52,17 +53,17 @@ export default function ScientificMissionsPage() {
         {/* ─── Hero (unchanged) ──────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex min-h-[440px] items-end justify-start overflow-hidden bg-[#1D2D44] h-[62vh]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <div className="absolute inset-0 bg-[#1D2D44]">
             <Image
-              src="/image/SM.jpg"
+              src="/image/ScientificMissions.webp"
               alt="Scientific missions and research collaboration"
               fill
               priority
               quality={90}
               sizes="100vw"
-              className="object-cover object-center"
+              className="scale-105 object-cover object-center"
             />
             <div
               className="absolute inset-0"
@@ -85,7 +86,7 @@ export default function ScientificMissionsPage() {
           <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-32 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -96,7 +97,12 @@ export default function ScientificMissionsPage() {
             >
               <span>Learning &amp; Development</span>
               <span className="text-white/30">/</span>
-              <span className="text-white/80">Researchers</span>
+              <Link
+                href="/Learning-and-Development/Researchers"
+                className="text-white/80 transition-colors hover:text-white"
+              >
+                Researchers
+              </Link>
             </motion.div>
 
             <div className="overflow-hidden pb-1">
@@ -133,23 +139,29 @@ export default function ScientificMissionsPage() {
             }}
           />
           <div className="relative mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-            <motion.p
-              className="font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
+            <motion.div
+              className="max-w-3xl"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-70px" }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              This program is designed to enable Kuwaiti researchers and
-              academics to present their research findings at prestigious and
-              academically accredited international and regional scientific
-              conferences. The program aims to provide participants with the
-              opportunity to present their research, exchange experiences,
-              acquire knowledge, and establish connections with scientists and
-              researchers from around the world, in addition to viewing the
-              latest results of scientific research and studies in their
-              respective fields of specialization.
-            </motion.p>
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
+                Overview
+              </p>
+              <p className="mt-5 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                This program is designed to enable Kuwaiti researchers and
+                academics to present their research findings at prestigious and
+                academically accredited international and regional scientific
+                conferences. The program aims to provide participants with the
+                opportunity to present their research, exchange experiences,
+                acquire knowledge, and establish connections with scientists and
+                researchers from around the world, in addition to viewing the
+                latest results of scientific research and studies in their
+                respective fields of specialization.
+              </p>
+            </motion.div>
           </div>
         </section>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -52,7 +53,7 @@ export default function ScholarlyPublicationPage() {
         {/* ─── Hero (no image) ───────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex min-h-[440px] items-end justify-start overflow-hidden bg-[#1D2D44] h-[62vh]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <div
@@ -76,7 +77,7 @@ export default function ScholarlyPublicationPage() {
           <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-32 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -87,7 +88,12 @@ export default function ScholarlyPublicationPage() {
             >
               <span>Learning &amp; Development</span>
               <span className="text-white/30">/</span>
-              <span className="text-white/80">Researchers</span>
+              <Link
+                href="/Learning-and-Development/Researchers"
+                className="text-white/80 transition-colors hover:text-white"
+              >
+                Researchers
+              </Link>
             </motion.div>
 
             <div className="overflow-hidden pb-1">
@@ -124,27 +130,33 @@ export default function ScholarlyPublicationPage() {
             }}
           />
           <div className="relative mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-            <motion.p
-              className="font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
+            <motion.div
+              className="max-w-3xl"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-70px" }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              A reward of appreciation amounting to Kuwaiti Dinars Five Hundred
-              (KD 500) shall be granted to participants who have received
-              support through any of the following programs: PhD Supplementary
-              Fund, Scientific Mission Grant, Research Fellowship Grant, or
-              Scholarship Bridging Grant, and have subsequently published their
-              research work in international periodicals and journals ranked
-              within the top 50% (Q1 or Q2) according to the Journal Citation
-              Reports (JCR).
-            </motion.p>
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
+                Overview
+              </p>
+              <p className="mt-5 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                A reward of appreciation amounting to Kuwaiti Dinars Five
+                Hundred (KD 500) shall be granted to participants who have
+                received support through any of the following programs: PhD
+                Supplementary Fund, Scientific Mission Grant, Research
+                Fellowship Grant, or Scholarship Bridging Grant, and have
+                subsequently published their research work in international
+                periodicals and journals ranked within the top 50% (Q1 or Q2)
+                according to the Journal Citation Reports (JCR).
+              </p>
+            </motion.div>
           </div>
         </section>
 
         {/* ─── Eligibility Criteria ──────────────────────────────────────── */}
-        <section className="relative bg-[#7DC0F1]/[0.07] py-20 sm:py-28">
+        <section className="relative bg-[#7DC0F1]/[0.06] py-20 sm:py-28">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
@@ -160,7 +172,7 @@ export default function ScholarlyPublicationPage() {
 
             <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
               <motion.ul
-                className="max-w-3xl divide-y divide-[#1D2D44]/8"
+                className="max-w-3xl divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -223,7 +235,7 @@ export default function ScholarlyPublicationPage() {
 
             <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
               <motion.ul
-                className="max-w-3xl divide-y divide-[#1D2D44]/8"
+                className="max-w-3xl divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -244,7 +256,7 @@ export default function ScholarlyPublicationPage() {
         </section>
 
         {/* ─── Application Submission ────────────────────────────────────── */}
-        <section className="relative bg-[#7DC0F1]/[0.07] py-20 sm:py-28">
+        <section className="relative bg-[#7DC0F1]/[0.06] py-20 sm:py-28">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
@@ -260,7 +272,7 @@ export default function ScholarlyPublicationPage() {
 
             <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
               <motion.ul
-                className="max-w-3xl divide-y divide-[#1D2D44]/8"
+                className="max-w-3xl divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -326,7 +338,7 @@ export default function ScholarlyPublicationPage() {
 
             <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
               <motion.div
-                className="grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2"
+                className="grid max-w-3xl grid-cols-1 gap-x-12 sm:grid-cols-2"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -340,9 +352,9 @@ export default function ScholarlyPublicationPage() {
                 ].map((grant) => (
                   <div
                     key={grant}
-                    className="group flex items-center gap-4 rounded-xl border border-[#1D2D44]/10 bg-[#7DC0F1]/[0.05] px-5 py-5 transition-colors hover:border-[#EC601B]/40"
+                    className="group/li flex items-center gap-4 border-t border-[#1D2D44]/[0.08] py-5"
                   >
-                    <span className="h-px w-5 shrink-0 bg-[#EC601B] transition-all duration-300 group-hover:w-8" />
+                    <span className="h-px w-3.5 shrink-0 bg-[#EC601B] transition-all duration-300 group-hover/li:w-6" />
                     <span className="font-poppins text-[15px] font-medium text-[#1D2D44]">
                       {grant}
                     </span>

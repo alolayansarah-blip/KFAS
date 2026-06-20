@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -53,7 +54,7 @@ export default function ScholarFellowshipPage() {
         {/* ─── Hero (unchanged) ──────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex min-h-[440px] items-end justify-start overflow-hidden bg-[#1D2D44] h-[62vh]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -63,7 +64,7 @@ export default function ScholarFellowshipPage() {
               priority
               quality={90}
               sizes="100vw"
-              className="scale-105 object-cover object-left-bottom"
+              className="scale-150 object-cover object-right translate-x-[12%]"
             />
             {/* navy overlays for text legibility */}
             <div
@@ -85,7 +86,7 @@ export default function ScholarFellowshipPage() {
           <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-32 sm:px-8 lg:px-12"
+            className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -96,7 +97,12 @@ export default function ScholarFellowshipPage() {
             >
               <span>Learning &amp; Development</span>
               <span className="text-white/30">/</span>
-              <span className="text-white/80">Researchers</span>
+              <Link
+                href="/Learning-and-Development/Researchers"
+                className="text-white/80 transition-colors hover:text-white"
+              >
+                Researchers
+              </Link>
             </motion.div>
 
             <div className="overflow-hidden pb-1">
