@@ -35,15 +35,39 @@ const nextConfig = {
   //     { source: "/research", destination: "/Research" },
   //   ];
   // },
-  // Add headers to help with cache invalidation
+  // Cache static assets aggressively; always revalidate HTML so deploys show immediately.
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 0,
+    },
+  },
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: "/_next/static/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=3600, must-revalidate",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/image/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/((?!_next/static|image|favicon.ico).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-cache, must-revalidate",
           },
         ],
       },
