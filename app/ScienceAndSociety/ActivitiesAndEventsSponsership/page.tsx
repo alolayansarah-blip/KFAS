@@ -418,18 +418,18 @@ export default function ActivitiesAndEventsSponsershipPage() {
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative flex h-[60vh] min-h-[420px] items-end justify-start overflow-hidden bg-[#121820]"
+          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#121820]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <div className="absolute inset-0 bg-[#1D2D44]">
               <Image
-                src="/image/ActivitiesAndEventsSpon.jpg"
+                src="/image/Sponsership.webp"
                 alt="KFAS-sponsored activities and events engagement"
                 fill
                 priority
                 quality={90}
                 sizes="100vw"
-                className="object-cover object-center"
+                className="scale-105 object-cover object-center"
               />
               <div
                 className="absolute inset-0"
@@ -451,7 +451,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full px-6 pb-14 pt-28 sm:px-8 lg:px-12"
+            className="relative z-10 w-full px-6 py-12 sm:px-8 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <div className={`${CONTAINER} w-full`}>
@@ -747,10 +747,23 @@ export default function ActivitiesAndEventsSponsershipPage() {
                 transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
                 whileHover={{ y: -8 }}
               >
-                <ImagePlaceholder
-                  ratio="aspect-[4/3]"
-                  label="Science Communication"
-                />
+                <div
+                  className="relative aspect-[4/3] w-full overflow-hidden border"
+                  style={{ borderColor: `${BRAND.navy}14` }}
+                >
+                  <Image
+                    src="/image/ScienceComms.jpeg"
+                    alt="Science communication and outreach collaboration at KFAS"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 640px"
+                    className="object-cover object-center"
+                  />
+                  <span
+                    className="absolute left-0 top-0 h-1 w-10"
+                    style={{ background: BRAND.orange }}
+                    aria-hidden
+                  />
+                </div>
               </motion.div>
             </div>
 

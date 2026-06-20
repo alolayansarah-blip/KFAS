@@ -739,7 +739,7 @@ export default function ActivitiesAndEventsPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/ActivitiesAndEvents.webp"
+              src="/image/sponsership.webp"
               alt="Activities and events"
               fill
               priority
