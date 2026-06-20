@@ -143,6 +143,21 @@ const SUCCESS_STORIES_IMPACT_ITEMS = [
   "Create long-term partnerships with knowledge providers",
 ] as const;
 
+const SUCCESS_STORY_IMAGES = [
+  {
+    src: "/image/RabdD3.jpeg",
+    alt: "KFAS-supported electric vehicle charging research project",
+  },
+  {
+    src: "/image/RandD1.jpeg",
+    alt: "Vertical farming innovation facility visit",
+  },
+  {
+    src: "/image/RandD2.jpeg",
+    alt: "KFAS-supported food research and development presentation",
+  },
+] as const;
+
 const READY_TO_START_ITEMS = [
   "Review the grant guidelines and eligibility criteria",
   "Prepare a concise project concept",
@@ -210,78 +225,6 @@ function RailList({ items }: { items: readonly string[] }) {
         </motion.li>
       ))}
     </ul>
-  );
-}
-
-// ─── Image placeholder ──────────────────────────────────────────────────────
-// Swap each placeholder for a real photo by replacing the block between the
-// REPLACE markers with:
-//   <Image src="/image/your-photo.jpg" alt="…" fill className="object-cover" />
-// (or a plain <img src="…" className="absolute inset-0 h-full w-full object-cover" />)
-function ImagePlaceholder({
-  ratio = "aspect-[4/3]",
-  label = "Image",
-  className = "",
-}: {
-  ratio?: string;
-  label?: string;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`relative w-full overflow-hidden border ${ratio} ${className}`}
-      style={{ borderColor: "#1D2D4414" }}
-    >
-      {/* ── REPLACE FROM HERE ────────────────────────────────────────── */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(135deg, #7DC0F145 0%, #1D2D4412 100%)",
-        }}
-        aria-hidden
-      />
-      <div
-        className="absolute inset-0 opacity-[0.5]"
-        style={{
-          backgroundImage: "radial-gradient(#1D2D4418 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
-        }}
-        aria-hidden
-      />
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="flex flex-col items-center gap-3">
-          <svg
-            width="34"
-            height="34"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#1D2D44"
-            strokeOpacity="0.4"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.6" />
-            <path d="m21 15-5-5L5 21" />
-          </svg>
-          <span
-            className="font-poppins text-[10px] font-semibold uppercase tracking-[0.3em]"
-            style={{ color: "#1D2D4455" }}
-          >
-            {label}
-          </span>
-        </div>
-      </div>
-      {/* ── REPLACE TO HERE ──────────────────────────────────────────── */}
-
-      {/* corner accent */}
-      <span
-        className="absolute left-0 top-0 h-1 w-10 bg-[#EC601B]"
-        aria-hidden
-      />
-    </div>
   );
 }
 
@@ -620,12 +563,7 @@ export default function RandDPrivatePage() {
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <SectionHead title="Success Stories & Impact">
-                  <p className="mt-5 border-l-2 border-[#EC601B]/30 pl-4 font-poppins text-[0.9rem] font-light italic leading-relaxed text-[#1D2D44]/45">
-                    (This is something we can add so people can see previous
-                    projects)
-                  </p>
-                </SectionHead>
+                <SectionHead title="Success Stories & Impact" />
               </div>
 
               <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
@@ -645,12 +583,21 @@ export default function RandDPrivatePage() {
             </div>
 
             <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[0, 1, 2].map((i) => (
-                <motion.div key={i} {...fadeUp(0.05 + i * 0.08)}>
-                  <ImagePlaceholder
-                    ratio="aspect-[4/3]"
-                    label="Previous Project"
-                  />
+              {SUCCESS_STORY_IMAGES.map((image, i) => (
+                <motion.div key={image.src} {...fadeUp(0.05 + i * 0.08)}>
+                  <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                    <span
+                      className="absolute left-0 top-0 h-1 w-10 bg-[#EC601B]"
+                      aria-hidden
+                    />
+                  </div>
                 </motion.div>
               ))}
             </div>
