@@ -122,7 +122,6 @@ export default function AboutKfasPage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(heroScroll, [0, 1], ["0%", "10%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -149,7 +148,7 @@ export default function AboutKfasPage() {
           ref={heroRef}
           className="relative overflow-hidden flex items-center justify-start h-[540px]"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <div className="absolute inset-0">
             <Image
               src="/image/Who2.webp"
               alt="Who We Are"
@@ -157,7 +156,7 @@ export default function AboutKfasPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="scale-100 object-cover object-[30%_bottom]"
+              className="object-cover object-[30%_bottom]"
             />
             {/* Directional overlay — left heavy for text legibility */}
             <div
@@ -175,11 +174,11 @@ export default function AboutKfasPage() {
                   "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
               }}
             />
-          </motion.div>
+          </div>
 
           {/* Content — vertically centered, left-aligned */}
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-12 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}
