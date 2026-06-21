@@ -423,7 +423,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <div className="absolute inset-0 bg-[#1D2D44]">
               <Image
-                src="/image/Sponsership.webp"
+                src="/image/Act.jpg"
                 alt="KFAS-sponsored activities and events engagement"
                 fill
                 priority
