@@ -15,7 +15,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
 
 const TITLE_LINES = [
-  { text: "Kuwait Foundation", accent: false },
+  { text: "Kuwait Foundation", accent: true },
   { text: "for the Advancement of Sciences", accent: true },
 ];
 
