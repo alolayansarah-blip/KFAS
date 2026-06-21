@@ -24,7 +24,7 @@ export default function Hero({
   titleAr,
   subtitle,
   description,
-  video = "/videos/KFAS-hero.mp4",
+  video = "/videos/KFAS.mp4",
   videoPoster = "/image/KFAS-hero-poster.jpg",
   className = "",
 }: HeroProps) {
@@ -36,7 +36,6 @@ export default function Hero({
     offset: ["start start", "end start"],
   });
 
-  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "5%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.55], ["0%", "-4%"]);
 
@@ -48,7 +47,7 @@ export default function Hero({
       className={`relative flex h-[min(100dvh,52rem)] min-h-[min(100dvh,36rem)] flex-col items-start justify-end overflow-hidden bg-[#1D2D44] ${className}`}
     >
       {/* Video background */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: videoY }}>
+      <div className="absolute inset-0 z-0">
         {video ? (
           <video
             ref={videoRef}
@@ -58,7 +57,7 @@ export default function Hero({
             playsInline
             preload="metadata"
             poster={videoPoster}
-            className="absolute inset-0 h-full w-full scale-110 object-cover"
+            className="absolute inset-0 h-full w-full object-cover saturate-[0.8]"
           >
             <source src={video} type="video/mp4" />
           </video>
@@ -66,12 +65,9 @@ export default function Hero({
           <div className="absolute inset-0 bg-[#1D2D44]" />
         )}
 
-        {/* Very light navy wash — cohesive brand tint */}
-        <div className="pointer-events-none absolute inset-0 z-10 bg-[#1D2D44]/20" />
-
         {/* Navy bottom depth for text legibility */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-[#1D2D44]/65 to-transparent" />
-      </motion.div>
+      </div>
 
       {/* Content */}
       <motion.div
