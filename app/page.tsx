@@ -36,7 +36,8 @@ export default function Home() {
           // titleAr="إرث راسخ"
           // subtitle="KFAS"
           // description="Kuwait Foundation for the Advancement of Sciences "
-          video="/videos/HeroVideo.mp4"
+          video="/videos/KFAS-hero.mp4"
+          videoPoster="/image/KFAS-hero-poster.jpg"
         />
 
         <FlippedCardStack />

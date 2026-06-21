@@ -24,8 +24,8 @@ export default function Hero({
   titleAr,
   subtitle,
   description,
-  video,
-  videoPoster,
+  video = "/videos/KFAS-hero.mp4",
+  videoPoster = "/image/KFAS-hero-poster.jpg",
   className = "",
 }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -36,7 +36,7 @@ export default function Hero({
     offset: ["start start", "end start"],
   });
 
-  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
+  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "5%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.55], ["0%", "-4%"]);
 
@@ -58,7 +58,7 @@ export default function Hero({
             playsInline
             preload="metadata"
             poster={videoPoster}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full scale-110 object-cover"
           >
             <source src={video} type="video/mp4" />
           </video>
@@ -66,11 +66,11 @@ export default function Hero({
           <div className="absolute inset-0 bg-[#1D2D44]" />
         )}
 
-        {/* Clean overlay for text readability */}
-        <div className="pointer-events-none absolute inset-0 z-10 bg-black/35" />
+        {/* Very light navy wash — cohesive brand tint */}
+        <div className="pointer-events-none absolute inset-0 z-10 bg-[#1D2D44]/20" />
 
-        {/* Subtle bottom depth */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-black/45 to-transparent" />
+        {/* Navy bottom depth for text legibility */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-[#1D2D44]/65 to-transparent" />
       </motion.div>
 
       {/* Content */}
