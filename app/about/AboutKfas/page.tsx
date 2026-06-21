@@ -122,7 +122,7 @@ export default function AboutKfasPage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
+  const heroY = useTransform(heroScroll, [0, 1], ["0%", "10%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -151,13 +151,13 @@ export default function AboutKfasPage() {
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
-              src="/image/aboutKFAS.webp"
+              src="/image/Who2.webp"
               alt="Who We Are"
               fill
               priority
               quality={65}
               sizes="100vw"
-              className="scale-125 object-cover object-[right_bottom] translate-x-[10%]"
+              className="scale-100 object-cover object-[30%_bottom]"
             />
             {/* Directional overlay — left heavy for text legibility */}
             <div
