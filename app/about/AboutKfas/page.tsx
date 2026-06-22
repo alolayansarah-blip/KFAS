@@ -146,7 +146,7 @@ export default function AboutKfasPage() {
         {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] xl:object-[50%_70%]"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] xl:object-[50%_75%]"
         >
           <div className="absolute inset-0">
             <Image
@@ -156,7 +156,7 @@ export default function AboutKfasPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="object-cover object-center"
+              className="origin-[center_80%] scale-105 object-cover object-[center_80%]"
             />
             {/* Directional overlay — left heavy for text legibility */}
             <div
@@ -178,7 +178,7 @@ export default function AboutKfasPage() {
 
           {/* Content — vertically centered, left-aligned */}
           <motion.div
-            className="relative z-10 mt-12 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}
