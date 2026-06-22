@@ -150,13 +150,13 @@ export default function AboutKfasPage() {
         >
           <div className="absolute inset-0">
             <Image
-              src="/image/Who2.webp"
+              src="/image/K1.webp"
               alt="Who We Are"
               fill
               priority
               quality={65}
               sizes="100vw"
-              className="object-cover object-[30%_bottom]"
+              className="object-cover object-center"
             />
             {/* Directional overlay — left heavy for text legibility */}
             <div
