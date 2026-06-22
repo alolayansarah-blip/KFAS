@@ -24,20 +24,17 @@ function splitLines(text: string): string[] {
   return text.split(/\||\n/).filter((line) => line.trim());
 }
 
-// Render a line, coloring *word* (asterisks) or "Future" in brand orange.
+// Render a line, coloring any *word* wrapped in asterisks in brand orange.
 function renderAccented(line: string) {
-  return line.split(/(\*[^*]+\*|\bFuture\b)/g).map((segment, index) => {
-    if (segment.length > 2 && segment.startsWith("*") && segment.endsWith("*")) {
+  return line.split(/(\*[^*]+\*)/g).map((segment, index) => {
+    if (
+      segment.length > 2 &&
+      segment.startsWith("*") &&
+      segment.endsWith("*")
+    ) {
       return (
         <span key={index} className="text-[#EC601B]">
           {segment.slice(1, -1)}
-        </span>
-      );
-    }
-    if (segment === "Future") {
-      return (
-        <span key={index} className="text-[#EC601B]">
-          {segment}
         </span>
       );
     }
@@ -50,7 +47,7 @@ export default function Hero({
   titleAr,
   subtitle,
   description,
-  video = "/videos/KFASHero.mp4",
+  video = "/videos/kfaswebsitevid.mp4",
   videoPoster = "/image/KFAS-hero-poster.jpg",
   className = "",
 }: HeroProps) {
@@ -192,7 +189,9 @@ export default function Hero({
         <button
           type="button"
           onClick={togglePlay}
-          aria-label={isPlaying ? "Pause background video" : "Play background video"}
+          aria-label={
+            isPlaying ? "Pause background video" : "Play background video"
+          }
           className="absolute bottom-6 right-6 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/[0.06] text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EC601B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1D2D44] sm:right-8 lg:right-12"
         >
           {isPlaying ? (
