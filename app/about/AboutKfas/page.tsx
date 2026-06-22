@@ -150,7 +150,7 @@ export default function AboutKfasPage() {
         >
           <div className="absolute inset-0">
             <Image
-              src="/image/K1.webp"
+              src="/image/AboutKFAS3.webp"
               alt="Who We Are"
               fill
               priority
