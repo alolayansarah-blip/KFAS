@@ -146,7 +146,7 @@ export default function AboutKfasPage() {
         {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-center justify-start h-[540px]"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] xl:object-[50%_70%]"
         >
           <div className="absolute inset-0">
             <Image

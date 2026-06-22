@@ -24,7 +24,7 @@ export default function Hero({
   titleAr,
   subtitle,
   description,
-  video = "/videos/KFAS.mp4",
+  video = "/videos/kfaswebsitevid.mp4",
   videoPoster = "/image/KFAS-hero-poster.jpg",
   className = "",
 }: HeroProps) {

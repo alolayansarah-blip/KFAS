@@ -36,7 +36,7 @@ export default function Home() {
           // titleAr="إرث راسخ"
           // subtitle="KFAS"
           // description="Kuwait Foundation for the Advancement of Sciences "
-          video="/videos/KFAS.mp4"
+          video="/videos/kfaswebsitevid.mp4"
           videoPoster="/image/KFAS-hero-poster.jpg"
         />
 
