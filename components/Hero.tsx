@@ -24,7 +24,7 @@ export default function Hero({
   titleAr,
   subtitle,
   description,
-  video = "/videos/kfaswebsitevid.mp4",
+  video = "/videos/KFASHero.mp4",
   videoPoster = "/image/KFAS-hero-poster.jpg",
   className = "",
 }: HeroProps) {
@@ -55,9 +55,9 @@ export default function Hero({
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="auto"
             poster={videoPoster}
-            className="absolute inset-0 h-full w-full object-cover saturate-[0.8]"
+            className="absolute inset-0 h-full w-full object-cover "
           >
             <source src={video} type="video/mp4" />
           </video>
