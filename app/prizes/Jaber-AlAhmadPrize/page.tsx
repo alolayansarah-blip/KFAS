@@ -277,23 +277,23 @@ export default function JaberAlAhmadPrizePage() {
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
-  const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
 
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
       <main className="min-h-screen bg-white font-poppins">
-        {/* ── Hero ── */}
+        {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#121820]"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] bg-[#121820]"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <div className="absolute inset-0">
             <Image
               src="/image/Prizes1.png"
               alt=""
               fill
               priority
+              quality={65}
               sizes="100vw"
               className="object-cover object-[center_40%] scale-[1.06] brightness-[0.98] contrast-[1.02]"
             />
@@ -308,10 +308,10 @@ export default function JaberAlAhmadPrizePage() {
                 ].join(", "),
               }}
             />
-          </motion.div>
+          </div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div

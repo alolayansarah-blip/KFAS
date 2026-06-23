@@ -18,8 +18,7 @@ export default function SearchPage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
     <>
@@ -30,16 +29,18 @@ export default function SearchPage() {
       />
 
       <main className="min-h-screen bg-white font-poppins">
+        {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[44vh] min-h-[300px] max-h-[480px] items-end overflow-hidden sm:min-h-[340px]"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] bg-[#1D2D44]"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <div className="absolute inset-0">
             <Image
               src="/image/KFASBuilding3.png"
               alt="Search"
               fill
               priority
+              quality={65}
               sizes="100vw"
               className="scale-105 object-cover object-right-bottom"
             />
@@ -52,50 +53,40 @@ export default function SearchPage() {
               }}
             />
             <div
-              aria-hid
+              aria-hidden
               className="absolute inset-0"
               style={{
                 background:
                   "linear-gradient(to top, rgba(29,45,68,0.55) 0%, transparent 50%)",
               }}
             />
-          </motion.div>
-
-          <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
+          </div>
 
           <motion.div
-            className={`relative z-10 w-full ${SAFE_X} pb-12 pt-[max(7rem,calc(env(safe-area-inset-top)+5.5rem))] sm:pb-14`}
+            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
-            <div className="mx-auto w-full max-w-[1280px]">
-              {/* <motion.p
-                className="mb-4 font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, ease: EASE }}
+            <div className="overflow-hidden">
+              <motion.h1
+                className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white [text-shadow:_2px_2px_20px_rgba(0,0,0,0.35)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.75, delay: 0.12, ease: EASE }}
               >
                 Search
-              </motion.p> */}
-
-              <div className="overflow-hidden">
-                <motion.h1
-                  className="font-poppins text-[2rem] font-bold leading-[1.1] tracking-tight text-white [text-shadow:_2px_2px_20px_rgba(0,0,0,0.35)] sm:text-5xl lg:text-[3.25rem]"
-                  initial={{ y: "100%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.75, delay: 0.12, ease: EASE }}
-                >
-                  Search
-                </motion.h1>
-              </div>
-
-              <motion.div
-                className="mt-6 h-[3px] w-16 origin-left bg-[#EC601B]"
-                initial={{ scaleX: 0, opacity: 0 }}
-                animate={{ scaleX: 1, opacity: 1 }}
-                transition={{ duration: 0.75, delay: 0.5, ease: EASE }}
-              />
+              </motion.h1>
             </div>
+
+            <motion.div
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              style={{ width: 72 }}
+            />
           </motion.div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
         <Suspense
