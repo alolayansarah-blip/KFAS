@@ -245,7 +245,7 @@ function SubProgramCard({
 const SUB_PROGRAMS = [
   {
     title: "KFAS Innovation Challenge",
-    imageSrc: "/image/KFASInnovation.jpg",
+    imageSrc: "/image/Innovation.webp",
     body: "One of our standout executive education programs is the annual KFAS Innovation Challenge, in which a small group of selected companies work with prestigious business schools to develop new initiatives and projects that advance a culture of innovation. After a competitive application process, executives and business leaders spend three to four months in structured learning and training, tackling a company-specific challenge.",
     applyHref: "https://learn.kfas.org.kw/",
   },
@@ -257,7 +257,7 @@ const SUB_PROGRAMS = [
   },
   {
     title: "KFAS High Potential Leadership Program",
-    imageSrc: "/image/kfas-hipo.jpg",
+    imageSrc: "/image/HighPotenial.webp",
     body: "The vitality of every organization is dependent on the strength of its future leaders. By identifying high potential (Hi-Po) leadership candidates early and supporting their development, organizations drive significant returns on their human capital investments — maximizing strategic initiative, market competitiveness, and overall growth.",
     applyHref: "https://learn.kfas.org.kw/",
   },
@@ -314,24 +314,24 @@ export default function ProfessionalsPage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
   return (
     <>
       <Header logo="/image/logo_c.png" forceWhiteBackground={true} />
       <main className="min-h-screen bg-white font-poppins">
-        {/* ── Hero ── */}
+        {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-white"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] bg-white"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <div className="absolute inset-0">
             <Image
               src="/image/Grants.jpg"
               alt=""
               fill
               priority
+              quality={65}
               sizes="100vw"
               className="object-cover object-center scale-105"
             />
@@ -349,10 +349,10 @@ export default function ProfessionalsPage() {
                   "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
               }}
             />
-          </motion.div>
+          </div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -410,7 +410,7 @@ export default function ProfessionalsPage() {
               <ProgramCard
                 title="Professional Certificate Incentive Scheme"
                 body="KFAS offer grants to enhance the capabilities of the Kuwaiti human capital and sharpen their professional skills by a scheme to encourage individuals to obtain their professional credentials. An attractive monetary reward is given upon successfully obtaining the professional certificate. The amount of the reward will be determined based on KFAS policies and procedures for rewards."
-                imageSrc="/image/back4.webp"
+                imageSrc="/image/Professional.webp"
                 applyHref="https://kfas.formstack.com/forms/kfas_support_for_professional_certifications_2026"
                 index={1}
               />
@@ -426,7 +426,7 @@ export default function ProfessionalsPage() {
               <ProgramCard
                 title="Local Courses"
                 body="KFAS bring executive education short-courses offered by international academic institutions on selected topics (in line with KFAS strategic direction) to Kuwait to offer seats locally and would be available to all Kuwaiti citizens."
-                imageSrc="/image/InstagramPost.png"
+                imageSrc="/image/LocalCourses.webp"
                 applyHref="https://learn.kfas.org.kw/"
                 index={0}
               />

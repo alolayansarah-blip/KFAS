@@ -79,7 +79,6 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
@@ -90,18 +89,18 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
         forceWhiteBackground
       />
       <main className="min-h-screen bg-white font-poppins selection:bg-[#EC601B] selection:text-white">
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
+        {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] bg-[#1D2D44]"
         >
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
+          <div className="absolute inset-0">
             <Image
               src="/image/extensionss.png"
               alt="Extension of scholarship bridging grant for researchers"
               fill
               priority
-              quality={90}
+              quality={65}
               sizes="100vw"
               className="scale-125 object-cover object-[center_18%]"
             />
@@ -121,12 +120,10 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
               }}
               aria-hidden
             />
-          </motion.div>
-
-          <div className="absolute left-0 right-0 top-0 z-20 h-[3px] bg-gradient-to-r from-[#EC601B] via-[#EC601B]/40 to-transparent" />
+          </div>
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 sm:px-8 lg:px-12"
+            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
