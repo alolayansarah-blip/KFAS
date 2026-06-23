@@ -8,6 +8,96 @@ import Footer from "@/components/Footer";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+type Person = {
+  src: string;
+  alt: string;
+  name: string;
+  title: string;
+};
+
+// ─── Data ───────────────────────────────────────────────────────────────────
+
+const directorsRow1: Person[] = [
+  {
+    src: "/image/Dina.png",
+    alt: "Dina N. Alnakib",
+    name: "Dina N. Alnakib",
+    title: "Senior Director - Research & Technology Deployment",
+  },
+  {
+    src: "/image/Mubarak.png",
+    alt: "Mubarak A. Al-Quoud",
+    name: "Mubarak A. Al-Quoud",
+    title: "Senior Director - Accounts",
+  },
+  {
+    src: "/image/Manar.png",
+    alt: "Manar A. AlMoussa",
+    name: "Manar A. AlMoussa",
+    title: "Senior Director - Prizes",
+  },
+  {
+    src: "/image/Almazeedi.png",
+    alt: "Yousef M. AlMazeedi",
+    name: "Yousef M. AlMazeedi",
+    title: "Senior Director - Communications",
+  },
+];
+
+const directorsRow2: Person[] = [
+  {
+    src: "/image/Khaldoun.png",
+    alt: "Khaldoun K. Harmi",
+    name: "Khaldoun K. Harmi",
+    title: "Senior Director - Planning & Development",
+  },
+  {
+    src: "/image/Hanan.png",
+    alt: "Hanan I. Alibrahim",
+    name: "Hanan I. Alibrahim",
+    title: "Senior Director - Monitoring & Evaluation",
+  },
+  {
+    src: "/image/Nouria.png",
+    alt: "Nouria A. AlBader",
+    name: "Nouria A. AlBader",
+    title: "Director - Investment & Treasury",
+  },
+  {
+    src: "/image/Akbar.png",
+    alt: "Hasan A. Akbar",
+    name: "Hasan A. Akbar",
+    title: "Senior Director - Information Technology",
+  },
+];
+
+const directorsRow3: Person[] = [
+  {
+    src: "/image/Abduljaleel.png",
+    alt: "Abdulaziz S. Alabduljalil",
+    name: "Abdulaziz S. Alabduljalil",
+    title: "Director - Engineering & Administration",
+  },
+  {
+    src: "/image/YousefAbdullah.png",
+    alt: "Yousef A. Alabdullah",
+    name: "Yousef A. Alabdullah",
+    title: "Director - Enterprise Learning & Development",
+  },
+  {
+    src: "/image/Abrar.png",
+    alt: "Abrar S. Almoosa",
+    name: "Abrar S. Almoosa",
+    title: "Director - Research Capacity Building",
+  },
+  {
+    src: "/image/Aisha.png",
+    alt: "Aisha H. AlDuaij",
+    name: "Aisha H. AlDuaij",
+    title: "Director - Human Resources",
+  },
+];
+
 // ─── Profile Card ─────────────────────────────────────────────────────────────
 
 function ProfileCard({
@@ -39,7 +129,7 @@ function ProfileCard({
 
   if (isVertical) {
     return (
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex w-44 flex-col items-center gap-4 sm:w-52">
         <motion.div
           className="relative shrink-0"
           initial={{ opacity: 0, y: 20 }}
@@ -135,6 +225,51 @@ function ProfileCard({
   );
 }
 
+// ─── Team Row ─────────────────────────────────────────────────────────────────
+
+function TeamRow({ label, people }: { label?: string; people: Person[] }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section ref={ref} className="bg-white pb-20">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Optional tier label */}
+        {label && (
+          <motion.div
+            className="mb-12 flex items-center gap-5"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1D2D44]/55 whitespace-nowrap">
+              {label}
+            </span>
+            <span className="h-px flex-1 bg-[#1D2D44]/10" />
+          </motion.div>
+        )}
+
+        {/* Fixed 4-up row — 2 per row on mobile */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:gap-x-8 md:grid-cols-4 lg:gap-x-10 justify-items-center">
+          {people.map((person, index) => (
+            <ProfileCard
+              key={person.name}
+              imageSrc={person.src}
+              imageAlt={person.alt}
+              name={person.name}
+              title={person.title}
+              isInView={inView}
+              animationDelay={Math.min(index * 0.08, 0.32)}
+              layout="vertical"
+              compact
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function OurTeamPage() {
@@ -142,9 +277,6 @@ export default function OurTeamPage() {
   const profileRef = useRef(null);
   const deputiesRef = useRef(null);
   const officersRef = useRef(null);
-  const directorsRef = useRef(null);
-  const directors2Ref = useRef(null);
-  const directors3Ref = useRef(null);
 
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -162,18 +294,6 @@ export default function OurTeamPage() {
     once: true,
     margin: "-80px",
   });
-  const isDirectorsInView = useInView(directorsRef, {
-    once: true,
-    margin: "-80px",
-  });
-  const isDirectors2InView = useInView(directors2Ref, {
-    once: true,
-    margin: "-80px",
-  });
-  const isDirectors3InView = useInView(directors3Ref, {
-    once: true,
-    margin: "-80px",
-  });
 
   return (
     <>
@@ -182,7 +302,7 @@ export default function OurTeamPage() {
         {/* ── Hero ── */}
         <section
           ref={heroRef}
-          className="relative flex h-[540px] items-center justify-start overflow-hidden bg-[#1D2D44]"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] bg-[#1D2D44]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <img
@@ -207,7 +327,7 @@ export default function OurTeamPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 mx-auto w-full max-w-7xl px-6 py-12 sm:px-8 lg:px-12"
+            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -268,9 +388,9 @@ export default function OurTeamPage() {
         {/* ── Deputy Directors General ── */}
         <section ref={deputiesRef} className="bg-white pb-20">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 justify-items-center">
+            <div className="flex flex-wrap justify-center gap-x-16 gap-y-12">
               <ProfileCard
-                imageSrc="/image/DrSalehAlqgeely.png"
+                imageSrc="/image/DrSaleh.png"
                 imageAlt="Saleh A. Alaqely"
                 name="Dr. Saleh A. Alaqely"
                 title="Deputy Director General - Support Services"
@@ -279,7 +399,7 @@ export default function OurTeamPage() {
                 layout="vertical"
               />
               <ProfileCard
-                imageSrc="/image/DrFahadAlfadhli.png"
+                imageSrc="/image/DrFahad.png"
                 imageAlt="Fahad M. Al-Fadhli"
                 name="Dr. Fahad M. Al-Fadhli"
                 title="Deputy Director General - Scientific Programs"
@@ -292,11 +412,11 @@ export default function OurTeamPage() {
         </section>
 
         {/* ── Chief Officers ── */}
-        <section ref={officersRef} className="bg-white pb-20">
+        <section ref={officersRef} className="bg-white pb-24">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-12 justify-items-center max-w-3xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-x-16 gap-y-12">
               <ProfileCard
-                imageSrc="/image/AbdullahBuQmashah.png"
+                imageSrc="/image/AbdullahBuQumashah.png"
                 imageAlt="Abdullah S. Abu Qumasha"
                 name="Abdullah S. Abu Qumasha"
                 title="Chief Strategy Officer"
@@ -317,156 +437,14 @@ export default function OurTeamPage() {
           </div>
         </section>
 
-        {/* ── Senior Directors row 1 ── */}
-        <section ref={directorsRef} className="bg-white pb-20">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
-              <ProfileCard
-                imageSrc="/image/EmanHabib.png"
-                imageAlt="Eman H. Hussain"
-                name="Eman H. Hussain"
-                title="Board Secretary"
-                isInView={isDirectorsInView}
-                animationDelay={0}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/YousefAlmazeedi.png"
-                imageAlt="Yousef M. AlMazeedi"
-                name="Yousef M. AlMazeedi"
-                title="Senior Director - Communications"
-                isInView={isDirectorsInView}
-                animationDelay={0.05}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/MubarakAlQuood.png"
-                imageAlt="Mubarak A. Al-Quoud"
-                name="Mubarak A. Al-Quoud"
-                title="Senior Director - Accounts"
-                isInView={isDirectorsInView}
-                animationDelay={0.1}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/HasanAkbar.png"
-                imageAlt="Hasan A. Akbar"
-                name="Hasan A. Akbar"
-                title="Senior Director - Information Technology"
-                isInView={isDirectorsInView}
-                animationDelay={0.15}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/ManarAlmousa.png"
-                imageAlt="Manar A. AlMoussa"
-                name="Manar A. AlMoussa"
-                title="Senior Director - Prizes"
-                isInView={isDirectorsInView}
-                animationDelay={0.2}
-                layout="vertical"
-                compact
-              />
-            </div>
-          </div>
-        </section>
+        {/* ── Directors — row 4 ── */}
+        <TeamRow people={directorsRow1} />
 
-        {/* ── Senior Directors row 2 ── */}
-        <section ref={directors2Ref} className="bg-white pb-20">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6 justify-items-center">
-              <ProfileCard
-                imageSrc="/image/DinaAlnaqeeb.png"
-                imageAlt="Dina N. Alnakib"
-                name="Dina N. Alnakib"
-                title="Senior Director - Research & Technology Deployment"
-                isInView={isDirectors2InView}
-                animationDelay={0}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/KhalodounHarmi.png"
-                imageAlt="Khaldoun K. Harmi"
-                name="Khaldoun K. Harmi"
-                title="Senior Director - Planning & Development"
-                isInView={isDirectors2InView}
-                animationDelay={0.05}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/HananAlebrahim.png"
-                imageAlt="Hanan I. Alibrahim"
-                name="Hanan I. Alibrahim"
-                title="Senior Director - Monitoring & Evaluation"
-                isInView={isDirectors2InView}
-                animationDelay={0.1}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/AbdulAziziAbduljalil.png"
-                imageAlt="Abdulaziz S. Alabduljalil"
-                name="Abdulaziz S. Alabduljalil"
-                title="Director - Engineering & Administration"
-                isInView={isDirectors2InView}
-                animationDelay={0.15}
-                layout="vertical"
-                compact
-              />
-              <ProfileCard
-                imageSrc="/image/YousefAlabdullah.png"
-                imageAlt="Yousef A. Alabdullah"
-                name="Yousef A. Alabdullah"
-                title="Director - Enterprise Learning & Development"
-                isInView={isDirectors2InView}
-                animationDelay={0.2}
-                layout="vertical"
-                compact
-              />
-            </div>
-          </div>
-        </section>
+        {/* ── Directors — row 5 ── */}
+        <TeamRow people={directorsRow2} />
 
-        {/* ── Directors ── */}
-        <section ref={directors3Ref} className="bg-white pb-24">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 justify-items-center">
-              <ProfileCard
-                imageSrc="/image/NouriaAlBader.png"
-                imageAlt="Nouria A. AlBader"
-                name="Nouria A. AlBader"
-                title="Director - Investment & Treasury"
-                isInView={isDirectors3InView}
-                animationDelay={0}
-                layout="vertical"
-              />
-              <ProfileCard
-                imageSrc="/image/AishaAlDuaij.png"
-                imageAlt="Aisha H. AlDuaij"
-                name="Aisha H. AlDuaij"
-                title="Director - Human Resources"
-                isInView={isDirectors3InView}
-                animationDelay={0.1}
-                layout="vertical"
-              />
-              <ProfileCard
-                imageSrc="/image/AbrarAlmosa.png"
-                imageAlt="Abrar S. Almoosa"
-                name="Abrar S. Almoosa"
-                title="Director - Research Capacity Building"
-                isInView={isDirectors3InView}
-                animationDelay={0.2}
-                layout="vertical"
-              />
-            </div>
-          </div>
-        </section>
+        {/* ── Directors — row 6 ── */}
+        <TeamRow people={directorsRow3} />
       </main>
       <Footer />
     </>
