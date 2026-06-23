@@ -394,6 +394,60 @@ export default function ProfessionalsPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
+        {/* ── Overview ── */}
+        <section
+          id="overview"
+          className="relative scroll-mt-28 overflow-hidden bg-white py-20 sm:py-28"
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            style={{
+              background:
+                "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
+            }}
+          />
+          <div className="relative mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
+            <motion.div
+              className="w-full"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
+                Overview
+              </p>
+              <div className="mt-5 flex flex-col gap-6">
+                <p className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  KFAS empowers professionals, executives, and emerging leaders
+                  through world-class learning opportunities designed to
+                  strengthen leadership, innovation, and digital transformation
+                  capabilities.
+                </p>
+                <motion.p
+                  className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70"
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+                >
+                  Through partnerships with leading international universities
+                  and business schools, participants gain access to executive
+                  education, leadership development programs, innovation
+                  challenges, and specialized training in emerging technologies
+                  and strategic management. These opportunities equip
+                  individuals with the knowledge, skills, and global perspectives
+                  needed to drive organizational excellence, foster innovation,
+                  and contribute to Kuwait&rsquo;s transition toward a
+                  knowledge-based economy.
+                </motion.p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* ── Professional Development Learning ── */}
         <section className="py-20 sm:py-28 bg-white">
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
