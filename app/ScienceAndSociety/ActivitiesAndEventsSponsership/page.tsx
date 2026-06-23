@@ -427,7 +427,8 @@ export default function ActivitiesAndEventsSponsershipPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="scale-105 object-cover object-center"
+              // this important for big screens
+              className="object-cover object-center lg:object-[center_34%]"
             />
             <div
               className="absolute inset-0"
@@ -448,7 +449,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
           </div>
 
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-36 md:mt-28 lg:mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div

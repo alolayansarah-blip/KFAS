@@ -242,7 +242,7 @@ export default function YoungResearcherGrantsPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="scale-150 object-cover object-right translate-x-[15%]"
+              className="object-cover object-center scale-110 md:scale-150 md:object-right md:translate-x-[15%]"
             />
             {/* Directional overlay — left heavy for text legibility */}
             <div
@@ -266,7 +266,7 @@ export default function YoungResearcherGrantsPage() {
 
           {/* Content — vertically centered, left-aligned */}
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-32 md:mt-28 lg:mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}

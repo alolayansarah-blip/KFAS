@@ -73,7 +73,7 @@ export default function SpecialNeedsPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="scale-105 object-cover object-center"
+              className="object-cover object-center lg:object-[center_35%]"
             />
             <div
               className="absolute inset-0"

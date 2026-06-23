@@ -244,7 +244,7 @@ export default function PolicyResearchGrantsPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="scale-105 object-cover object-center"
+              className=" object-cover object-center"
             />
             {/* Directional overlay — left heavy for text legibility */}
             <div
@@ -268,7 +268,7 @@ export default function PolicyResearchGrantsPage() {
 
           {/* Content — vertically centered, left-aligned */}
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-32 md:mt-28 lg:mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}

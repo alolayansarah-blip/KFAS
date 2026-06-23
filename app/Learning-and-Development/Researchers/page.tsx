@@ -380,7 +380,8 @@ export default function ResearchersPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="object-cover object-center"
+              // className="object-cover object-center"
+              className="object-cover object-center lg:object-[center_38%]"
             />
             <div
               className="absolute inset-0"
