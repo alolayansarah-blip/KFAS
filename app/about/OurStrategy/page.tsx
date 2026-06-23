@@ -38,7 +38,7 @@ export default function OurStrategyPage() {
         {/* ── Hero — cinematic ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-center justify-start h-[540px]"
+          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px]"
         >
           <motion.div className="absolute inset-0" style={{ y: heroY }}>
             <Image
@@ -69,7 +69,7 @@ export default function OurStrategyPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
