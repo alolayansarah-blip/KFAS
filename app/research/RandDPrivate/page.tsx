@@ -19,14 +19,6 @@ const fadeUp = (delay = 0) => ({
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-const GRANT_FOCUS_ITEMS = [
-  "Product research & development",
-  "Technology transfer and adaptation",
-  "Digital transformation and advanced technologies",
-  "Process, service, and operational optimisation",
-  "Feasibility studies for new technologies or markets",
-] as const;
-
 const GRANT_TYPES = [
   {
     title: "Flagship Grants",
@@ -38,6 +30,7 @@ const GRANT_TYPES = [
       "Typical duration: 6–36 months",
       "Funding levels are designed to attract ambitious, high-value projects",
     ],
+    note: "This grant type is intended for larger, strategically significant projects with the potential to deliver strong national and sector-wide impact.",
   },
   {
     title: "Business Development Grants",
@@ -48,6 +41,7 @@ const GRANT_TYPES = [
       "Suitable for small-to-medium scale innovation projects",
       "Typical duration: 6–24 months",
     ],
+    note: "This pathway supports focused innovation projects that strengthen business performance and create tangible value for the company.",
   },
 ] as const;
 
@@ -135,28 +129,58 @@ const PARTNER_WITH_KFAS_ITEMS = [
   "Long-term partnership beyond a single project",
 ] as const;
 
-const SUCCESS_STORIES_IMPACT_ITEMS = [
-  "Launch new or improved products",
-  "Adopt advanced technologies",
-  "Improve efficiency and competitiveness",
-  "Build internal R&D and innovation capabilities",
-  "Create long-term partnerships with knowledge providers",
+const IMPACT_STORIES = [
+  {
+    id: "kdd",
+    title: "KDD-No Sugar Added:",
+    body: "KFAS funded the “No Sugar Added” project in partnership with Kuwait Danish Dairy and Dasman Diabetes Institute to scientifically re-engineer KDD’s best-selling chocolate ice cream. Using a “metabolic matrix” approach, the team reduced added sugars and enhanced nutritional value without sacrificing taste. Lab tests and an 8-month clinical trial with diabetic patients demonstrated the improved product’s health benefits, leading to the launch of a new no-added-sugar ice cream as part of KDD’s healthier product line. This showcases how scientific R&D can drive healthier food options for the public.",
+    image: "/image/randD3.png",
+    alt: "KDD Good For Me no added sugar chocolate ice cream",
+    imageFit: "contain" as const,
+  },
+  {
+    id: "soof",
+    title: "“Soof” Sustainable Wool Processing Mill Project:",
+    body: "Kuwait’s first sustainable wool factory “Soof” was inaugurated in Jan 2025. The project began with the Al Sadu Society’s proposal to explore the feasibility of producing sustainable yarns from local wool. KFAS funded a research initiative in collaboration with the Kuwait Institute for Scientific Research (KISR) and the Al Sadu Society, focusing on improving wool quality from Naeemi sheep, known for their high-quality fibers, for use in traditional crafts. The findings demonstrated the potential for economic and industrial development, leading to the recommendation to establish the factory as a model for successful partnerships supported by KFAS. The factory is a result of an initiative by Al Sadu Society, supported by KFAS and hosted by Al-Mawashi. This strategic partnership aims to develop the local wool industry, add value to Kuwait’s natural resources and promote sustainability in national projects. The project transforms raw local sheep fleece into high-quality yarns and felt, employing solar power (15 kW panels generating ~25,000 kWh/year) and advanced water recycling (~70,000 m³/year reused). “Soof” reduces reliance on synthetic and imported fibers, adds value to a local natural resource, and exemplifies KFAS’s push for home-grown innovation and industrial sustainability.",
+    image: "/image/tech3.jpg",
+    alt: "SOOF Sustainable Wool Processing Mill exhibition booth",
+    imageFit: "cover" as const,
+  },
+  {
+    id: "beorganic",
+    title: "Beyond Organic:",
+    body: "KFAS co-funded the “BeOrganic” vertical farming project in 2022 to bolster food security through technology-driven agriculture. The aeroponic system, installed in Al-Wafra, achieved up to 800% greater crop yield per square foot annually while using 92% less water and zero pesticides compared to traditional farming, demonstrating the viability of sustainable agriculture in Kuwait. This was just one of many projects KFAS supported during Covid-19 to support the private sector's efforts in strengthening national food security.",
+    image: "/image/randD4.jpg",
+    alt: "BeOrganic vertical farming aeroponic towers display",
+    imageFit: "cover" as const,
+  },
+  {
+    id: "al-hamra",
+    title: "Al-Hamra Business Tower Structural Health Monitoring:",
+    body: "The structural monitoring project, delivered in collaboration with KISR, Kuwait University, and MIT, aimed to develop an advanced system for monitoring the safety and performance of tall buildings in Kuwait. Tested on the Al-Hamra Business Tower, the project focused on modelling ground motion and installing a network of sensors to continuously measure a building’s response to environmental forces such as wind and seismic activity. These sensors capture real-time data on structural behavior, enabling early detection of potential damage or changes in performance. Beyond its technical contributions, the project represents a strategic step toward strengthening Kuwait’s capabilities in infrastructure resilience.",
+  },
+  {
+    id: "quantum",
+    title:
+      "Using Quantum Technology to Secure Digital Communications in the State of Kuwait:",
+    body: "This project, led by Kuwait Hackers, addresses the emerging threat posed by the rapid advancement of quantum computing, which has the potential to compromise conventional cryptographic systems. At the same time, it positions Kuwait at the forefront of next-generation cybersecurity by exploring quantum cryptography as a resilient, forward-looking solution to safeguard critical infrastructure and sensitive data within an increasingly complex and interconnected global landscape.",
+  },
+  {
+    id: "ndt-robot",
+    title: "Mobile Non-Destructive Testing NDT Inspection Robot:",
+    body: "The EQUATE Group developed an innovative Mobile Non-Destructive Testing inspection robot designed to enhance safety, efficiency, and quality in industrial maintenance operations by enabling remote inspection of confined and hazardous environments without human intervention. Internationally patented through the United States Patent and Trademark Office, the solution was developed by a team of EQUATE engineers in collaboration with KFAS and the Sabah Al-Ahmad Center for Giftedness and Creativity and delivered through the KFAS Innovation Challenge program. Through this initiative, KFAS played a pivotal role in fostering innovation and empowering local talent, supporting the transformation of advanced engineering concepts into globally recognized industrial solutions that strengthen Kuwait’s innovation ecosystem and industrial competitiveness.",
+  },
 ] as const;
 
-const SUCCESS_STORY_IMAGES = [
-  {
-    src: "/image/RabdD3.jpeg",
-    alt: "KFAS-supported electric vehicle charging research project",
-  },
-  {
-    src: "/image/RandD1.jpeg",
-    alt: "Vertical farming innovation facility visit",
-  },
-  {
-    src: "/image/RandD2.jpeg",
-    alt: "KFAS-supported food research and development presentation",
-  },
-] as const;
+const OVERVIEW_IMAGE = {
+  src: "/image/randD1.jpg",
+  alt: "KFAS and private sector partners at a KDD exhibition",
+} as const;
+
+const GRANT_SECTION_IMAGE = {
+  src: "/image/randD2.jpg",
+  alt: "Vertical farming innovation facility",
+} as const;
 
 const READY_TO_START_ITEMS = [
   "Review the grant guidelines and eligibility criteria",
@@ -323,50 +347,78 @@ export default function RandDPrivatePage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── Overview (full-width editorial lead) ──────────────────────── */}
+        {/* ── Overview (text + image editorial row) ─────────────────────── */}
         <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <motion.div {...fadeUp()}>
-              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
-                Overview
-              </p>
-              <h2 className="mt-4 max-w-3xl font-poppins text-[1.7rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[2.1rem]">
-                Empowering Innovation in Kuwait&apos;s Private Sector
-              </h2>
-            </motion.div>
+            <div className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-2">
+              <motion.div {...fadeUp()}>
+                <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+                <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
+                  Overview
+                </p>
+                <h2 className="mt-4 font-poppins text-[1.7rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[2.1rem]">
+                  Empowering Innovation in Kuwait&apos;s Private Sector
+                </h2>
 
-            <div className="mt-8 max-w-3xl space-y-6">
-              <motion.p
-                {...fadeUp(0.1)}
-                className="font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70"
-              >
-                KFAS supports Kuwaiti companies in strengthening their
-                competitiveness, productivity, and long-term growth through
-                science, technology, and innovation.
-              </motion.p>
-              <motion.p
-                {...fadeUp(0.18)}
-                className="font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70"
-              >
-                Our{" "}
-                <span className="font-semibold text-[#1D2D44]">
-                  Private Sector R&amp;D Co-Funding Grants
-                </span>{" "}
-                are designed to help companies transform ideas into impactful
-                solutions by sharing risk, accelerating innovation, and
-                connecting businesses with local and international knowledge
-                providers.
-              </motion.p>
+                <div className="mt-8 space-y-6">
+                  <p className="font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70">
+                    KFAS empowers Kuwaiti companies to enhance their
+                    competitiveness, boost productivity, and drive sustainable
+                    long-term growth through science, technology, and innovation.
+                  </p>
+                  <p className="font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70">
+                    The{" "}
+                    <span className="font-semibold text-[#1D2D44]">
+                      Private Sector R&amp;D Co-Funding Grant
+                    </span>{" "}
+                    supports applied research, technology development, and
+                    innovation projects that enhance competitiveness, accelerate
+                    growth, and help drive Kuwait&apos;s transition toward a
+                    knowledge-based economy.
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div {...fadeUp(0.1)}>
+                <div className="group relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
+                  <Image
+                    src={OVERVIEW_IMAGE.src}
+                    alt={OVERVIEW_IMAGE.alt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span
+                    className="absolute left-0 top-0 h-1 w-10 bg-[#EC601B]"
+                    aria-hidden
+                  />
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* ── What is the grant (rail · tint) ───────────────────────────── */}
+        {/* ── What is the grant (text + image · tint) ───────────────────── */}
         <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
-            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
-              <div className="lg:col-span-4">
+            <div className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-2">
+              <motion.div {...fadeUp(0.05)} className="order-2 lg:order-1">
+                <div className="group relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
+                  <Image
+                    src={GRANT_SECTION_IMAGE.src}
+                    alt={GRANT_SECTION_IMAGE.alt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span
+                    className="absolute left-0 top-0 h-1 w-10 bg-[#EC601B]"
+                    aria-hidden
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div {...fadeUp()} className="order-1 lg:order-2">
                 <SectionHead title="What is the Private Sector R&D Co-Funding Grant?">
                   <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
                     The KFAS Private Sector R&amp;D Co-Funding Grant supports
@@ -375,15 +427,13 @@ export default function RandDPrivatePage() {
                     Grants are co-funded, meaning KFAS partners with companies
                     to jointly fund projects that advance innovation.
                   </p>
-                  <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/55">
-                    Projects typically focus on:
+                  <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
+                    The program is designed to reduce innovation risk for
+                    companies while enabling them to access advanced expertise,
+                    validate new ideas, and accelerate commercialization.
                   </p>
                 </SectionHead>
-              </div>
-
-              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
-                <RailList items={GRANT_FOCUS_ITEMS} />
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -423,6 +473,11 @@ export default function RandDPrivatePage() {
                           </li>
                         ))}
                       </ul>
+                      {"note" in grant && grant.note && (
+                        <p className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+                          {grant.note}
+                        </p>
+                      )}
                     </motion.div>
                   ))}
                 </div>
@@ -558,6 +613,36 @@ export default function RandDPrivatePage() {
               </div>
               <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
                 <RailList items={PARTNER_WITH_KFAS_ITEMS} />
+                <motion.p
+                  {...fadeUp(0.2)}
+                  className="mt-8 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75"
+                >
+                  Beyond financial support, the co-funding model helps reduce
+                  innovation risk while providing applicants with strategic
+                  guidance, project oversight, and access to a global network
+                  of knowledge partners.
+                </motion.p>
+                <motion.p
+                  {...fadeUp(0.28)}
+                  className="mt-5 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75"
+                >
+                  Companies interested in applying are encouraged to review the
+                  grant guidelines and eligibility criteria and contact{" "}
+                  <a
+                    href={`mailto:${READY_TO_START_EMAIL}`}
+                    className="font-medium text-[#EC601B] underline decoration-[#EC601B]/35 underline-offset-[5px] transition-colors hover:text-[#d45510] hover:decoration-[#d45510]/50"
+                  >
+                    {READY_TO_START_EMAIL}
+                  </a>{" "}
+                  with a project concept. For any inquiries, contact{" "}
+                  <a
+                    href={`mailto:${READY_TO_START_EMAIL}`}
+                    className="font-medium text-[#EC601B] underline decoration-[#EC601B]/35 underline-offset-[5px] transition-colors hover:text-[#d45510] hover:decoration-[#d45510]/50"
+                  >
+                    {READY_TO_START_EMAIL}
+                  </a>{" "}
+                  for guidance.
+                </motion.p>
               </div>
             </div>
           </div>
@@ -572,39 +657,45 @@ export default function RandDPrivatePage() {
               </div>
 
               <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
-                <motion.div {...fadeUp(0.08)}>
-                  <h3 className="font-poppins text-[1.15rem] font-semibold leading-snug text-[#1D2D44]">
-                    Turning Innovation into Results
-                  </h3>
-                  <p className="mt-3 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
-                    This section can showcase how KFAS-supported projects have
-                    helped companies:
-                  </p>
-                </motion.div>
-                <div className="mt-4">
-                  <RailList items={SUCCESS_STORIES_IMPACT_ITEMS} />
+                <div className="divide-y divide-[#1D2D44]/10">
+                  {IMPACT_STORIES.map((story, i) => (
+                    <motion.article
+                      key={story.id}
+                      {...fadeUp(0.08 + i * 0.08)}
+                      className={i === 0 ? "pb-10" : "py-10"}
+                    >
+                      <h3 className="font-poppins text-[1.15rem] font-semibold leading-snug text-[#1D2D44]">
+                        {story.title}
+                      </h3>
+                      <p className="mt-3 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/65">
+                        {story.body}
+                      </p>
+
+                      {"image" in story && story.image && (
+                        <div className="mt-8 max-w-md">
+                          <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08] bg-white">
+                            <Image
+                              src={story.image}
+                              alt={story.alt}
+                              fill
+                              sizes="(max-width: 640px) 100vw, 28rem"
+                              className={
+                                story.imageFit === "contain"
+                                  ? "object-contain object-center p-4"
+                                  : "object-cover object-center"
+                              }
+                            />
+                            <span
+                              className="absolute left-0 top-0 h-1 w-10 bg-[#EC601B]"
+                              aria-hidden
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </motion.article>
+                  ))}
                 </div>
               </div>
-            </div>
-
-            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {SUCCESS_STORY_IMAGES.map((image, i) => (
-                <motion.div key={image.src} {...fadeUp(0.05 + i * 0.08)}>
-                  <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover"
-                    />
-                    <span
-                      className="absolute left-0 top-0 h-1 w-10 bg-[#EC601B]"
-                      aria-hidden
-                    />
-                  </div>
-                </motion.div>
-              ))}
             </div>
           </div>
         </section>

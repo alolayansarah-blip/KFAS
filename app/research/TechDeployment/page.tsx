@@ -91,6 +91,24 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
+const PILOT_PROJECTS = [
+  {
+    id: "01",
+    image: "/image/Tech1.jpg",
+    alt: "Rooftop solar panel installation",
+  },
+  {
+    id: "02",
+    image: "/image/tech2.jpg",
+    alt: "SOOF Sustainable Wool Processing Mill",
+  },
+  {
+    id: "03",
+    image: "/image/tech3.jpg",
+    alt: "Solar parking canopy installation",
+  },
+];
+
 /* ─── Editorial step row ─────────────────────────────────────────────────── */
 
 function StepRow({ step, index }: { step: ProcessStep; index: number }) {
@@ -277,6 +295,31 @@ export default function TechDeploymentPage() {
           </motion.p>
         </RailSection>
 
+        {/* ── Pilot project images ──────────────────────────────────────── */}
+        <section className="bg-white px-6 py-12 sm:px-8 sm:py-16 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {PILOT_PROJECTS.map(({ id, image, alt }, i) => (
+                <motion.div key={id} {...fadeUp(0.05 + i * 0.08)}>
+                  <div className="group relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
+                    <Image
+                      src={image}
+                      alt={alt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span
+                      className="absolute left-0 top-0 z-10 h-1 w-10 bg-[#EC601B]"
+                      aria-hidden
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── How the Process Works ─────────────────────────────────────── */}
         <RailSection title="How the Process Works">
           <motion.p
@@ -291,6 +334,24 @@ export default function TechDeploymentPage() {
             ))}
           </div>
         </RailSection>
+
+        {/* ── Contact note ──────────────────────────────────────────────── */}
+        <section className="bg-[#7DC0F1]/[0.06] px-6 py-12 sm:px-8 sm:py-16 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <motion.p
+              {...fadeUp(0.05)}
+              className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75"
+            >
+              For more information contact us at:{" "}
+              <a
+                href="mailto:research@kfas.org.kw"
+                className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+              >
+                research@kfas.org.kw
+              </a>
+            </motion.p>
+          </div>
+        </section>
       </main>
 
       <Footer

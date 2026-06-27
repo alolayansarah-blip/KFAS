@@ -22,11 +22,26 @@ const fadeUp = (delay = 0) => ({
 const STEPS = [
   {
     id: "01",
-    body: "Policy Papers and Guidelines: KFAS can assist is assigning a consultant, by request, for a specific study of a national issue within priorities that will lead to developing policies or guidelines that have positive impact on stakeholders.",
+    body: "Policy Papers and Guidelines: KFAS can assist public entities, upon request, in commissioning a consultant or specialized entity to conduct research/study for a specific study of a national issue within priorities that will lead to developing policies or guidelines that have positive impact on stakeholders.",
   },
   {
     id: "02",
-    body: "Commissioned Research: KFAS rolls our Call for Proposal for a specific topic or technology within priority areas that requires further research and will lead to application, policy or guidelines.",
+    body: "Commissioned Research: KFAS rolls our Call for Proposal or commissions specialized entities to conduct research/study for a specific topic or technology within priority areas that requires further research and will lead to application, policy or guidelines.",
+  },
+];
+
+const WHITE_PAPERS = [
+  {
+    id: "01",
+    title: "Kuwait's Energy Transition",
+    image: "/image/WhitePaper1.jpg",
+    alt: "Kuwait's Energy Transition white paper cover",
+  },
+  {
+    id: "02",
+    title: "Mitigating and Combating Sand Encroachments in Kuwait",
+    image: "/image/WhitePaper2.jpg",
+    alt: "Mitigating and Combating Sand Encroachments in Kuwait white paper cover",
   },
 ];
 
@@ -161,9 +176,15 @@ export default function AssignedStudiesPage() {
               </h2>
 
               <p className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
-                They are commissioned studies targeting specific thematic areas
+                {/* They are commissioned studies targeting specific thematic areas
                 that have a high impact on Kuwait&apos;s long-term development
                 goals, these strategic studies are aligned with Kuwait&apos;s
+                national priorities, focusing on producing white papers, policy
+                briefs, and research studies to address critical national
+                issues. */}
+                KFAS funds commissioned studies targeting specific thematic
+                areas that have a high impact on Kuwait's long-term development
+                goals, these strategic studies are aligned with Kuwait's
                 national priorities, focusing on producing white papers, policy
                 briefs, and research studies to address critical national
                 issues.
@@ -172,8 +193,44 @@ export default function AssignedStudiesPage() {
           </div>
         </section>
 
-        {/* ── Process (two-column rail) ── */}
+        {/* ── White Papers (two-column rail) ── */}
         <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <SectionHead title="White Papers" />
+              </div>
+
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                  {WHITE_PAPERS.map(({ id, title, image, alt }, i) => (
+                    <motion.article key={id} {...fadeUp(0.05 + i * 0.08)}>
+                      <div className="group relative aspect-[3/4] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
+                        <Image
+                          src={image}
+                          alt={alt}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                          className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <span
+                          className="absolute left-0 top-0 z-10 h-1 w-10 bg-[#EC601B]"
+                          aria-hidden
+                        />
+                      </div>
+                      <h3 className="mt-4 font-poppins text-[15px] font-semibold leading-snug text-[#1D2D44]">
+                        {title}
+                      </h3>
+                    </motion.article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Process (two-column rail) ── */}
+        <section className="border-t border-[#1D2D44]/10 bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
@@ -199,6 +256,24 @@ export default function AssignedStudiesPage() {
                 </ul>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ── Contact note ──────────────────────────────────────────────── */}
+        <section className="bg-[#7DC0F1]/[0.06] px-6 py-12 sm:px-8 sm:py-16 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <motion.p
+              {...fadeUp(0.05)}
+              className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75"
+            >
+              For more information contact us at:{" "}
+              <a
+                href="mailto:research@kfas.org.kw"
+                className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
+              >
+                research@kfas.org.kw
+              </a>
+            </motion.p>
           </div>
         </section>
       </main>

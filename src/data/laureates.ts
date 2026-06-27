@@ -1372,6 +1372,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم الهندسية",
     affiliationAr: "جامعة كاليفورنيا",
+    image: "/image/gabrialrabeiz.jpg",
   },
   {
     id: "kuwait-2014-104",
@@ -1385,6 +1386,7 @@ export const LAUREATES: Laureate[] = [
     country: "Palestine",
     specializationAr: "الاقتصاد والإدارة",
     affiliationAr: "جامعة بيرزيت",
+    image: "/image/nidalsabri.jpg",
   },
   {
     id: "kuwait-2014-105",
@@ -1398,6 +1400,7 @@ export const LAUREATES: Laureate[] = [
     country: "Kuwait",
     specializationAr: "الاقتصاد والإدارة",
     affiliationAr: "جامعة الكويت",
+    image: "/image/adeladwani.jpg",
   },
   {
     id: "kuwait-2014-106",
@@ -1411,6 +1414,7 @@ export const LAUREATES: Laureate[] = [
     country: "Palestine",
     specializationAr: "دراسات في اللغة العربية وآدابها",
     affiliationAr: "جامعة بيرزيت",
+    image: "/image/mahdiarar.jpg",
   },
   {
     id: "kuwait-2014-107",
@@ -1424,6 +1428,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "الموضوع غير محدد",
     affiliationAr: "الجامعة الأمريكية في بيروت",
+    image: "/image/naderbizri.jpg",
   },
   {
     id: "kuwait-2015-108",
@@ -1437,6 +1442,7 @@ export const LAUREATES: Laureate[] = [
     country: "Syria",
     specializationAr: "العلوم الطبية الأساسية",
     affiliationAr: "جامعة ميشيغان",
+    image: "/image/hudaakil.jpg",
   },
   {
     id: "kuwait-2015-109",
@@ -1450,6 +1456,7 @@ export const LAUREATES: Laureate[] = [
     country: "Egypt",
     specializationAr: "المياة",
     affiliationAr: "جامعة الكويت",
+    image: "/image/hishameltouny.jpg",
   },
   {
     id: "kuwait-2015-110",
@@ -1463,19 +1470,21 @@ export const LAUREATES: Laureate[] = [
     country: "Palestine",
     specializationAr: "العلوم الاجتماعية",
     affiliationAr: "الجامعة الأمريكية في بيروت",
+    image: "/image/sarihanafi.jpg",
   },
   {
     id: "kuwait-2015-111",
     prize: "kuwait",
     year: 2015,
     status: "awarded",
-    name: "Dr. Mna Al-Saeed Ahmad Al-Hlali Bikr",
+    name: "Dr. Mona Al-Saeed Ahmad Al-Hlali Baiker",
     nameAr: "أ.د منى السعيد أحمد الهلالي بيكر",
     verified: false,
     field: "Arts & Literature",
     country: "Egypt",
     specializationAr: "دراسات في اللغات الأجنبية وآدابها",
     affiliationAr: "مركز دراسات الترجمة والثقافات\nجامعة مانشستر",
+    image: "/image/monabaker.jpg",
   },
   {
     id: "kuwait-2016-112",
@@ -1490,6 +1499,7 @@ export const LAUREATES: Laureate[] = [
     specializationAr: "الفيزياء",
     affiliationAr:
       "مركز المعالجة والتحليل الطيفي في نطاق الأشعة تحت الحمراء\n\nمعهد كاليفورنيا للتكنولوجيا",
+    image: "/image/georgehelou.jpg",
   },
   {
     id: "kuwait-2016-113",
@@ -1503,19 +1513,21 @@ export const LAUREATES: Laureate[] = [
     country: "Tunisia",
     specializationAr: "الغذاء والزراعة",
     affiliationAr: "مختبر سينسبري\nمركز جون اينيس",
+    image: "/image/sophiekamon.jpg",
   },
   {
     id: "kuwait-2016-114",
     prize: "kuwait",
     year: 2016,
     status: "shared",
-    name: "Dr. Nhad Mohammad Slihh",
+    name: "Dr. Nehad Mohammad Slihh",
     nameAr: "أ.د نهاد محمد صليحه",
     verified: false,
     field: "Arts & Literature",
     country: "Egypt",
     specializationAr: "دراسات في الفنون التشكيلية والمسرحية والموسيقية",
     affiliationAr: "المعهد العالي للنقد الفني بأكاديمية الفنون",
+    image: "/image/nehadselaiha.jpg",
   },
   {
     id: "kuwait-2016-115",
@@ -1529,19 +1541,21 @@ export const LAUREATES: Laureate[] = [
     country: "Syria",
     specializationAr: "دراسات في الفنون التشكيلية والمسرحية والموسيقية",
     affiliationAr: "جامعة دمشق",
+    image: "/image/afifbahnassi.jpg",
   },
   {
     id: "kuwait-2017-116",
     prize: "kuwait",
     year: 2017,
     status: "awarded",
-    name: "Dr. Omar Mousa Abdulfattah Iaghi",
+    name: "Dr. Omar Mousa Abdulfattah Yaghi",
     nameAr: "أ.د عمر موسى عبدالفتاح ياغي",
     verified: false,
     field: "Basic Sciences",
     country: "Jordan",
     specializationAr: "الكيمياء",
     affiliationAr: "جامعة كاليفورنيا في بيركلي",
+    image: "/image/yaghi.png",
   },
   {
     id: "kuwait-2017-117",
@@ -1555,6 +1569,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم الطبية التطبيقية",
     affiliationAr: "جامعة هارفارد",
+    image: "/image/arnaout.png",
   },
   {
     id: "kuwait-2017-118",
@@ -1568,6 +1583,7 @@ export const LAUREATES: Laureate[] = [
     country: "Egypt",
     specializationAr: "العلوم الطبية التطبيقية",
     affiliationAr: "معهد ألباني",
+    image: "/image/shakermousa.png",
   },
   {
     id: "kuwait-2017-119",
@@ -1581,6 +1597,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "التربية",
     affiliationAr: "الجامعة الأمريكية في بيروت",
+    image: "/image/boujauode.png",
   },
   {
     id: "kuwait-2017-120",
@@ -1594,6 +1611,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "الأدب المقارن والتراجم الأدبية",
     affiliationAr: "جامعة مينيسوتا",
+    image: "/image/nabil mattar.png",
   },
   {
     id: "kuwait-2017-121",
@@ -1607,6 +1625,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم (الأساسية - التطبيقية) والرياضيات",
     affiliationAr: "المعهد الوطني للأبحاث في باريس",
+    image: "/image/Maroon.png",
   },
   {
     id: "kuwait-2018-122",
@@ -1620,6 +1639,7 @@ export const LAUREATES: Laureate[] = [
     country: "Yemen",
     specializationAr: "العلوم البيولوجية",
     affiliationAr: "علم الأعصاب",
+    image: "/image/Hilal-Lashuel.jpg",
   },
   {
     id: "kuwait-2018-123",
@@ -1633,6 +1653,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم البيولوجية",
     affiliationAr: "الجامعة الأمريكية في بيروت",
+    image: "/image/Mohammad-Hassan-Elsayegh.jpg",
   },
   {
     id: "kuwait-2018-124",
@@ -1646,6 +1667,7 @@ export const LAUREATES: Laureate[] = [
     country: "Egypt",
     specializationAr: "تكنولوجيا  الطاقة النظيفة المستدامة",
     affiliationAr: "جامعة ليهاي",
+    image: "/image/Zakya-Hussein-Kafafi.jpg",
   },
   {
     id: "kuwait-2018-125",
@@ -1659,6 +1681,7 @@ export const LAUREATES: Laureate[] = [
     country: "Palestine",
     specializationAr: "تكنولوجيا  الطاقة النظيفة المستدامة",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
+    image: "/image/Husam-Niman-Alshareef.jpg",
   },
   {
     id: "kuwait-2018-126",
@@ -1672,6 +1695,7 @@ export const LAUREATES: Laureate[] = [
     country: "Iraq",
     specializationAr: "الاقتصاد",
     affiliationAr: "المعهد الملكي للتكنولوجيا",
+    image: "/image/Imad-Moosa.jpg",
   },
   {
     id: "kuwait-2018-127",
@@ -1685,6 +1709,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "الاقتصاد",
     affiliationAr: "جامعة سيراكروز",
+    image: "/image/Badi-Hani-Baltagi.jpg",
   },
   {
     id: "kuwait-2018-128",
@@ -1698,6 +1723,7 @@ export const LAUREATES: Laureate[] = [
     country: "Iraq",
     specializationAr: "دراسات في اللغة العربية وآدابها",
     affiliationAr: "جامعة كولومبيا",
+    image: "/image/Muhsin-Jassim-Al-Musawi.jpg",
   },
   {
     id: "kuwait-2019-129",
@@ -1710,6 +1736,7 @@ export const LAUREATES: Laureate[] = [
     field: "Basic Sciences",
     country: "Tunisia",
     specializationAr: "الرياضيات",
+    image: "/image/Nader-Masmoudi.jpg",
   },
   {
     id: "kuwait-2019-130",
@@ -1723,6 +1750,7 @@ export const LAUREATES: Laureate[] = [
     country: "Palestine",
     specializationAr: "البيئة",
     affiliationAr: "جامعة نورث ويسترن",
+    image: "/image/Dr.-Omar-Farha.jpg",
   },
   {
     id: "kuwait-2019-131",
@@ -1736,6 +1764,7 @@ export const LAUREATES: Laureate[] = [
     country: "Morocco",
     specializationAr: "العلوم الاجتماعية",
     affiliationAr: "أستاذ متقاعد وسفير سابق",
+    image: "/image/Ali-Oumlil.jpg",
   },
   {
     id: "kuwait-2019-132",
@@ -1749,6 +1778,7 @@ export const LAUREATES: Laureate[] = [
     country: "Palestine",
     specializationAr: "العلوم الاجتماعية",
     affiliationAr: "جامعة برينستون",
+    image: "/image/Amaney-Jamal.jpg",
   },
   {
     id: "kuwait-2019-133",
@@ -1762,6 +1792,7 @@ export const LAUREATES: Laureate[] = [
     country: "Jordan",
     specializationAr: "دراسات في اللغات الأجنبية وآدابها",
     affiliationAr: "الجامعة الأردنية",
+    image: "/image/Mohammad-Shaheen.jpg",
   },
   {
     id: "kuwait-2020-134",
@@ -1775,6 +1806,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "علوم الأرض",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
+    image: "/image/Prof.-Ibrahim-Mahmoud-Hoteit.jpg",
   },
   {
     id: "kuwait-2020-135",
@@ -1788,6 +1820,7 @@ export const LAUREATES: Laureate[] = [
     country: "Egypt",
     specializationAr: "علوم الأرض",
     affiliationAr: "جامعة بوسطن",
+    image: "/image/Prof.-Farouk-Elsayed-Elbaz.jpg",
   },
   {
     id: "kuwait-2020-136",
@@ -1801,6 +1834,7 @@ export const LAUREATES: Laureate[] = [
     country: "Tunisia",
     specializationAr: "العلوم الهندسية",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
+    image: "/image/Prof.-Mohamed-Slim-Alouini.jpg",
   },
   {
     id: "kuwait-2020-137",
@@ -1814,6 +1848,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم الإدارية والمالية والمصرفية",
     affiliationAr: "الجامعة الأميركية في بيروت",
+    image: "/image/Prof.-Salim-Chahine.jpg",
   },
   {
     id: "kuwait-2020-138",
@@ -1827,19 +1862,21 @@ export const LAUREATES: Laureate[] = [
     country: "Syria",
     specializationAr: "العلوم الإدارية والمالية والمصرفية",
     affiliationAr: "جامعة ليموج - فرنسا",
+    image: "/image/Prof.-Amine-Tarazi.jpg",
   },
   {
     id: "kuwait-2020-139",
     prize: "kuwait",
     year: 2020,
     status: "shared",
-    name: "Dr. Nda Mohsen Shabout",
+    name: "Dr. Nada Mohsen Shabout",
     nameAr: "أ.د ندى محسن شبوط",
     verified: false,
     field: "Arts & Literature",
     country: "Iraq",
     specializationAr: "دراسات في الفنون التشكيلية والمسرحية والموسيقية",
     affiliationAr: "University of North Texas",
+    image: "/image/Prof.-Nada-Shabout.jpg",
   },
   {
     id: "kuwait-2020-140",
@@ -1853,6 +1890,7 @@ export const LAUREATES: Laureate[] = [
     country: "Tunisia",
     specializationAr: "دراسات في الفنون التشكيلية والمسرحية والموسيقية",
     affiliationAr: "المعهد العالي للموسيقيين – تونس",
+    image: "/image/Prof.-Mahmoud-Ali-Guettat.jpg",
   },
   {
     id: "kuwait-2020-141",
@@ -1866,6 +1904,7 @@ export const LAUREATES: Laureate[] = [
     country: "Algeria",
     specializationAr: "التراث العلمي العربي والإسلامي",
     affiliationAr: "المركز الوطني للبحث العلمي في فرنسا",
+    image: "/image/Prof.-Ahmed-Djebbar.jpg",
   },
   {
     id: "kuwait-2020-142",
@@ -1879,6 +1918,7 @@ export const LAUREATES: Laureate[] = [
     country: "Turkey",
     specializationAr: "التراث العلمي العربي والإسلامي",
     affiliationAr: "Turkish Society of History of Science",
+    image: "/image/Prof.-Ekmeleddin-İhsanoğlu.jpg",
   },
   {
     id: "kuwait-2021-143",
@@ -1892,6 +1932,7 @@ export const LAUREATES: Laureate[] = [
     country: "Saudi Arabia",
     specializationAr: "الفيزياء",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
+    image: "/image/DrOsamaBakr.jpg",
   },
   {
     id: "kuwait-2021-144",
@@ -1905,6 +1946,7 @@ export const LAUREATES: Laureate[] = [
     country: "Egypt",
     specializationAr: "الفيزياء",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
+    image: "/image/Prof.OmarFarghalyAbdelsaboor.jpg",
   },
   {
     id: "kuwait-2021-145",
@@ -1918,6 +1960,7 @@ export const LAUREATES: Laureate[] = [
     country: "Egypt",
     specializationAr: "العلوم التطبيقية عن موضوع العلوم الطبية التطبيقية",
     affiliationAr: "Clinical Research Institute of Montreal (IRCM)",
+    image: "/image/DrNabilSeidah.jpg",
   },
   {
     id: "kuwait-2021-146",
@@ -1931,6 +1974,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم التطبيقية عن موضوع العلوم الطبية التطبيقية",
     affiliationAr: "الجامعة الأميركية في بيروت",
+    image: "/image/Prof.AliTaher.jpg",
   },
   {
     id: "kuwait-2021-147",
@@ -1944,6 +1988,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم التربوية",
     affiliationAr: "University of North Carolina - Chapel Hill",
+    image: "/image/Prof.FouadABDELKhalick.jpg",
   },
   {
     id: "kuwait-2021-148",
@@ -1957,6 +2002,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "علم اللغويات",
     affiliationAr: "الجامعة الأميركية في بيروت",
+    image: "/image/DrRamziBaalbaki.jpg",
   },
   {
     id: "kuwait-2022-149",
@@ -1970,6 +2016,7 @@ export const LAUREATES: Laureate[] = [
     country: "Saudi Arabia",
     specializationAr: "العلوم الطبية الأساسية - علم الجينات البشرية",
     affiliationAr: "جامعة الفيصل",
+    image: "/image/Dr.FawzanAlkhraya.jpg",
   },
   {
     id: "kuwait-2022-150",
@@ -1984,6 +2031,7 @@ export const LAUREATES: Laureate[] = [
     specializationAr:
       "تكنولوجيا الطاقة النظيفة والمستدامة -  تكنولوجيا البطاريات",
     affiliationAr: "مختبر أرجون الوطني التابع لوزارة الطاقة الأمريكية",
+    image: "/image/Drkhaleelhaj.jpg",
   },
   {
     id: "kuwait-2022-151",
@@ -1998,6 +2046,7 @@ export const LAUREATES: Laureate[] = [
     specializationAr:
       "الاقتصاد والعلوم المالية والمصرفية - تخصص الاقتصاد القياسي",
     affiliationAr: "جامعة هارفارد",
+    image: "/image/Dr.ElieTamer.jpg",
   },
   {
     id: "kuwait-2022-152",
@@ -2011,6 +2060,7 @@ export const LAUREATES: Laureate[] = [
     country: "Morocco",
     specializationAr: "الأدب والفن في العالم العربي - تخصص علم السرديات",
     affiliationAr: "كلية الآداب والعلوم الإنسانية بالرباط.",
+    image: "/image/drSayesYaktine.jpg",
   },
   {
     id: "kuwait-2022-153",
@@ -2025,6 +2075,7 @@ export const LAUREATES: Laureate[] = [
     specializationAr:
       "دراسة وتحليل الظواهر الفيزيائية والكيميائية على المستوى النانوي",
     affiliationAr: "بجامعة فلوريد",
+    image: "/image/DrMohammadMattousi.jpg",
   },
   {
     id: "kuwait-2023-154",
@@ -2038,6 +2089,7 @@ export const LAUREATES: Laureate[] = [
     country: "Palestine",
     specializationAr: "الكيمياء",
     affiliationAr: "جامعة Calgary في كندا",
+    image: "/image/DrNashat.jpg",
   },
   {
     id: "kuwait-2023-155",
@@ -2051,6 +2103,7 @@ export const LAUREATES: Laureate[] = [
     country: "Morocco",
     specializationAr: "الكيمياء",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
+    image: "/image/Dr.MohammadEddaodi.jpg",
   },
   {
     id: "kuwait-2023-156",
@@ -2064,6 +2117,7 @@ export const LAUREATES: Laureate[] = [
     country: "Egypt",
     specializationAr: "علوم المياه",
     affiliationAr: "جامعة غرب ميشيغان",
+    image: "/image/DrMuhammadSultan.jpg",
   },
   {
     id: "kuwait-2023-157",
@@ -2077,6 +2131,7 @@ export const LAUREATES: Laureate[] = [
     country: "Syria",
     specializationAr: "الذكاء الاصطناعي وعلم الروبوتات",
     affiliationAr: "معهد ماساتشوستس للتكنولوجيا",
+    image: "/image/Dr.DinaKatabi.jpg",
   },
   {
     id: "kuwait-2024-158",
@@ -2090,6 +2145,7 @@ export const LAUREATES: Laureate[] = [
     country: "Jordan",
     specializationAr: "العلوم البيولوجية",
     affiliationAr: "The Lundquist Institute at Harbor-UCLA Medical Center",
+    image: "/image/DrAshraf.png",
   },
   {
     id: "kuwait-2024-159",
@@ -2103,6 +2159,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم الهندسية",
     affiliationAr: "جامعة ستانفورد",
+    image: "/image/Dr.Sharbel.png",
   },
   {
     id: "kuwait-2024-160",
@@ -2116,6 +2173,7 @@ export const LAUREATES: Laureate[] = [
     country: "Tunisia",
     specializationAr: "العلوم الهندسية",
     affiliationAr: "جامعة هونغ كونغ للعلوم والتكنولوجيا",
+    image: "/image/Dr.KhaledQassem.png",
   },
   {
     id: "kuwait-2024-161",
@@ -2129,6 +2187,7 @@ export const LAUREATES: Laureate[] = [
     country: "Lebanon",
     specializationAr: "العلوم الإدارية",
     affiliationAr: "Canadian University Dubai",
+    image: "/image/Dr.DeemahMohammad.png",
   },
   {
     id: "kuwait-2024-162",
@@ -2142,6 +2201,7 @@ export const LAUREATES: Laureate[] = [
     country: "Jordan",
     specializationAr: "العلوم الإدارية",
     affiliationAr: "Drexel University",
+    image: "/image/Dr.Shawkat.png",
   },
   {
     id: "kuwait-2024-163",
@@ -2155,6 +2215,72 @@ export const LAUREATES: Laureate[] = [
     country: "Jordan",
     specializationAr: "تاريخ الحضارات والفكر الإنساني",
     affiliationAr: "جامعة اليرموك",
+    image: "/image/DrZedan.png",
+  },
+  {
+    id: "kuwait-2025-375",
+    prize: "kuwait",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Jalal Shatah",
+    nameAr: "أ.د جلال شطح",
+    verified: false,
+    field: "Basic Sciences",
+    country: "Lebanon",
+    specializationAr: "علوم الرياضيات",
+    image: "/image/Dr.jalal.png",
+  },
+  {
+    id: "kuwait-2025-376",
+    prize: "kuwait",
+    year: 2025,
+    status: "shared",
+    name: "Dr. Nour al-Din Ghaffour",
+    nameAr: "أ.د نور الدين غفور",
+    verified: false,
+    field: "Applied Sciences",
+    country: "Algeria",
+    specializationAr: "العلوم البيئية",
+    image: "/image/Dr.NourAlDin.png",
+  },
+  {
+    id: "kuwait-2025-377",
+    prize: "kuwait",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Mohammad Bamyeh",
+    nameAr: "أ.د محمد باميه",
+    verified: false,
+    field: "Economics & Social Sciences",
+    country: "Jordan",
+    specializationAr: "علم الاجتماع",
+    image: "/image/Dr.MohammadBamya.png",
+  },
+  {
+    id: "kuwait-2025-378",
+    prize: "kuwait",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Abdullah Mohammad Al-Ghadhami",
+    nameAr: "أ.د عبدالله محمد الغذامي",
+    verified: false,
+    field: "Humanities, Arts & Literature",
+    country: "Saudi Arabia",
+    specializationAr: "الأدب والفن في العالم العربي",
+    image: "/image/Dr.AbdullahAlghuthama.png",
+  },
+  {
+    id: "kuwait-2025-379",
+    prize: "kuwait",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Ahmad Khalil",
+    nameAr: "أ.د أحمد خليل",
+    verified: false,
+    field: "Emerging Specialized Sciences — Computational Biology",
+    country: "Jordan",
+    specializationAr: "علوم البيولوجيا الحاسوب وتطبيقاته",
+    image: "/image/Dr.AhmadKhaleel.png",
   },
   {
     id: "jaber-1988-164",
@@ -4356,7 +4482,7 @@ export const LAUREATES: Laureate[] = [
     prize: "jaber",
     year: 2023,
     status: "awarded",
-    name: "Dr. Zid Essam Al-Mrazouq",
+    name: "Dr. Zaid Essam Al-Mrazouq",
     nameAr: "الدكتور زيد عصام المرزوق",
     verified: false,
     field: "Medical & Allied Health Sciences",
@@ -4380,12 +4506,13 @@ export const LAUREATES: Laureate[] = [
     prize: "jaber",
     year: 2023,
     status: "shared",
-    name: "Dr. Aml Abdulwahab Al-Salh",
+    name: "Dr. Amal Abdulwahab Al-Salh",
     nameAr: "الدكتورة أمل عبد الوهاب الصالح",
     verified: false,
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/Prof.Amal.jpg",
   },
   {
     id: "jaber-2023-351",
@@ -4398,6 +4525,7 @@ export const LAUREATES: Laureate[] = [
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/fahadalzumai.jpg",
   },
   {
     id: "jaber-2024-352",
@@ -4448,6 +4576,50 @@ export const LAUREATES: Laureate[] = [
     affiliationAr: "معهد الكويت للأبحاث العلمية",
   },
   {
+    id: "jaber-2025-380",
+    prize: "jaber",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Aisha Ahmad Mutairan Al-Azmi",
+    nameAr: "الدكتورة عائشة أحمد مطيران العازمي",
+    verified: false,
+    field: "Social Sciences & Humanities",
+    country: "Kuwait",
+  },
+  {
+    id: "jaber-2025-381",
+    prize: "jaber",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Hussein Mahdi Behbehani",
+    nameAr: "الأستاذ الدكتور حسين مهدي بهبهاني",
+    verified: false,
+    field: "Life Sciences",
+    country: "Kuwait",
+  },
+  {
+    id: "jaber-2025-382",
+    prize: "jaber",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Yousef Saad Al-Qahim",
+    nameAr: "الدكتور يوسف سعد القهيم",
+    verified: false,
+    field: "Engineering Sciences",
+    country: "Kuwait",
+  },
+  {
+    id: "jaber-2025-383",
+    prize: "jaber",
+    year: 2025,
+    status: "awarded",
+    name: "Dr. Yousef Abdullah Al-Khazi",
+    nameAr: "الأستاذ الدكتور يوسف عبدالله الخزي",
+    verified: false,
+    field: "Natural Sciences & Mathematics",
+    country: "Kuwait",
+  },
+  {
     id: "sumait-2015-356",
     prize: "sumait",
     year: 2015,
@@ -4459,6 +4631,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "Awarded the first Al-Sumait Health Prize for sustained work to control and eradicate malaria affecting tens of millions of African children, and for leading the Alliance for Accelerating Excellence in Science in Africa (AESA).",
+    image: "/image/kevin-march.jpg",
   },
   {
     id: "sumait-2016-357",
@@ -4472,6 +4645,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "Joint winner for research and development on Africa's key food crops — cassava, banana and plantain, cowpea, maize, soybean and yam — delivering safer, more nutritious, pest- and drought-resistant varieties that raise yields across Sub-Saharan Africa.",
+    image: "/image/iita.jpg",
   },
   {
     id: "sumait-2016-358",
@@ -4485,6 +4659,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "The Prize was awarded (jointly) to the Potato Centre in Peru, for its extensive initiatives in providing Vitamin A fortified, stable food for millions in the Sub-Saharan regions of Africa",
+    image: "/image/cip.jpg",
   },
   {
     id: "sumait-2017-359",
@@ -4498,6 +4673,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "Awarded for significantly advancing gender equity in education through targeted programmes, shaping attitudes, practices and education policy across 33 African countries.",
+    image: "/image/fawe.png",
   },
   {
     id: "sumait-2018-360",
@@ -4511,6 +4687,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "Joint Health winner whose HIV treatment and prevention research — including on HIV-TB co-infection — has changed health policy and practice and reduced mortality across Africa.",
+    image: "/image/Salimb-Abdool-Karim.jpg",
   },
   {
     id: "sumait-2018-361",
@@ -4524,6 +4701,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "Professor west is a Professor of Ophthalmology and the Vice Chair for Research at the Wilmer Eye Institute, at Johns Hopkins Unviersity. She has been working on the control of trachoma for over 30 years, and her research has covered every aspect of the disease with far reaching impacts.",
+    image: "/image/Sheila-West.jpg",
   },
   {
     id: "sumait-2018-362",
@@ -4537,6 +4715,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "The Prize was awarded to The Rakai Health Sciences Program (RHSP) of Uganda, for achieving its overriding goal on research towards the improvement of health by preventing HIV and sexually transmitted diseases.",
+    image: "/image/Rakai-Health.jpg",
   },
   {
     id: "sumait-2019-363",
@@ -4550,6 +4729,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "The Prize was awarded (jointly) to The Africa Rice Center (Based in Cote d’ivoire) for its important role in enhancing food security in Africa, including the production of new rice varieties vitamin A enriched-rice with high yielding and climate-resilient and leading of pan-African rice research organization committed to improving livelihoods in Africa through strong science and effective partnerships devoted to improving the rice economy in Africa and is part of a global research partnership for a food-secure future.",
+    image: "/image/The-Africa-Rice-Center.jpg",
   },
   {
     id: "sumait-2019-364",
@@ -4563,6 +4743,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "Joint winner: a 30-country network improving bean productivity, processing and value chains, developing climate-smart, nutritious varieties vital to food security and soil fertility.",
+    image: "/image/Pan-Africa-Bean-Research.jpg",
   },
   {
     id: "sumait-2020-365",
@@ -4576,6 +4757,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "The Prize was awarded (jointly) to Ubongo Learning, which is based in Tanzania, for its “innovative and transformative initiative for disadvantaged children. It has tremendous potential in reducing the gap created by education disparities, by utilizing a massive scale-up approach, while delivering attractive edutainment materials through radio, TV, and basic mobile phones to 17 million children across Africa. It also aims to reach 60 million learners by 2025; hence, demonstrating the potential size and breadth of its impact, sustainability, affordability, ease of adaptation and replicability.",
+    image: "/image/Ubongo-Learning.jpg",
   },
   {
     id: "sumait-2020-366",
@@ -4589,6 +4771,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "Joint winner recognised for mother-tongue literacy programmes with a bridge to English in early education, teacher training, and free open learning materials across nine African countries.",
+    image: "/image/Molteno-Institute.jpg",
   },
   {
     id: "sumait-2021-367",
@@ -4602,6 +4785,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "In recognition for his essential role in developing Africa’s response to disease outbreak and providing technical support to strengthen public health and disease control institutions in the African Union.",
+    image: "/image/Dr.-John-N.-Nkengasong.jpg",
   },
   {
     id: "sumait-2021-368",
@@ -4615,6 +4799,8 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "Awarded for leading infectious-disease genomics in Africa through translational research and capacity building, transforming understanding of pathogen evolution, transmission and outbreak response.",
+    image:
+      "/image/African-Centre-of-Excellence-for-Genomics-of-Infectious-Diseases.jpg",
   },
   {
     id: "sumait-2022-369",
@@ -4628,6 +4814,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "A non-profit managed and led by Africans for Africans, AATF strives to create sustainable and new ways to approach agri-business.",
+    image: "/image/African-Agricultural-Technology-Foundation-(AATF).jpg",
   },
   {
     id: "sumait-2022-370",
@@ -4641,6 +4828,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "Joint Food Security winner; a leader in satellite crop mapping and machine learning who heads NASA Harvest Africa, building crop-monitoring systems that have strengthened food security for millions of households.",
+    image: "/image/Dr.-Catherine-Nakalembe2.jpg",
   },
   {
     id: "sumait-2023-371",
@@ -4654,6 +4842,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Organization",
     brief:
       "Awarded for supporting over 6.4 million children, partnering with 7,000 government schools across five African countries to keep girls in primary and secondary education since 1993.",
+    image: "/image/CAMFED-logo.jpg",
   },
   {
     id: "sumait-2024-372",
@@ -4667,6 +4856,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "Vice President, University of Health and Allied Sciences. The Prize was jointly awarded to three distinguished African scientists for their pioneering contributions to the fight against malaria in Africa.",
+    image: "/image/Professor-Fred-Binka2.jpg",
   },
   {
     id: "sumait-2024-373",
@@ -4680,6 +4870,7 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "Associate Professor of Pediatrics and Child Health at Makerere University, and Consultant Pediatric Neurologist at Mulago National Referral Hospital. The Prize was jointly awarded to three distinguished African scientists for their pioneering contributions to the fight against malaria in Africa.",
+    image: "/image/ProfRitchard.png",
   },
   {
     id: "sumait-2024-374",
@@ -4693,5 +4884,6 @@ export const LAUREATES: Laureate[] = [
     kind: "Individual",
     brief:
       "Director of Research in Parasitology. The Prize was jointly awarded to three distinguished African scientists for their pioneering contributions to the fight against malaria in Africa. Regional Director of the Institute for Health Sciences Research in Nanoro. Burkina Faso",
+    image: "/image/ProfHalidou.png",
   },
 ];
