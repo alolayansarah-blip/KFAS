@@ -53,6 +53,7 @@ const config: Config = {
       },
       fontFamily: {
         poppins: ["var(--font-poppins)", "sans-serif"],
+        arabic: ["var(--font-arabic)", "sans-serif"],
       },
       animation: {
         shimmer: "shimmer 2s infinite",

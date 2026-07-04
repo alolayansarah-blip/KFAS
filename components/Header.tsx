@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, memo } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import {
+  Link,
+  switchLocalePathname,
+  usePathname,
+  useRouter,
+} from "@/src/i18n/navigation";
 import type { NavItem } from "@/types";
 
 const SCROLL_THRESHOLD = 50;
 const NAV_CLOSE_DELAY_MS = 220;
-const LANG_STORAGE_KEY = "kfas-lang";
 const HREF_OUR_TEAM = "/about/our-team";
 const SEARCH_HREF = "/search";
 
@@ -15,7 +19,7 @@ function navItemKey(item: NavItem) {
   return `${item.href}::${item.label}`;
 }
 
-const DEFAULT_NAV_ITEMS: NavItem[] = [
+const DEFAULT_NAV_ITEMS_EN: NavItem[] = [
   {
     label: "About",
     href: "/about",
@@ -82,10 +86,99 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
   },
 ];
 
+const DEFAULT_NAV_ITEMS_AR: NavItem[] = [
+  {
+    label: "عن المؤسسة",
+    href: "/about",
+    children: [
+      { label: "من نحن", href: "/about/AboutKfas" },
+      { label: "تاريخنا", href: "/about/OurHistory" },
+      { label: "استراتيجيتنا", href: "/about/OurStrategy" },
+      { label: "مجلس الإدارة", href: "/about/BoardOfDirectors" },
+      { label: "فريقنا", href: "/about/our-team" },
+    ],
+  },
+  {
+    label: "البحث العلمي",
+    href: "/Research",
+    children: [
+      { label: "المنح", href: "/research/grants" },
+      { label: "الأنشطة والفعاليات", href: "/research/ActivitiesAndEvents" },
+      { label: "الدراسات بالتكليف", href: "/research/AssignedStudies" },
+      { label: "رعاية المؤتمرات العلمية", href: "/research/SCS" },
+      { label: "نشر التكنلوجيـا", href: "/research/TechDeployment" },
+      {
+        label: "البحث والتطوير في القطاع الخاص",
+        href: "/research/RandDPrivate",
+      },
+      { label: "بوابة أبحاث المؤسسة", href: "/research/KFASResearchPortal" },
+    ],
+  },
+  {
+    label: "التعلّم والتطوير",
+    href: "/Learning-and-Development",
+    children: [
+      {
+        label: "الباحثون",
+        href: "/Learning-and-Development/Researchers",
+      },
+      {
+        label: "المهنيون",
+        href: "/Learning-and-Development/Professionals",
+      },
+      { label: "الشباب", href: "/Learning-and-Development/Youth" },
+    ],
+  },
+  {
+    label: "العلوم والمجتمع",
+    href: "/Science-and-Society",
+    children: [
+      {
+        label: "رعاية الأنشطة والفعاليات",
+        href: "/ScienceAndSociety/ActivitiesAndEventsSponsership",
+      },
+      { label: "المنشورات", href: "https://www.aspdkw.com/" },
+      {
+        label: "ذوو الاحتياجات الخاصة",
+        href: "/ScienceAndSociety/SpecialNeeds",
+      },
+    ],
+  },
+  {
+    label: "الجوائز",
+    href: "/prizes",
+    children: [
+      { label: "جائزة الكويت", href: "/prizes/KuwaitPrize" },
+      { label: "جائزة جابر الأحمد", href: "/prizes/Jaber-AlAhmadPrize" },
+      { label: "جائزة السميط", href: "/prizes/AlSumaitPrize" },
+      { label: "الفائزون", href: "/prizes/Laureates" },
+    ],
+  },
+];
+
+const DEFAULT_NAV_ITEMS = DEFAULT_NAV_ITEMS_EN;
+
 const LANGUAGES = [
   { code: "en", label: "English", flag: "🇬🇧" },
   { code: "ar", label: "العربية", flag: "🇰🇼" },
 ];
+
+const UI_STRINGS = {
+  en: {
+    search: "Search the website",
+    changeLanguage: "Change language",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    language: "Language",
+  },
+  ar: {
+    search: "البحث في الموقع",
+    changeLanguage: "تغيير اللغة",
+    openMenu: "فتح القائمة",
+    closeMenu: "إغلاق القائمة",
+    language: "اللغة",
+  },
+} as const;
 
 interface HeaderProps {
   logo?: string;
@@ -177,14 +270,16 @@ function navLinkColor(isScrolled: boolean, isActive: boolean): string {
 const SearchButton = ({
   isScrolled,
   onClick,
+  ariaLabel,
 }: {
   isScrolled: boolean;
   onClick: () => void;
+  ariaLabel: string;
 }) => (
   <button
     type="button"
     onClick={onClick}
-    aria-label="Search the website"
+    aria-label={ariaLabel}
     className={`${NAV_LINK_BASE} ${navLinkColor(isScrolled, false)}`}
   >
     <SearchIcon className="h-[18px] w-[18px]" />
@@ -400,23 +495,27 @@ DesktopNavItem.displayName = "DesktopNavItem";
 
 const LanguageSwitcher = ({
   currentLanguage,
+  pathname,
   isOpen,
   isScrolled,
   onToggle,
-  onSelect,
+  onNavigate,
+  ariaLabel,
 }: {
   currentLanguage: string;
+  pathname: string;
   isOpen: boolean;
   isScrolled: boolean;
   onToggle: () => void;
-  onSelect: (code: string) => void;
+  onNavigate: (code: string) => void;
+  ariaLabel: string;
 }) => (
   <div className="language-switcher relative ml-1 shrink-0">
     <button
       type="button"
       id="lang-trigger"
       onClick={onToggle}
-      aria-label="Change language"
+      aria-label={ariaLabel}
       aria-expanded={isOpen}
       aria-haspopup="menu"
       aria-controls={isOpen ? "lang-menu" : undefined}
@@ -438,11 +537,11 @@ const LanguageSwitcher = ({
     >
       {LANGUAGES.map((lang, idx) => (
         <div key={lang.code}>
-          <button
-            type="button"
+          <a
+            href={switchLocalePathname(pathname, lang.code)}
             role="menuitem"
             aria-current={currentLanguage === lang.code ? "true" : undefined}
-            onClick={() => onSelect(lang.code)}
+            onClick={() => onNavigate(lang.code)}
             className={`flex w-full items-center gap-2.5 px-5 py-2.5 text-[14px] text-left text-white/90 transition-colors duration-150 hover:bg-white/15 hover:text-white ${
               currentLanguage === lang.code ? "bg-white/15 text-white" : ""
             }`}
@@ -452,7 +551,7 @@ const LanguageSwitcher = ({
             {currentLanguage === lang.code && (
               <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
             )}
-          </button>
+          </a>
           {idx < LANGUAGES.length - 1 && <DropdownDivider />}
         </div>
       ))}
@@ -592,13 +691,19 @@ function Header({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState("en");
+  const locale = useLocale();
 
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const router = useRouter();
   const closeNavTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const navItemsList = navItems.length > 0 ? navItems : DEFAULT_NAV_ITEMS;
+  const navItemsList =
+    navItems.length > 0
+      ? navItems
+      : locale === "ar"
+        ? DEFAULT_NAV_ITEMS_AR
+        : DEFAULT_NAV_ITEMS_EN;
+  const t = UI_STRINGS[locale === "ar" ? "ar" : "en"];
   const showWhiteBg = isScrolled || forceWhiteBackground;
 
   const clearCloseTimer = useCallback(() => {
@@ -634,16 +739,9 @@ function Header({
     [clearCloseTimer],
   );
 
-  const handleLanguageSelect = useCallback((code: string) => {
-    setCurrentLanguage(code);
+  const handleLanguageNavigate = useCallback((code: string) => {
     setIsLangOpen(false);
-    try {
-      localStorage.setItem(LANG_STORAGE_KEY, code);
-    } catch {
-      /* ignore */
-    }
-    document.documentElement.lang = code;
-    document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+    document.cookie = `NEXT_LOCALE=${code};path=/;SameSite=Lax`;
   }, []);
 
   const closeMobileMenu = useCallback(() => setIsMenuOpen(false), []);
@@ -678,19 +776,6 @@ function Header({
   }, []);
 
   useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(LANG_STORAGE_KEY);
-      if (saved === "en" || saved === "ar") {
-        setCurrentLanguage(saved);
-        document.documentElement.lang = saved;
-        document.documentElement.dir = saved === "ar" ? "rtl" : "ltr";
-      }
-    } catch {
-      /* SSR / private mode */
-    }
-  }, []);
 
   useEffect(() => {
     if (!openDropdown && !isLangOpen && !isMenuOpen) return;
@@ -773,12 +858,17 @@ function Header({
             ))}
 
             <div>
-              <SearchButton isScrolled={showWhiteBg} onClick={goToSearch} />
+              <SearchButton
+                isScrolled={showWhiteBg}
+                onClick={goToSearch}
+                ariaLabel={t.search}
+              />
             </div>
 
             <div>
               <LanguageSwitcher
-                currentLanguage={currentLanguage}
+                currentLanguage={locale}
+                pathname={pathname}
                 isOpen={isLangOpen}
                 isScrolled={showWhiteBg}
                 onToggle={() => {
@@ -786,7 +876,8 @@ function Header({
                   setOpenDropdown(null);
                   setIsLangOpen((v) => !v);
                 }}
-                onSelect={handleLanguageSelect}
+                onNavigate={handleLanguageNavigate}
+                ariaLabel={t.changeLanguage}
               />
             </div>
           </div>
@@ -816,7 +907,7 @@ function Header({
             <button
               type="button"
               onClick={goToSearch}
-              aria-label="Search the website"
+              aria-label={t.search}
               className="p-2 text-gray-400 transition-colors hover:text-[#EC601B] active:scale-95"
             >
               <SearchIcon className="h-6 w-6" />
@@ -825,7 +916,7 @@ function Header({
             <button
               type="button"
               onClick={() => setIsMenuOpen((v) => !v)}
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-label={isMenuOpen ? t.closeMenu : t.openMenu}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
               className="p-2 text-gray-400 transition-colors hover:text-[#EC601B] active:scale-95"
@@ -868,29 +959,29 @@ function Header({
 
             <div className="border-t border-gray-50 px-5 pb-4 pt-3">
               <p className="mb-2 px-2 text-[10px] font-medium uppercase tracking-[0.1em] text-gray-300">
-                Language
+                {t.language}
               </p>
               <div className="space-y-0.5">
                 {LANGUAGES.map((lang) => (
-                  <button
+                  <a
                     key={lang.code}
-                    type="button"
+                    href={switchLocalePathname(pathname, lang.code)}
                     onClick={() => {
-                      handleLanguageSelect(lang.code);
+                      handleLanguageNavigate(lang.code);
                       closeMobileMenu();
                     }}
                     className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-[14px] font-normal transition-colors ${
-                      currentLanguage === lang.code
+                      locale === lang.code
                         ? "bg-[#EC601B] text-white rounded-lg"
                         : "text-gray-600 hover:text-[#EC601B]"
                     }`}
                   >
                     <span className="text-base leading-none">{lang.flag}</span>
                     <span>{lang.label}</span>
-                    {currentLanguage === lang.code && (
+                    {locale === lang.code && (
                       <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
                     )}
-                  </button>
+                  </a>
                 ))}
               </div>
             </div>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useLocale, useTranslations } from "next-intl";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -17,33 +18,10 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: EASE },
 });
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-const STEPS = [
-  {
-    id: "01",
-    body: "Policy Papers and Guidelines: KFAS can assist public entities, upon request, in commissioning a consultant or specialized entity to conduct research/study for a specific study of a national issue within priorities that will lead to developing policies or guidelines that have positive impact on stakeholders.",
-  },
-  {
-    id: "02",
-    body: "Commissioned Research: KFAS rolls our Call for Proposal or commissions specialized entities to conduct research/study for a specific topic or technology within priority areas that requires further research and will lead to application, policy or guidelines.",
-  },
-];
-
-const WHITE_PAPERS = [
-  {
-    id: "01",
-    title: "Kuwait's Energy Transition",
-    image: "/image/WhitePaper1.jpg",
-    alt: "Kuwait's Energy Transition white paper cover",
-  },
-  {
-    id: "02",
-    title: "Mitigating and Combating Sand Encroachments in Kuwait",
-    image: "/image/WhitePaper2.jpg",
-    alt: "Mitigating and Combating Sand Encroachments in Kuwait white paper cover",
-  },
-];
+const WHITE_PAPER_IMAGES = [
+  "/image/WhitePaper1.jpg",
+  "/image/WhitePaper2.jpg",
+] as const;
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
@@ -69,6 +47,28 @@ function SectionHead({ title }: { title: string }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AssignedStudiesPage() {
+  const t = useTranslations("AssignedStudiesPage");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
+  const bodyTextSize = isArabic ? "text-[17px]" : "text-[15px]";
+
+  const whitePapers = (
+    t.raw("whitePapers") as { title: string; alt: string }[]
+  ).map((paper, i) => ({
+    id: String(i + 1).padStart(2, "0"),
+    title: paper.title,
+    alt: paper.alt,
+    image: WHITE_PAPER_IMAGES[i] ?? WHITE_PAPER_IMAGES[0],
+  }));
+
+  const steps = (t.raw("steps") as { title: string; body: string }[]).map(
+    (step, i) => ({
+      id: String(i + 1).padStart(2, "0"),
+      title: step.title,
+      body: step.body,
+    }),
+  );
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -93,7 +93,7 @@ export default function AssignedStudiesPage() {
           <div className="absolute inset-0">
             <Image
               src="/image/AssignedBanner.webp"
-              alt="Assigned Studies"
+              alt={t("heroTitle")}
               fill
               priority
               quality={65}
@@ -127,25 +127,31 @@ export default function AssignedStudiesPage() {
           >
             {/* Breadcrumb */}
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-base tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Research</span>
+              <span>{t("breadcrumb")}</span>
               {/* <span className="text-white/25">/</span>
               <span>Assigned Studies</span> */}
             </motion.div>
 
             {/* Title — clip-path wipe */}
-            <div className="overflow-hidden">
+            <div className={`overflow-hidden ${isArabic ? "pb-2" : "pb-0.5"}`}>
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className={`font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                  isArabic ? "leading-[1.4]" : "leading-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Assigned Studies
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
@@ -168,26 +174,27 @@ export default function AssignedStudiesPage() {
           <div className="mx-auto max-w-[1280px]">
             <motion.div className="max-w-[860px]" {...fadeUp(0)}>
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <span className="mt-5 block font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
-                Overview
+              <span
+                className={`mt-5 block font-poppins font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-base tracking-normal"
+                    : "text-[10px] uppercase tracking-[0.35em]"
+                }`}
+              >
+                {t("overviewKicker")}
               </span>
-              <h2 className="mt-3 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem]">
-                Assigned Studies
+              <h2
+                className={`mt-3 font-poppins font-semibold tracking-tight text-[#1D2D44] sm:text-[1.9rem] ${
+                  isArabic
+                    ? "text-[1.55rem] leading-[1.45]"
+                    : "text-[1.55rem] leading-[1.18]"
+                }`}
+              >
+                {t("overviewTitle")}
               </h2>
 
-              <p className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
-                {/* They are commissioned studies targeting specific thematic areas
-                that have a high impact on Kuwait&apos;s long-term development
-                goals, these strategic studies are aligned with Kuwait&apos;s
-                national priorities, focusing on producing white papers, policy
-                briefs, and research studies to address critical national
-                issues. */}
-                KFAS funds commissioned studies targeting specific thematic
-                areas that have a high impact on Kuwait's long-term development
-                goals, these strategic studies are aligned with Kuwait's
-                national priorities, focusing on producing white papers, policy
-                briefs, and research studies to address critical national
-                issues.
+              <p className={`mt-7 font-poppins ${bodyTextSize} font-light leading-[1.9] text-[#1D2D44]/70`}>
+                {t("overviewBody")}
               </p>
             </motion.div>
           </div>
@@ -198,12 +205,12 @@ export default function AssignedStudiesPage() {
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <SectionHead title="White Papers" />
+                <SectionHead title={t("whitePapersTitle")} />
               </div>
 
               <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                  {WHITE_PAPERS.map(({ id, title, image, alt }, i) => (
+                  {whitePapers.map(({ id, title, image, alt }, i) => (
                     <motion.article key={id} {...fadeUp(0.05 + i * 0.08)}>
                       <div className="group relative aspect-[3/4] w-full overflow-hidden border border-[#1D2D44]/[0.08]">
                         <Image
@@ -234,12 +241,12 @@ export default function AssignedStudiesPage() {
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <SectionHead title="How the process works" />
+                <SectionHead title={t("processTitle")} />
               </div>
 
               <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
                 <ul className="divide-y divide-[#1D2D44]/10 border-t border-[#1D2D44]/10">
-                  {STEPS.map(({ id, body }, i) => (
+                  {steps.map(({ id, title, body }, i) => (
                     <motion.li
                       key={id}
                       {...fadeUp(0.05 + i * 0.08)}
@@ -248,7 +255,10 @@ export default function AssignedStudiesPage() {
                       <span className="shrink-0 pt-1 font-poppins text-[12px] font-bold tracking-[0.2em] text-[#EC601B]">
                         {id}
                       </span>
-                      <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
+                      <p className={`font-poppins ${bodyTextSize} font-light leading-[1.9] text-[#1D2D44]/75`}>
+                        <span className="font-semibold underline underline-offset-[3px] decoration-[#1D2D44]/40">
+                          {title}
+                        </span>{" "}
                         {body}
                       </p>
                     </motion.li>
@@ -264,9 +274,9 @@ export default function AssignedStudiesPage() {
           <div className="mx-auto max-w-[1280px]">
             <motion.p
               {...fadeUp(0.05)}
-              className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75"
+              className={`font-poppins ${bodyTextSize} font-light leading-[1.9] text-[#1D2D44]/75`}
             >
-              For more information contact us at:{" "}
+              {t("contactText")}{" "}
               <a
                 href="mailto:research@kfas.org.kw"
                 className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"

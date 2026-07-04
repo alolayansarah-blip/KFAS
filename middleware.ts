@@ -1,31 +1,44 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { NextRequest, NextResponse } from "next/server";
+import { routing } from "./src/i18n/routing";
 
-/**
- * App routes live under /research/... (lowercase). Nav and bookmarks may use
- * /Research/... which 404s on case-sensitive hosts. Normalize the prefix.
- * Also normalize /research/randdprivate -> /research/RandDPrivate.
- */
-export function middleware(request: NextRequest) {
+const intlMiddleware = createMiddleware(routing);
+
+function splitLocalePath(pathname: string): {
+  locale: string | null;
+  rest: string;
+} {
+  const match = pathname.match(/^\/(en|ar)(\/.*)?$/);
+  if (match) {
+    return { locale: match[1], rest: match[2] ?? "" };
+  }
+  return { locale: null, rest: pathname };
+}
+
+export default function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
-  const p = url.pathname;
+  const { locale, rest } = splitLocalePath(url.pathname);
+  const prefix = locale ? `/${locale}` : "";
 
-  if (p.startsWith("/Research/")) {
-    url.pathname = "/research/" + p.slice("/Research/".length);
+  if (rest.startsWith("/Research/")) {
+    url.pathname = `${prefix}/research/${rest.slice("/Research/".length)}`;
     return NextResponse.redirect(url);
   }
 
-  if (p.startsWith("/research/")) {
-    const rest = p.slice("/research/".length);
-    if (rest.toLowerCase() === "randdprivate" && rest !== "RandDPrivate") {
-      url.pathname = "/research/RandDPrivate";
+  if (rest.startsWith("/research/")) {
+    const segment = rest.slice("/research/".length);
+    if (
+      segment.toLowerCase() === "randdprivate" &&
+      segment !== "RandDPrivate"
+    ) {
+      url.pathname = `${prefix}/research/RandDPrivate`;
       return NextResponse.redirect(url);
     }
   }
 
-  return NextResponse.next();
+  return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ["/Research/:path*", "/research/:path*"],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };

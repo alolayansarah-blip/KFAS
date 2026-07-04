@@ -1,0 +1,77 @@
+{
+  "Common": {
+    "research": "Research",
+    "Overview": "Overview"
+  },
+  "AssignedStudiesPage": {
+    "breadcrumb": "Research",
+    "heroTitle": "Assigned Studies",
+    "overviewKicker": "Overview",
+    "overviewTitle": "Assigned Studies",
+    "overviewBody": "KFAS funds commissioned studies targeting specific thematic areas that have a high impact on Kuwait's long-term development goals, these strategic studies are aligned with Kuwait's national priorities, focusing on producing white papers, policy briefs, and research studies to address critical national issues.",
+    "whitePapersTitle": "White Papers",
+    "whitePapers": [
+      {
+        "title": "Kuwait's Energy Transition",
+        "alt": "Kuwait's Energy Transition white paper cover"
+      },
+      {
+        "title": "Mitigating and Combating Sand Encroachments in Kuwait",
+        "alt": "Mitigating and Combating Sand Encroachments in Kuwait white paper cover"
+      }
+    ],
+    "processTitle": "How the process works",
+    "steps": [
+      {
+        "title": "Policy Papers and Guidelines:",
+        "body": "KFAS can assist public entities, upon request, in commissioning a consultant or specialized entity to conduct research/study for a specific study of a national issue within priorities that will lead to developing policies or guidelines that have positive impact on stakeholders."
+      },
+      {
+        "title": "Commissioned Research:",
+        "body": "KFAS rolls our Call for Proposal or commissions specialized entities to conduct research/study for a specific topic or technology within priority areas that requires further research and will lead to application, policy or guidelines."
+      }
+    ],
+    "contactText": "For more information contact us at:"
+  },
+  "TechDeploymentPage": {
+    "breadcrumb": "Research",
+    "heroAlt": "Technology deployment and innovation",
+    "heroTitleLine1": "Technology",
+    "heroTitleLine2": "Deployment",
+    "overviewKicker": "Overview",
+    "overviewTitle": "Tech Deployment",
+    "overviewSubtitleLine1": "Pilot Projects &",
+    "overviewSubtitleLine2": "Scalable Solutions",
+    "overviewBody": "Technology Deployment (Pilot) projects offer scalable solutions to national challenges. These projects drive innovation, sustainability, and socio-economic progress in Kuwait and are designed to transform research into practical applications, supporting technology transfer, economic growth, and institutional collaboration.",
+    "whoCanApplyTitle": "Who Can Apply?",
+    "whoCanApplyBody": "Any Kuwait based research institution, public entities and NGOs.",
+    "pilotAlts": [
+      "Rooftop solar panel installation",
+      "SOOF Sustainable Wool Processing Mill",
+      "Solar parking canopy installation"
+    ],
+    "processTitle": "How the Process Works",
+    "processIntro": "Applications open year-round",
+    "processSteps": [
+      {
+        "title": "Applicants submit a short concept note outlining:",
+        "bullets": [
+          "Project objectives and scope",
+          "High-level timeline",
+          "Budget summary",
+          "Expected outcome"
+        ]
+      },
+      {
+        "body": "Concept Review: KFAS reviews the concept for relevance and eligibility. This can include several meetings with applicant to refine the proposed concept."
+      },
+      {
+        "body": "Applicant is requested to submit a detailed proposal with project description and methodology including a letter of intent from his/her institution."
+      },
+      {
+        "body": "KFAS reviews the proposal for funding eligibility."
+      }
+    ],
+    "contactText": "For more information contact us at:"
+  }
+}
