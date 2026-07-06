@@ -304,5 +304,85 @@
       }
     ],
     "componentsClosing": "The prize may be awarded to one laureate or shared by multiple laureates whose contributions merit recognition."
+  },
+  "JaberAlAhmadPrizePage": {
+    "breadcrumb": "Prizes",
+    "heroTitleLine1": "Jaber Al-Ahmad",
+    "heroTitleLine2": "Prize",
+    "heroSubtitle": "for Young Researchers",
+    "applyLinkText": "Click here to apply",
+    "logoAlt": "Jaber Al-Ahmad Prize for Young Researchers",
+    "overviewTitle": "Overview of the Jaber Al-Ahmad Prize",
+    "overviewBody1Pre": "The Kuwait Foundation for the Advancement of Sciences (KFAS) awards the ",
+    "overviewBody1Bold": "Jaber Al-Ahmad Prize for Young Researchers",
+    "overviewBody1Post": " to encourage outstanding young national scientific talents to engage in research, study, authorship, and translation across various branches of scientific production.",
+    "overviewBody2Pre": "The Jaber Al-Ahmad Prize for Young Researchers was established in ",
+    "overviewBody2Year": "1988",
+    "overviewBody2Post": ", following an initiative by the late Amir Sheikh Jaber Al-Ahmad Al-Jaber Al-Sabah, may he rest in peace. The prize aims to honor young Kuwaiti scientists and encourage creativity and excellence in various fields of scientific research.",
+    "objectivesTitle": "Objectives of the Prize",
+    "objectivesIntro": "The Jaber Al-Ahmad Prize aims to:",
+    "objectiveItems": [
+      "Encourage young Kuwaiti researchers to excel in scientific research.",
+      "Recognize outstanding research achievements in the early stages of a scientific career.",
+      "Promote a culture of scientific research and innovation within academic and research institutions in the State of Kuwait.",
+      "Support the development of a generation of researchers capable of contributing to the advancement of scientific knowledge."
+    ],
+    "fieldsTitle": "Prize Fields",
+    "fieldsIntro": "The prize covers six scientific fields:",
+    "fieldBlocks": [
+      {
+        "title": "Natural Sciences and Mathematics",
+        "body": "Includes physics, chemistry, geology, mathematics, statistics, computer science, and related disciplines."
+      },
+      {
+        "title": "Engineering Sciences",
+        "body": "Includes chemical engineering, civil engineering, electrical engineering, industrial engineering, mechanical engineering, petroleum engineering, agricultural engineering, and related disciplines."
+      },
+      {
+        "title": "Biological Sciences",
+        "body": "Includes botany, embryology, zoology, entomology, biochemistry, agriculture, animal resources (veterinary science, dairy production, poultry, livestock, fisheries), agricultural chemistry, plant pathology, horticulture, microbiology, molecular biology, genetics, and related disciplines."
+      },
+      {
+        "title": "Medical and Allied Medical Sciences",
+        "body": "Includes anatomy, pharmacy, physiology, medical microbiology, pathology, internal medicine, obstetrics and gynecology, pediatrics, psychiatry, radiotherapy, surgery, dentistry, ophthalmology, and related disciplines."
+      },
+      {
+        "title": "Social Sciences and Humanities",
+        "body": "Includes anthropology, psychology, sociology, political science, history, geography, education, Arabic language, foreign languages, philosophy, law, Islamic jurisprudence, and related disciplines."
+      },
+      {
+        "title": "Administrative and Economic Sciences",
+        "body": "Includes business administration, marketing, management information systems, finance, international business, accounting, economics, insurance, operations management, and related disciplines."
+      }
+    ],
+    "eligibilityTitle": "Eligibility and Conditions",
+    "eligibilityIntro": "Applicants must meet the following requirements:",
+    "eligibilityItems": [
+      "The nominee must be a Kuwaiti national.",
+      "The nominee must not have previously won the Jaber Al-Ahmad Prize in any of its fields.",
+      "A nominee may not apply for more than one field, and the nomination must be in the nominee's area of scientific specialization with the submitted research.",
+      "The nominee must hold a PhD degree, or a fellowship in medical specialties, accredited by the Ministry of Higher Education. Government-sponsored faculty members studying abroad are exempt from this requirement.",
+      "The nominee must not exceed 45 years of age at the time the prize is announced.",
+      "Scientific outputs considered in the evaluation include primarily peer-reviewed journal publications, as well as conference papers, unpublished research presented at conferences (abstracts and posters), authored/translated/edited books, book chapters, articles, studies, reports, and international patents.",
+      "The submitted scientific output must include at least 12 research papers published in peer-reviewed journals after obtaining the PhD or fellowship.",
+      "The submitted scientific production must adhere to standards and principles of academic and research integrity.",
+      "Decisions of the Board of Directors of KFAS are final and not subject to appeal."
+    ],
+    "componentsTitle": "Prize Components",
+    "componentsIntro": "Each Jaber Al-Ahmad Prize includes:",
+    "prizeComponents": [
+      {
+        "title": "KD 15,000",
+        "desc": "A monetary award of 15,000 Kuwaiti Dinars."
+      },
+      {
+        "title": "Gold Medal",
+        "desc": "A gold medal bearing the logo of the Kuwait Foundation for the Advancement of Sciences."
+      },
+      {
+        "title": "Certificate",
+        "desc": "A certificate of recognition issued by KFAS."
+      }
+    ]
   }
 }
