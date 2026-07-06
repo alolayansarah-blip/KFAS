@@ -226,18 +226,15 @@
       },
       {
         "title": "Al-Hamra Business Tower Structural Health Monitoring:",
-        "body": "The structural monitoring project, delivered in collaboration with KISR, Kuwait University, and MIT, aimed to develop an advanced system for monitoring the safety and performance of tall buildings in Kuwait. Tested on the Al-Hamra Business Tower, the project focused on modelling ground motion and installing a network of sensors to continuously measure a building’s response to environmental forces such as wind and seismic activity. These sensors capture real-time data on structural behavior, enabling early detection of potential damage or changes in performance. Beyond its technical contributions, the project represents a strategic step toward strengthening Kuwait’s capabilities in infrastructure resilience.",
-        "alt": "Futuristic visualization of skyscrapers with digital data overlays representing structural health monitoring technology"
+        "body": "The structural monitoring project, delivered in collaboration with KISR, Kuwait University, and MIT, aimed to develop an advanced system for monitoring the safety and performance of tall buildings in Kuwait. Tested on the Al-Hamra Business Tower, the project focused on modelling ground motion and installing a network of sensors to continuously measure a building’s response to environmental forces such as wind and seismic activity. These sensors capture real-time data on structural behavior, enabling early detection of potential damage or changes in performance. Beyond its technical contributions, the project represents a strategic step toward strengthening Kuwait’s capabilities in infrastructure resilience."
       },
       {
         "title": "Using Quantum Technology to Secure Digital Communications in the State of Kuwait:",
-        "body": "This project, led by Kuwait Hackers, addresses the emerging threat posed by the rapid advancement of quantum computing, which has the potential to compromise conventional cryptographic systems. At the same time, it positions Kuwait at the forefront of next-generation cybersecurity by exploring quantum cryptography as a resilient, forward-looking solution to safeguard critical infrastructure and sensitive data within an increasingly complex and interconnected global landscape.",
-        "alt": "Quantum technology concept illustration for secure digital communications"
+        "body": "This project, led by Kuwait Hackers, addresses the emerging threat posed by the rapid advancement of quantum computing, which has the potential to compromise conventional cryptographic systems. At the same time, it positions Kuwait at the forefront of next-generation cybersecurity by exploring quantum cryptography as a resilient, forward-looking solution to safeguard critical infrastructure and sensitive data within an increasingly complex and interconnected global landscape."
       },
       {
         "title": "Mobile Non-Destructive Testing NDT Inspection Robot:",
-        "body": "The EQUATE Group developed an innovative Mobile Non-Destructive Testing inspection robot designed to enhance safety, efficiency, and quality in industrial maintenance operations by enabling remote inspection of confined and hazardous environments without human intervention. Internationally patented through the United States Patent and Trademark Office, the solution was developed by a team of EQUATE engineers in collaboration with KFAS and the Sabah Al-Ahmad Center for Giftedness and Creativity and delivered through the KFAS Innovation Challenge program. Through this initiative, KFAS played a pivotal role in fostering innovation and empowering local talent, supporting the transformation of advanced engineering concepts into globally recognized industrial solutions that strengthen Kuwait’s innovation ecosystem and industrial competitiveness.",
-        "alt": "EQUATE mobile non-destructive testing inspection robot"
+        "body": "The EQUATE Group developed an innovative Mobile Non-Destructive Testing inspection robot designed to enhance safety, efficiency, and quality in industrial maintenance operations by enabling remote inspection of confined and hazardous environments without human intervention. Internationally patented through the United States Patent and Trademark Office, the solution was developed by a team of EQUATE engineers in collaboration with KFAS and the Sabah Al-Ahmad Center for Giftedness and Creativity and delivered through the KFAS Innovation Challenge program. Through this initiative, KFAS played a pivotal role in fostering innovation and empowering local talent, supporting the transformation of advanced engineering concepts into globally recognized industrial solutions that strengthen Kuwait’s innovation ecosystem and industrial competitiveness."
       }
     ],
     "readyToStartTitle": "Ready to Start?",
@@ -248,5 +245,64 @@
       "Contact the KFAS Research & Technology team for initial guidance"
     ],
     "contactLabel": "Contact:"
+  },
+  "KuwaitPrizePage": {
+    "breadcrumb": "Prizes",
+    "heroTitle": "Kuwait Prize",
+    "applyLinkText": "Click here to apply",
+    "logoAlt": "Kuwait Prize",
+    "overviewTitle": "Overview of the Kuwait Prize",
+    "overviewBody1": "The Kuwait Prize is one of the most prestigious scientific awards granted by the Kuwait Foundation for the Advancement of Sciences (KFAS). The prize recognizes distinguished researchers who have made significant and impactful contributions to the advancement of science, knowledge, and innovation in fields that serve humanity and promote scientific progress.",
+    "overviewBody2Pre": "Established in ",
+    "overviewBody2Year": "1979",
+    "overviewBody2Post": ", the Kuwait Prize aims to encourage excellence in scientific research and to highlight outstanding achievements by scientists and scholars whose work contributes to the development of knowledge and the advancement of society.",
+    "objectivesTitle": "Objectives of the Prize",
+    "objectivesIntro": "The Kuwait Prize seeks to:",
+    "objectiveItems": [
+      "Promote scientific research and innovation in key fields of knowledge.",
+      "Recognize and honor distinguished scientists and scholars whose work has significantly advanced their disciplines.",
+      "Encourage Arab researchers to pursue excellence in scientific inquiry and discovery.",
+      "Strengthen the culture of research and knowledge development in the Arab world."
+    ],
+    "fieldsTitle": "Prize Fields",
+    "fieldsIntro": "The Kuwait Prize covers five main fields:",
+    "fieldItems": [
+      "Basic Sciences",
+      "Applied Sciences",
+      "Economic, Social and Legal Sciences",
+      "Humanities, Arts and Literature",
+      "Emerging Sciences"
+    ],
+    "fieldsClosing": "The first four fields are awarded annually, while the fifth field, Emerging Sciences, is awarded biennially. Within these main fields, the specific scientific subfields are determined and announced by KFAS in accordance with the approved prize cycle.",
+    "eligibilityTitle": "Eligibility and Conditions",
+    "eligibilityIntro": "Candidates for the Kuwait Prize must satisfy the approved conditions and requirements of the Prize, including the following:",
+    "eligibilityItems": [
+      "The nominee must be of Arab nationality and provide supporting documentation proving Arab origin.",
+      "The nominee must be a distinguished researcher in the relevant scientific field and hold a doctorate degree or, in medical specialties, an equivalent fellowship.",
+      "The nominee must not have previously won any field of the Kuwait Prize.",
+      "Nomination may be made in one field only.",
+      "The nominee's scientific or scholarly production must represent an original, continuous, and influential contribution in the field of nomination.",
+      "The submitted scientific production must be of significant relevance to the subject of the Prize.",
+      "Scientific production may include peer-reviewed research published in scientific journals, research published in scientific conferences, authored, translated, edited, and verified books and book chapters, artistic production in the fields of arts and literature, art exhibitions, and international patents, in accordance with the approved rules and criteria of the Prize.",
+      "Nominations are accepted through universities, governmental and private institutes, previous Kuwait Prize laureates, research and nomination committees, accredited international organizations, as well as self-nomination, in accordance with KFAS regulations. KFAS does not accept nominations from political entities.",
+      "In the case of self-nomination, the nominee shall attach a detailed statement setting out the justifications for eligibility, together with recommendation letters from references affiliated with scientific institutions."
+    ],
+    "componentsTitle": "Prize Components",
+    "componentsIntro": "For each awarded subfield, the Kuwait Prize consists of:",
+    "prizeComponents": [
+      {
+        "title": "KD 40,000",
+        "desc": "A monetary award of KD 40,000. (Approx. $135,000)"
+      },
+      {
+        "title": "Gold Medal",
+        "desc": "A gold medal bearing the emblem of KFAS."
+      },
+      {
+        "title": "Certificate",
+        "desc": "A certificate of recognition from KFAS."
+      }
+    ],
+    "componentsClosing": "The prize may be awarded to one laureate or shared by multiple laureates whose contributions merit recognition."
   }
 }
