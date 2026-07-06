@@ -73,5 +73,180 @@
       }
     ],
     "contactText": "For more information contact us at:"
+  },
+  "RandDPrivatePage": {
+    "breadcrumb": "Research",
+    "heroAlt": "R&D in Private Sector",
+    "heroTitle": "R&D in Private Sector",
+    "overviewKicker": "Overview",
+    "overviewTitle": "Empowering Innovation in Kuwait's Private Sector",
+    "overviewImageAlt": "KFAS and private sector partners at a KDD exhibition",
+    "overviewBody1": "KFAS empowers Kuwaiti companies to enhance their competitiveness, boost productivity, and drive sustainable long-term growth through science, technology, and innovation.",
+    "overviewBody2Pre": "The ",
+    "overviewBody2Bold": "Private Sector R&D Co-Funding Grant",
+    "overviewBody2Post": " supports applied research, technology development, and innovation projects that enhance competitiveness, accelerate growth, and help drive Kuwait's transition toward a knowledge-based economy.",
+    "whatIsGrantTitle": "What is the Private Sector R&D Co-Funding Grant?",
+    "grantImageAlt": "Vertical farming innovation facility",
+    "whatIsGrantBody1": "The KFAS Private Sector R&D Co-Funding Grant supports applied research, technology development, and innovation projects that deliver clear business and national impact. Grants are co-funded, meaning KFAS partners with companies to jointly fund projects that advance innovation.",
+    "whatIsGrantBody2": "The program is designed to reduce innovation risk for companies while enabling them to access advanced expertise, validate new ideas, and accelerate commercialization.",
+    "grantTypesTitle": "Grant Types",
+    "grantTypesIntro": "Two pathways designed to match the scale and ambition of your innovation project:",
+    "grantTypes": [
+      {
+        "title": "Flagship Grants",
+        "subtitle": "Designed for high-impact projects of national or strategic importance.",
+        "bullets": [
+          "Supports large scale R&D or technology transfer projects",
+          "Ideal for projects that can generate strong success stories for Kuwait",
+          "Typical duration: 6–36 months",
+          "Funding levels are designed to attract ambitious, high-value projects"
+        ],
+        "note": "This grant type is intended for larger, strategically significant projects with the potential to deliver strong national and sector-wide impact."
+      },
+      {
+        "title": "Business Development Grants",
+        "subtitle": "Designed for projects with clear and measurable business benefits.",
+        "bullets": [
+          "Supports feasibility studies, applied R&D, technology transfer, and process optimisation",
+          "Suitable for small-to-medium scale innovation projects",
+          "Typical duration: 6–24 months"
+        ],
+        "note": "This pathway supports focused innovation projects that strengthen business performance and create tangible value for the company."
+      }
+    ],
+    "whoCanApplyTitle": "Who Can Apply?",
+    "whoCanApplyIntro": "You should consider applying if your organisation:",
+    "whoCanApplyItems": [
+      "Is a Kuwait-based private sector company or has legal representation in Kuwait",
+      "Has a clear R&D, technology, or innovation challenge",
+      "Can co-fund part of the project (financially or in-kind)",
+      "Has the operational and technical capacity to execute the project",
+      "Is seeking to work with a knowledge provider (local or international), or has strong in-house capabilities"
+    ],
+    "whatWeLookForTitle": "What We Look For",
+    "whatWeLookForIntro": "Applications are assessed based on:",
+    "whatWeLookForItems": [
+      "Clarity of objectives and problem definition",
+      "Technical feasibility and sound methodology",
+      "Innovation and novelty (locally or within the sector)",
+      "Expected outputs and business impact",
+      "Relevance to Kuwait and alignment with KFAS priorities",
+      "Budget justification and value for money"
+    ],
+    "applicationProcessTitle": "How the Application Process Works",
+    "applicationProcessIntro": "We follow a clear, staged process to support applicants throughout their journey:",
+    "applicationProcessSteps": [
+      {
+        "title": "Concept Note / Expression of Interest",
+        "lead": "Applicants submit a short concept note outlining:",
+        "bullets": [
+          "Company details and contact information",
+          "Project objectives and scope",
+          "High-level timeline",
+          "Budget summary",
+          "Expected business impact"
+        ]
+      },
+      {
+        "title": "Concept Review & Management Presentation",
+        "bullets": [
+          "KFAS reviews the concept for eligibility and relevance",
+          "Shortlisted applicants are invited to present their project to KFAS management"
+        ]
+      },
+      {
+        "title": "Full Application Submission",
+        "lead": "Eligible applicants are invited to submit a full proposal, including:",
+        "bullets": [
+          "Detailed project description and methodology",
+          "Work plan and milestones",
+          "Budget and co-funding plan",
+          "Information on the project team and knowledge providers"
+        ]
+      },
+      {
+        "title": "Review & Decision",
+        "bullets": [
+          "Applications undergo rigorous review",
+          "Final funding decisions are communicated to applicants"
+        ]
+      },
+      {
+        "title": "Grant Agreement & Project Kick-off",
+        "bullets": [
+          "Successful applicants sign a grant agreement",
+          "Projects begin with agreed milestones, reporting, and payment schedules"
+        ]
+      }
+    ],
+    "duringProjectTitle": "During the Project: Monitoring & Support",
+    "duringProjectIntro": "KFAS works closely with funded companies through:",
+    "duringProjectItems": [
+      "Regular status update meetings",
+      "Milestone-based deliverables and payments",
+      "Ongoing interaction from KFAS team",
+      "Support with project adjustments, if needed"
+    ],
+    "afterProjectTitle": "After the Project: Outcomes & Impact",
+    "afterProjectIntro": "At project completion, companies submit final deliverables and reports. KFAS focuses on:",
+    "afterProjectItems": [
+      "Measuring business and technological impact",
+      "Capturing lessons learned",
+      "Identifying scale-up or follow-on opportunities",
+      "Sharing success stories to inspire the wider private sector"
+    ],
+    "whyPartnerTitle": "Why Partner with KFAS?",
+    "partnerItems": [
+      "Co-Fund Grants reduce innovation risk",
+      "Access to trusted local and international expertise",
+      "Structured governance and milestone-based funding",
+      "Strong focus on real-world impact",
+      "Long-term partnership beyond a single project"
+    ],
+    "partnerBody1": "Beyond financial support, the co-funding model helps reduce innovation risk while providing applicants with strategic guidance, project oversight, and access to a global network of knowledge partners.",
+    "partnerBody2Pre": "Companies interested in applying are encouraged to review the grant guidelines and eligibility criteria and contact ",
+    "partnerBody2Mid": " with a project concept. For any inquiries, contact ",
+    "partnerBody2Post": " for guidance.",
+    "successStoriesTitle": "Success Stories & Impact",
+    "impactStories": [
+      {
+        "title": "KDD-No Sugar Added:",
+        "body": "KFAS funded the “No Sugar Added” project in partnership with Kuwait Danish Dairy and Dasman Diabetes Institute to scientifically re-engineer KDD’s best-selling chocolate ice cream. Using a “metabolic matrix” approach, the team reduced added sugars and enhanced nutritional value without sacrificing taste. Lab tests and an 8-month clinical trial with diabetic patients demonstrated the improved product’s health benefits, leading to the launch of a new no-added-sugar ice cream as part of KDD’s healthier product line. This showcases how scientific R&D can drive healthier food options for the public.",
+        "alt": "KDD Good For Me no added sugar chocolate ice cream"
+      },
+      {
+        "title": "“Soof” Sustainable Wool Processing Mill Project:",
+        "body": "Kuwait’s first sustainable wool factory “Soof” was inaugurated in Jan 2025. The project began with the Al Sadu Society’s proposal to explore the feasibility of producing sustainable yarns from local wool. KFAS funded a research initiative in collaboration with the Kuwait Institute for Scientific Research (KISR) and the Al Sadu Society, focusing on improving wool quality from Naeemi sheep, known for their high-quality fibers, for use in traditional crafts. The findings demonstrated the potential for economic and industrial development, leading to the recommendation to establish the factory as a model for successful partnerships supported by KFAS. The factory is a result of an initiative by Al Sadu Society, supported by KFAS and hosted by Al-Mawashi. This strategic partnership aims to develop the local wool industry, add value to Kuwait’s natural resources and promote sustainability in national projects. The project transforms raw local sheep fleece into high-quality yarns and felt, employing solar power (15 kW panels generating ~25,000 kWh/year) and advanced water recycling (~70,000 m³/year reused). “Soof” reduces reliance on synthetic and imported fibers, adds value to a local natural resource, and exemplifies KFAS’s push for home-grown innovation and industrial sustainability.",
+        "alt": "SOOF Sustainable Wool Processing Mill exhibition booth"
+      },
+      {
+        "title": "Beyond Organic:",
+        "body": "KFAS co-funded the “BeOrganic” vertical farming project in 2022 to bolster food security through technology-driven agriculture. The aeroponic system, installed in Al-Wafra, achieved up to 800% greater crop yield per square foot annually while using 92% less water and zero pesticides compared to traditional farming, demonstrating the viability of sustainable agriculture in Kuwait. This was just one of many projects KFAS supported during Covid-19 to support the private sector's efforts in strengthening national food security.",
+        "alt": "BeOrganic vertical farming aeroponic towers display"
+      },
+      {
+        "title": "Al-Hamra Business Tower Structural Health Monitoring:",
+        "body": "The structural monitoring project, delivered in collaboration with KISR, Kuwait University, and MIT, aimed to develop an advanced system for monitoring the safety and performance of tall buildings in Kuwait. Tested on the Al-Hamra Business Tower, the project focused on modelling ground motion and installing a network of sensors to continuously measure a building’s response to environmental forces such as wind and seismic activity. These sensors capture real-time data on structural behavior, enabling early detection of potential damage or changes in performance. Beyond its technical contributions, the project represents a strategic step toward strengthening Kuwait’s capabilities in infrastructure resilience.",
+        "alt": "Futuristic visualization of skyscrapers with digital data overlays representing structural health monitoring technology"
+      },
+      {
+        "title": "Using Quantum Technology to Secure Digital Communications in the State of Kuwait:",
+        "body": "This project, led by Kuwait Hackers, addresses the emerging threat posed by the rapid advancement of quantum computing, which has the potential to compromise conventional cryptographic systems. At the same time, it positions Kuwait at the forefront of next-generation cybersecurity by exploring quantum cryptography as a resilient, forward-looking solution to safeguard critical infrastructure and sensitive data within an increasingly complex and interconnected global landscape.",
+        "alt": "Quantum technology concept illustration for secure digital communications"
+      },
+      {
+        "title": "Mobile Non-Destructive Testing NDT Inspection Robot:",
+        "body": "The EQUATE Group developed an innovative Mobile Non-Destructive Testing inspection robot designed to enhance safety, efficiency, and quality in industrial maintenance operations by enabling remote inspection of confined and hazardous environments without human intervention. Internationally patented through the United States Patent and Trademark Office, the solution was developed by a team of EQUATE engineers in collaboration with KFAS and the Sabah Al-Ahmad Center for Giftedness and Creativity and delivered through the KFAS Innovation Challenge program. Through this initiative, KFAS played a pivotal role in fostering innovation and empowering local talent, supporting the transformation of advanced engineering concepts into globally recognized industrial solutions that strengthen Kuwait’s innovation ecosystem and industrial competitiveness.",
+        "alt": "EQUATE mobile non-destructive testing inspection robot"
+      }
+    ],
+    "readyToStartTitle": "Ready to Start?",
+    "readyToStartIntro": "Companies interested in applying are encouraged to:",
+    "readyToStartItems": [
+      "Review the grant guidelines and eligibility criteria",
+      "Prepare a concise project concept",
+      "Contact the KFAS Research & Technology team for initial guidance"
+    ],
+    "contactLabel": "Contact:"
   }
 }

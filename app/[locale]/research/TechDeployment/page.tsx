@@ -22,9 +22,7 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as const },
 });
 
-type ProcessStep =
-  | { title: string; bullets: string[] }
-  | { body: string };
+type ProcessStep = { title: string; bullets: string[] } | { body: string };
 
 function SectionHead({ title }: { title: ReactNode }) {
   return (
@@ -274,14 +272,20 @@ export default function TechDeploymentPage() {
           </div>
         </section>
 
-        <RailSection tint title={t("whoCanApplyTitle")}>
-          <motion.p
-            className={`font-poppins ${bodyTextSize} leading-[1.9] text-[#1D2D44]/70 font-light`}
-            {...fadeUp(0.05)}
-          >
-            {t("whoCanApplyBody")}
-          </motion.p>
-        </RailSection>
+        <section className="bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-24 lg:px-12">
+          <div className="mx-auto max-w-[1280px]">
+            <motion.div {...fadeUp(0.05)}>
+              <h2 className="font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem]">
+                {t("whoCanApplyTitle")}
+              </h2>
+              <p
+                className={`mt-4 font-poppins ${bodyTextSize} leading-[1.9] font-light text-[#1D2D44]/70`}
+              >
+                {t("whoCanApplyBody")}
+              </p>
+            </motion.div>
+          </div>
+        </section>
 
         <section className="bg-white px-6 py-12 sm:px-8 sm:py-16 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
