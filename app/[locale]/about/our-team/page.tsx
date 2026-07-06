@@ -32,8 +32,8 @@ const directorsRow1: Person[] = [
   },
   {
     src: "/image/Manar.png",
-    alt: "Manar A. AlMoussa",
-    name: "Manar A. AlMoussa",
+    alt: "Manar A. AlRashed",
+    name: "Manar A. AlRashed",
     title: "Senior Director - Prizes",
   },
   {
