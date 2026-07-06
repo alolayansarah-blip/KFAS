@@ -5,8 +5,12 @@ import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useLocale, useTranslations } from "next-intl";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+type PrizeComponent = { title: string; desc: string };
 
 function FadeUp({
   children,
@@ -35,6 +39,7 @@ function FadeUp({
 function SectionHeading({ children }: { children: ReactNode }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const isArabic = useLocale() === "ar";
   return (
     <div ref={ref} className="mb-10">
       <motion.h2
@@ -46,7 +51,11 @@ function SectionHeading({ children }: { children: ReactNode }) {
         {children}
       </motion.h2>
       <motion.div
-        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+        className={`mt-5 h-px ${
+          isArabic
+            ? "origin-right bg-gradient-to-l from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+            : "origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+        }`}
         initial={{ scaleX: 0, opacity: 0 }}
         animate={inView ? { scaleX: 1, opacity: 1 } : {}}
         transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
@@ -58,6 +67,7 @@ function SectionHeading({ children }: { children: ReactNode }) {
 function SectionHeadingLight({ children }: { children: ReactNode }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const isArabic = useLocale() === "ar";
   return (
     <div ref={ref} className="mb-10">
       <motion.h2
@@ -69,7 +79,7 @@ function SectionHeadingLight({ children }: { children: ReactNode }) {
         {children}
       </motion.h2>
       <motion.div
-        className="mt-5 h-px origin-left bg-white/30"
+        className={`mt-5 h-px bg-white/30 ${isArabic ? "origin-right" : "origin-left"}`}
         style={{ width: 48 }}
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
@@ -79,7 +89,7 @@ function SectionHeadingLight({ children }: { children: ReactNode }) {
   );
 }
 
-function ApplyLink({ href = "#" }: { href?: string }) {
+function ApplyLink({ href = "#", text }: { href?: string; text: string }) {
   return (
     <a
       href={href}
@@ -89,10 +99,10 @@ function ApplyLink({ href = "#" }: { href?: string }) {
     >
       <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
       <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-        Click here to apply
+        {text}
       </span>
       <svg
-        className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
+        className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:-scale-x-100 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -107,13 +117,6 @@ function ApplyLink({ href = "#" }: { href?: string }) {
     </a>
   );
 }
-
-const objectiveItems = [
-  "Encourage young researchers and practitioners across Africa to excel in scientific research and development practice.",
-  "Recognize outstanding achievements in the early stages of a career that advance African development priorities.",
-  "Promote a culture of scientific research and innovation within academic, governmental, and civil society institutions serving the continent.",
-  "Support the development of a generation of leaders capable of advancing scientific knowledge for sustainable progress in Africa.",
-];
 
 function ObjectiveRow({ text, index }: { text: string; index: number }) {
   const ref = useRef(null);
@@ -143,17 +146,15 @@ function ObjectiveRow({ text, index }: { text: string; index: number }) {
   );
 }
 
-function ObjectiveRows() {
+function ObjectiveRows({ items }: { items: string[] }) {
   return (
     <div>
-      {objectiveItems.map((text, i) => (
+      {items.map((text, i) => (
         <ObjectiveRow key={i} text={text} index={i} />
       ))}
     </div>
   );
 }
-
-const prizeFieldLabels = ["Health", "Food Security", "Education"];
 
 function PrizeFieldRow({ label, index }: { label: string; index: number }) {
   const ref = useRef(null);
@@ -183,23 +184,15 @@ function PrizeFieldRow({ label, index }: { label: string; index: number }) {
   );
 }
 
-function PrizeFieldRows() {
+function PrizeFieldRows({ items }: { items: string[] }) {
   return (
     <div>
-      {prizeFieldLabels.map((label, i) => (
+      {items.map((label, i) => (
         <PrizeFieldRow key={label} label={label} index={i} />
       ))}
     </div>
   );
 }
-
-const eligibilityItems = [
-  "The nominated candidates' research and development work or projects and initiatives must be innovative and have achieved high-impact in the African continent.",
-  "The submitted work must be of paramount importance in promoting significant economic, social, human resources and infrastructure development within the announced field of the prize.",
-  "Submitted research work of a nominated candidate should be composed of studies and applied research, published in peer-review Scientific journals and recognized at a global level within the announced field. The research outcomes need to have been applied after publication in African countries within the past ten years. Adequate supporting evidence needs to be provided.",
-  "Nominations are accepted from competent regional and international institutions and scientific centers (universities, institutes and centers of scientific research) as well as from UN organizations, former winners in the field of the prize, or former evaluation members.",
-  "All submissions must be submitted in English. If the work is carried out in other languages, a comprehensive summary of the nominated work in English must be submitted.",
-];
 
 function EligibilityNumberedRow({
   text,
@@ -228,30 +221,24 @@ function EligibilityNumberedRow({
   );
 }
 
-function EligibilityNumberedRows() {
+function EligibilityNumberedRows({ items }: { items: string[] }) {
   return (
     <div>
-      {eligibilityItems.map((text, i) => (
+      {items.map((text, i) => (
         <EligibilityNumberedRow key={i} text={text} index={i} />
       ))}
     </div>
   );
 }
 
-const prizeComponentItems = [
-  { title: "USD 1,000,000", desc: "A monetary award of USD 1,000,000." },
-  { title: "Gold Medal", desc: "A gold medal." },
-  { title: "Certificate", desc: "A certificate of recognition." },
-];
-
-function PrizeComponentRows() {
+function PrizeComponentRows({ items }: { items: PrizeComponent[] }) {
   return (
     <div className="mt-10 border-t border-[#1D2D44]/08 pt-12 sm:pt-14">
       <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-0">
-        {prizeComponentItems.map((item) => (
+        {items.map((item) => (
           <div
             key={item.title}
-            className="relative flex min-w-0 flex-col items-center border-b border-[#1D2D44]/06 px-5 py-10 text-center last:border-b-0 sm:border-b-0 sm:border-r sm:border-[#1D2D44]/08 sm:py-2 sm:last:border-r-0 lg:px-10"
+            className="relative flex min-w-0 flex-col items-center border-b border-[#1D2D44]/06 px-5 py-10 text-center last:border-b-0 sm:border-b-0 sm:border-e sm:border-[#1D2D44]/08 sm:py-2 sm:last:border-e-0 lg:px-10"
           >
             <p className="font-poppins text-[#EC601B] font-light text-[1.5rem] leading-[1.25] tracking-[0.03em] sm:text-[1.65rem] lg:text-[1.8rem]">
               {item.title}
@@ -267,6 +254,15 @@ function PrizeComponentRows() {
 }
 
 export default function AlSumaitPrizePage() {
+  const t = useTranslations("AlSumaitPrizePage");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
+
+  const objectiveItems = t.raw("objectiveItems") as string[];
+  const fieldItems = t.raw("fieldItems") as string[];
+  const eligibilityItems = t.raw("eligibilityItems") as string[];
+  const prizeComponents = t.raw("prizeComponents") as PrizeComponent[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -297,11 +293,17 @@ export default function AlSumaitPrizePage() {
               className="absolute inset-0 pointer-events-none"
               aria-hidden
               style={{
-                background: [
-                  "linear-gradient(128deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
-                  "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
-                  "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
-                ].join(", "),
+                background: isArabic
+                  ? [
+                      "linear-gradient(232deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
+                      "radial-gradient(ellipse 90% 65% at 90% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
+                      "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
+                    ].join(", ")
+                  : [
+                      "linear-gradient(128deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
+                      "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
+                      "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
+                    ].join(", "),
               }}
             />
           </div>
@@ -311,16 +313,24 @@ export default function AlSumaitPrizePage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-base tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Prizes</span>
+              <span>{t("breadcrumb")}</span>
               <span className="text-white/25">/</span>
             </motion.div>
 
-            <h1 className="font-poppins flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.1] [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]">
+            <h1
+              className={`font-poppins flex flex-col gap-2 text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                isArabic ? "leading-[1.35]" : "leading-[1.1]"
+              }`}
+            >
               <div className="overflow-hidden">
                 <motion.span
                   className="block"
@@ -328,7 +338,7 @@ export default function AlSumaitPrizePage() {
                   animate={{ y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
                 >
-                  Al-Sumait
+                  {t("heroTitleLine1")}
                 </motion.span>
               </div>
               <div className="overflow-hidden">
@@ -338,7 +348,7 @@ export default function AlSumaitPrizePage() {
                   animate={{ y: 0 }}
                   transition={{ duration: 0.7, delay: 0.32, ease: EASE }}
                 >
-                  Prize
+                  {t("heroTitleLine2")}
                 </motion.span>
               </div>
               <motion.span
@@ -347,12 +357,14 @@ export default function AlSumaitPrizePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.72, ease: EASE }}
               >
-                for African Development
+                {t("heroSubtitle")}
               </motion.span>
             </h1>
 
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className={`mt-5 h-[3px] rounded-full bg-[#EC601B] ${
+                isArabic ? "origin-right" : "origin-left"
+              }`}
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
@@ -368,34 +380,43 @@ export default function AlSumaitPrizePage() {
           <div className="relative z-10">
             <section className="py-20 sm:py-28">
               <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-                <SectionHeading>Overview of the Al-Sumait Prize</SectionHeading>
+                <SectionHeading>{t("overviewTitle")}</SectionHeading>
                 <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10 xl:gap-12">
                   <div className="min-w-0 flex-1 space-y-6">
                     <FadeUp delay={0.1}>
                       <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
-                        The Kuwait Foundation for the Advancement of Sciences
-                        (KFAS) awards the{" "}
-                        <span className="font-semibold text-[#1D2D44]">
-                          Al-Sumait Prize for African Development
-                        </span>{" "}
-                        to encourage outstanding contributions to human
-                        development in Africa and to link science and innovation
-                        to tangible social progress across various branches of
-                        sustainable development.
+                        {t("overviewBody1Pre")}
+                        {t("overviewBody1Bold") && (
+                          <span className="font-semibold text-[#1D2D44]">
+                            {t("overviewBody1Bold")}
+                          </span>
+                        )}
+                        {t("overviewBody1Post")}
                       </p>
                     </FadeUp>
                     <FadeUp delay={0.18}>
                       <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
-                        The Al-Sumait Prize reflects KFAS&apos;s commitment to
-                        expanding its international recognition footprint,
-                        honoring impactful development outcomes in Africa, and
-                        encouraging creativity and excellence in fields that
-                        strengthen communities and advance long-term prosperity
-                        on the continent.
+                        {t("overviewBody2Pre")}
+                        {t("overviewBody2Bold") && (
+                          <span className="font-semibold text-[#1D2D44]">
+                            {t("overviewBody2Bold")}
+                          </span>
+                        )}
+                        {t("overviewBody2Post")}
                       </p>
                     </FadeUp>
-                    <FadeUp delay={0.22}>
-                      <ApplyLink href="https://prizes.kfas.org.kw/" />
+                    {isArabic && (
+                      <FadeUp delay={0.22}>
+                        <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
+                          {t("overviewBody3")}
+                        </p>
+                      </FadeUp>
+                    )}
+                    <FadeUp delay={0.26}>
+                      <ApplyLink
+                        href="https://prizes.kfas.org.kw/"
+                        text={t("applyLinkText")}
+                      />
                     </FadeUp>
                   </div>
                   <FadeUp
@@ -414,7 +435,7 @@ export default function AlSumaitPrizePage() {
                       >
                         <Image
                           src="/image/alsumaitPrize.webp"
-                          alt="Al-Sumait Prize for African Development"
+                          alt={t("logoAlt")}
                           width={400}
                           height={400}
                           className="relative h-auto w-full max-w-[240px] object-contain sm:max-w-[280px] lg:max-w-[300px] drop-shadow-lg"
@@ -431,14 +452,14 @@ export default function AlSumaitPrizePage() {
               <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
                 <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
                   <div className="lg:sticky lg:top-32">
-                    <SectionHeading>Objectives of the Prize</SectionHeading>
+                    <SectionHeading>{t("objectivesTitle")}</SectionHeading>
                     <FadeUp delay={0.15}>
                       <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-4">
-                        The Al-Sumait Prize aims to:
+                        {t("objectivesIntro")}
                       </p>
                     </FadeUp>
                   </div>
-                  <ObjectiveRows />
+                  <ObjectiveRows items={objectiveItems} />
                 </div>
               </div>
             </section>
@@ -459,25 +480,23 @@ export default function AlSumaitPrizePage() {
                 backgroundSize: "28px 28px",
               }}
             />
-            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/20 blur-3xl" />
+            <div className="absolute -top-24 -end-24 w-96 h-96 rounded-full bg-white/20 blur-3xl" />
           </div>
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
             <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
               <div className="lg:sticky lg:top-32">
-                <SectionHeadingLight>Prize Fields</SectionHeadingLight>
+                <SectionHeadingLight>{t("fieldsTitle")}</SectionHeadingLight>
                 <FadeUp delay={0.15}>
                   <p className="font-poppins text-base leading-[1.9] text-white/70 font-light mt-4">
-                    The prize is awarded annually in rotating fields that
-                    address key development priorities in Africa:
+                    {t("fieldsIntro")}
                   </p>
                 </FadeUp>
               </div>
-              <PrizeFieldRows />
+              <PrizeFieldRows items={fieldItems} />
             </div>
             <FadeUp delay={0.2}>
               <p className="font-poppins text-base leading-[1.9] text-white/75 font-light mt-14 lg:mt-16 max-w-2xl">
-                Each year, one of these fields is selected as the focus of the
-                prize cycle.
+                {t("fieldsClosing")}
               </p>
             </FadeUp>
           </div>
@@ -490,7 +509,7 @@ export default function AlSumaitPrizePage() {
             aria-hidden
           >
             <svg
-              className="absolute -top-20 -right-20 opacity-[0.08] w-[480px]"
+              className="absolute -top-20 -end-20 opacity-[0.08] w-[480px]"
               viewBox="0 0 400 400"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -520,7 +539,7 @@ export default function AlSumaitPrizePage() {
               />
             </svg>
             <svg
-              className="absolute -bottom-16 -left-16 opacity-[0.06] w-[320px]"
+              className="absolute -bottom-16 -start-16 opacity-[0.06] w-[320px]"
               viewBox="0 0 400 400"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -544,28 +563,28 @@ export default function AlSumaitPrizePage() {
           </div>
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start relative z-10">
             <div className="lg:sticky lg:top-32">
-              <SectionHeading>Eligibility and Conditions</SectionHeading>
+              <SectionHeading>{t("eligibilityTitle")}</SectionHeading>
               <FadeUp delay={0.12}>
                 <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/60 font-light mt-4">
-                  Nominated candidates must satisfy the following:
+                  {t("eligibilityIntro")}
                 </p>
               </FadeUp>
             </div>
-            <EligibilityNumberedRows />
+            <EligibilityNumberedRows items={eligibilityItems} />
           </div>
         </section>
 
         {/* ── Prize Components ── */}
         <section className="py-20 sm:py-28 bg-white">
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <SectionHeading>Prize Components</SectionHeading>
+            <SectionHeading>{t("componentsTitle")}</SectionHeading>
             <div className="mt-8 space-y-6">
               <FadeUp delay={0.05}>
                 <p className="font-poppins text-base leading-[1.9] text-[#1D2D44]/65 font-light">
-                  The Al-Sumait Prize includes:
+                  {t("componentsIntro")}
                 </p>
               </FadeUp>
-              <PrizeComponentRows />
+              <PrizeComponentRows items={prizeComponents} />
             </div>
           </div>
         </section>

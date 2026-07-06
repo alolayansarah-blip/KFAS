@@ -384,5 +384,57 @@
         "desc": "A certificate of recognition issued by KFAS."
       }
     ]
+  },
+  "AlSumaitPrizePage": {
+    "breadcrumb": "Prizes",
+    "heroTitleLine1": "Al-Sumait",
+    "heroTitleLine2": "Prize",
+    "heroSubtitle": "for African Development",
+    "applyLinkText": "Click here to apply",
+    "logoAlt": "Al-Sumait Prize for African Development",
+    "overviewTitle": "Overview of the Al-Sumait Prize",
+    "overviewBody1Pre": "The Kuwait Foundation for the Advancement of Sciences (KFAS) awards the ",
+    "overviewBody1Bold": "Al-Sumait Prize for African Development",
+    "overviewBody1Post": " to encourage outstanding contributions to human development in Africa and to link science and innovation to tangible social progress across various branches of sustainable development.",
+    "overviewBody2Pre": "The Al-Sumait Prize reflects KFAS's commitment to expanding its international recognition footprint, honoring impactful development outcomes in Africa, and encouraging creativity and excellence in fields that strengthen communities and advance long-term prosperity on the continent.",
+    "overviewBody2Bold": "",
+    "overviewBody2Post": "",
+    "objectivesTitle": "Objectives of the Prize",
+    "objectivesIntro": "The Al-Sumait Prize aims to:",
+    "objectiveItems": [
+      "Encourage young researchers and practitioners across Africa to excel in scientific research and development practice.",
+      "Recognize outstanding achievements in the early stages of a career that advance African development priorities.",
+      "Promote a culture of scientific research and innovation within academic, governmental, and civil society institutions serving the continent.",
+      "Support the development of a generation of leaders capable of advancing scientific knowledge for sustainable progress in Africa."
+    ],
+    "fieldsTitle": "Prize Fields",
+    "fieldsIntro": "The prize is awarded annually in rotating fields that address key development priorities in Africa:",
+    "fieldItems": ["Health", "Food Security", "Education"],
+    "fieldsClosing": "Each year, one of these fields is selected as the focus of the prize cycle.",
+    "eligibilityTitle": "Eligibility and Conditions",
+    "eligibilityIntro": "Nominated candidates must satisfy the following:",
+    "eligibilityItems": [
+      "The nominated candidates' research and development work or projects and initiatives must be innovative and have achieved high-impact in the African continent.",
+      "The submitted work must be of paramount importance in promoting significant economic, social, human resources and infrastructure development within the announced field of the prize.",
+      "Submitted research work of a nominated candidate should be composed of studies and applied research, published in peer-review Scientific journals and recognized at a global level within the announced field. The research outcomes need to have been applied after publication in African countries within the past ten years. Adequate supporting evidence needs to be provided.",
+      "Nominations are accepted from competent regional and international institutions and scientific centers (universities, institutes and centers of scientific research) as well as from UN organizations, former winners in the field of the prize, or former evaluation members.",
+      "All submissions must be submitted in English. If the work is carried out in other languages, a comprehensive summary of the nominated work in English must be submitted."
+    ],
+    "componentsTitle": "Prize Components",
+    "componentsIntro": "The Al-Sumait Prize includes:",
+    "prizeComponents": [
+      {
+        "title": "USD 1,000,000",
+        "desc": "A monetary award of USD 1,000,000."
+      },
+      {
+        "title": "Gold Medal",
+        "desc": "A gold medal."
+      },
+      {
+        "title": "Certificate",
+        "desc": "A certificate of recognition."
+      }
+    ]
   }
 }
