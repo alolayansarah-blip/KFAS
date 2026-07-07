@@ -4585,6 +4585,7 @@ export const LAUREATES: Laureate[] = [
     verified: false,
     field: "Social Sciences & Humanities",
     country: "Kuwait",
+    image: "/image/Dr.Aisha.png",
   },
   {
     id: "jaber-2025-381",
@@ -4596,6 +4597,7 @@ export const LAUREATES: Laureate[] = [
     verified: false,
     field: "Life Sciences",
     country: "Kuwait",
+    image: "/image/Dr.HussainBehbehani.png",
   },
   {
     id: "jaber-2025-382",
@@ -4607,6 +4609,7 @@ export const LAUREATES: Laureate[] = [
     verified: false,
     field: "Engineering Sciences",
     country: "Kuwait",
+    image: "/image/Dr.yousefSaad.png",
   },
   {
     id: "jaber-2025-383",
@@ -4618,6 +4621,7 @@ export const LAUREATES: Laureate[] = [
     verified: false,
     field: "Natural Sciences & Mathematics",
     country: "Kuwait",
+    image: "/image/Dr.YousefAlkhazi.png",
   },
   {
     id: "sumait-2015-356",
