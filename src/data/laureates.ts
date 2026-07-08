@@ -4368,6 +4368,7 @@ export const LAUREATES: Laureate[] = [
     field: "Administrative & Economic Sciences",
     country: "Kuwait",
     affiliationAr: "الهيئة العامة للتعليم التطبيقي والتدريب",
+    image: "/image/Prof.-Hesham-Almujamed.jpg",
   },
   {
     id: "jaber-2021-339",
@@ -4380,6 +4381,7 @@ export const LAUREATES: Laureate[] = [
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/Prof.-Meshari-Almosa.jpg",
   },
   {
     id: "jaber-2021-340",
@@ -4392,6 +4394,7 @@ export const LAUREATES: Laureate[] = [
     field: "Life Sciences",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/Prof.-Ahmad-Allafi.jpg",
   },
   {
     id: "jaber-2021-341",
@@ -4404,6 +4407,7 @@ export const LAUREATES: Laureate[] = [
     field: "Natural Sciences & Mathematics",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/Dr.-Abdullah-Alazemi.jpg",
   },
   {
     id: "jaber-2022-342",
@@ -4416,6 +4420,7 @@ export const LAUREATES: Laureate[] = [
     field: "Medical & Allied Health Sciences",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/الدكتور-محمد-حيدر-جمال.jpg",
   },
   {
     id: "jaber-2022-343",
@@ -4428,6 +4433,7 @@ export const LAUREATES: Laureate[] = [
     field: "Administrative & Economic Sciences",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/الدكتور-عبد-الله-جواد-سلطان.jpg",
   },
   {
     id: "jaber-2022-344",
@@ -4440,6 +4446,7 @@ export const LAUREATES: Laureate[] = [
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "أكاديمية  سعد العبدالله للعلوم الأمنية",
+    image: "/image/الدكتور-عبد-الله-راشد-الشبلي.jpg",
   },
   {
     id: "jaber-2022-345",
@@ -4452,18 +4459,20 @@ export const LAUREATES: Laureate[] = [
     field: "Engineering Sciences",
     country: "Kuwait",
     affiliationAr: "معهد الكويت للأبحاث العلمية",
+    image: "/image/الدكتور-يوسف-يعقوب-العسيري.jpg",
   },
   {
     id: "jaber-2022-346",
     prize: "jaber",
     year: 2022,
     status: "awarded",
-    name: "Dr. Dari Adel Al-Houil",
+    name: "Dr. Dari Adel Al-Houail",
     nameAr: "الدكتور ضاري عادل الحويل",
     verified: false,
     field: "Natural Sciences & Mathematics",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/الدكتور-ضاري-عادل-الحويل.jpg",
   },
   {
     id: "jaber-2023-347",
@@ -4476,6 +4485,7 @@ export const LAUREATES: Laureate[] = [
     field: "Life Sciences",
     country: "Kuwait",
     affiliationAr: "معهد دسمان للسكري",
+    image: "/image/الدكتورة-فاطمة-سالم-الراشد.jpg",
   },
   {
     id: "jaber-2023-348",
@@ -4488,31 +4498,33 @@ export const LAUREATES: Laureate[] = [
     field: "Medical & Allied Health Sciences",
     country: "Kuwait",
     affiliationAr: "مستشفى بريجهام والنساء- بجامعه هارفرد الطبية",
+    image: "/image/الدكتور-زيد-عصام-المرزوق.jpg",
   },
   {
     id: "jaber-2023-349",
     prize: "jaber",
     year: 2023,
     status: "awarded",
-    name: "Dr. Ammar Mohammad Bhamn",
+    name: "Dr. Ammar Mohammad Bahaman",
     nameAr: "الدكتور عمار محمد بهمن",
     verified: false,
     field: "Engineering Sciences",
     country: "Kuwait",
     affiliationAr: "في جامعة الكويت",
+    image: "/image/الدكتور-عمار-محمد-بهمن.jpg",
   },
   {
     id: "jaber-2023-350",
     prize: "jaber",
     year: 2023,
     status: "shared",
-    name: "Dr. Amal Abdulwahab Al-Salh",
+    name: "Dr. Amal Abdulwahab Al-Saleh",
     nameAr: "الدكتورة أمل عبد الوهاب الصالح",
     verified: false,
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
-    image: "/image/Prof.Amal.jpg",
+    image: "/image/الأستاذة-الدكتورة-أمل-عبد-الوهاب-الصالح.jpg",
   },
   {
     id: "jaber-2023-351",
@@ -4525,7 +4537,7 @@ export const LAUREATES: Laureate[] = [
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
-    image: "/image/fahadalzumai.jpg",
+    image: "/image/Drfahadalzumai.jpg",
   },
   {
     id: "jaber-2024-352",
@@ -4538,6 +4550,7 @@ export const LAUREATES: Laureate[] = [
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/DrMariam.png",
   },
   {
     id: "jaber-2024-353",
@@ -4550,6 +4563,7 @@ export const LAUREATES: Laureate[] = [
     field: "Administrative & Economic Sciences",
     country: "Kuwait",
     affiliationAr: "بنك بوبيان",
+    image: "/image/Dr.BaderAlhasheL.png",
   },
   {
     id: "jaber-2024-354",
@@ -4562,6 +4576,7 @@ export const LAUREATES: Laureate[] = [
     field: "Medical & Allied Health Sciences",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
+    image: "/image/Dr.AliTHEYAB.png",
   },
   {
     id: "jaber-2024-355",
@@ -4574,6 +4589,7 @@ export const LAUREATES: Laureate[] = [
     field: "Engineering Sciences",
     country: "Kuwait",
     affiliationAr: "معهد الكويت للأبحاث العلمية",
+    image: "/image/Dr.NasserAlsayegh.png",
   },
   {
     id: "jaber-2025-380",
