@@ -4295,7 +4295,7 @@ export const LAUREATES: Laureate[] = [
     field: "Social Sciences & Humanities",
     country: "Kuwait",
     affiliationAr: "جامعة الكويت",
-    image: "/image/Dr.-Hind-Al-Ma’seb.jpg",
+    image: "/image/Dr.-Hind-Al-Maseb.jpg",
   },
   {
     id: "jaber-2019-331",
