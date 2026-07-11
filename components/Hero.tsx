@@ -9,8 +9,7 @@ import {
 } from "framer-motion";
 
 interface HeroProps {
-  titleEn?: string;
-  titleAr?: string;
+  title?: string;
   subtitle?: string;
   description?: string;
   video?: string;
@@ -43,8 +42,7 @@ function renderAccented(line: string) {
 }
 
 export default function Hero({
-  titleEn,
-  titleAr,
+  title,
   subtitle,
   description,
   video = "/videos/kfaswebsitevid.mp4",
@@ -70,7 +68,7 @@ export default function Hero({
   const contentOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.55], ["0%", "-4%"]);
 
-  const lines = titleEn ? splitLines(titleEn) : [];
+  const lines = title ? splitLines(title) : [];
 
   const togglePlay = () => {
     const node = videoRef.current;
@@ -121,7 +119,7 @@ export default function Hero({
         }`}
         style={{ opacity: contentOpacity, y: contentY }}
       >
-        <div className="mx-auto w-full max-w-[1280px] px-6 text-left sm:px-8 lg:px-12">
+        <div className="mx-auto w-full max-w-[1280px] px-6 text-start sm:px-8 lg:px-12">
           {subtitle && (
             <motion.p
               className="mb-5 text-[11px] font-semibold uppercase tracking-[0.35em] text-white/70"
@@ -159,18 +157,6 @@ export default function Hero({
             </h1>
           )}
 
-          {titleAr && (
-            <motion.p
-              dir="rtl"
-              className="mb-4 font-poppins text-lg font-light text-white/75 sm:text-xl lg:text-lg"
-              initial={reduce ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.45, ease: EASE }}
-            >
-              {titleAr}
-            </motion.p>
-          )}
-
           {description && (
             <motion.p
               className="max-w-[48ch] font-poppins text-[14px] font-light leading-[1.9] text-white/80 sm:text-[15px]"
@@ -192,7 +178,7 @@ export default function Hero({
           aria-label={
             isPlaying ? "Pause background video" : "Play background video"
           }
-          className="absolute bottom-6 right-6 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/[0.06] text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EC601B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1D2D44] sm:right-8 lg:right-12"
+          className="absolute bottom-6 end-6 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/[0.06] text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EC601B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1D2D44] sm:end-8 lg:end-12"
         >
           {isPlaying ? (
             <svg

@@ -3,6 +3,10 @@
     "research": "Research",
     "Overview": "Overview"
   },
+  "HomePage": {
+    "heroTitleLine1": "Timeless Legacy",
+    "heroTitleLine2": "Innovative Future"
+  },
   "AssignedStudiesPage": {
     "breadcrumb": "Research",
     "heroTitle": "Assigned Studies",

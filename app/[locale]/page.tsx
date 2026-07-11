@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { getTranslations } from "next-intl/server";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -25,17 +26,17 @@ const InstagramFeed = dynamic(() => import("@/components/InstagramFeed"), {
 });
 const SocialShareMenu = dynamic(() => import("@/components/SocialShareMenu"));
 
-export default function Home() {
+export default async function Home() {
+  const t = await getTranslations("HomePage");
+  const heroTitle = `${t("heroTitleLine1")}|${t("heroTitleLine2")}`;
+
   return (
     <>
       <Header logo="/image/logo_white.png" logoText="KFastest" />
       <SocialShareMenu />
       <main>
         <Hero
-          titleEn="Timeless Legacy|Innovative Future"
-          // titleAr="إرث راسخ"
-          // subtitle="KFAS"
-          // description="Kuwait Foundation for the Advancement of Sciences "
+          title={heroTitle}
           video="/videos/kfaswebsitevid.mp4"
           videoPoster="/image/KFAS-hero-poster.jpg"
         />

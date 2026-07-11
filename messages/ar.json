@@ -3,6 +3,10 @@
     "research": "البحث",
     "Overview": "مقدمـة"
   },
+  "HomePage": {
+    "heroTitleLine1": "إرث راسخ",
+    "heroTitleLine2": "مستقبل مبتكر"
+  },
   "AssignedStudiesPage": {
     "breadcrumb": "البحث",
     "heroTitle": "الدراسات بالتكليف",
