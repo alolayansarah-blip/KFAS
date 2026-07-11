@@ -7,6 +7,13 @@
     "heroTitleLine1": "إرث راسخ",
     "heroTitleLine2": "مستقبل مبتكر"
   },
+  "FlippedCardStack": {
+    "cards": [
+      { "title": "المنح البحثية", "label": "استكشف" },
+      { "title": "التعلّم والتطوير", "label": "اكتشف" },
+      { "title": "إصداراتنا", "label": "تصفح" }
+    ]
+  },
   "AssignedStudiesPage": {
     "breadcrumb": "البحث",
     "heroTitle": "الدراسات بالتكليف",

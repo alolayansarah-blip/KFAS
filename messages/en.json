@@ -7,6 +7,13 @@
     "heroTitleLine1": "Timeless Legacy",
     "heroTitleLine2": "Innovative Future"
   },
+  "FlippedCardStack": {
+    "cards": [
+      { "title": "Research Grants", "label": "Explore" },
+      { "title": "Learning & Development", "label": "Discover" },
+      { "title": "Our Publications", "label": "Browse" }
+    ]
+  },
   "AssignedStudiesPage": {
     "breadcrumb": "Research",
     "heroTitle": "Assigned Studies",
