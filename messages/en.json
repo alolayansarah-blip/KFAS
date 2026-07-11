@@ -14,6 +14,21 @@
       { "title": "Our Publications", "label": "Browse" }
     ]
   },
+  "WhoWeAre": {
+    "eyebrow": "Who We Are",
+    "titleLine1": "Kuwait Foundation",
+    "titleLine2": "for the Advancement of Sciences",
+    "titleAriaLabel": "Kuwait Foundation for the Advancement of Sciences",
+    "logoAlt": "KFAS logo",
+    "body": "Established in 1976, KFAS is a private, non-profit organization that supports research, training, and development in STEAM innovation in alignment with Kuwait's national priorities. Through educational programs, cross-sector partnerships, and prestigious prizes, KFAS rewards excellence and inspires future generations to spread knowledge and accelerate progress.",
+    "stats": [
+      { "value": "1976", "label": "Founded" },
+      { "value": "50", "label": "Years of Impact" },
+      { "value": "500+", "label": "Research Grants" }
+    ],
+    "readMore": "Read more",
+    "imageAlt": "KFAS — Kuwait Foundation for the Advancement of Sciences"
+  },
   "AssignedStudiesPage": {
     "breadcrumb": "Research",
     "heroTitle": "Assigned Studies",

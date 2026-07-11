@@ -10,20 +10,12 @@ import {
   useMotionValue,
   animate,
 } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
 
-const TITLE_LINES = [
-  { text: "Kuwait Foundation", accent: true },
-  { text: "for the Advancement of Sciences", accent: true },
-];
-
-const STATS = [
-  { value: "1976", label: "Founded" },
-  { value: "50", label: "Years of Impact" },
-  { value: "500+", label: "Research Grants" },
-];
+type Stat = { value: string; label: string };
 
 // ─── Animated counter stat ────────────────────────────────────────────────────
 
@@ -36,10 +28,12 @@ function AnimatedStat({
   value,
   label,
   delay,
+  isArabic = false,
 }: {
   value: string;
   label: string;
   delay: number;
+  isArabic?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
@@ -70,11 +64,21 @@ function AnimatedStat({
       viewport={{ once: true, amount: 0.5 }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
-      <div className="font-poppins text-lg font-bold tabular-nums text-[#EC601B]">
+      <div
+        className={`font-poppins font-bold tabular-nums text-[#EC601B] ${
+          isArabic ? "text-xl" : "text-lg"
+        }`}
+      >
         <motion.span>{displayCount}</motion.span>
         {suffix}
       </div>
-      <div className="mt-0.5 text-[10px] font-light uppercase tracking-[0.18em] text-[#1D2D44]/40">
+      <div
+        className={`mt-0.5 font-light text-[#1D2D44]/40 ${
+          isArabic
+            ? "text-[13px] tracking-normal"
+            : "text-[10px] uppercase tracking-[0.18em]"
+        }`}
+      >
         {label}
       </div>
     </motion.div>
@@ -84,6 +88,14 @@ function AnimatedStat({
 // ─── WhoWeAre ─────────────────────────────────────────────────────────────────
 
 function WhoWeAre() {
+  const t = useTranslations("WhoWeAre");
+  const isArabic = useLocale() === "ar";
+  const stats = t.raw("stats") as Stat[];
+  const titleLines = [
+    { text: t("titleLine1"), accent: true },
+    { text: t("titleLine2"), accent: true },
+  ];
+
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +116,7 @@ function WhoWeAre() {
     >
       {/* Ghost year watermark */}
       <motion.div
-        className="pointer-events-none absolute -right-[4vw] top-1/2 -translate-y-1/2 select-none font-poppins text-[26vw] font-black leading-none text-[#1D2D44]/[0.03] whitespace-nowrap"
+        className="pointer-events-none absolute -end-[4vw] top-1/2 -translate-y-1/2 select-none font-poppins text-[26vw] font-black leading-none text-[#1D2D44]/[0.03] whitespace-nowrap"
         style={{ y: ghostY }}
         aria-hidden
       >
@@ -118,7 +130,7 @@ function WhoWeAre() {
             {/* Eyebrow */}
             <motion.div
               className="mb-5 flex items-center gap-3"
-              initial={{ opacity: 0, x: -16 }}
+              initial={{ opacity: 0, x: isArabic ? 16 : -16 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={VIEWPORT}
               transition={{ duration: 0.6, ease: EASE }}
@@ -134,8 +146,14 @@ function WhoWeAre() {
                 viewport={VIEWPORT}
                 transition={{ duration: 0.65, delay: 0.15, ease: EASE }}
               />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.45em] text-[#EC601B]">
-                Who We Are
+              <span
+                className={`font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[14px] tracking-normal"
+                    : "text-[10px] uppercase tracking-[0.45em]"
+                }`}
+              >
+                {t("eyebrow")}
               </span>
             </motion.div>
 
@@ -143,10 +161,10 @@ function WhoWeAre() {
             <div
               ref={titleRef}
               className="mb-4 flex items-start gap-5"
-              aria-label="Kuwait Foundation for the Advancement of Sciences"
+              aria-label={t("titleAriaLabel")}
             >
               <div className="flex flex-col gap-0.5 flex-1">
-                {TITLE_LINES.map(({ text, accent }, i) => (
+                {titleLines.map(({ text, accent }, i) => (
                   <div
                     key={text}
                     className="overflow-hidden pb-[0.1em] -mb-[0.1em]"
@@ -177,16 +195,18 @@ function WhoWeAre() {
               {/* Logo */}
               <motion.div
                 className="flex items-center gap-4 pt-1 self-stretch"
-                initial={{ opacity: 0, x: 10 }}
+                initial={{ opacity: 0, x: isArabic ? -10 : 10 }}
                 animate={
-                  isTitleInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 10 }
+                  isTitleInView
+                    ? { opacity: 1, x: 0 }
+                    : { opacity: 0, x: isArabic ? -10 : 10 }
                 }
                 transition={{ duration: 0.6, delay: 0.35, ease: EASE }}
               >
                 <div className="relative h-20 w-20 shrink-0 sm:h-24 sm:w-24 opacity-90">
                   <Image
                     src="/image/logo_c.png"
-                    alt="KFAS logo"
+                    alt={t("logoAlt")}
                     fill
                     sizes="96px"
                     className="object-contain drop-shadow-sm"
@@ -200,18 +220,17 @@ function WhoWeAre() {
                    Information "comes into focus" as you read down the page.
             */}
             <motion.p
-              className="mb-6 font-poppins text-[15px] font-light leading-relaxed tracking-[0.01em] text-[#1D2D44]/60"
+              className={`mb-6 font-poppins font-light leading-relaxed text-[#1D2D44]/60 ${
+                isArabic
+                  ? "text-[17px] tracking-normal leading-[1.9]"
+                  : "text-[15px] tracking-[0.01em]"
+              }`}
               initial={{ opacity: 0, y: 18, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={VIEWPORT}
               transition={{ duration: 0.85, delay: 0.45, ease: EASE }}
             >
-              Established in 1976, KFAS is a private, non-profit organization
-              that supports research, training, and development in STEAM
-              innovation in alignment with Kuwait&apos;s national priorities.
-              Through educational programs, cross-sector partnerships, and
-              prestigious prizes, KFAS rewards excellence and inspires future
-              generations to spread knowledge and accelerate progress.
+              {t("body")}
             </motion.p>
 
             {/* Stats
@@ -219,12 +238,13 @@ function WhoWeAre() {
                    and the number counts up from 0 using useMotionValue.
             */}
             <div className="mb-7 grid grid-cols-3 gap-4">
-              {STATS.map(({ value, label }, i) => (
+              {stats.map(({ value, label }, i) => (
                 <AnimatedStat
                   key={label}
                   value={value}
                   label={label}
                   delay={0.55 + i * 0.12}
+                  isArabic={isArabic}
                 />
               ))}
             </div>
@@ -241,11 +261,17 @@ function WhoWeAre() {
                 className="group inline-flex items-center gap-3"
               >
                 <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
-                <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-                  Read more
+                <span
+                  className={`font-medium text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510] ${
+                    isArabic
+                      ? "text-[15px] tracking-normal"
+                      : "text-[13px] tracking-[0.08em]"
+                  }`}
+                >
+                  {t("readMore")}
                 </span>
                 <svg
-                  className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
+                  className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:-scale-x-100 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -281,7 +307,7 @@ function WhoWeAre() {
                 <motion.div className="relative" style={{ y: imageY }}>
                   <Image
                     src="/image/GroupPage.webp"
-                    alt="KFAS — Kuwait Foundation for the Advancement of Sciences"
+                    alt={t("imageAlt")}
                     width={1600}
                     height={1000}
                     sizes="(max-width: 1024px) 90vw, 45vw"
@@ -298,8 +324,8 @@ function WhoWeAre() {
               </div>
 
               {/* Corner accents — same editorial vocabulary as the rest of the site */}
-              <div className="pointer-events-none absolute -left-2.5 -top-2.5 h-9 w-9 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/45" />
-              <div className="pointer-events-none absolute -bottom-2.5 -right-2.5 h-9 w-9 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/40" />
+              <div className="pointer-events-none absolute -start-2.5 -top-2.5 h-9 w-9 border-s-[1.5px] border-t-[1.5px] border-[#EC601B]/45" />
+              <div className="pointer-events-none absolute -bottom-2.5 -end-2.5 h-9 w-9 border-b-[1.5px] border-e-[1.5px] border-[#7DC0F1]/40" />
             </div>
           </motion.div>
         </div>
