@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -16,6 +17,8 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true },
   transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as const },
 });
+
+type GrantPage = { label: string; href: string };
 
 // ─── Sticky rail heading ────────────────────────────────────────────────────
 function SectionHead({ title }: { title: ReactNode }) {
@@ -73,45 +76,30 @@ function RailSection({
 }
 
 // ─── Grant program switcher (transfer between the 5 grant pages) ─────────────
-// Drop this same <GrantTabs /> into all five grant pages — the active tab is
-// detected automatically from the URL, so no per-page edits are needed.
-const GRANT_PAGES = [
-  { label: "Research Infrastructure Grants", href: "/research/grants/RIG" },
-  {
-    label: "Applied Research Grants",
-    href: "/research/grants/Applied-Research-Grants",
-  },
-  {
-    label: "Fundamental Research Grants",
-    href: "/research/grants/Fundamental-Research-Grants",
-  },
-  {
-    label: "Young Researcher Grants",
-    href: "/research/grants/Young-Researcher-Grants",
-  },
-  {
-    label: "Policy Research Grants",
-    href: "/research/grants/Policy-Research-Grants",
-  },
-];
-
-function GrantTabs() {
+function GrantTabs({
+  pages,
+  ariaLabel,
+  srLabel,
+}: {
+  pages: GrantPage[];
+  ariaLabel: string;
+  srLabel: string;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const activeHref =
-    GRANT_PAGES.find(
-      (p) => pathname === p.href || pathname?.startsWith(p.href + "/"),
-    )?.href ?? "";
+    pages.find((p) => pathname === p.href || pathname?.startsWith(p.href + "/"))
+      ?.href ?? "";
 
   return (
     <nav
-      aria-label="Grant programs"
+      aria-label={ariaLabel}
       className="border-b border-[#1D2D44]/[0.08] bg-white"
     >
       <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
         <div className="py-2.5 lg:hidden">
           <label htmlFor="grant-switcher" className="sr-only">
-            Jump to another grant program
+            {srLabel}
           </label>
           <select
             id="grant-switcher"
@@ -119,7 +107,7 @@ function GrantTabs() {
             onChange={(e) => router.push(e.target.value)}
             className="w-full border border-[#1D2D44]/15 bg-white px-4 py-2.5 font-poppins text-[13px] font-medium text-[#1D2D44] focus:border-[#EC601B] focus:outline-none"
           >
-            {GRANT_PAGES.map((p) => (
+            {pages.map((p) => (
               <option key={p.href} value={p.href}>
                 {p.label}
               </option>
@@ -128,7 +116,7 @@ function GrantTabs() {
         </div>
 
         <ul className="hidden grid-cols-2 gap-2 py-2.5 sm:grid-cols-3 lg:grid">
-          {GRANT_PAGES.map((p) => {
+          {pages.map((p) => {
             const active = p.href === activeHref;
             return (
               <li key={p.href}>
@@ -152,13 +140,6 @@ function GrantTabs() {
   );
 }
 
-const focusAreas = [
-  "Health-related infrastructures",
-  "General Science infrastructures",
-  "Engineering infrastructures",
-  "Future Economies",
-];
-
 const documents = [
   {
     label: "RIG Proposal Template",
@@ -179,6 +160,13 @@ const documents = [
 ];
 
 export default function RigPage() {
+  const t = useTranslations("RIGPage");
+  const isArabic = useLocale() === "ar";
+
+  const grantPages = t.raw("grantPages") as GrantPage[];
+  const focusAreas = t.raw("focusAreas") as string[];
+  const importantItems = t.raw("importantItems") as string[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -197,7 +185,11 @@ export default function RigPage() {
         {/* ── Hero — full bleed, header overlays on top ── */}
         <section
           ref={heroRef}
-          className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px]"
+          className={`relative overflow-hidden flex items-center justify-start ${
+            isArabic
+              ? "h-[400px] md:h-[500px] lg:h-[560px]"
+              : "h-[360px] md:h-[460px] lg:h-[540px]"
+          }`}
         >
           <div className="absolute inset-0">
             <Image
@@ -209,7 +201,7 @@ export default function RigPage() {
               sizes="100vw"
               className="scale-105 object-cover object-[center_42%]"
             />
-            {/* Directional overlay — left heavy for text legibility */}
+            {/* Directional overlay — heavy on the leading side for text legibility */}
             <div
               className="absolute inset-0"
               style={{
@@ -229,44 +221,61 @@ export default function RigPage() {
             />
           </div>
 
-          {/* Content — vertically centered, left-aligned */}
+          {/* Content — vertically centered, leading-aligned */}
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className={`relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 ${
+              isArabic ? "mt-32 sm:mt-40 lg:mt-44" : "mt-44"
+            }`}
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-base tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Research</span>
+              <span>{t("breadcrumbResearch")}</span>
               <span className="text-white/25">/</span>
               <Link
                 href="/research/grants"
                 className="hover:text-white transition-colors"
               >
-                Grants
+                {t("breadcrumbGrants")}
               </Link>
               <span className="text-white/25">/</span>
             </motion.div>
 
             {/* Title — clip-path wipe */}
-            <div className="overflow-hidden">
+            <div className={`overflow-hidden ${isArabic ? "pb-4 sm:pb-5" : "pb-0.5"}`}>
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className={`font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-tight tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                RIG
+                {isArabic ? (
+                  <>
+                    <span className="block">{t("heroTitleLine1")}</span>
+                    <span className="block">{t("heroTitleLine2")}</span>
+                  </>
+                ) : (
+                  t("heroTitle")
+                )}
               </motion.h1>
             </div>
 
             {/* Orange rule */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
@@ -279,55 +288,42 @@ export default function RigPage() {
         </section>
 
         {/* ── Grant program switcher ── */}
-        <GrantTabs />
+        <GrantTabs
+          pages={grantPages}
+          ariaLabel={t("grantTabsAriaLabel")}
+          srLabel={t("grantTabsSrLabel")}
+        />
 
         {/* ── Overview ── */}
         <section className="px-6 py-20 sm:px-8 sm:py-24 lg:px-12 bg-white">
           <div className="mx-auto max-w-[1280px]">
             <motion.div {...fadeUp(0)}>
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]">
-                Overview
+              <p
+                className={`mt-5 font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[14px] tracking-normal"
+                    : "text-[10px] uppercase tracking-[0.4em]"
+                }`}
+              >
+                {t("overviewKicker")}
               </p>
               <h2 className="mt-4 font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight text-[#1D2D44]">
-                Research Infrastructure Grants
+                {t("overviewTitle")}
               </h2>
             </motion.div>
             <div className="mt-7 space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-              <motion.p {...fadeUp(0.05)}>
-                The Kuwait Foundation for the Advancement of Sciences (KFAS)
-                provides grants for research infrastructure proposals. The
-                Research Infrastructure Grant (RIG) will support and invest in
-                public research centers and laboratories in Kuwait, in an aim to
-                maximize their impact on the scientific community and strengthen
-                their alignment with the global research ecosystem standards.
-              </motion.p>
-              <motion.p {...fadeUp(0.1)}>
-                All submitted proposals by the public institutions in Kuwait,
-                should focus on strengthening research infrastructure by
-                enabling the acquisition of cutting-edge equipment and enhancing
-                institutional research capabilities to advance scientific
-                fields.
-              </motion.p>
+              <motion.p {...fadeUp(0.05)}>{t("overviewBody1")}</motion.p>
+              <motion.p {...fadeUp(0.1)}>{t("overviewBody2")}</motion.p>
             </div>
           </div>
         </section>
 
         {/* ── 2026 Call ── */}
-        <RailSection
-          tint
-          title="KFAS 2026 Call for Research Infrastructure Grant Proposals"
-        >
+        <RailSection tint title={t("callTitle")}>
           <div className="space-y-4 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-            <motion.p {...fadeUp(0.05)}>
-              For the 2026 First Call for Research Infrastructure Grant
-              Proposals (RIG), the Kuwait Foundation for the Advancement of
-              Sciences (KFAS) invites competitive proposals to be submitted
-              starting from February 1st 2026 to May 1st 2026.
-            </motion.p>
-            <motion.p {...fadeUp(0.1)}>
-              The call can be accessed and downloaded from the link below:
-            </motion.p>
+            <motion.p {...fadeUp(0.05)}>{t("callBody1")}</motion.p>
+            <motion.p {...fadeUp(0.1)}>{t("callBody2")}</motion.p>
             <motion.div {...fadeUp(0.15)}>
               <a
                 href="https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2F2026%2FResearch%20Infrastructure%20Grants%202026%20Final%201%20Feb%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS%2F2026&p=true&ga=1"
@@ -337,10 +333,10 @@ export default function RigPage() {
               >
                 <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
                 <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-                  KFAS Call for Research Infrastructure Grant Proposals
+                  {t("callLinkText")}
                 </span>
                 <svg
-                  className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0"
+                  className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:-scale-x-100 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -355,30 +351,31 @@ export default function RigPage() {
               </a>
             </motion.div>
             <motion.div {...fadeUp(0.2)}>
-              <p className="border-l-2 border-[#EC601B]/40 pl-4 pt-1 text-[#1D2D44]/75">
-                <span className="font-semibold text-[#1D2D44]">Note:</span> Only
-                applications that are submitted via email to{" "}
+              <p className="border-s-2 border-[#EC601B]/40 ps-4 pt-1 text-[#1D2D44]/75">
+                <span className="font-semibold text-[#1D2D44]">
+                  {t("callNoteLabel")}
+                </span>
+                {t("callNotePre")}
                 <a
                   href="mailto:research@kfas.org.kw"
+                  dir="ltr"
                   className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40"
                 >
                   research@kfas.org.kw
-                </a>{" "}
-                are accepted.
+                </a>
+                {t("callNotePost")}
               </p>
             </motion.div>
           </div>
         </RailSection>
 
         {/* ── Focus Areas ── */}
-        <RailSection title="Focus Areas and Domains:">
+        <RailSection title={t("focusTitle")}>
           <motion.p
             className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
             {...fadeUp(0.05)}
           >
-            The Kuwait Foundation for the Advancement of Sciences (KFAS) invites
-            proposals that advance Kuwait&apos;s research infrastructure within
-            the following priority domains:
+            {t("focusIntro")}
           </motion.p>
           <div className="mt-6 divide-y divide-[#1D2D44]/[0.08]">
             {focusAreas.map((label, i) => (
@@ -401,117 +398,95 @@ export default function RigPage() {
             className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
             {...fadeUp(0.2)}
           >
-            All submitted proposals should demonstrate how the proposed
-            infrastructure will elevate research capacity, catalyze innovation,
-            and enable impactful scientific and technological advancement.
+            {t("focusClosing")}
           </motion.p>
         </RailSection>
 
         {/* ── Proposal Submissions ── */}
-        <RailSection tint title="Proposal Submissions:">
+        <RailSection tint title={t("submissionsTitle")}>
           <div className="space-y-5 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light">
-            <motion.p {...fadeUp(0.05)}>
-              All proposals must be submitted by the Principal Researchers, who
-              are the individuals responsible for managing and overseeing
-              research laboratories or centers and who hold official
-              administrative titles, acting on behalf of their respective
-              entities.
-            </motion.p>
+            <motion.p {...fadeUp(0.05)}>{t("submissionsBody1")}</motion.p>
             <motion.p {...fadeUp(0.1)}>
-              The following,{" "}
+              {t("submissionsBody2Pre")}
               <a
                 href="https://kfas.sharepoint.com/:w:/g/IQDcdCil0djoQ4u0Et7ait4-AXDquE-z_lMQheiMMDs4pvE?e=wRrIux"
                 target="_blank"
                 rel="noopener noreferrer"
+                dir="ltr"
                 className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
               >
-                RIG Proposal Form Template
+                {t("submissionsTemplateLinkText")}
               </a>
-              , must be completed and submitted via email to{" "}
+              {t("submissionsBody2Mid")}
               <a
                 href="mailto:research@kfas.org.kw"
+                dir="ltr"
                 className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
               >
                 research@kfas.org.kw
               </a>
-              . All necessary details are included in the template for your
-              reference.
+              {t("submissionsBody2Post")}
             </motion.p>
             <motion.p {...fadeUp(0.15)}>
-              A Letter of Intent:{" "}
+              {t("submissionsBody3Pre")}
               <a
                 href="https://kfas.sharepoint.com/:w:/g/IQBE5Pe5xj0kTK7vhkYRBiXnAcc26lBv17tZdUR88wnKcpg?e=XLADNz"
                 target="_blank"
                 rel="noopener noreferrer"
+                dir="ltr"
                 className="font-semibold text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
               >
-                RIG Letter of Intent Sample
-              </a>{" "}
-              from the applicant&apos;s institution/organization issued by the
-              assigned authority, indicating the approval to submit the proposal
-              to KFAS is required with the submission.
+                {t("submissionsLOILinkText")}
+              </a>
+              {t("submissionsBody3Post")}
             </motion.p>
-            <motion.p {...fadeUp(0.2)}>
-              Proposals are strongly encouraged to set short- to medium-term
-              objectives and are expected to be implemented within five years of
-              the award date.
-            </motion.p>
+            <motion.p {...fadeUp(0.2)}>{t("submissionsBody4")}</motion.p>
           </div>
         </RailSection>
 
         {/* ── Eligibility ── */}
-        <RailSection title="General Eligibility for Proposal Submissions:">
+        <RailSection title={t("eligibilityTitle")}>
           <motion.p
             className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
             {...fadeUp(0.05)}
           >
-            All institutions applying for the Research Infrastructure Grant must
-            meet the following eligibility requirements:
+            {t("eligibilityIntro")}
           </motion.p>
           <div className="mt-6 divide-y divide-[#1D2D44]/[0.08]">
             {[
-              <>Must be based in Kuwait at a Public Institution.</>,
+              <>{t("eligibilityItem0")}</>,
+              <>{t("eligibilityItem0b")}</>,
               <>
-                Must Submit proposals via e-mail to (
+                {t("eligibilityItem1Pre")}
                 <a
                   href="mailto:research@kfas.org.kw"
+                  dir="ltr"
                   className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40"
                 >
                   research@kfas.org.kw
                 </a>
-                ); manual submissions will not be accepted.
+                {t("eligibilityItem1Post")}
               </>,
               <>
-                Provide a Letter of intent from the applying institution
-                indicating:
-                <ul className="mt-3 space-y-2 pl-2">
-                  {[
-                    "Commitment to co-funding and ongoing maintenance of the infrastructure.",
-                    "Evidence of existing laboratory facilities and/or designated areas to host the proposed infrastructure.",
-                  ].map((sub, j) => (
-                    <li key={j} className="flex items-start gap-3">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
-                      <span>{sub}</span>
-                    </li>
-                  ))}
+                {t("eligibilityItem2Lead")}
+                <ul className="mt-3 space-y-2 ps-2">
+                  {[t("eligibilityItem2Sub1"), t("eligibilityItem2Sub2")].map(
+                    (sub, j) => (
+                      <li key={j} className="flex items-start gap-3">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
+                        <span>{sub}</span>
+                      </li>
+                    ),
+                  )}
                 </ul>
               </>,
-              <>
-                Demonstrate a strong researchers track record among faculty
-                members and/or researchers within the institution that
-                demonstrates their capacity to effectively utilize the requested
-                equipment in the proposed research area.
-              </>,
-              <>
-                Ensure the requested infrastructure supports research that meets
-                high standards of excellence and has the potential of generating
-                high quality, impactful outputs.
-              </>,
+              <>{t("eligibilityItem3")}</>,
+              <>{t("eligibilityItem4")}</>,
             ].map((item, i) => (
               <motion.div
                 key={i}
                 className="group flex gap-5 py-6 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
-                initial={{ opacity: 0, x: -16 }}
+                initial={{ opacity: 0, x: isArabic ? 16 : -16 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.07 }}
@@ -525,23 +500,18 @@ export default function RigPage() {
             className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/50 font-light"
             {...fadeUp(0.2)}
           >
-            Any application missing major requirements by the closing date of
-            the cycle will be marked as incomplete and consequently declined.
+            {t("eligibilityClosing")}
           </motion.p>
         </RailSection>
 
         {/* ── Important Information ── */}
-        <RailSection tint title="Important Information:">
+        <RailSection tint title={t("importantTitle")}>
           <div className="divide-y divide-[#1D2D44]/[0.08]">
-            {[
-              "A Letter of Intent from the applicant's institution/organization issued by the assigned authority, indicating the approval to submit the proposal to KFAS is required.",
-              "All proposals that pass KFAS' initial internal screening will be evaluated by external peer reviewers and will subsequently undergo a binary review (decline or approval).",
-              "Applicant Institution should be committed to providing an environment that upholds research ethics of transparency, accountability, and auditability, including rules that govern KFAS's Intellectual Property (IP) Policy.",
-            ].map((item, i) => (
+            {importantItems.map((item, i) => (
               <motion.div
                 key={i}
                 className="group flex gap-5 py-6 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
-                initial={{ opacity: 0, x: -12 }}
+                initial={{ opacity: 0, x: isArabic ? 12 : -12 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
@@ -555,21 +525,17 @@ export default function RigPage() {
             className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/50 font-light"
             {...fadeUp(0.25)}
           >
-            Applicants (Principal Researchers, who hold official administrative
-            titles) are strongly encouraged to submit their applications early
-            in the call announcement period to ensure sufficient time for
-            resolving any missing documentation.
+            {t("importantClosing")}
           </motion.p>
         </RailSection>
 
         {/* ── Documents ── */}
-        <RailSection title="Application Related Documents:">
+        <RailSection title={t("documentsTitle")}>
           <motion.p
             className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
             {...fadeUp(0.05)}
           >
-            All details, conditions and information on the scope of funding and
-            proposal requirements can be found in the following attachments:
+            {t("documentsIntro")}
           </motion.p>
           <div className="mt-6 divide-y divide-[#1D2D44]/[0.08]">
             {documents.map((doc, i) => (
@@ -607,7 +573,10 @@ export default function RigPage() {
                       />
                     </svg>
                   </div>
-                  <span className="font-poppins text-[14px] font-medium text-[#1D2D44] transition-colors group-hover:text-[#EC601B]">
+                  <span
+                    dir="ltr"
+                    className="font-poppins text-[14px] font-medium text-[#1D2D44] transition-colors group-hover:text-[#EC601B]"
+                  >
                     {doc.label}
                   </span>
                 </div>
@@ -616,7 +585,7 @@ export default function RigPage() {
                   height="14"
                   viewBox="0 0 14 14"
                   fill="none"
-                  className="shrink-0 opacity-20 transition-opacity group-hover:opacity-100"
+                  className="shrink-0 opacity-20 transition-opacity group-hover:opacity-100 rtl:-scale-x-100"
                 >
                   <path
                     d="M2 7h10M7 2l5 5-5 5"
@@ -633,44 +602,43 @@ export default function RigPage() {
             className="mt-7 font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/65 font-light"
             {...fadeUp(0.2)}
           >
-            It is the responsibility of the applicant and the applicant&apos;s
-            institution to ensure that they read, understand, and adhere to the
-            application requirements and all KFAS guidelines, rules, and
-            regulations.
+            {t("documentsClosing")}
           </motion.p>
         </RailSection>
 
         {/* ── Contact ── */}
-        <RailSection tint title="Contact Us:">
+        <RailSection tint title={t("contactTitle")}>
           <div className="space-y-3 font-poppins text-[15px] text-[#1D2D44]/65 font-light">
             <motion.p {...fadeUp(0.05)}>
-              If you have any inquiries, please email us at:{" "}
+              {t("contactBody1Pre")}
               <a
                 href="mailto:research@kfas.org.kw"
+                dir="ltr"
                 className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
               >
                 research@kfas.org.kw
               </a>
             </motion.p>
             <motion.p {...fadeUp(0.1)}>
-              Telephone:{" "}
+              {t("contactPhoneLabel")}
               <a
                 href="tel:+96522278125"
+                dir="ltr"
                 className="font-medium text-[#1D2D44] hover:text-[#EC601B] transition-colors"
               >
                 (+965) 22278125
-              </a>{" "}
-              or{" "}
+              </a>
+              {t("contactPhoneMid")}
               <a
                 href="tel:+96522278126"
+                dir="ltr"
                 className="font-medium text-[#1D2D44] hover:text-[#EC601B] transition-colors"
               >
                 22278126
               </a>
             </motion.p>
             <motion.p className="pt-2 text-[#1D2D44]/45" {...fadeUp(0.15)}>
-              KFAS decisions regarding research grants are final and not subject
-              to appeal.
+              {t("contactClosing")}
             </motion.p>
           </div>
         </RailSection>

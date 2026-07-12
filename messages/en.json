@@ -29,6 +29,92 @@
     "readMore": "Read more",
     "imageAlt": "KFAS — Kuwait Foundation for the Advancement of Sciences"
   },
+  "RIGPage": {
+    "breadcrumbResearch": "Research",
+    "breadcrumbGrants": "Grants",
+    "heroTitle": "RIG",
+    "grantTabsAriaLabel": "Grant programs",
+    "grantTabsSrLabel": "Jump to another grant program",
+    "grantPages": [
+      {
+        "label": "Research Infrastructure Grants",
+        "href": "/research/grants/RIG"
+      },
+      {
+        "label": "Applied Research Grants",
+        "href": "/research/grants/Applied-Research-Grants"
+      },
+      {
+        "label": "Fundamental Research Grants",
+        "href": "/research/grants/Fundamental-Research-Grants"
+      },
+      {
+        "label": "Young Researcher Grants",
+        "href": "/research/grants/Young-Researcher-Grants"
+      },
+      {
+        "label": "Policy Research Grants",
+        "href": "/research/grants/Policy-Research-Grants"
+      }
+    ],
+    "overviewKicker": "Overview",
+    "overviewTitle": "Research Infrastructure Grants",
+    "overviewBody1": "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for research infrastructure proposals. The Research Infrastructure Grant (RIG) will support and invest in public research centers and laboratories in Kuwait, in an aim to maximize their impact on the scientific community and strengthen their alignment with the global research ecosystem standards.",
+    "overviewBody2": "All submitted proposals by the public institutions in Kuwait, should focus on strengthening research infrastructure by enabling the acquisition of cutting-edge equipment and enhancing institutional research capabilities to advance scientific fields.",
+    "callTitle": "KFAS 2026 Call for Research Infrastructure Grant Proposals",
+    "callBody1": "For the 2026 First Call for Research Infrastructure Grant Proposals (RIG), the Kuwait Foundation for the Advancement of Sciences (KFAS) invites competitive proposals to be submitted starting from February 1st 2026 to May 1st 2026.",
+    "callBody2": "The call can be accessed and downloaded from the link below:",
+    "callLinkText": "KFAS Call for Research Infrastructure Grant Proposals",
+    "callNoteLabel": "Note:",
+    "callNotePre": " Only applications that are submitted via email to ",
+    "callNotePost": " are accepted.",
+    "focusTitle": "Focus Areas and Domains:",
+    "focusIntro": "The Kuwait Foundation for the Advancement of Sciences (KFAS) invites proposals that advance Kuwait's research infrastructure within the following priority domains:",
+    "focusAreas": [
+      "Health-related infrastructures",
+      "General Science infrastructures",
+      "Engineering infrastructures",
+      "Future Economies"
+    ],
+    "focusClosing": "All submitted proposals should demonstrate how the proposed infrastructure will elevate research capacity, catalyze innovation, and enable impactful scientific and technological advancement.",
+    "submissionsTitle": "Proposal Submissions:",
+    "submissionsBody1": "All proposals must be submitted by the Principal Researchers, who are the individuals responsible for managing and overseeing research laboratories or centers and who hold official administrative titles, acting on behalf of their respective entities.",
+    "submissionsBody2Pre": "The following, ",
+    "submissionsTemplateLinkText": "RIG Proposal Form Template",
+    "submissionsBody2Mid": ", must be completed and submitted via email to ",
+    "submissionsBody2Post": ". All necessary details are included in the template for your reference.",
+    "submissionsBody3Pre": "A Letter of Intent: ",
+    "submissionsLOILinkText": "RIG Letter of Intent Sample",
+    "submissionsBody3Post": " from the applicant's institution/organization issued by the assigned authority, indicating the approval to submit the proposal to KFAS is required with the submission.",
+    "submissionsBody4": "Proposals are strongly encouraged to set short- to medium-term objectives and are expected to be implemented within five years of the award date.",
+    "eligibilityTitle": "General Eligibility for Proposal Submissions:",
+    "eligibilityIntro": "All institutions applying for the Research Infrastructure Grant must meet the following eligibility requirements:",
+    "eligibilityItem0": "Must be based in Kuwait .",
+    "eligibilityItem0b": "Complete and submit the Research Infrastructure Grant proposal, including all required information and attachments, within the designated call deadline.",
+    "eligibilityItem1Pre": "Must Submit proposals via e-mail to (",
+    "eligibilityItem1Post": "); manual submissions will not be accepted.",
+    "eligibilityItem2Lead": "Provide a Letter of intent from the applying institution indicating:",
+    "eligibilityItem2Sub1": "Commitment to co-funding and ongoing maintenance of the infrastructure.",
+    "eligibilityItem2Sub2": "Evidence of existing laboratory facilities and/or designated areas to host the proposed infrastructure.",
+    "eligibilityItem3": "Demonstrate a strong researchers track record among faculty members and/or researchers within the institution that demonstrates their capacity to effectively utilize the requested equipment in the proposed research area.",
+    "eligibilityItem4": "Ensure the requested infrastructure supports research that meets high standards of excellence and has the potential of generating high quality, impactful outputs.",
+    "eligibilityClosing": "Any application missing major requirements by the closing date of the cycle will be marked as incomplete and consequently declined.",
+    "importantTitle": "Important Information:",
+    "importantItems": [
+      "A Letter of Intent from the applicant's institution/organization issued by the assigned authority, indicating the approval to submit the proposal to KFAS is required.",
+      "All proposals that pass KFAS' initial internal screening will be evaluated by external peer reviewers and will subsequently undergo a binary review (decline or approval).",
+      "Applicant Institution should be committed to providing an environment that upholds research ethics of transparency, accountability, and auditability, including rules that govern KFAS's Intellectual Property (IP) Policy."
+    ],
+    "importantClosing": "Applicants (Principal Researchers, who hold official administrative titles) are strongly encouraged to submit their applications early in the call announcement period to ensure sufficient time for resolving any missing documentation.",
+    "documentsTitle": "Application Related Documents:",
+    "documentsIntro": "All details, conditions and information on the scope of funding and proposal requirements can be found in the following attachments:",
+    "documentsClosing": "It is the responsibility of the applicant and the applicant's institution to ensure that they read, understand, and adhere to the application requirements and all KFAS guidelines, rules, and regulations.",
+    "contactTitle": "Contact Us:",
+    "contactBody1Pre": "If you have any inquiries, please email us at: ",
+    "contactPhoneLabel": "Telephone: ",
+    "contactPhoneMid": " or ",
+    "contactClosing": "KFAS decisions regarding research grants are final and not subject to appeal."
+  },
   "AssignedStudiesPage": {
     "breadcrumb": "Research",
     "heroTitle": "Assigned Studies",
