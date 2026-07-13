@@ -954,7 +954,11 @@
     ],
     "fieldsTitle": "Prize Fields",
     "fieldsIntro": "The prize is awarded annually in rotating fields that address key development priorities in Africa:",
-    "fieldItems": ["Health", "Food Security", "Education"],
+    "fieldItems": [
+      "Health",
+      "Food Security",
+      "Education"
+    ],
     "fieldsClosing": "Each year, one of these fields is selected as the focus of the prize cycle.",
     "eligibilityTitle": "Eligibility and Conditions",
     "eligibilityIntro": "Nominated candidates must satisfy the following:",
@@ -981,5 +985,36 @@
         "desc": "A certificate of recognition."
       }
     ]
+  },
+  "CallforReviewersPage": {
+    "breadcrumbResearch": "Research",
+    "breadcrumbGrants": "Grants",
+    "heroTitle": "Call for Reviewers",
+    "overviewKicker": "Introduction",
+    "overviewTitle": "Call for Reviewers",
+    "overviewBody1": "The Kuwait Foundation for the Advancement of Sciences (KFAS) invites qualified international experts and researchers to join its reviewer pool and contribute their expertise to the evaluation of research grant proposals.",
+    "overviewBody2": "KFAS is a private, non-profit organization that supports high-quality research in science, technology, and innovation in Kuwait. It funds projects aligned with national priorities and ensures excellence through a rigorous peer review process.",
+    "becomeTitle": "Become a Grant Reviewer",
+    "becomeBody1": "Join KFAS reviewer pool and contribute to advancing Kuwait’s scientific landscape through the evaluation of high-impact research proposals.",
+    "becomeBody2": "Reviewers provide structured written feedback and score applications against program-specific criteria, with their assessments playing a key role in informing funding decisions.",
+    "requirementsTitle": "Requirements:",
+    "requirementsItems": [
+      "Reviewers are expected to hold a PhD or equivalent terminal degree in a relevant STEM discipline.",
+      "A strong track record of research excellence is required, demonstrated through publications, scholarly output, or significant professional contributions, with expertise aligned to the subject areas of assigned proposals.",
+      "Current affiliation with an international academic, research, or clinical institution is required.",
+      "Timely completion of assigned reviews is expected.",
+      "Strong command of the English language is required.",
+      "Detailed, constructive feedback aimed at improving the quality of research is expected."
+    ],
+    "applicationTitle": "Application Form:",
+    "applicationBody": "To apply for our reviewer call, please fill out the online application form using the link below:",
+    "applicationLinkText": "KFAS Call for Peer Reviewers – Fill out form",
+    "contactTitle": "Contact Us:",
+    "contactBody1Pre": "If you have any inquiries, please email us at: ",
+    "contactPhoneLabel": "Telephone: ",
+    "contactPhoneMid": " or ",
+    "fundedTitle": "Funded Project Examples on KFAS Research Portal:",
+    "fundedBody": "To gain insight into the scope and diversity of KFAS-funded research, visit the “Projects and Impact” section of the KFAS Research Portal to explore a range of successful projects, both ongoing and completed, across Applied, Fundamental, Policy, and Young Researcher grants.",
+    "fundedLinkText": "https://research.kfas.org.kw"
   }
 }

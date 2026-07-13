@@ -68,6 +68,15 @@ const GRANT_TYPES: GrantType[] = [
     imageAlt:
       "Professionals collaborating in a policy research and workshop discussion",
   },
+  {
+    id: "call-for-reviewers",
+    title: "Call for Reviewers",
+    description:
+      "Join KFAS as a peer reviewer to evaluate research grant proposals and help uphold scientific excellence across our funding programs.",
+    applyHref: "/research/grants/CallforReviewers",
+    imageSrc: "/image/Researcher.jpeg",
+    imageAlt: "Researcher reviewing scientific work",
+  },
 ];
 
 // ─── Apply Link ───────────────────────────────────────────────────────────────
