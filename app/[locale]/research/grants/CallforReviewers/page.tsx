@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
@@ -15,6 +16,8 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true },
   transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as const },
 });
+
+type GrantPage = { label: string; href: string };
 
 function SectionHead({ title }: { title: ReactNode }) {
   return (
@@ -97,9 +100,77 @@ function RailSection({
   );
 }
 
+// ─── Grant program switcher (transfer between the 6 grant pages) ─────────────
+function GrantTabs({
+  pages,
+  ariaLabel,
+  srLabel,
+}: {
+  pages: GrantPage[];
+  ariaLabel: string;
+  srLabel: string;
+}) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const path =
+    pathname?.replace(/^\/(en|ar)(?=\/|$)/, "") || pathname || "";
+  const activeHref =
+    pages.find((p) => path === p.href || path.startsWith(p.href + "/"))
+      ?.href ?? "";
+
+  return (
+    <nav
+      aria-label={ariaLabel}
+      className="border-b border-[#1D2D44]/[0.08] bg-white"
+    >
+      <div className="mx-auto max-w-[1280px] px-6 sm:px-8 lg:px-12">
+        <div className="py-2.5 lg:hidden">
+          <label htmlFor="grant-switcher" className="sr-only">
+            {srLabel}
+          </label>
+          <select
+            id="grant-switcher"
+            value={activeHref}
+            onChange={(e) => router.push(e.target.value)}
+            className="w-full border border-[#1D2D44]/15 bg-white px-4 py-2.5 font-poppins text-[13px] font-medium text-[#1D2D44] focus:border-[#EC601B] focus:outline-none"
+          >
+            {pages.map((p) => (
+              <option key={p.href} value={p.href}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <ul className="hidden grid-cols-2 gap-2 py-2.5 sm:grid-cols-3 lg:grid">
+          {pages.map((p) => {
+            const active = p.href === activeHref;
+            return (
+              <li key={p.href}>
+                <Link
+                  href={p.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`block rounded-full border px-3 py-2 text-center font-poppins text-[11.5px] font-medium leading-snug tracking-[0.01em] transition-all duration-300 sm:text-[12px] ${
+                    active
+                      ? "border-[#EC601B] bg-[#EC601B] text-white"
+                      : "border-[#1D2D44]/15 text-[#1D2D44]/65 hover:border-[#EC601B] hover:text-[#EC601B]"
+                  }`}
+                >
+                  {p.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </nav>
+  );
+}
+
 export default function CallforReviewersPage() {
   const t = useTranslations("CallforReviewersPage");
   const isArabic = useLocale() === "ar";
+  const grantPages = t.raw("grantPages") as GrantPage[];
   const requirementsItems = t.raw("requirementsItems") as string[];
 
   const heroRef = useRef(null);
@@ -216,6 +287,13 @@ export default function CallforReviewersPage() {
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
+
+        {/* ── Grant program switcher ── */}
+        <GrantTabs
+          pages={grantPages}
+          ariaLabel={t("grantTabsAriaLabel")}
+          srLabel={t("grantTabsSrLabel")}
+        />
 
         {/* ── Introduction ── */}
         <section className="px-6 py-20 sm:px-8 sm:py-24 lg:px-12 bg-white">

@@ -73,6 +73,10 @@
       {
         "label": "Policy Research Grants",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "Call for Reviewers",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "Overview",
@@ -159,6 +163,10 @@
       {
         "label": "Policy Research Grants",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "Call for Reviewers",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "Overview",
@@ -260,6 +268,10 @@
       {
         "label": "Policy Research Grants",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "Call for Reviewers",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "Overview",
@@ -362,6 +374,10 @@
       {
         "label": "Policy Research Grants",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "Call for Reviewers",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "Overview",
@@ -469,6 +485,10 @@
       {
         "label": "Policy Research Grants",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "Call for Reviewers",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "Overview",
@@ -1015,6 +1035,34 @@
     "contactPhoneMid": " or ",
     "fundedTitle": "Funded Project Examples on KFAS Research Portal:",
     "fundedBody": "To gain insight into the scope and diversity of KFAS-funded research, visit the “Projects and Impact” section of the KFAS Research Portal to explore a range of successful projects, both ongoing and completed, across Applied, Fundamental, Policy, and Young Researcher grants.",
-    "fundedLinkText": "https://research.kfas.org.kw"
+    "fundedLinkText": "https://research.kfas.org.kw",
+    "grantTabsAriaLabel": "Grant programs",
+    "grantTabsSrLabel": "Jump to another grant program",
+    "grantPages": [
+      {
+        "label": "Research Infrastructure Grants",
+        "href": "/research/grants/RIG"
+      },
+      {
+        "label": "Applied Research Grants",
+        "href": "/research/grants/Applied-Research-Grants"
+      },
+      {
+        "label": "Fundamental Research Grants",
+        "href": "/research/grants/Fundamental-Research-Grants"
+      },
+      {
+        "label": "Young Researcher Grants",
+        "href": "/research/grants/Young-Researcher-Grants"
+      },
+      {
+        "label": "Policy Research Grants",
+        "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "Call for Reviewers",
+        "href": "/research/grants/CallforReviewers"
+      }
+    ]
   }
 }

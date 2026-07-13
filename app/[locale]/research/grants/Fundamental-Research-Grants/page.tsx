@@ -105,7 +105,7 @@ function CtaLink({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-// ─── Grant program switcher (transfer between the 5 grant pages) ─────────────
+// ─── Grant program switcher (transfer between the 6 grant pages) ─────────────
 function GrantTabs({
   pages,
   ariaLabel,
@@ -117,8 +117,10 @@ function GrantTabs({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const path =
+    pathname?.replace(/^\/(en|ar)(?=\/|$)/, "") || pathname || "";
   const activeHref =
-    pages.find((p) => pathname === p.href || pathname?.startsWith(p.href + "/"))
+    pages.find((p) => path === p.href || path.startsWith(p.href + "/"))
       ?.href ?? "";
 
   return (

@@ -75,6 +75,10 @@
       {
         "label": "منح أبحاث السياسات",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "دعوة للمحكّمين",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "مقدمـة",
@@ -163,6 +167,10 @@
       {
         "label": "منح أبحاث السياسات",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "دعوة للمحكّمين",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "مقدمـة",
@@ -264,6 +272,10 @@
       {
         "label": "منح أبحاث السياسات",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "دعوة للمحكّمين",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "مقدمـة",
@@ -366,6 +378,10 @@
       {
         "label": "منح أبحاث السياسات",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "دعوة للمحكّمين",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "مقدمـة",
@@ -473,6 +489,10 @@
       {
         "label": "منح أبحاث السياسات",
         "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "دعوة للمحكّمين",
+        "href": "/research/grants/CallforReviewers"
       }
     ],
     "overviewKicker": "مقدمـة",
@@ -959,7 +979,11 @@
     ],
     "fieldsTitle": "مجالات الجائزة",
     "fieldsIntro": "تُمنح الجائزة سنويًا بالتناوب في مجالات تعالج أولويات التنمية في أفريقيا، وهي:",
-    "fieldItems": ["الصحة", "الأمن الغذائي", "التعليم"],
+    "fieldItems": [
+      "الصحة",
+      "الأمن الغذائي",
+      "التعليم"
+    ],
     "fieldsClosing": "ويتم اختيار أحد هذه المجالات ليكون محور دورة الجائزة في كل عام.",
     "eligibilityTitle": "شروط الترشح",
     "eligibilityIntro": "يجب أن يستوفي المرشحون الشروط التالية:",
@@ -1016,6 +1040,34 @@
     "contactPhoneMid": " أو ",
     "fundedTitle": "أمثلة للمشاريع الممولة في بوابة KFAS Research Portal ",
     "fundedBody": "للاطلاع على نطاق وتنوع الأبحاث الممولة من قبل مؤسسة الكويت للتقدم العلمي، يُرجى زيارة قسم «المشاريع والأثر» في بوابة KFAS Research Portal لاستكشاف مجموعة من المشاريع الناجحة، الجارية والمكتملة، ضمن منح البحوث التطبيقية والأساسية ومنح البحوث المعنية بالسياسات ومنح الباحثين الشباب.",
-    "fundedLinkText": "https://research.kfas.org.kw"
+    "fundedLinkText": "https://research.kfas.org.kw",
+    "grantTabsAriaLabel": "برامج المنح",
+    "grantTabsSrLabel": "الانتقال إلى برنامج منحة آخر",
+    "grantPages": [
+      {
+        "label": "منح البنية التحتية البحثية",
+        "href": "/research/grants/RIG"
+      },
+      {
+        "label": "منح الأبحاث التطبيقية",
+        "href": "/research/grants/Applied-Research-Grants"
+      },
+      {
+        "label": "منح الأبحاث الأساسية",
+        "href": "/research/grants/Fundamental-Research-Grants"
+      },
+      {
+        "label": "منح الباحثين الشباب",
+        "href": "/research/grants/Young-Researcher-Grants"
+      },
+      {
+        "label": "منح أبحاث السياسات",
+        "href": "/research/grants/Policy-Research-Grants"
+      },
+      {
+        "label": "دعوة للمحكّمين",
+        "href": "/research/grants/CallforReviewers"
+      }
+    ]
   }
 }
