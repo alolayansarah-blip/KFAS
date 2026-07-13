@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/src/i18n/navigation";
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
@@ -112,10 +111,8 @@ function GrantTabs({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const path =
-    pathname?.replace(/^\/(en|ar)(?=\/|$)/, "") || pathname || "";
   const activeHref =
-    pages.find((p) => path === p.href || path.startsWith(p.href + "/"))
+    pages.find((p) => pathname === p.href || pathname.startsWith(p.href + "/"))
       ?.href ?? "";
 
   return (

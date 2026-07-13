@@ -568,6 +568,45 @@
     "contactPhoneMid": " or ",
     "contactClosing": "KFAS decisions regarding research grants are final, and not subject to appeal."
   },
+  "GrantsIndexPage": {
+    "breadcrumb": "Research",
+    "heroTitle": "Grants",
+    "overviewTitle": "KFAS Grant Programs Overview",
+    "overviewBody": "The Kuwait Foundation for the Advancement of Sciences (KFAS) offers a diverse portfolio of grant programs designed to support research, innovation, and capacity building in Kuwait. These programs are strategically structured to cover a wide spectrum of research activities, including fundamental, applied, policy-oriented, and infrastructure-focused initiatives, as well as supporting early-career researchers. Through these grants, KFAS aims to address national priorities, strengthen collaboration across sectors, and ensure that research outcomes contribute to scientific advancement, economic development, and evidence-based policymaking. The following sections outline the key grant types offered by KFAS:",
+    "applyLinkText": "Click here",
+    "grants": [
+      {
+        "id": "rig",
+        "title": "Research Infrastructure Grants",
+        "description": "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for research infrastructure proposals. The Research Infrastructure Grant (RIG) will support and invest in public research centers and laboratories in Kuwait."
+      },
+      {
+        "id": "applied",
+        "title": "Applied Research Grants",
+        "description": "Supporting research projects that translate scientific findings into practical solutions for industry and society."
+      },
+      {
+        "id": "fundamental",
+        "title": "Fundamental Research Grants",
+        "description": "Backing curiosity-driven research that advances foundational knowledge without immediate commercial application."
+      },
+      {
+        "id": "young",
+        "title": "Young Researcher Grants",
+        "description": "Empowering early-career scientists and researchers with funding to launch independent research careers."
+      },
+      {
+        "id": "policy",
+        "title": "Policy Research Grants",
+        "description": "Enabling evidence-based research that informs public policy, governance, and national development strategies."
+      },
+      {
+        "id": "call-for-reviewers",
+        "title": "Call for Reviewers",
+        "description": "Join KFAS as a peer reviewer to evaluate research grant proposals and help uphold scientific excellence across our funding programs."
+      }
+    ]
+  },
   "AssignedStudiesPage": {
     "breadcrumb": "Research",
     "heroTitle": "Assigned Studies",
