@@ -310,7 +310,13 @@ export default function YoungResearcherGrantsPage() {
           <div className="mx-auto max-w-[1280px]">
             <motion.div {...fadeUp(0)}>
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]">
+              <p
+                className={`mt-5 font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[16px] tracking-normal"
+                    : "text-[10px] uppercase tracking-[0.4em]"
+                }`}
+              >
                 {t("overviewKicker")}
               </p>
               <h2 className="mt-4 font-poppins text-2xl sm:text-3xl font-semibold leading-tight tracking-tight text-[#1D2D44]">

@@ -302,7 +302,7 @@ export default function RigPage() {
               <p
                 className={`mt-5 font-semibold text-[#EC601B] ${
                   isArabic
-                    ? "text-[14px] tracking-normal"
+                    ? "text-[16px] tracking-normal"
                     : "text-[10px] uppercase tracking-[0.4em]"
                 }`}
               >
