@@ -137,6 +137,60 @@
     "contactPhoneMid": " or ",
     "contactClosing": "KFAS decisions regarding research grants are final and not subject to appeal."
   },
+  "AboutKfasPage": {
+    "breadcrumbAbout": "About",
+    "heroTitle": "Who We Are",
+    "overviewKicker": "Overview",
+    "overviewBody1": "The Kuwait Foundation for the Advancement of Sciences (KFAS) is a private, non-profit organization established in December 1976. Through cooperation with local and international partners, KFAS funds and implements research, training, and development programs that address Kuwait's national priorities in the fields of science, technology, and innovation, as well as operating specialized scientific centers. The programs target various segments within the innovation ecosystem. KFAS also actively engages the wider public to generate awareness and interest in the fields of science and technology. KFAS builds alliances across academia, government, the private sector, non-government organizations, and the broader community to diffuse knowledge and accelerate progress.",
+    "overviewBody2": "Through its prestigious prizes, KFAS not only celebrates the remarkable contributions of Kuwaiti and Arab researchers but also reinforces its commitment to advancing science and technology. These prizes underscore KFAS's role in rewarding excellence, validating impactful research, inspiring future generations, and encouraging further contributions to Kuwait's scientific and technological landscape. KFAS is recognized as a leading player in Kuwait's scientific and technological accomplishments and advancements. The governance system of KFAS is structured to ensure effective oversight and management of its activities. It includes a Board of Directors, chaired and appointed by H.H. The Amir of the State of Kuwait, that is responsible for strategic decision-making, executive board committees focused on specific areas, and an executive management that handles day-to-day operations.",
+    "buildingImageAlt": "KFAS building with KFAS signage",
+    "visionMissionTitle": "Vision & Mission",
+    "visionMission": [
+      {
+        "label": "Our",
+        "title": "Vision",
+        "text": "To advance science, technology, and innovation for a resilient, thriving, and sustainable future."
+      },
+      {
+        "label": "Our",
+        "title": "Mission",
+        "text": "To pursue scientific excellence to tackle national challenges through a prominent science, technology, and innovation model."
+      }
+    ],
+    "strategyBody1": "Driving our work is the premise that science creates knowledge, technology accelerates progress, and innovation shapes transformative solutions. During 2025–2029, we aim to build on our legacy and our strengths by continuing to support exemplary programs and projects, while also accelerating our support for emerging scientific areas that call for new research, novel uses of technology, and expanded horizons in knowledge transfers and human capacities.",
+    "strategyBody2": "All of our work will be aligned with our three pillars—robust research ecosystem, viable innovation, and human ingenuity—and each pillar will complement and produce synergies with the others. We will focus on elevating research efficacy, encouraging transdisciplinary research, and informing science-based policy. We will also focus on promoting science, technology, and innovation (STI) transfers and contributing to the growth of the innovation ecosystem. And we will focus on diffusing knowledge and developing human capabilities and potential.",
+    "strategyBody3": "We will pursue priority areas that address issues of importance to Kuwait, particularly in the areas of environment, energy, health, STEAM education, water and food security, and future economies, while maintaining a vigilant awareness of emerging trends and initiatives outside these areas that could bring benefit to the nation.",
+    "strategyBody4": "Specialized centers of excellence have been established in Kuwait and continue to be funded as subsidiaries of the foundation, providing the country with additional ways to address national challenges through research and development.",
+    "centersKicker": "Our Centers",
+    "centers": [
+      {
+        "title": "The Scientific Center",
+        "description": "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness."
+      },
+      {
+        "title": "Dasman Diabetes Institute",
+        "description": "Developing research projects, educational programs, and awareness-raising initiatives that improve society and combat diabetes."
+      },
+      {
+        "title": "Sabah Al-Ahmad Center",
+        "description": "A center dedicated to nurturing talent and creativity in young individuals under the Kuwait Foundation for the Advancement of Sciences."
+      },
+      {
+        "title": "Advancement of Sciences",
+        "description": "An advanced research and development center focused on innovation, scientific excellence, and the dissemination of knowledge."
+      },
+      {
+        "title": "Kuwait National Space Research Center",
+        "description": "Kuwait's national center for space research, advancing scientific exploration, technology, and human-capital development under KFAS auspices."
+      },
+      {
+        "title": "Sheikh Abdullah Al Salem Cultural Centre",
+        "description": "One of the world's largest cultural complexes, housing museums of natural history, science, space, and Arabic Islamic science with over 1,100 exhibits."
+      }
+    ],
+    "readMore": "Read More",
+    "backToTop": "Back to Top"
+  },
   "ARGPage": {
     "breadcrumbResearch": "Research",
     "breadcrumbGrants": "Grants",
