@@ -111,7 +111,7 @@ const DEFAULT_NAV_ITEMS_AR: NavItem[] = [
         label: "البحث والتطوير في القطاع الخاص",
         href: "/research/RandDPrivate",
       },
-      { label: "بوابة أبحاث المؤسسة", href: "/research/KFASResearchPortal" },
+      { label: "بوابة الكويت للأبحاث", href: "/research/KFASResearchPortal" },
     ],
   },
   {

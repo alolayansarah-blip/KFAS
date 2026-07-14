@@ -3,6 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -17,85 +18,27 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as const },
 });
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
-const PORTAL_AIMS = [
-  "Showcasing KFAS's supported projects.",
-  "Encouraging collaborations between researchers.",
-  "Promoting communication & dissemination.",
-  "Promoting research Infrastructures & facilities etc.",
+type ShowcaseItem = { title: string; body: string };
+
+type FaqItem = {
+  label: string;
+  question: string;
+  answer?: string;
+  answerPre?: string;
+  answerBold?: string;
+  answerPost?: string;
+  imageAlt: string;
+  imageCaption: string;
+};
+
+const FAQ_IMAGES = [
+  "/image/Portal1.png",
+  "/image/Portal2.png",
+  "/image/Portal 3.png",
 ];
-
-const PORTAL_SHOWCASES = [
-  {
-    title: "Data Showcased",
-    body: "The KFAS Pure Portal includes publications, research outputs, people, projects and grants, research units, prizes, and research-related activities. Items can be interconnected, allowing research centers to tag publications based on their funded research.",
-  },
-  {
-    title: "Sustainable Development Goals",
-    body: "The Portal demonstrates KFAS' contribution to the UN Sustainable Development Goals (SDGs) on a Profile User Level, Research Unit or Institute Level, and on a Research Output Level.",
-  },
-  {
-    title: "Potential Collaborators",
-    body: "The Portal is an excellent starting point to look for an advisor, a co-author, or assembling a multidisciplinary team for a grant.",
-  },
-];
-
-const PERFORMANCE_METRICS = [
-  {
-    title: "Research-Output Metrics",
-    body: "such as Scopus Citations, PlumX Metrics, and the Altmetric Donut, which track citations, online engagement, and research visibility across various platforms.",
-  },
-  {
-    title: "Author-Level Metrics",
-    body: "such as the Scopus h-index, Elsevier Fingerprint, and a Global Map of Collaborations help assess researcher impact, identify key expertise, and visualize international research partnerships.",
-  },
-];
-
-// ─── FAQ Data ─────────────────────────────────────────────────────────────────
-
-const FAQ_ITEMS = [
-  {
-    label: "What is it",
-    question: "What is the KFAS Research Portal?",
-    answer: (
-      <>
-        It serves as the centralized system for managing publications, grants,
-        projects, and researcher profiles.{" "}
-        <strong className="font-semibold text-white">
-          The KFAS Research Portal powered by Pure provides a single, searchable
-          platform
-        </strong>{" "}
-        that aggregates and showcases all KFAS-funded research outputs and
-        impact in one place.
-      </>
-    ),
-    image: "/image/Portal1.png",
-    imageAlt: "Researcher name",
-    imageCaption: "Researcher name",
-    reverse: false,
-  },
-  {
-    label: "Who can access",
-    question: "Who can access the KFAS Research Portal?",
-    answer:
-      "Everyone has access to the Portal; it showcases all the research achievements of KFAS to our audience in Kuwait and around the world.",
-    image: "/image/Portal2.png",
-    imageAlt: "Researcher name",
-    imageCaption: "Researcher name",
-    reverse: true,
-  },
-  {
-    label: "Eligibility",
-    question: "Who can create a profile in KFAS Research Portal?",
-    answer:
-      "Only researchers who have engaged in projects with KFAS, whether past or future, are eligible to create profiles on the KFAS Research Portal.",
-    image: "/image/Portal 3.png",
-    imageAlt: "Researcher name",
-    imageCaption: "Researcher name",
-    reverse: false,
-  },
-];
+const FAQ_REVERSE = [false, true, false];
 
 // ─── Shared UI (editorial) ─────────────────────────────────────────────────────
 
@@ -143,12 +86,24 @@ function Mark() {
 
 function FaqRow({
   item,
+  image,
+  reverse,
   index,
 }: {
-  item: (typeof FAQ_ITEMS)[number];
+  item: FaqItem;
+  image: string;
+  reverse: boolean;
   index: number;
 }) {
-  const { label, question, answer, image, imageAlt, reverse } = item;
+  const {
+    label,
+    question,
+    answer,
+    answerPre,
+    answerBold,
+    answerPost,
+    imageAlt,
+  } = item;
 
   const textCell = (
     <motion.div
@@ -183,7 +138,7 @@ function FaqRow({
 
       {/* animated accent bar */}
       <motion.div
-        className="mt-5 mb-5 h-[2.5px] w-10 origin-left rounded-full bg-white/55"
+        className="mt-5 mb-5 h-[2.5px] w-10 origin-left rtl:origin-right rounded-full bg-white/55"
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: 1 }}
         viewport={{ once: true }}
@@ -198,7 +153,15 @@ function FaqRow({
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
       >
-        {answer}
+        {answer ? (
+          answer
+        ) : (
+          <>
+            {answerPre}{" "}
+            <strong className="font-semibold text-white">{answerBold}</strong>{" "}
+            {answerPost}
+          </>
+        )}
       </motion.p>
     </motion.div>
   );
@@ -254,6 +217,14 @@ function FaqRow({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function KFASResearchPortalPage() {
+  const t = useTranslations("KFASPortalPage");
+  const isArabic = useLocale() === "ar";
+
+  const pavingAims = t.raw("pavingAims") as string[];
+  const faqItems = t.raw("faqItems") as FaqItem[];
+  const showcaseItems = t.raw("showcaseItems") as ShowcaseItem[];
+  const performanceMetrics = t.raw("performanceMetrics") as ShowcaseItem[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -285,13 +256,14 @@ export default function KFASResearchPortalPage() {
               sizes="100vw"
               className="scale-105 object-cover object-center"
             />
-            {/* Directional overlay — left heavy for text legibility */}
+            {/* Directional overlay — leading heavy for text legibility */}
             <div
               aria-hidden
               className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                background: isArabic
+                  ? "linear-gradient(252deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)"
+                  : "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
             />
             {/* Bottom fade */}
@@ -305,46 +277,70 @@ export default function KFASResearchPortalPage() {
             />
           </div>
 
-          {/* Content — vertically centered, left-aligned */}
+          {/* Content — vertically centered, leading-aligned */}
           <motion.div
-            className="relative z-10 mt-36 md:mt-28 lg:mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className={`relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 ${
+              isArabic
+                ? "mt-28 sm:mt-36 lg:mt-44"
+                : "mt-28 md:mt-28 lg:mt-44"
+            }`}
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-base tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Research</span>
-              {/* <span className="text-white/25">/</span>
-              <span>KFAS Research Portal</span> */}
+              <span>{t("breadcrumbResearch")}</span>
             </motion.div>
 
             {/* Title — clip-path wipe */}
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className={`font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-tight tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                KFAS Research
-                <br />
-                Portal
+                <span className="block">{t("heroTitleLine1")}</span>
+                <span className="block">{t("heroTitleLine2")}</span>
               </motion.h1>
             </div>
 
-            {/* Orange rule */}
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 hidden h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 72 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           {/* White bleed into body */}
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
@@ -356,47 +352,41 @@ export default function KFASResearchPortalPage() {
             <motion.div className="max-w-3xl" {...fadeUp(0)}>
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
               <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
-                Overview
+                {t("overviewKicker")}
               </p>
               <h2 className="mt-4 font-poppins text-[1.7rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[2.1rem]">
-                The Gateway to Impactful Research in Kuwait
+                {t("overviewTitle")}
               </h2>
 
               <p className="mt-7 font-poppins text-[15px] font-light leading-[1.95] text-[#1D2D44]/70">
-                The KFAS Research Portal serves as an open window, that
-                showcases all the research and impactful achievements of KFAS.
-                This innovative research information management system offers
-                new insights into the scholarly expertise and collaborative
-                opportunities between KFAS and researchers engaged in joint
-                projects with various entities. This portal is designed to help
-                researchers and potential collaborators identify working on
-                specific research or scholarly areas in collaboration with KFAS.
+                {t("overviewBody")}
               </p>
 
-              <a
-                href="https://pure.kfas.org.kw/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-6 inline-flex items-center gap-3"
-              >
-                <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
-                <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-                  KFAS Research Portal Link
-                </span>
-                <svg
-                  className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2.5}
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-8">
+                <a
+                  href=""
+                  className="group inline-flex items-center gap-3 pointer-events-none"
+                  aria-disabled="true"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </a>
+                  <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+                  <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
+                    {t("overviewLinkText")}
+                  </span>
+                  <svg
+                    className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:rotate-180 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 rtl:group-hover:translate-x-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </a>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -407,13 +397,13 @@ export default function KFASResearchPortalPage() {
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <SectionHead
-                  title="KFAS: Paving the Way"
-                  intro="KFAS supports Kuwait's Research Community, both individually and institutionally. The KFAS Research Portal aims to:"
+                  title={t("pavingTitle")}
+                  intro={t("pavingIntro")}
                 />
               </div>
-              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
                 <ul className="divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]">
-                  {PORTAL_AIMS.map((item, i) => (
+                  {pavingAims.map((item, i) => (
                     <motion.li
                       key={item}
                       {...fadeUp(0.05 + i * 0.08)}
@@ -434,8 +424,14 @@ export default function KFASResearchPortalPage() {
         {/* ── FAQ (orange section — kept) ── */}
         <section className="overflow-hidden bg-[#EC601B] px-6 sm:px-8 lg:px-12">
           <div className="mx-auto w-full max-w-[1280px]">
-            {FAQ_ITEMS.map((item, i) => (
-              <FaqRow key={item.label} item={item} index={i} />
+            {faqItems.map((item, i) => (
+              <FaqRow
+                key={item.label}
+                item={item}
+                image={FAQ_IMAGES[i]}
+                reverse={FAQ_REVERSE[i]}
+                index={i}
+              />
             ))}
           </div>
         </section>
@@ -446,13 +442,13 @@ export default function KFASResearchPortalPage() {
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <SectionHead
-                  title="KFAS Research Portal:"
-                  intro="The portal showcases the following:"
+                  title={t("showcaseTitle")}
+                  intro={t("showcaseIntro")}
                 />
               </div>
-              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
                 <ul className="divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]">
-                  {PORTAL_SHOWCASES.map(({ title, body }, i) => (
+                  {showcaseItems.map(({ title, body }, i) => (
                     <motion.li
                       key={title}
                       {...fadeUp(0.05 + i * 0.08)}
@@ -470,19 +466,19 @@ export default function KFASResearchPortalPage() {
 
                   {/* Research Performance Metrics (nested) */}
                   <motion.li
-                    {...fadeUp(0.05 + PORTAL_SHOWCASES.length * 0.08)}
+                    {...fadeUp(0.05 + showcaseItems.length * 0.08)}
                     className="group/li flex gap-5 py-7 sm:gap-7 sm:py-9"
                   >
                     <Mark />
                     <div className="min-w-0 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/75">
                       <span>
                         <span className="font-semibold text-[#1D2D44]">
-                          Research Performance Metrics:{" "}
+                          {t("performanceLabel")}:{" "}
                         </span>
-                        The portal also provides:
+                        {t("performanceIntro")}
                       </span>
                       <ul className="mt-3 space-y-3">
-                        {PERFORMANCE_METRICS.map(({ title, body }) => (
+                        {performanceMetrics.map(({ title, body }) => (
                           <li key={title} className="flex items-start gap-3">
                             <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7DC0F1]" />
                             <span>
@@ -507,14 +503,15 @@ export default function KFASResearchPortalPage() {
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <SectionHead title="Contact Us:" />
+                <SectionHead title={t("contactTitle")} />
               </div>
-              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
+              <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
                 <div className="space-y-3 font-poppins text-[15px] font-light text-[#1D2D44]/65">
                   <motion.p {...fadeUp(0.05)}>
-                    If you have any inquiries, please email us at:{" "}
+                    {t("contactBody1Pre")}
                     <a
                       href="mailto:pure@kfas.org.kw"
+                      dir="ltr"
                       className="font-medium text-[#EC601B] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:opacity-80"
                     >
                       pure@kfas.org.kw
@@ -522,16 +519,18 @@ export default function KFASResearchPortalPage() {
                   </motion.p>
 
                   <motion.p {...fadeUp(0.1)}>
-                    Telephone:{" "}
+                    {t("contactPhoneLabel")}
                     <a
                       href="tel:+96522278125"
+                      dir="ltr"
                       className="font-medium text-[#1D2D44] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:text-[#EC601B]"
                     >
                       (+965) 22278125
-                    </a>{" "}
-                    or{" "}
+                    </a>
+                    {t("contactPhoneMid")}
                     <a
                       href="tel:+96522278126"
+                      dir="ltr"
                       className="font-medium text-[#1D2D44] underline underline-offset-[3px] decoration-[#EC601B]/40 hover:text-[#EC601B]"
                     >
                       22278126
@@ -542,12 +541,12 @@ export default function KFASResearchPortalPage() {
                     className="pt-6 text-[15px] font-light leading-[1.85] sm:text-[16px]"
                     {...fadeUp(0.15)}
                   >
-                    Stay engaged, stay connected and let the
+                    {t("contactClosingPre")}
                     <br />
                     <span className="font-semibold text-[#1D2D44]">
-                      KFAS Research Portal
+                      {t("contactClosingBold")}
                     </span>{" "}
-                    be your gateway to impactful research
+                    {t("contactClosingPost")}
                   </motion.p>
                 </div>
               </div>

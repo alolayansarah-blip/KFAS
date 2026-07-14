@@ -1052,6 +1052,83 @@
       }
     ]
   },
+  "KFASPortalPage": {
+    "breadcrumbResearch": "Research",
+    "heroTitleLine1": "KFAS Research",
+    "heroTitleLine2": "Portal",
+    "overviewKicker": "Overview",
+    "overviewTitle": "The Gateway to Impactful Research in Kuwait",
+    "overviewBody": "The KFAS Research Portal serves as an open window, that showcases all the research and impactful achievements of KFAS. This innovative research information management system offers new insights into the scholarly expertise and collaborative opportunities between KFAS and researchers engaged in joint projects with various entities. This portal is designed to help researchers and potential collaborators identify working on specific research or scholarly areas in collaboration with KFAS.",
+    "overviewLinkText": "KFAS Research Portal",
+    "pavingTitle": "KFAS: Paving the Way",
+    "pavingIntro": "KFAS supports Kuwait's Research Community, both individually and institutionally. The KFAS Research Portal aims to:",
+    "pavingAims": [
+      "Showcasing KFAS's supported projects.",
+      "Encouraging collaborations between researchers.",
+      "Promoting communication & dissemination.",
+      "Promoting research Infrastructures & facilities etc."
+    ],
+    "faqItems": [
+      {
+        "label": "What is it",
+        "question": "What is the KFAS Research Portal?",
+        "answerPre": "It serves as the centralized system for managing publications, grants, projects, and researcher profiles.",
+        "answerBold": "The KFAS Research Portal powered by Pure provides a single, searchable platform",
+        "answerPost": "that aggregates and showcases all KFAS-funded research outputs and impact in one place.",
+        "imageAlt": "Researcher name",
+        "imageCaption": "Researcher name"
+      },
+      {
+        "label": "Who can access",
+        "question": "Who can access the KFAS Research Portal?",
+        "answer": "Everyone has access to the Portal; it showcases all the research achievements of KFAS to our audience in Kuwait and around the world.",
+        "imageAlt": "Researcher name",
+        "imageCaption": "Researcher name"
+      },
+      {
+        "label": "Eligibility",
+        "question": "Who can create a profile in KFAS Research Portal?",
+        "answer": "Only researchers who have engaged in projects with KFAS, whether past or future, are eligible to create profiles on the KFAS Research Portal.",
+        "imageAlt": "Researcher name",
+        "imageCaption": "Researcher name"
+      }
+    ],
+    "showcaseTitle": "KFAS Research Portal:",
+    "showcaseIntro": "The portal showcases the following:",
+    "showcaseItems": [
+      {
+        "title": "Data Showcased",
+        "body": "The KFAS Pure Portal includes publications, research outputs, people, projects and grants, research units, prizes, and research-related activities. Items can be interconnected, allowing research centers to tag publications based on their funded research."
+      },
+      {
+        "title": "Sustainable Development Goals",
+        "body": "The Portal demonstrates KFAS' contribution to the UN Sustainable Development Goals (SDGs) on a Profile User Level, Research Unit or Institute Level, and on a Research Output Level."
+      },
+      {
+        "title": "Potential Collaborators",
+        "body": "The Portal is an excellent starting point to look for an advisor, a co-author, or assembling a multidisciplinary team for a grant."
+      }
+    ],
+    "performanceLabel": "Research Performance Metrics",
+    "performanceIntro": "The portal also provides:",
+    "performanceMetrics": [
+      {
+        "title": "Research-Output Metrics",
+        "body": "such as Scopus Citations, PlumX Metrics, and the Altmetric Donut, which track citations, online engagement, and research visibility across various platforms."
+      },
+      {
+        "title": "Author-Level Metrics",
+        "body": "such as the Scopus h-index, Elsevier Fingerprint, and a Global Map of Collaborations help assess researcher impact, identify key expertise, and visualize international research partnerships."
+      }
+    ],
+    "contactTitle": "Contact Us:",
+    "contactBody1Pre": "If you have any inquiries, please email us at: ",
+    "contactPhoneLabel": "Telephone: ",
+    "contactPhoneMid": " or ",
+    "contactClosingPre": "Stay engaged, stay connected and let the",
+    "contactClosingBold": "KFAS Research Portal",
+    "contactClosingPost": "be your gateway to impactful research"
+  },
   "CallforReviewersPage": {
     "breadcrumbResearch": "Research",
     "breadcrumbGrants": "Grants",
