@@ -49,7 +49,7 @@
   },
   "RIGPage": {
     "breadcrumbResearch": "البحث",
-    "breadcrumbGrants": "المنح",
+    "breadcrumbGrants": "دعم البحوث / المنح",
     "heroTitle": "منح البنية التحتية البحثية",
     "heroTitleLine1": "منح البنية",
     "heroTitleLine2": "التحتية البحثية",
@@ -141,7 +141,7 @@
   },
   "ARGPage": {
     "breadcrumbResearch": "البحث",
-    "breadcrumbGrants": "المنح",
+    "breadcrumbGrants": "دعم البحوث / المنح",
     "heroTitle": "منح البحوث التطبيقية",
     "heroTitleLine1": "منح البحوث",
     "heroTitleLine2": "التطبيقية",
@@ -254,9 +254,9 @@
   },
   "FRGPage": {
     "breadcrumbResearch": "البحث",
-    "breadcrumbGrants": "المنح",
-    "heroTitleLine1": "منح البحوث الأساسية",
-    "heroTitleLine2": "",
+    "breadcrumbGrants": "دعم البحوث / المنح",
+    "heroTitleLine1": "منح البحوث",
+    "heroTitleLine2": "الأساسية",
     "grantTabsAriaLabel": "برامج المنح",
     "grantTabsSrLabel": "الانتقال إلى برنامج منحة آخر",
     "grantPages": [
@@ -331,6 +331,10 @@
       {
         "label": "دليل سياسة الملكية الفكرية (IP) في مؤسسة الكويت للتقدم العلمي",
         "href": "https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2FKFAS%20Intellectual%20Property%20%28IP%29%20Policy%20%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS&p=true&ga=1"
+      },
+      {
+        "label": "نموذج السيرة الذاتية الخاص بمؤسسة الكويت للتقدم العلمي (KFAS) (إلزامي لجميع الباحثين الرئيسيين والباحثين المشاركين)",
+        "href": ""
       }
     ],
     "additionalIntro": "إضافة إلى تقديم الطلب، يجب:",
@@ -360,7 +364,7 @@
   },
   "YRGPage": {
     "breadcrumbResearch": "البحث",
-    "breadcrumbGrants": "المنح",
+    "breadcrumbGrants": "دعم البحوث / المنح",
     "heroTitleLine1": "منح",
     "heroTitleLine2": "الباحثين الشباب",
     "grantTabsAriaLabel": "برامج المنح",
@@ -471,7 +475,7 @@
   },
   "PRGPage": {
     "breadcrumbResearch": "البحث",
-    "breadcrumbGrants": "المنح",
+    "breadcrumbGrants": "دعم البحوث / المنح",
     "heroTitleLine1": "منح البحوث",
     "heroTitleLine2": "المعنية بالسياسات",
     "grantTabsAriaLabel": "برامج المنح",
@@ -1055,7 +1059,7 @@
   },
   "CallforReviewersPage": {
     "breadcrumbResearch": "البحث",
-    "breadcrumbGrants": "المنح",
+    "breadcrumbGrants": "دعم البحوث / المنح",
     "heroTitle": "دعوة للمحكّمين",
     "overviewKicker": "مقدمـة",
     "overviewTitle": "دعوة للمحكّمين",

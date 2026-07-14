@@ -285,11 +285,11 @@
     "overviewTitle": "Fundamental Research Grants",
     "overviewBody1": "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for Fundamental Research Proposals. Fundamental Research is research focusing on the advancement of knowledge, increasing understanding in fundamental scientific principles, and is not directed towards immediate practical solutions or commercial objectives.",
     "overviewBody2": "All submitted proposals should aim to generate solutions and outcomes that advance a scientific field, promote innovative approaches or methodologies, and support the development of new technologies.",
-    "callTitle": "KFAS 2026 First Call for Research Proposals for Applied, Fundamental, Policy and Young Researcher Proposals",
+    "callTitle": "KFAS 2026 Second Call for Research Proposals for Applied, Fundamental, Policy and Young Researcher Proposals",
     "callBody1": "The Kuwait Foundation for the Advancement of Sciences invites competitive research proposals to be submitted starting on the:",
     "callDates": "15th of September to 15th of November 2026, by midnight Kuwait time.",
     "callBody2": "The call can be accessed and downloaded from the link below:",
-    "callLinkText": "KFAS 2026 First Call for Research Proposals",
+    "callLinkText": "KFAS 2026 Second Call for Research Proposals",
     "callNotePre": "Please note that only applications that are submitted through the ",
     "callNoteLinkText": "KFAS Research Grants Management System",
     "callNotePost": " are accepted, as manual submission of proposals is not accepted. Any application missing major requirements by the closing date of the cycle will be marked as incomplete and declined.",
@@ -327,6 +327,10 @@
       {
         "label": "KFAS Intellectual Property (IP) Policy",
         "href": "https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2FKFAS%20Intellectual%20Property%20%28IP%29%20Policy%20%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS&p=true&ga=1"
+      },
+      {
+        "label": "KFAS CV Template (Compulsory for all Principal and Co-Investigator Applicants)",
+        "href": ""
       }
     ],
     "additionalIntro": "In addition to the proposal submission, applicant is required to do the following:",

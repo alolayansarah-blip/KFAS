@@ -102,7 +102,7 @@ const DEFAULT_NAV_ITEMS_AR: NavItem[] = [
     label: "البحث العلمي",
     href: "/Research",
     children: [
-      { label: "المنح", href: "/research/grants" },
+      { label: "دعم البحوث / المنح", href: "/research/grants" },
       { label: "الأنشطة والفعاليات", href: "/research/ActivitiesAndEvents" },
       { label: "الدراسات بالتكليف", href: "/research/AssignedStudies" },
       { label: "رعاية المؤتمرات العلمية", href: "/research/SCS" },
