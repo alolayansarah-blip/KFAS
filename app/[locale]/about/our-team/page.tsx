@@ -3,100 +3,44 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { User } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-type Person = {
-  src: string;
-  alt: string;
-  name: string;
-  title: string;
-};
+type NameTitle = { name: string; title: string };
+type Person = { src: string; alt: string; name: string; title: string };
 
-// ─── Data ───────────────────────────────────────────────────────────────────
+// ─── Image data — not locale-specific, so it lives outside translations ───────
 
-const directorsRow1: Person[] = [
-  {
-    src: "/image/Dina.png",
-    alt: "Dina N. Alnakib",
-    name: "Dina N. Alnakib",
-    title: "Senior Director - Research & Technology Deployment",
-  },
-  {
-    src: "/image/Mubarak.png",
-    alt: "Mubarak A. Al-Quoud",
-    name: "Mubarak A. Al-Quoud",
-    title: "Senior Director - Accounts",
-  },
-  {
-    src: "/image/Manar.png",
-    alt: "Manar A. AlRashed",
-    name: "Manar A. AlRashed",
-    title: "Senior Director - Prizes",
-  },
-  {
-    src: "/image/Almazeedi.png",
-    alt: "Yousef M. AlMazeedi",
-    name: "Yousef M. AlMazeedi",
-    title: "Senior Director - Communications",
-  },
+const DIRECTORS_ROW1_IMAGES = [
+  { src: "/image/Dina.png", alt: "Dina N. Alnakib" },
+  { src: "/image/Mubarak.png", alt: "Mubarak A. Al-Quoud" },
+  { src: "/image/Manar.png", alt: "Manar A. AlRashed" },
+  { src: "/image/Almazeedi.png", alt: "Yousef M. AlMazeedi" },
 ];
 
-const directorsRow2: Person[] = [
-  {
-    src: "/image/Khaldoun.png",
-    alt: "Khaldoun K. Harmi",
-    name: "Khaldoun K. Harmi",
-    title: "Senior Director - Planning & Development",
-  },
-  {
-    src: "/image/Hanan.png",
-    alt: "Hanan I. Alibrahim",
-    name: "Hanan I. Alibrahim",
-    title: "Senior Director - Monitoring & Evaluation",
-  },
-  {
-    src: "/image/Nouria.png",
-    alt: "Nouria A. AlBader",
-    name: "Nouria A. AlBader",
-    title: "Director - Investment & Treasury",
-  },
-  {
-    src: "/image/Akbar.png",
-    alt: "Hasan A. Akbar",
-    name: "Hasan A. Akbar",
-    title: "Senior Director - Information Technology",
-  },
+const DIRECTORS_ROW2_IMAGES = [
+  { src: "/image/Khaldoun.png", alt: "Khaldoun K. Harmi" },
+  { src: "/image/Hanan.png", alt: "Hanan I. Alibrahim" },
+  { src: "/image/Nouria.png", alt: "Nouria A. AlBader" },
+  { src: "/image/Akbar.png", alt: "Hasan A. Akbar" },
 ];
 
-const directorsRow3: Person[] = [
-  {
-    src: "/image/Abduljaleel.png",
-    alt: "Abdulaziz S. Alabduljalil",
-    name: "Abdulaziz S. Alabduljalil",
-    title: "Director - Engineering & Administration",
-  },
-  {
-    src: "/image/YousefAbdullah.png",
-    alt: "Yousef A. Alabdullah",
-    name: "Yousef A. Alabdullah",
-    title: "Director - Enterprise Learning & Development",
-  },
-  {
-    src: "/image/Abrar.png",
-    alt: "Abrar S. Almoosa",
-    name: "Abrar S. Almoosa",
-    title: "Director - Research Capacity Building",
-  },
-  {
-    src: "/image/Aisha.png",
-    alt: "Aisha H. AlDuaij",
-    name: "Aisha H. AlDuaij",
-    title: "Director - Human Resources",
-  },
+const DIRECTORS_ROW3_IMAGES = [
+  { src: "/image/Abduljaleel.png", alt: "Abdulaziz S. Alabduljalil" },
+  { src: "/image/YousefAbdullah.png", alt: "Yousef A. Alabdullah" },
+  { src: "/image/Abrar.png", alt: "Abrar S. Almoosa" },
+  { src: "/image/Aisha.png", alt: "Aisha H. AlDuaij" },
 ];
+
+function mergePeople(
+  images: { src: string; alt: string }[],
+  names: NameTitle[],
+): Person[] {
+  return images.map((img, i) => ({ ...img, ...names[i] }));
+}
 
 // ─── Profile Card ─────────────────────────────────────────────────────────────
 
@@ -136,8 +80,8 @@ function ProfileCard({
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: animationDelay, ease: EASE }}
         >
-          <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
-          <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
+          <div className="pointer-events-none absolute -start-2 -top-2 z-10 h-6 w-6 border-s-[1.5px] border-t-[1.5px] border-[#EC601B]/40" />
+          <div className="pointer-events-none absolute -end-2 -bottom-2 z-10 h-6 w-6 border-e-[1.5px] border-b-[1.5px] border-[#7DC0F1]/35" />
           <div
             className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
           >
@@ -188,8 +132,8 @@ function ProfileCard({
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
         transition={{ duration: 0.6, delay: animationDelay, ease: EASE }}
       >
-        <div className="absolute -left-2 -top-2 h-7 w-7 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none z-10" />
-        <div className="absolute -bottom-2 -right-2 h-7 w-7 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none z-10" />
+        <div className="pointer-events-none absolute -start-2 -top-2 z-10 h-7 w-7 border-s-[1.5px] border-t-[1.5px] border-[#EC601B]/40" />
+        <div className="pointer-events-none absolute -end-2 -bottom-2 z-10 h-7 w-7 border-e-[1.5px] border-b-[1.5px] border-[#7DC0F1]/35" />
         <div
           className={`relative overflow-hidden bg-[#1D2D44]/[0.03] ${imgSize}`}
         >
@@ -208,7 +152,7 @@ function ProfileCard({
       </motion.div>
 
       <motion.div
-        className="flex-1 text-center sm:text-left sm:pt-4"
+        className="flex-1 text-center sm:text-left sm:pt-4 rtl:sm:text-right"
         initial={{ opacity: 0, x: 30 }}
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
         transition={{ duration: 0.5, delay: animationDelay + 0.12, ease: EASE }}
@@ -219,7 +163,7 @@ function ProfileCard({
         <p className="mt-2 text-[12px] font-light text-[#EC601B] tracking-wide">
           {title}
         </p>
-        <div className="mt-3 h-px w-8 bg-gradient-to-r from-[#EC601B]/40 to-transparent" />
+        <div className="mt-3 h-px w-8 bg-gradient-to-r from-[#EC601B]/40 to-transparent rtl:bg-gradient-to-l" />
       </motion.div>
     </div>
   );
@@ -273,6 +217,25 @@ function TeamRow({ label, people }: { label?: string; people: Person[] }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function OurTeamPage() {
+  const t = useTranslations("OurTeamPage");
+  const isArabic = useLocale() === "ar";
+
+  const directorGeneral = t.raw("directorGeneral") as NameTitle;
+  const deputies = t.raw("deputies") as NameTitle[];
+  const officers = t.raw("officers") as NameTitle[];
+  const directorsRow1 = mergePeople(
+    DIRECTORS_ROW1_IMAGES,
+    t.raw("directorsRow1") as NameTitle[],
+  );
+  const directorsRow2 = mergePeople(
+    DIRECTORS_ROW2_IMAGES,
+    t.raw("directorsRow2") as NameTitle[],
+  );
+  const directorsRow3 = mergePeople(
+    DIRECTORS_ROW3_IMAGES,
+    t.raw("directorsRow3") as NameTitle[],
+  );
+
   const heroRef = useRef(null);
   const profileRef = useRef(null);
   const deputiesRef = useRef(null);
@@ -327,7 +290,9 @@ export default function OurTeamPage() {
           </motion.div>
 
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className={`relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 ${
+              isArabic ? "md:mt-36 lg:mt-40" : ""
+            }`}
             style={{ opacity: heroOpacity }}
           >
             <motion.div
@@ -336,12 +301,20 @@ export default function OurTeamPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>About</span>
+              <span>{t("breadcrumbAbout")}</span>
               <span className="text-white/25">/</span>
             </motion.div>
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className={`font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-tight tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
@@ -350,11 +323,11 @@ export default function OurTeamPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Our Team
+                {t("heroTitle")}
               </motion.h1>
             </div>
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{
@@ -375,8 +348,8 @@ export default function OurTeamPage() {
               <ProfileCard
                 imageSrc="/image/DrAmeenah.png"
                 imageAlt="Ameenah R. Farhan"
-                name="Dr. Ameenah R. Farhan"
-                title="Director General"
+                name={directorGeneral.name}
+                title={directorGeneral.title}
                 isInView={isInView}
                 layout="vertical"
                 large
@@ -392,8 +365,8 @@ export default function OurTeamPage() {
               <ProfileCard
                 imageSrc="/image/DrSaleh.png"
                 imageAlt="Saleh A. Alaqely"
-                name="Dr. Saleh A. Alaqely"
-                title="Deputy Director General - Support Services"
+                name={deputies[0].name}
+                title={deputies[0].title}
                 isInView={isDeputiesInView}
                 animationDelay={0}
                 layout="vertical"
@@ -401,8 +374,8 @@ export default function OurTeamPage() {
               <ProfileCard
                 imageSrc="/image/DrFahad.png"
                 imageAlt="Fahad M. Al-Fadhli"
-                name="Dr. Fahad M. Al-Fadhli"
-                title="Deputy Director General - Scientific Programs"
+                name={deputies[1].name}
+                title={deputies[1].title}
                 isInView={isDeputiesInView}
                 animationDelay={0.1}
                 layout="vertical"
@@ -418,8 +391,8 @@ export default function OurTeamPage() {
               <ProfileCard
                 imageSrc="/image/AbdullahBuQumashah.png"
                 imageAlt="Abdullah S. Abu Qumasha"
-                name="Abdullah S. Abu Qumasha"
-                title="Chief Strategy Officer"
+                name={officers[0].name}
+                title={officers[0].title}
                 isInView={isOfficersInView}
                 animationDelay={0}
                 layout="vertical"
@@ -427,8 +400,8 @@ export default function OurTeamPage() {
               <ProfileCard
                 imageSrc="/image/DrBassam.png"
                 imageAlt="Dr.Bassam A. Alfaili"
-                name="Dr.Bassam A. Alfaili"
-                title="Chief Enterprise Development Officer"
+                name={officers[1].name}
+                title={officers[1].title}
                 isInView={isOfficersInView}
                 animationDelay={0.1}
                 layout="vertical"

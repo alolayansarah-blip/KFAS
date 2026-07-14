@@ -584,6 +584,88 @@
       }
     }
   },
+  "OurTeamPage": {
+    "breadcrumbAbout": "About",
+    "heroTitle": "Our Team",
+    "directorGeneral": {
+      "name": "Dr. Ameenah R. Farhan",
+      "title": "Director General"
+    },
+    "deputies": [
+      {
+        "name": "Dr. Saleh A. Alaqely",
+        "title": "Deputy Director General - Support Services"
+      },
+      {
+        "name": "Dr. Fahad M. Al-Fadhli",
+        "title": "Deputy Director General - Scientific Programs"
+      }
+    ],
+    "officers": [
+      {
+        "name": "Abdullah S. Abu Qumasha",
+        "title": "Chief Strategy Officer"
+      },
+      {
+        "name": "Dr.Bassam A. Alfaili",
+        "title": "Chief Enterprise Development Officer"
+      }
+    ],
+    "directorsRow1": [
+      {
+        "name": "Dina N. Alnakib",
+        "title": "Senior Director - Research & Technology Deployment"
+      },
+      {
+        "name": "Mubarak A. Al-Quoud",
+        "title": "Senior Director - Accounts"
+      },
+      {
+        "name": "Manar A. AlRashed",
+        "title": "Senior Director - Prizes"
+      },
+      {
+        "name": "Yousef M. AlMazeedi",
+        "title": "Senior Director - Communications"
+      }
+    ],
+    "directorsRow2": [
+      {
+        "name": "Khaldoun K. Harmi",
+        "title": "Senior Director - Planning & Development"
+      },
+      {
+        "name": "Hanan I. Alibrahim",
+        "title": "Senior Director - Monitoring & Evaluation"
+      },
+      {
+        "name": "Nouria A. AlBader",
+        "title": "Director - Investment & Treasury"
+      },
+      {
+        "name": "Hasan A. Akbar",
+        "title": "Senior Director - Information Technology"
+      }
+    ],
+    "directorsRow3": [
+      {
+        "name": "Abdulaziz S. Alabduljalil",
+        "title": "Director - Engineering & Administration"
+      },
+      {
+        "name": "Yousef A. Alabdullah",
+        "title": "Director - Enterprise Learning & Development"
+      },
+      {
+        "name": "Abrar S. Almoosa",
+        "title": "Director - Research Capacity Building"
+      },
+      {
+        "name": "Aisha H. AlDuaij",
+        "title": "Director - Human Resources"
+      }
+    ]
+  },
   "ARGPage": {
     "breadcrumbResearch": "Research",
     "breadcrumbGrants": "Grants",
