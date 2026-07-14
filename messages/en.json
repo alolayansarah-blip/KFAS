@@ -173,7 +173,7 @@
     "overviewTitle": "Applied Research Grants",
     "overviewBody1": "The Kuwait Foundation for the Advancement of Sciences (KFAS) provides grants for Applied Research Proposals. Applied Research is directed towards creating practical solutions to specific problems for specific end-users/stakeholders through innovation in practice, products, or procedures. Proposals of this type should include concrete plans for implementation, engagement, and real-world impact. The outcomes of this research may lead to commercialization of products, generation of patents, or the potential to produce relevant policies, or clinical and service applications.",
     "overviewBody2": "All submitted proposals should aim to generate solutions and outcomes that advance a scientific field, promote innovative approaches or methodologies, and support the development of new technologies.",
-    "callTitle": "KFAS 2026 First Call for Research Proposals for Applied, Fundamental, Policy and Young Researcher Proposals",
+    "callTitle": "KFAS 2026 Second Call for Research Proposals for Applied, Fundamental, Policy and Young Researcher Proposals",
     "callBody1": "The Kuwait Foundation for the Advancement of Sciences invites competitive research proposals to be submitted starting on the:",
     "callDates": "15th of September to 15th of November 2026, by midnight Kuwait time.",
     "callBody2": "The call can be accessed and downloaded from the link below:",
@@ -1013,11 +1013,7 @@
     ],
     "fieldsTitle": "Prize Fields",
     "fieldsIntro": "The prize is awarded annually in rotating fields that address key development priorities in Africa:",
-    "fieldItems": [
-      "Health",
-      "Food Security",
-      "Education"
-    ],
+    "fieldItems": ["Health", "Food Security", "Education"],
     "fieldsClosing": "Each year, one of these fields is selected as the focus of the prize cycle.",
     "eligibilityTitle": "Eligibility and Conditions",
     "eligibilityIntro": "Nominated candidates must satisfy the following:",
