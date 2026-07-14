@@ -476,7 +476,12 @@ export default function AppliedResearchGrantsPage() {
               </a>
               {t("additionalBodyPost")}
             </motion.p>
-            <motion.p {...fadeUp(0.3)}>{t("additionalClosing")}</motion.p>
+            <motion.p {...fadeUp(0.3)}>
+              {t("additionalClosingPre")}
+              <span className="font-semibold text-[#1D2D44]">
+                {t("additionalClosingBold")}
+              </span>
+            </motion.p>
           </div>
         </RailSection>
 
@@ -499,9 +504,14 @@ export default function AppliedResearchGrantsPage() {
                   ))}
                 </ul>
               </>,
-              <>{t("eligibilityItem1")}</>,
+              <>
+                {t("eligibilityItem1Pre")}
+                <span className="font-semibold text-[#1D2D44]">
+                  {t("eligibilityItem1Bold")}
+                </span>
+                {t("eligibilityItem1Post")}
+              </>,
               <>{t("eligibilityItem2")}</>,
-              // <>{t("eligibilityItem3")}</>,
             ].map((item, i) => (
               <motion.div
                 key={i}

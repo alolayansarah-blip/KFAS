@@ -197,7 +197,7 @@
     "portalBody1": "The KFAS Research Portal is a research information management system that connects researchers and collaborators, showcasing the expertise and ongoing projects of those working in partnership with KFAS across various scholarly fields.",
     "portalLinkPlaceholder": "KFAS Research Portal Link",
     "portalBody2": "Visit the 'Projects and Impact' section of the KFAS Research Portal to discover a range of successful KFAS-funded projects, both ongoing and completed, from Applied, Fundamental, Policy, and Young Researcher grants.",
-    "attachmentsTitle": "Attachments and proposal requirements",
+    "attachmentsTitle": "Application Related Documents:",
     "attachmentsIntro": "All details, conditions and information on the scope of funding and proposal requirements can be found in the following attachments:",
     "attachmentItems": [
       {
@@ -215,19 +215,26 @@
       {
         "label": "KFAS Intellectual Property (IP) Policy",
         "href": "https://kfas.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FPublic%2FKFAS%2FKFAS%20Intellectual%20Property%20%28IP%29%20Policy%20%2Epdf&parent=%2FShared%20Documents%2FPublic%2FKFAS&p=true&ga=1"
+      },
+      {
+        "label": "KFAS CV Template (Compulsory for all Principal and Co-Investigator Applicants)",
+        "href": ""
       }
     ],
     "additionalIntro": "In addition to the proposal submission, applicant is required to do the following:",
     "additionalBodyPre": "To upload, through the Grant Management System (GMS), a Letter of Intent written by the institute/organization to which the applicant is affiliated, indicating approval of submitting the proposal to KFAS. (",
     "additionalLinkText": "sample of letter of intent",
     "additionalBodyPost": ").",
-    "additionalClosing": "Failure to comply may result in noncompliance consequences for both the applicant and their institution, including declining proposal funding, as well as negatively impacting any future funding requests.",
+    "additionalClosingPre": "",
+    "additionalClosingBold": "Failure to comply may result in noncompliance consequences for both the applicant and their institution, including declining proposal funding, as well as negatively impacting any future funding requests.",
     "eligibilityTitle": "General Eligibility for Proposal Submissions",
     "eligibilityItem0Lead": "Researchers and scientists from the following sectors are eligible to apply:",
     "eligibilityItem0Sub1": "Research & Higher Education sector",
     "eligibilityItem0Sub2": "Public/Governmental sector",
     "eligibilityItem0Sub3": "Not-for-Profit Companies and Civil Society Organizations (CSOs)",
-    "eligibilityItem1": "Researchers and scientists from international academic and research institutes may apply for research grants only through a Kuwaiti institution, and the project must demonstrate substantial collaboration with a Kuwait-based research team.",
+    "eligibilityItem1Pre": "Researchers and scientists from international academic and research institutes may apply for research grants ",
+    "eligibilityItem1Bold": "only through a Kuwaiti institution",
+    "eligibilityItem1Post": ", and the project must demonstrate substantial collaboration with a Kuwait-based research team.",
     "eligibilityItem2": "Applicants must clearly outline all co-funding schemes in the application's budget proposal and include it in the letter of intent. Proposals that do not provide clear evidence of co-funding and the required letter of intent will be considered incomplete.",
     "eligibilityClosing": "Applicants are strongly encouraged to review all criteria and ensure eligibility, prior to proposal submission.",
     "portalSectionTitle": "Grant Application Portal",

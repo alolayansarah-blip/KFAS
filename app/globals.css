@@ -26,6 +26,11 @@ html[lang="ar"] .font-poppins {
   font-family: var(--font-arabic), sans-serif;
 }
 
+/* Body paragraphs: English uses 15px; Arabic uses 17px */
+html[lang="ar"] .text-\[15px\] {
+  font-size: 17px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
