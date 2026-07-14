@@ -191,6 +191,156 @@
     "readMore": "Read More",
     "backToTop": "Back to Top"
   },
+  "OurHistoryPage": {
+    "breadcrumbAbout": "About",
+    "heroTitle": "Our History",
+    "introBody": "Founded in 1976 by Amiri Decree, the Kuwait Foundation for the Advancement of Sciences (KFAS) is a private, non-profit organization that advances science, technology, and innovation to support Kuwait's development. KFAS is funded by contributions from Kuwait's private-sector shareholding companies as a percentage of annual profits (currently 1%), with a governance model in which the Board is chaired and appointed by the Amir of the State of Kuwait.",
+    "filterByYear": "Filter by year",
+    "allYears": "All Years",
+    "filterAriaLabel": "Filter timeline by year",
+    "milestoneEyebrow": "Milestone",
+    "backToTop": "Back to Top",
+    "milestones": [
+      {
+        "year": "1976",
+        "title": "Establishment",
+        "description": "KFAS was established by Amiri Decree as a private, non-profit organization to build a national culture of science, technology, and innovation and to support long-term sustainable development.",
+        "imageAlt": "KFAS Foundation"
+      },
+      {
+        "year": "1979",
+        "title": "The Kuwait Prize",
+        "description": "KFAS launched the Kuwait Prize to recognize major scientific contributions and strengthen research excellence across Kuwait and the Arab world.",
+        "imageAlt": "Kuwait Prize"
+      },
+      {
+        "year": "1984",
+        "title": "Advancement of Sciences Publishing and Distribution Company",
+        "description": "KFAS established the Advancement of Sciences Publishing & Distribution Company (ASPD) to popularize science and strengthen science communication for public audiences, youth, and schools.",
+        "imageAlt": "Science Publishing and Public Engagement"
+      },
+      {
+        "year": "1986",
+        "title": "Al-Oloom Magazine",
+        "description": "KFAS expanded Arabic science communication through Al-Oloom, building sustained public access to global science content in Arabic.",
+        "imageAlt": "Al-Oloom Magazine"
+      },
+      {
+        "year": "1987",
+        "title": "KFAS Headquarters",
+        "description": "KFAS inaugurated its headquarters as an anchor for national science and innovation activity.",
+        "imageAlt": "KFAS Headquarters"
+      },
+      {
+        "year": "1988",
+        "title": "Jaber Al-Ahmad Prize for Young Researchers",
+        "description": "KFAS established a national prize to encourage and recognize outstanding Kuwaiti researchers and strengthen the research pipeline.",
+        "imageAlt": "Jaber Al-Ahmad Prize for Young Researchers"
+      },
+      {
+        "year": "2000",
+        "title": "The Scientific Center (TSCK)",
+        "description": "KFAS established The Scientific Center as a major national platform for STEM learning and public engagement through interactive exhibits and scientific experiences.",
+        "imageAlt": "The Scientific Center"
+      },
+      {
+        "year": "2000-2001",
+        "title": "Kuwait Program at Harvard Kennedy School",
+        "description": "KFAS launched the Kuwait Program at Harvard Kennedy School to support fellowships, research collaboration, and leadership development connected to Kuwait's policy priorities.",
+        "imageAlt": "Kuwait Program at Harvard Kennedy School"
+      },
+      {
+        "year": "2005",
+        "title": "Kuwait–MIT CNRE",
+        "description": "KFAS strengthened international applied research collaboration by establishing a Kuwait–MIT center focused on energy, water, and the environment.",
+        "imageAlt": "Kuwait–MIT CNRE"
+      },
+      {
+        "year": "2006",
+        "title": "Dasman Diabetes Institute (DDI)",
+        "description": "KFAS established Dasman Diabetes Institute to reduce diabetes burden in Kuwait through research, training, education, and health awareness programs.",
+        "imageAlt": "Dasman Diabetes Institute"
+      },
+      {
+        "year": "2010",
+        "title": "Sabah Al-Ahmad Center for Giftedness & Creativity (SACGC)",
+        "description": "KFAS launched SACGC to develop gifted students, support inventors, and strengthen innovation capability including pathways to patenting.",
+        "imageAlt": "Sabah Al-Ahmad Center for Giftedness & Creativity"
+      },
+      {
+        "year": "2013",
+        "title": "KFAS Innovation Challenge",
+        "description": "KFAS launched the Innovation Challenge to help organizations build innovation capability through structured executive learning and project development.",
+        "imageAlt": "KFAS Innovation Challenge"
+      },
+      {
+        "year": "2015",
+        "title": "Al-Sumait Prize for African Development",
+        "description": "KFAS expanded its international recognition footprint through the Al-Sumait Prize, honoring impactful development outcomes in Africa and linking science to tangible social progress.",
+        "imageAlt": "Al-Sumait Prize for African Development"
+      },
+      {
+        "year": "2019",
+        "title": "Kuwait University CMS-CERN Membership",
+        "description": "KFAS supported Kuwait University's full membership in the CMS experiment at CERN to deepen research collaboration and build student and teacher capacity in physics and engineering.",
+        "imageAlt": "Kuwait University CMS-CERN Membership"
+      },
+      {
+        "year": "2020",
+        "title": "COVID-19 Rapid Research Response",
+        "description": "KFAS launched dedicated research funding to address COVID-19 impacts across health, education, and the economy, enabling fast national knowledge generation during the pandemic.",
+        "imageAlt": ""
+      },
+      {
+        "year": "2023",
+        "title": "KuwaitSat-1 Launch",
+        "description": "KuwaitSat-1 launched on 3 January 2023 as a Kuwait University project supported by KFAS, advancing national space capability and hands-on student training.",
+        "imageAlt": "KuwaitSat-1 Launch"
+      },
+      {
+        "year": "2024",
+        "title": "Research Portal",
+        "description": "KFAS launched the \"PURE\" portal to showcase funded projects and research outputs, and to enable discovery of expertise and collaboration opportunities.",
+        "imageAlt": "PURE Research Portal"
+      },
+      {
+        "year": "Sep 2024",
+        "title": "Kuwait National Space Research Center Announced",
+        "description": "A national space research center was announced under KFAS auspices to strengthen Kuwait's space research, technology, and human-capital development.",
+        "imageAlt": "Kuwait National Space Research Center"
+      },
+      {
+        "year": "2024–2025",
+        "title": "NASEM Precision & Personalized Medicine Workshops",
+        "description": "KFAS partnered with the U.S. National Academies on joint workshops to advance knowledge exchange in precision and personalized medicine.",
+        "imageAlt": "NASEM Precision & Personalized Medicine Workshops"
+      },
+      {
+        "year": "28 May 2025",
+        "title": "KFAS Strategy 2025–2029",
+        "description": "KFAS launched its 2025–2029 strategy to strengthen the national research ecosystem and leverage science, technology, and innovation to address national challenges and sustainable development.",
+        "imageAlt": "KFAS Strategy 2025–2029"
+      },
+      {
+        "year": "30 Nov 2025",
+        "title": "KFAS–MBRSC MoU on Space Science",
+        "description": "KFAS and the Mohammed Bin Rashid Space Centre signed an MoU to advance space science cooperation, training, and joint research aligned with national priorities.",
+        "imageAlt": "KFAS–MBRSC MoU on Space Science"
+      },
+      {
+        "year": "2025",
+        "title": "25 Years of KFAS–Harvard Executive Education",
+        "description": "KFAS marked 25 years of partnership with Harvard Kennedy School executive education, highlighting leadership development impact and outcomes.",
+        "imageAlt": "25 Years of KFAS–Harvard Executive Education"
+      },
+      {
+        "year": "2023–2025",
+        "title": "National Science Engagement Scales",
+        "description": "KFAS advanced sustained public engagement via annual Science Month programming and mobile STEM outreach initiatives to bring interactive science experiences to students nationwide.",
+        "imageAlt": ""
+      }
+    ]
+  },
   "ARGPage": {
     "breadcrumbResearch": "Research",
     "breadcrumbGrants": "Grants",

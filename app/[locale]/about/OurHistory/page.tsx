@@ -3,14 +3,58 @@
 import React, { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.1 };
 
+type Milestone = {
+  year: string;
+  title: string;
+  description: string;
+  imageAlt: string;
+};
+
+// Visual assets keyed by milestone index — kept out of translations since
+// they aren't locale-specific.
+const MILESTONE_MEDIA: {
+  image?: string;
+  imageFit?: "contain" | "cover";
+  grayscale?: boolean;
+}[] = [
+  { image: "/image/ShaikhJaber.jpeg", grayscale: true }, // 1976
+  { image: "/image/KuwaitPrize.webp", imageFit: "contain" }, // 1979
+  { image: "/image/1984AspdPublications.png" }, // 1984
+  { image: "/image/1986.png" }, // 1986
+  { image: "/image/1987.webp" }, // 1987
+  { image: "/image/jaberPrize.webp", imageFit: "contain" }, // 1988
+  { image: "/image/ScientificCenter.webp" }, // 2000
+  { image: "/image/2001.jpg" }, // 2000-2001
+  { image: "/image/MIT.webp" }, // 2005
+  { image: "/image/DDI2.webp" }, // 2006
+  { image: "/image/2010.png" }, // 2010
+  { image: "/image/2013.webp" }, // 2013
+  { image: "/image/alsumaitPrize.webp", imageFit: "contain" }, // 2015
+  { image: "/image/2019CERN.webp" }, // 2019
+  {}, // 2020
+  { image: "/image/2023.png" }, // 2023
+  { image: "/image/Pure.webp" }, // 2024
+  { image: "/image/NSRClogo.png", imageFit: "contain" }, // Sep 2024
+  { image: "/image/naseem.png" }, // 2024–2025
+  { image: "/image/KFASstrategy1.jpeg" }, // 28 May 2025
+  { image: "/image/mou.png" }, // 30 Nov 2025
+  { image: "/image/harvard.png" }, // 2025
+  {}, // 2023–2025
+];
+
 export default function OurHistoryPage() {
+  const t = useTranslations("OurHistoryPage");
+  const isArabic = useLocale() === "ar";
   const [selectedYear, setSelectedYear] = useState<number | "all">("all");
+
+  const historyMilestones = t.raw("milestones") as Milestone[];
 
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -22,199 +66,6 @@ export default function OurHistoryPage() {
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-  const historyMilestones = [
-    {
-      year: "1976",
-      title: "Establishment ",
-      description:
-        "KFAS was established by Amiri Decree as a private, non-profit organization to build a national culture of science, technology, and innovation and to support long-term sustainable development.",
-      image: "/image/ShaikhJaber.jpeg",
-      imageAlt: "KFAS Foundation",
-    },
-    {
-      year: "1979",
-      title: "The Kuwait Prize",
-      description:
-        "KFAS launched the Kuwait Prize to recognize major scientific contributions and strengthen research excellence across Kuwait and the Arab world.",
-      image: "/image/KuwaitPrize.webp",
-      imageAlt: "Kuwait Prize",
-      imageFit: "contain" as const,
-    },
-    {
-      year: "1984 ",
-      title: "Advancement of Sciences Publishing and Distribution Company",
-      description:
-        "KFAS established the Advancement of Sciences Publishing & Distribution Company (ASPD) to popularize science and strengthen science communication for public audiences, youth, and schools.",
-      image: "/image/1984AspdPublications.png",
-      imageAlt: "Science Publishing and Public Engagement",
-    },
-    {
-      year: "1986",
-      title: "Al-Oloom Magazine",
-      description:
-        "KFAS expanded Arabic science communication through Al-Oloom, building sustained public access to global science content in Arabic.",
-      image: "/image/1986.png",
-      imageAlt: "Al-Oloom Magazine",
-    },
-    {
-      year: "1987",
-      title: "KFAS Headquarters",
-      description:
-        "KFAS inaugurated its headquarters as an anchor for national science and innovation activity.",
-      image: "/image/1987.webp",
-      imageAlt: "KFAS Headquarters",
-    },
-    {
-      year: "1988",
-      title: "Jaber Al-Ahmad Prize for Young Researchers",
-      description:
-        "KFAS established a national prize to encourage and recognize outstanding Kuwaiti researchers and strengthen the research pipeline.",
-      image: "/image/jaberPrize.webp",
-      imageAlt: "Jaber Al-Ahmad Prize for Young Researchers",
-      imageFit: "contain" as const,
-    },
-    {
-      year: "2000",
-      title: "The Scientific Center (TSCK)",
-      description:
-        "KFAS established The Scientific Center as a major national platform for STEM learning and public engagement through interactive exhibits and scientific experiences.",
-      image: "/image/ScientificCenter.webp",
-      imageAlt: "The Scientific Center",
-    },
-    {
-      year: "2000-2001",
-      title: "Kuwait Program at Harvard Kennedy School",
-      description:
-        "KFAS launched the Kuwait Program at Harvard Kennedy School to support fellowships, research collaboration, and leadership development connected to Kuwait's policy priorities.",
-      image: "/image/2001.jpg",
-      imageAlt: "Kuwait Program at Harvard Kennedy School",
-    },
-    {
-      year: "2005",
-      title: "Kuwait–MIT CNRE",
-      description:
-        "KFAS strengthened international applied research collaboration by establishing a Kuwait–MIT center focused on energy, water, and the environment.",
-      image: "/image/MIT.webp",
-      imageAlt: "Kuwait–MIT CNRE",
-    },
-    {
-      year: "2006",
-      title: "Dasman Diabetes Institute (DDI)",
-      description:
-        "KFAS established Dasman Diabetes Institute to reduce diabetes burden in Kuwait through research, training, education, and health awareness programs.",
-      image: "/image/DDI2.webp",
-      imageAlt: "Dasman Diabetes Institute",
-    },
-    {
-      year: "2010",
-      title: "Sabah Al-Ahmad Center for Giftedness & Creativity (SACGC)",
-      description:
-        "KFAS launched SACGC to develop gifted students, support inventors, and strengthen innovation capability including pathways to patenting.",
-      image: "/image/2010.png",
-      imageAlt: "Sabah Al-Ahmad Center for Giftedness & Creativity",
-    },
-    {
-      year: "2013",
-      title: "KFAS Innovation Challenge",
-      description:
-        "KFAS launched the Innovation Challenge to help organizations build innovation capability through structured executive learning and project development.",
-      image: "/image/2013.webp",
-      imageAlt: "KFAS Innovation Challenge",
-    },
-    {
-      year: "2015",
-      title: "Al-Sumait Prize for African Development",
-      description:
-        "KFAS expanded its international recognition footprint through the Al-Sumait Prize, honoring impactful development outcomes in Africa and linking science to tangible social progress.",
-      image: "/image/alsumaitPrize.webp",
-      imageAlt: "Al-Sumait Prize for African Development",
-      imageFit: "contain" as const,
-    },
-    // {
-    //   year: "2017",
-    //   title: "KFAS Academy",
-    //   description:
-    //     "KFAS established KFAS Academy to scale high-quality training and capacity development using advanced learning technologies and delivery models.",
-    // },
-    {
-      year: "2019",
-      title: "Kuwait University CMS-CERN Membership",
-      description:
-        "KFAS supported Kuwait University's full membership in the CMS experiment at CERN to deepen research collaboration and build student and teacher capacity in physics and engineering.",
-      image: "/image/2019CERN.webp",
-      imageAlt: "Kuwait University CMS-CERN Membership",
-    },
-    {
-      year: "2020",
-      title: "COVID-19 Rapid Research Response",
-      description:
-        "KFAS launched dedicated research funding to address COVID-19 impacts across health, education, and the economy, enabling fast national knowledge generation during the pandemic.",
-    },
-    {
-      year: "2023",
-      title: "KuwaitSat-1 Launch",
-      description:
-        "KuwaitSat-1 launched on 3 January 2023 as a Kuwait University project supported by KFAS, advancing national space capability and hands-on student training.",
-      image: "/image/2023.png",
-      imageAlt: "KuwaitSat-1 Launch",
-    },
-    {
-      year: "2024",
-      title: " Research Portal",
-      description:
-        'KFAS launched the \"PURE\" portal to showcase funded projects and research outputs, and to enable discovery of expertise and collaboration opportunities.',
-      image: "/image/Pure.webp",
-      imageAlt: "PURE Research Portal",
-    },
-    {
-      year: "Sep 2024",
-      title: "Kuwait National Space Research Center Announced",
-      description:
-        "A national space research center was announced under KFAS auspices to strengthen Kuwait's space research, technology, and human-capital development.",
-      image: "/image/NSRClogo.png",
-      imageAlt: "Kuwait National Space Research Center",
-      imageFit: "contain" as const,
-    },
-    {
-      year: "2024–2025",
-      title: "NASEM Precision & Personalized Medicine Workshops",
-      description:
-        "KFAS partnered with the U.S. National Academies on joint workshops to advance knowledge exchange in precision and personalized medicine.",
-      image: "/image/naseem.png",
-      imageAlt: "NASEM Precision & Personalized Medicine Workshops",
-    },
-    {
-      year: "28 May 2025",
-      title: "KFAS Strategy 2025–2029",
-      description:
-        "KFAS launched its 2025–2029 strategy to strengthen the national research ecosystem and leverage science, technology, and innovation to address national challenges and sustainable development.",
-      image: "/image/KFASstrategy1.jpeg",
-      imageAlt: "KFAS Strategy 2025–2029",
-    },
-    {
-      year: "30 Nov 2025",
-      title: "KFAS–MBRSC MoU on Space Science",
-      description:
-        "KFAS and the Mohammed Bin Rashid Space Centre signed an MoU to advance space science cooperation, training, and joint research aligned with national priorities.",
-      image: "/image/mou.png",
-      imageAlt: "KFAS–MBRSC MoU on Space Science",
-    },
-    {
-      year: "2025",
-      title: "25 Years of KFAS–Harvard Executive Education",
-      description:
-        "KFAS marked 25 years of partnership with Harvard Kennedy School executive education, highlighting leadership development impact and outcomes.",
-      image: "/image/harvard.png",
-      imageAlt: "25 Years of KFAS–Harvard Executive Education",
-    },
-    {
-      year: "2023–2025",
-      title: "National Science Engagement Scales",
-      description:
-        "KFAS advanced sustained public engagement via annual Science Month programming and mobile STEM outreach initiatives to bring interactive science experiences to students nationwide.",
-    },
-  ];
-
   const getStartYear = (value: string) => {
     const match = value.match(/\d{4}/);
     return match ? Number(match[0]) : null;
@@ -225,7 +76,7 @@ export default function OurHistoryPage() {
       .map((m) => getStartYear(m.year))
       .filter((year): year is number => year !== null);
     return Array.from(new Set(years)).sort((a, b) => a - b);
-  }, []);
+  }, [historyMilestones]);
 
   const filteredMilestones = useMemo(() => {
     if (selectedYear === "all") return historyMilestones;
@@ -233,7 +84,7 @@ export default function OurHistoryPage() {
       const startYear = getStartYear(m.year);
       return startYear !== null && startYear >= selectedYear;
     });
-  }, [selectedYear]);
+  }, [historyMilestones, selectedYear]);
 
   return (
     <>
@@ -258,7 +109,7 @@ export default function OurHistoryPage() {
               sizes="100vw"
               className="object-cover object-[center_28%] -scale-x-100"
             />
-            {/* Directional overlay — left heavy for title legibility */}
+            {/* Directional overlay — same in Arabic and English */}
             <div
               className="absolute inset-0"
               style={{
@@ -286,13 +137,21 @@ export default function OurHistoryPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>About</span>
+              <span>{t("breadcrumbAbout")}</span>
               <span className="text-white/25">/</span>
             </motion.div>
 
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className={`font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-tight tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
@@ -301,12 +160,12 @@ export default function OurHistoryPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Our History
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{
@@ -332,14 +191,7 @@ export default function OurHistoryPage() {
               viewport={VIEWPORT}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              Founded in 1976 by Amiri Decree, the Kuwait Foundation for the
-              Advancement of Sciences (KFAS) is a private, non-profit
-              organization that advances science, technology, and innovation to
-              support Kuwait's development. KFAS is funded by contributions from
-              Kuwait's private-sector shareholding companies as a percentage of
-              annual profits (currently 1%), with a governance model in which
-              the Board is chaired and appointed by the Amir of the State of
-              Kuwait.
+              {t("introBody")}
             </motion.p>
 
             {/* Filter */}
@@ -351,7 +203,7 @@ export default function OurHistoryPage() {
               transition={{ duration: 0.5, ease: EASE }}
             >
               <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#1D2D44]/40">
-                Filter by year
+                {t("filterByYear")}
               </p>
               <select
                 value={selectedYear}
@@ -361,9 +213,9 @@ export default function OurHistoryPage() {
                   )
                 }
                 className="border border-[#1D2D44]/12 bg-white px-5 py-3 text-[13px] font-medium text-[#1D2D44] focus:outline-none focus:border-[#EC601B]/40 transition-colors duration-200 w-48"
-                aria-label="Filter timeline by year"
+                aria-label={t("filterAriaLabel")}
               >
-                <option value="all">All Years</option>
+                <option value="all">{t("allYears")}</option>
                 {yearOptions.map((year) => (
                   <option key={year} value={year}>
                     {year}
@@ -379,7 +231,8 @@ export default function OurHistoryPage() {
 
               <div className="space-y-12">
                 {filteredMilestones.map((milestone, index) => {
-                  const hasImage = Boolean(milestone.image);
+                  const media = MILESTONE_MEDIA[index];
+                  const hasImage = Boolean(media?.image);
                   const isEven = index % 2 === 0;
 
                   return (
@@ -409,7 +262,7 @@ export default function OurHistoryPage() {
 
                           {/* Eyebrow */}
                           <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#1D2D44]/35 mb-3">
-                            Milestone
+                            {t("milestoneEyebrow")}
                           </p>
 
                           {/* Title */}
@@ -418,7 +271,7 @@ export default function OurHistoryPage() {
                           </h4>
 
                           {/* Divider */}
-                          <div className="mb-4 h-px w-8 bg-gradient-to-r from-[#EC601B]/40 to-transparent" />
+                          <div className="mb-4 h-px w-8 bg-gradient-to-r from-[#EC601B]/40 to-transparent rtl:bg-gradient-to-l" />
 
                           {/* Description */}
                           <p className="text-base font-light leading-[1.9] text-[#1D2D44]/65">
@@ -432,18 +285,16 @@ export default function OurHistoryPage() {
                         {hasImage && (
                           <div className="relative w-full overflow-hidden aspect-[16/10] group">
                             <Image
-                              src={milestone.image as string}
+                              src={media.image as string}
                               alt={milestone.imageAlt || milestone.title}
                               fill
                               sizes="(max-width: 1024px) 100vw, 50vw"
                               className={`${
-                                milestone.imageFit === "contain"
+                                media.imageFit === "contain"
                                   ? "object-contain"
                                   : "object-cover"
                               } transition-transform duration-700 group-hover:scale-[1.03] ${
-                                milestone.image === "/image/ShaikhJaber.jpeg"
-                                  ? "grayscale"
-                                  : ""
+                                media.grayscale ? "grayscale" : ""
                               }`}
                             />
                             <div className="absolute inset-0 bg-[#1D2D44]/15 transition-all duration-500 group-hover:bg-[#1D2D44]/5" />
@@ -471,7 +322,7 @@ export default function OurHistoryPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VIEWPORT}
                 transition={{ duration: 0.5, ease: EASE }}
-                aria-label="Back to top"
+                aria-label={t("backToTop")}
               >
                 <div className="flex h-9 w-9 items-center justify-center border border-[#1D2D44]/15 transition-all duration-300 group-hover:border-[#EC601B]/50 group-hover:-translate-y-1">
                   <svg
@@ -489,7 +340,7 @@ export default function OurHistoryPage() {
                   </svg>
                 </div>
                 <span className="text-[11px] font-medium uppercase tracking-[0.2em]">
-                  Back to Top
+                  {t("backToTop")}
                 </span>
               </motion.button>
             </div>
