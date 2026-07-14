@@ -52,13 +52,13 @@ export default function OurStrategyPage() {
               sizes="100vw"
               className="scale-[1.15] object-cover object-[center_58%]"
             />
+            {/* Directional overlay — same in Arabic and English */}
             <div
               aria-hidden
               className="absolute inset-0"
               style={{
-                background: isArabic
-                  ? "linear-gradient(252deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)"
-                  : "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                background:
+                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
             />
             <div
