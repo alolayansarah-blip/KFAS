@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -16,7 +17,14 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.7, delay, ease: EASE },
 });
 
+type Pillar = { label: string; title: string };
+
 export default function OurStrategyPage() {
+  const t = useTranslations("OurStrategyPage");
+  const isArabic = useLocale() === "ar";
+
+  const pillars = t.raw("pillars") as Pillar[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -24,12 +32,6 @@ export default function OurStrategyPage() {
   });
   const heroY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
-
-  const pillars = [
-    { label: "Pillar 1", title: "Robust Research Ecosystem" },
-    { label: "Pillar 2", title: "Viable Innovation" },
-    { label: "Pillar 3", title: "Human Ingenuity" },
-  ];
 
   return (
     <>
@@ -54,8 +56,9 @@ export default function OurStrategyPage() {
               aria-hidden
               className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                background: isArabic
+                  ? "linear-gradient(252deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)"
+                  : "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
             />
             <div
@@ -78,7 +81,7 @@ export default function OurStrategyPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>About</span>
+              <span>{t("breadcrumbAbout")}</span>
               <span className="text-white/25">/</span>
             </motion.div>
 
@@ -93,12 +96,12 @@ export default function OurStrategyPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Our Strategy
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{
@@ -119,118 +122,94 @@ export default function OurStrategyPage() {
             {/* Editorial lead-in */}
             <motion.div className="mb-12" {...fadeUp(0)}>
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.4em] text-[#EC601B]">
-                Overview
+              <p
+                className={`mt-5 font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[15px] tracking-normal"
+                    : "text-[10px] uppercase tracking-[0.4em]"
+                }`}
+              >
+                {t("overviewKicker")}
               </p>
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-16 items-start">
-              {/* Left — body copy */}
+              {/* Leading column — body copy */}
               <div className="space-y-6">
                 <motion.p
                   className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0)}
                 >
-                  With its strategy for 2025-2029, the Kuwait Foundation for the
-                  Advancement of Sciences seeks to enhance and demonstrate the
-                  potential value of science, technology, and innovation to
-                  complement national efforts in achieving Kuwait's vision and
-                  enhancing individual competitiveness on the global stage. In
-                  the next five years, we will promote a robust research
-                  ecosystem, catalyze viable innovation, and invest in Kuwait's
-                  human ingenuity. KFAS integrates its three pillars—
-                  <strong className="font-semibold">
-                    robust research ecosystem, viable innovation
-                  </strong>
-                  , and{" "}
-                  <strong className="font-semibold"> human ingenuity</strong>
-                  —to create a synergistic framework where scientific
-                  advancements drive innovation, innovation fuels economic
-                  growth, and capacity-building efforts prepare individuals to
-                  excel in a knowledge-based economy. By aligning research,
-                  innovation, and human development efforts with Kuwait's
-                  national vision, KFAS enhances the interplay between knowledge
-                  creation, practical application, and talent cultivation,
-                  ensuring a sustainable and globally competitive future for the
-                  nation. To promote a{" "}
-                  <strong className="font-semibold">
-                    {" "}
-                    robust research ecosystem
-                  </strong>
-                  , we will amplify Kuwait's scientific contributions regionally
-                  and internationally by enabling collaborations with
-                  institutions around the world. We will focus our efforts on
-                  evolving dynamic priority areas supported in our preceding
-                  strategy.
+                  {t("para1Segment1")}
+                  <strong className="font-semibold">{t("para1Bold1")}</strong>
+                  {t("para1Segment2")}{" "}
+                  <strong className="font-semibold">{t("para1Bold2")}</strong>
+                  {t("para1Segment3")}{" "}
+                  <strong className="font-semibold">{t("para1Bold3")}</strong>
+                  {t("para1Segment4")}
                 </motion.p>
 
                 <motion.p
                   className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0.05)}
                 >
-                  To catalyze{" "}
-                  <strong className="font-semibold"> viable innovation</strong>,
-                  we will continue to empower programs and practices that equip
-                  Kuwait to meet present and future challenges, converting
-                  research outputs into applied knowledge and technologies.
+                  {t("para2Pre")}{" "}
+                  <strong className="font-semibold">{t("para2Bold")}</strong>
+                  {t("para2Post")}
                 </motion.p>
 
                 <motion.p
                   className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0.1)}
                 >
-                  To invest in Kuwait's{" "}
-                  <strong className="font-semibold"> human ingenuity</strong>,
-                  we will facilitate knowledge transfers and develop people's
-                  capabilities. We will meet shifting demands with rigorous gap
-                  analyses and needs assessments. To foster a culture of
-                  scientific interest and curiosity, our programs will promote
-                  lifelong learning.
+                  {t("para3Pre")}{" "}
+                  <strong className="font-semibold">{t("para3Bold")}</strong>
+                  {t("para3Post")}
                 </motion.p>
 
                 <motion.p
                   className="text-base text-justify font-light leading-[1.9] text-[#1D2D44]/65"
                   {...fadeUp(0.15)}
                 >
-                  Building on the momentum of recent initiatives to modernize
-                  our operations, we will increasingly distinguish KFAS as a
-                  model of organizational agility and proficiency. We will
-                  strive constantly to be more effective and efficient, and we
-                  will strive to adhere to international standards. Through the
-                  interconnected pillars of research, innovation, and human
-                  ingenuity, KFAS aims to address dynamic national and global
-                  challenges by fostering collaborative networks, bridging gaps
-                  between academia and industry, and empowering individuals to
-                  lead in science, technology, and innovation-driven fields. In
-                  our pursuit of organizational proficiency, we will invest in
-                  optimizing our operations and developing a positive
-                  organizational culture.
+                  {t("para4")}
                 </motion.p>
 
                 <motion.div {...fadeUp(0.18)} className="mt-6">
                   <div className="relative aspect-[3/4] w-full max-w-md overflow-hidden group">
                     <Image
-                      src="/image/KFASCover.webp"
-                      alt="KFAS Strategy 2025–2029"
+                      src={
+                        isArabic
+                          ? "/image/OurStrategyAr.png"
+                          : "/image/KFASCover.webp"
+                      }
+                      alt={t("coverImageAlt")}
                       fill
                       sizes="(max-width: 768px) 100vw, 448px"
                       className="object-contain"
                     />
-                    <div className="pointer-events-none absolute -left-2 -top-2 h-8 w-8 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40" />
-                    <div className="pointer-events-none absolute -bottom-2 -right-2 h-8 w-8 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35" />
+                    <div className="pointer-events-none absolute -left-2 -top-2 h-8 w-8 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 rtl:left-auto rtl:right-[-0.5rem]" />
+                    <div className="pointer-events-none absolute -bottom-2 -right-2 h-8 w-8 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 rtl:right-auto rtl:left-[-0.5rem]" />
                   </div>
                 </motion.div>
 
                 {/* Download CTA */}
                 <motion.div {...fadeUp(0.2)}>
                   <a
-                    href="/image/KFAS_Strategy_2025-2029_EN.pdf"
-                    download="KFAS_Strategy_2025-2029_EN.pdf"
+                    href={
+                      isArabic
+                        ? "/image/KFAS%20Strategy%202025-2029%20AR.pdf"
+                        : "/image/KFAS_Strategy_2025-2029_EN.pdf"
+                    }
+                    download={
+                      isArabic
+                        ? "KFAS Strategy 2025-2029 AR.pdf"
+                        : "KFAS_Strategy_2025-2029_EN.pdf"
+                    }
                     className="group inline-flex items-center gap-3 mt-4"
                   >
                     <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
                     <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-                      Download file
+                      {t("downloadText")}
                     </span>
                     <svg
                       className="h-3 w-3 text-[#EC601B] transition-all duration-300 group-hover:text-[#d45510] group-hover:translate-y-0.5"
@@ -249,7 +228,7 @@ export default function OurStrategyPage() {
                 </motion.div>
               </div>
 
-              {/* Right — three pillars rail */}
+              {/* Trailing column — three pillars rail */}
               <motion.div
                 className="hidden lg:flex flex-col gap-4 sticky top-32"
                 {...fadeUp(0.2)}
@@ -260,12 +239,12 @@ export default function OurStrategyPage() {
                     className="group relative overflow-hidden border border-[#1D2D44]/[0.08] p-5 transition-colors duration-300 hover:border-[#EC601B]/30"
                   >
                     {/* Animated orange spine */}
-                    <span className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-[#EC601B] transition-transform duration-500 group-hover:scale-y-100" />
+                    <span className="absolute left-0 top-0 h-full w-[2px] origin-top scale-y-0 bg-[#EC601B] transition-transform duration-500 group-hover:scale-y-100 rtl:left-auto rtl:right-0" />
                     {i === 0 && (
-                      <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none" />
+                      <div className="absolute -left-2 -top-2 h-6 w-6 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40 pointer-events-none rtl:left-auto rtl:right-[-0.5rem]" />
                     )}
                     {i === 2 && (
-                      <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none" />
+                      <div className="absolute -bottom-2 -right-2 h-6 w-6 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35 pointer-events-none rtl:right-auto rtl:left-[-0.5rem]" />
                     )}
                     <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
                       {label}
@@ -287,8 +266,12 @@ export default function OurStrategyPage() {
               <div className="pointer-events-none absolute -left-2.5 -top-2.5 h-10 w-10 border-l-[1.5px] border-t-[1.5px] border-[#EC601B]/40" />
               <div className="pointer-events-none absolute -bottom-2.5 -right-2.5 h-10 w-10 border-b-[1.5px] border-r-[1.5px] border-[#7DC0F1]/35" />
               <img
-                src="/image/KFAS_Strategy.png"
-                alt="KFAS strategy diagram"
+                src={
+                  isArabic
+                    ? "/image/OurStrategyAr23.png"
+                    : "/image/KFAS_Strategy.png"
+                }
+                alt={t("diagramAlt")}
                 className="w-full"
               />
             </motion.div>

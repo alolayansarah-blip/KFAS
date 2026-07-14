@@ -341,6 +341,42 @@
       }
     ]
   },
+  "OurStrategyPage": {
+    "breadcrumbAbout": "About",
+    "heroTitle": "Our Strategy",
+    "overviewKicker": "Overview",
+    "para1Segment1": "With its strategy for 2025-2029, the Kuwait Foundation for the Advancement of Sciences seeks to enhance and demonstrate the potential value of science, technology, and innovation to complement national efforts in achieving Kuwait's vision and enhancing individual competitiveness on the global stage. In the next five years, we will promote a robust research ecosystem, catalyze viable innovation, and invest in Kuwait's human ingenuity. KFAS integrates its three pillars—",
+    "para1Bold1": "robust research ecosystem, viable innovation",
+    "para1Segment2": ", and",
+    "para1Bold2": "human ingenuity",
+    "para1Segment3": "—to create a synergistic framework where scientific advancements drive innovation, innovation fuels economic growth, and capacity-building efforts prepare individuals to excel in a knowledge-based economy. By aligning research, innovation, and human development efforts with Kuwait's national vision, KFAS enhances the interplay between knowledge creation, practical application, and talent cultivation, ensuring a sustainable and globally competitive future for the nation. To promote a",
+    "para1Bold3": "robust research ecosystem",
+    "para1Segment4": ", we will amplify Kuwait's scientific contributions regionally and internationally by enabling collaborations with institutions around the world. We will focus our efforts on evolving dynamic priority areas supported in our preceding strategy.",
+    "para2Pre": "To catalyze",
+    "para2Bold": "viable innovation",
+    "para2Post": ", we will continue to empower programs and practices that equip Kuwait to meet present and future challenges, converting research outputs into applied knowledge and technologies.",
+    "para3Pre": "To invest in Kuwait's",
+    "para3Bold": "human ingenuity",
+    "para3Post": ", we will facilitate knowledge transfers and develop people's capabilities. We will meet shifting demands with rigorous gap analyses and needs assessments. To foster a culture of scientific interest and curiosity, our programs will promote lifelong learning.",
+    "para4": "Building on the momentum of recent initiatives to modernize our operations, we will increasingly distinguish KFAS as a model of organizational agility and proficiency. We will strive constantly to be more effective and efficient, and we will strive to adhere to international standards. Through the interconnected pillars of research, innovation, and human ingenuity, KFAS aims to address dynamic national and global challenges by fostering collaborative networks, bridging gaps between academia and industry, and empowering individuals to lead in science, technology, and innovation-driven fields. In our pursuit of organizational proficiency, we will invest in optimizing our operations and developing a positive organizational culture.",
+    "coverImageAlt": "KFAS Strategy 2025–2029",
+    "downloadText": "Download file",
+    "pillars": [
+      {
+        "label": "Pillar 1",
+        "title": "Robust Research Ecosystem"
+      },
+      {
+        "label": "Pillar 2",
+        "title": "Viable Innovation"
+      },
+      {
+        "label": "Pillar 3",
+        "title": "Human Ingenuity"
+      }
+    ],
+    "diagramAlt": "KFAS strategy diagram"
+  },
   "ARGPage": {
     "breadcrumbResearch": "Research",
     "breadcrumbGrants": "Grants",
