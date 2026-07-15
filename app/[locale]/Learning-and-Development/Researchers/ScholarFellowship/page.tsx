@@ -2,12 +2,17 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+type Grant = { title: string; body: string };
+type EligibilityBlock = { title: string; items: string[] };
+type Cycle = { cycle: string; window: string };
 
 /* ── shared pieces ────────────────────────────────────────────────────── */
 
@@ -38,6 +43,15 @@ function Mark() {
 }
 
 export default function ScholarFellowshipPage() {
+  const t = useTranslations("ScholarFellowshipPage");
+  const isArabic = useLocale() === "ar";
+
+  const grants = t.raw("grants") as Grant[];
+  const eligibilityBlocks = t.raw("eligibilityBlocks") as EligibilityBlock[];
+  const requiredDocuments = t.raw("requiredDocuments") as string[];
+  const financialItems = t.raw("financialItems") as string[];
+  const cycles = t.raw("cycles") as Cycle[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -63,7 +77,7 @@ export default function ScholarFellowshipPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="scale-150 object-cover object-right translate-x-[12%]"
+              className="object-cover object-center"
             />
             {/* navy overlays for text legibility */}
             <div
@@ -87,40 +101,64 @@ export default function ScholarFellowshipPage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-6 flex items-center gap-2.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55"
+              className={`mb-6 flex items-center gap-2.5 font-poppins font-semibold text-white/55 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.34em]"
+              }`}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/30">/</span>
               <Link
                 href="/Learning-and-Development/Researchers"
                 className="text-white/80 transition-colors hover:text-white"
               >
-                Researchers
+                {t("breadcrumbResearchers")}
               </Link>
             </motion.div>
 
-            <div className="overflow-hidden pb-1">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-1"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)]"
+                className={`font-poppins text-4xl font-bold text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-[1.08] tracking-tight"
+                }`}
                 initial={{ y: "108%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                Scholar Fellowship
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-7 h-[3px] origin-left rounded-full bg-[#EC601B]"
+              className="mt-7 hidden h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B] md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 76 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -129,7 +167,7 @@ export default function ScholarFellowshipPage() {
         <section className="relative overflow-hidden bg-white py-20 sm:py-28">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -144,31 +182,20 @@ export default function ScholarFellowshipPage() {
               viewport={{ once: true, margin: "-70px" }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              The Kuwait Foundation for the Advancement of Sciences (KFAS)
-              offers the following grants to support outstanding Kuwaiti
-              researchers:
+              {t("leadParagraph")}
             </motion.p>
 
             <div className="mt-10 max-w-3xl border-t border-[#1D2D44]/10">
-              {[
-                {
-                  title: "Postdoctoral Research",
-                  body: "A grant for those holding a PhD to continue research in their specialized fields under the supervision of experts or academic/research institutions.",
-                },
-                {
-                  title: "Research Internship",
-                  body: "A fellowship for conducting research or gaining experience in using advanced research techniques.",
-                },
-              ].map((grant, i) => (
+              {grants.map((grant, i) => (
                 <motion.div
                   key={grant.title}
-                  className="group relative border-b border-[#1D2D44]/10 py-8 pl-7"
+                  className="group relative border-b border-[#1D2D44]/10 py-8 pl-7 rtl:pl-0 rtl:pr-7"
                   initial={{ opacity: 0, y: 22 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.6, delay: i * 0.1, ease: EASE }}
                 >
-                  <span className="absolute left-0 top-9 h-7 w-[3px] rounded-full bg-[#EC601B] transition-all duration-500 group-hover:h-[calc(100%-3.5rem)]" />
+                  <span className="absolute left-0 top-9 h-7 w-[3px] rounded-full bg-[#EC601B] transition-all duration-500 group-hover:h-[calc(100%-3.5rem)] rtl:left-auto rtl:right-0" />
                   <h3 className="font-poppins text-[19px] font-semibold leading-snug text-[#1D2D44]">
                     {grant.title}
                   </h3>
@@ -193,10 +220,10 @@ export default function ScholarFellowshipPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Eligibility Criteria" />
+              <SectionHead title={t("eligibilityTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -208,37 +235,33 @@ export default function ScholarFellowshipPage() {
                   <span className="w-5 shrink-0 font-poppins text-[15px] font-semibold tabular-nums text-[#EC601B]">
                     1.
                   </span>
-                  Kuwaiti nationals.
+                  {t("eligibilityItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <span className="w-5 shrink-0 font-poppins text-[15px] font-semibold tabular-nums text-[#EC601B]">
                     2.
                   </span>
-                  No more than 45 years of age at the time of submitting the
-                  application.
+                  {t("eligibilityItem2")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <span className="w-5 shrink-0 font-poppins text-[15px] font-semibold tabular-nums text-[#EC601B]">
                     3.
                   </span>
-                  Have obtained their most recent academic degree within three
-                  years before the application date.
+                  {t("eligibilityItem3")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <span className="w-5 shrink-0 font-poppins text-[15px] font-semibold tabular-nums text-[#EC601B]">
                     4.
                   </span>
                   <span>
-                    The fellowship must be related to the applicant&apos;s
-                    academic field and falls within Science, Technology, and
-                    Innovation (STI) domains. To view the fields, please{" "}
+                    {t("eligibilityItem4Pre")}{" "}
                     <a
                       href="/image/KFAS strategy 2025-2029 - Priority Areas.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      click here
+                      {t("eligibilityItem4LinkText")}
                     </a>
                     .
                   </span>
@@ -248,54 +271,34 @@ export default function ScholarFellowshipPage() {
                     5.
                   </span>
                   <span>
-                    The applicant must have received an acceptance letter from a
-                    university, research/academic institution or company
-                    involved in scientific research and innovation. Provided
-                    that the institution is ranked among the top 200 globally
-                    according to{" "}
+                    {t("eligibilityItem5Pre")}{" "}
                     <a
                       href="https://www.timeshighereducation.com/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      Times Higher Education home
+                      {t("eligibilityItem5LinkText")}
                     </a>{" "}
-                    or U.S. News &amp; World Report.
+                    {t("eligibilityItem5Post")}
                   </span>
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <span className="w-5 shrink-0 font-poppins text-[15px] font-semibold tabular-nums text-[#EC601B]">
                     6.
                   </span>
-                  If approved, applicant must provide an official leave letter
-                  from his/her employer (if applicable).
+                  {t("eligibilityItem6")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <span className="w-5 shrink-0 font-poppins text-[15px] font-semibold tabular-nums text-[#EC601B]">
                     7.
                   </span>
-                  Specific Eligibility Criteria
+                  {t("eligibilityItem7")}
                 </li>
               </motion.ul>
 
-              <div className="mt-6 grid max-w-4xl grid-cols-1 gap-x-12 gap-y-10 pl-9 md:grid-cols-2">
-                {[
-                  {
-                    title: "7.1 Postdoctoral Research:",
-                    items: [
-                      "The applicant must have obtained a Ph.D. degree or its equivalent.",
-                      "The duration must not be less than 6 months and not more than 12 months.",
-                    ],
-                  },
-                  {
-                    title: "7.2 Research Internship:",
-                    items: [
-                      "Must hold a bachelor's or master's degree.",
-                      "The duration must not be less than 3 months and not more than 6 months.",
-                    ],
-                  },
-                ].map((block, i) => (
+              <div className="mt-6 grid max-w-4xl grid-cols-1 gap-x-12 gap-y-10 pl-9 rtl:pl-0 rtl:pr-9 md:grid-cols-2">
+                {eligibilityBlocks.map((block, i) => (
                   <motion.div
                     key={block.title}
                     className="relative"
@@ -329,10 +332,10 @@ export default function ScholarFellowshipPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Required Documents" />
+              <SectionHead title={t("requiredDocumentsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -340,13 +343,7 @@ export default function ScholarFellowshipPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                {[
-                  'Recent copy of the civil ID through the "Kuwait Mobile ID" app.',
-                  "Updated Curriculum Vitae.",
-                  "An acceptance letter from the university or academic/research institution or company, specifying the fellowship duration (start and end date).",
-                  "All academic degrees and transcripts must be authenticated by the Ministry of Higher Education.",
-                  "Personal Statement – minimum 200 words.",
-                ].map((doc) => (
+                {requiredDocuments.map((doc) => (
                   <li
                     key={doc}
                     className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
@@ -372,10 +369,10 @@ export default function ScholarFellowshipPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Financial Benefits" />
+              <SectionHead title={t("financialBenefitsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.div
                 className="max-w-2xl"
                 initial={{ opacity: 0, y: 18 }}
@@ -384,35 +381,32 @@ export default function ScholarFellowshipPage() {
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
                 <p className="font-poppins text-[15px] font-medium text-[#1D2D44]">
-                  Monthly Allowance per table below:
+                  {t("monthlyAllowanceIntro")}
                 </p>
 
                 <div className="mt-5 overflow-hidden border border-[#1D2D44]/12 bg-white shadow-[0_24px_60px_-40px_rgba(29,45,68,0.45)]">
-                  <table className="w-full border-collapse text-left">
+                  <table className="w-full border-collapse text-left rtl:text-right">
                     <thead>
                       <tr className="bg-[#1D2D44]">
                         <th className="border-b-[3px] border-[#7DC0F1] px-5 py-4 font-poppins text-[12px] font-semibold uppercase tracking-[0.12em] text-white sm:px-7">
-                          Fellowship Type
+                          {t("tableFellowshipType")}
                         </th>
                         <th className="border-b-[3px] border-[#7DC0F1] px-5 py-4 font-poppins text-[12px] font-semibold uppercase tracking-[0.12em] text-white sm:px-7">
-                          Monthly Allowance*
+                          {t("tableMonthlyAllowance")}
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {[
-                        ["Postdoctoral Research", "KD 2,000"],
-                        ["Research Internship", "KD 1,200"],
-                      ].map(([type, amount]) => (
+                      {grants.map((grant, i) => (
                         <tr
-                          key={type}
+                          key={grant.title}
                           className="border-t border-[#1D2D44]/10 transition-colors hover:bg-[#7DC0F1]/10"
                         >
                           <td className="px-5 py-5 font-poppins text-[15px] font-medium text-[#1D2D44] sm:px-7">
-                            {type}
+                            {grant.title}
                           </td>
                           <td className="px-5 py-5 font-poppins text-[16px] font-semibold text-[#EC601B] sm:px-7">
-                            {amount}
+                            {i === 0 ? "KD 2,000" : "KD 1,200"}
                           </td>
                         </tr>
                       ))}
@@ -420,7 +414,7 @@ export default function ScholarFellowshipPage() {
                   </table>
                 </div>
                 <p className="mt-3 font-poppins text-[12.5px] font-light italic text-[#1D2D44]/55">
-                  *Only for the grant duration
+                  {t("tableFootnote")}
                 </p>
               </motion.div>
 
@@ -431,11 +425,7 @@ export default function ScholarFellowshipPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
               >
-                {[
-                  "A flight ticket allowance for one round-trip economy-class ticket to the fellowship location.",
-                  "Travel insurance.",
-                  "Applicants must declare if they receive funding for the same fellowship from another source. KFAS will cover the difference.",
-                ].map((item) => (
+                {financialItems.map((item) => (
                   <li
                     key={item}
                     className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
@@ -453,10 +443,10 @@ export default function ScholarFellowshipPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Application Submission" />
+              <SectionHead title={t("applicationSubmissionTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.div
                 className="max-w-3xl"
                 initial={{ opacity: 0, y: 18 }}
@@ -465,13 +455,10 @@ export default function ScholarFellowshipPage() {
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
                 <p className="font-poppins text-[15px] font-medium text-[#1D2D44]">
-                  Applications are open twice a year:
+                  {t("applicationsOpenIntro")}
                 </p>
                 <div className="mt-5 border-y border-[#1D2D44]/10">
-                  {[
-                    { cycle: "Cycle 1", window: "April 1 – May 31" },
-                    { cycle: "Cycle 2", window: "October 1 – November 30" },
-                  ].map((c, i) => (
+                  {cycles.map((c, i) => (
                     <div
                       key={c.cycle}
                       className={`group flex flex-wrap items-center gap-x-5 gap-y-1 py-5 ${
@@ -501,29 +488,25 @@ export default function ScholarFellowshipPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  If the applicant does not submit the required documents within
-                  two weeks from the date of notification by KFAS, the
-                  application is considered declined and must be resubmitted.
+                  {t("applicationItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Application process will take up to 60 working days after
-                  application window closure.
+                  {t("applicationItem2")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    For applying, please{" "}
+                    {t("applicationItem3Pre")}{" "}
                     <a
                       href="https://apply.kfas.org.kw/FormDetails/Index?Id=195263e4-b3f6-f011-8406-6045bd6a4103"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      click here
+                      {t("applicationItem3LinkText")}
                     </a>
-                    . Only applications that are submitted through the
-                    application link will be considered.
+                    {t("applicationItem3Post")}
                   </span>
                 </li>
               </motion.ul>
@@ -536,10 +519,11 @@ export default function ScholarFellowshipPage() {
                 transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
               >
                 <span className="font-poppins text-[14px] font-light text-[#1D2D44]/60">
-                  For any inquiries, please contact:
+                  {t("contactLabel")}
                 </span>
                 <a
                   href="mailto:rgraduates@kfas.org.kw"
+                  dir="ltr"
                   className="group inline-flex items-center gap-2 font-poppins text-[14px] font-semibold text-[#EC601B] transition-colors hover:text-[#1D2D44]"
                 >
                   <span className="underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors group-hover:decoration-[#1D2D44]/40">
