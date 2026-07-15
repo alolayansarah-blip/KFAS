@@ -2019,5 +2019,78 @@
       "Scientific Mission",
       "Research Fellowship"
     ]
+  },
+  "ScientificMissionsPage": {
+    "breadcrumbLearning": "Learning & Development",
+    "breadcrumbResearchers": "Researchers",
+    "heroTitle": "Scientific Missions",
+    "overviewKicker": "Overview",
+    "overviewBody": "This program is designed to enable Kuwaiti researchers and academics to present their research findings at prestigious and academically accredited international and regional scientific conferences. The program aims to provide participants with the opportunity to present their research, exchange experiences, acquire knowledge, and establish connections with scientists and researchers from around the world, in addition to viewing the latest results of scientific research and studies in their respective fields of specialization.",
+    "eligibilityTitle": "Eligibility Criteria",
+    "eligibilityItem1": "Kuwaiti nationals.",
+    "eligibilityItem2": "Master's or a PhD degree holder, or their equivalents, a postgraduate student or equivalents, or researcher in research, academic, or medical institutions in Kuwait or abroad.",
+    "eligibilityItem3Pre": "Scientific participation must be within the Science, Technology, and Innovation (STI) domains. To view the fields, please",
+    "eligibilityItem3LinkText": "click here",
+    "eligibilityItem4": "The conference must meet high academic standards, organized by prestigious international universities, research centers, scientific and professional organizations.",
+    "eligibilityItem5": "A minimum of one calendar year must have elapsed since the last KFAS scientific mission grant.",
+    "eligibilityItem6": "Applications must be submitted no later than 30 working days (~6 weeks) before the scheduled start date of the conference.",
+    "eligibilityItem7": "A maximum of two applicants from the same department may benefit from attending the same conference, provided they are presenting two different scientific research.",
+    "eligibilityItem8": "Only one researcher from the accepted research paper is to benefit from the grant, given that his/her name must be included in the acceptance letter.",
+    "requiredDocumentsTitle": "Required Documents",
+    "requiredDocItem1": "Recent copy of the civil ID through the \"Kuwait Mobile ID\" app.",
+    "requiredDocItem2": "Updated Curriculum Vitae.",
+    "requiredDocItem3": "Acceptance letter stating the mode of presentation — oral or poster — and indicate whether it will be conducted in-person or virtually; only postgraduate students or equivalents are eligible to present a poster presentation.",
+    "requiredDocItem4": "The accepted Abstract in PDF form.",
+    "requiredDocItem5": "The conference program including the accepted participation (if available).",
+    "requiredDocItem6Pre": "Co-authors authorization (if applicable).",
+    "requiredDocItem6LinkText": "(Template)",
+    "requiredDocItem7": "A letter from the senior management of the employment addressed to KFAS Director General approving the scientific mission participation and does not receive any financial support.",
+    "requiredDocItem8": "For postgraduate students: a letter of recommendation from the student's academic supervisor and, if studying abroad, a To Whom It May Concern letter from the Kuwait Cultural Office (waived for unemployed recent graduates within one year of graduation).",
+    "requiredDocItem9": "Bank Transfer Certificate: that includes bank name, branch, account number and IBAN.",
+    "financialGrantTitle": "The Financial Grant",
+    "financialGrantBody": "Applicants traveling from Kuwait will receive a fixed grant amount based on the destination country (see table below). For applicants based outside Kuwait, the grant will be calculated based on the shortest flight route from their departure location to the conference destination.",
+    "financialTable": [
+      {
+        "group": "Professionals",
+        "rows": [
+          [
+            "North and South America, Far East, Australia, Canada, New Zealand, or South Africa (greater than 7 hrs.)",
+            "KD 2,000"
+          ],
+          [
+            "Europe, South East Asia or North Africa (between 4 hrs and 7 hrs.)",
+            "KD 1,500"
+          ],
+          [
+            "Egypt, Turkey, Middle East or GCC countries (less than or equal to 4 hrs.)",
+            "KD 1,000"
+          ]
+        ]
+      },
+      {
+        "group": "Postgraduates",
+        "rows": [
+          [
+            "North and South America, Far East, Australia, Canada, New Zealand, or South Africa (greater than 7 hrs.)",
+            "KD 1,000"
+          ],
+          [
+            "Europe, South East Asia or North Africa (between 4 hrs and 7 hrs.)",
+            "KD 750"
+          ],
+          [
+            "Egypt, Turkey, Middle East or GCC countries (less than or equal to 4 hrs.)",
+            "KD 500"
+          ]
+        ]
+      }
+    ],
+    "applicationSubmissionTitle": "Application Submission",
+    "applicationItem1": "Applications are open all year-round.",
+    "applicationItem2Pre": "Only applications that are submitted through the application link",
+    "applicationItem2LinkText": "click here",
+    "applicationItem2Post": "will be considered.",
+    "applicationItem3": "If the applicant does not submit the required documents within two weeks from the date of notification by KFAS, the application is considered declined and must be resubmitted.",
+    "contactLabel": "For any inquiries, please contact:"
   }
 }

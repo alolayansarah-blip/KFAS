@@ -2,12 +2,15 @@
 
 import { Fragment, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+type FinancialGroup = { group: string; rows: [string, string][] };
 
 /* ── shared pieces ────────────────────────────────────────────────────── */
 
@@ -38,6 +41,11 @@ function Mark() {
 }
 
 export default function ScientificMissionsPage() {
+  const t = useTranslations("ScientificMissionsPage");
+  const isArabic = useLocale() === "ar";
+
+  const financialTable = t.raw("financialTable") as FinancialGroup[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -63,7 +71,7 @@ export default function ScientificMissionsPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="scale-105 object-cover object-center"
+              className="object-cover object-center"
             />
             <div
               className="absolute inset-0"
@@ -81,6 +89,14 @@ export default function ScientificMissionsPage() {
               }}
               aria-hidden
             />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+              }}
+              aria-hidden
+            />
           </div>
 
           <motion.div
@@ -88,18 +104,22 @@ export default function ScientificMissionsPage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-6 flex items-center gap-2.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55"
+              className={`mb-6 flex items-center gap-2.5 font-poppins font-semibold text-white/55 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.34em]"
+              }`}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/30">/</span>
               <Link
                 href="/Learning-and-Development/Researchers"
                 className="text-white/80 transition-colors hover:text-white"
               >
-                Researchers
+                {t("breadcrumbResearchers")}
               </Link>
             </motion.div>
 
@@ -110,18 +130,30 @@ export default function ScientificMissionsPage() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                Scientific Missions
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-7 h-[3px] origin-left rounded-full bg-[#EC601B]"
+              className="mt-7 hidden h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B] md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 76 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -130,7 +162,7 @@ export default function ScientificMissionsPage() {
         <section className="relative overflow-hidden bg-white py-20 sm:py-28">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -145,19 +177,17 @@ export default function ScientificMissionsPage() {
               transition={{ duration: 0.7, ease: EASE }}
             >
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
-                Overview
+              <p
+                className={`mt-5 font-poppins font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[15px] tracking-normal"
+                    : "text-[12px] uppercase tracking-[0.3em]"
+                }`}
+              >
+                {t("overviewKicker")}
               </p>
               <p className="mt-5 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
-                This program is designed to enable Kuwaiti researchers and
-                academics to present their research findings at prestigious and
-                academically accredited international and regional scientific
-                conferences. The program aims to provide participants with the
-                opportunity to present their research, exchange experiences,
-                acquire knowledge, and establish connections with scientists and
-                researchers from around the world, in addition to viewing the
-                latest results of scientific research and studies in their
-                respective fields of specialization.
+                {t("overviewBody")}
               </p>
             </motion.div>
           </div>
@@ -175,10 +205,10 @@ export default function ScientificMissionsPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Eligibility Criteria" />
+              <SectionHead title={t("eligibilityTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -188,57 +218,46 @@ export default function ScientificMissionsPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Kuwaiti nationals.
+                  {t("eligibilityItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Master&apos;s or a PhD degree holder, or their equivalents, a
-                  postgraduate student or equivalents, or researcher in
-                  research, academic, or medical institutions in Kuwait or
-                  abroad.
+                  {t("eligibilityItem2")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Scientific participation must be within the Science,
-                    Technology, and Innovation (STI) domains. To view the
-                    fields, please{" "}
+                    {t("eligibilityItem3Pre")}{" "}
                     <a
                       href="/image/KFAS strategy 2025-2029 - Priority Areas.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      click here
+                      {t("eligibilityItem3LinkText")}
                     </a>
                     .
                   </span>
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  The conference must meet high academic standards, organized by
-                  prestigious international universities, research centers,
-                  scientific and professional organizations.
-                </li>
-                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
-                  <Mark />A minimum of one calendar year must have elapsed since
-                  the last KFAS scientific mission grant.
+                  {t("eligibilityItem4")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Applications must be submitted no later than 30 working days
-                  (~6 weeks) before the scheduled start date of the conference.
-                </li>
-                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
-                  <Mark />A maximum of two applicants from the same department
-                  may benefit from attending the same conference, provided they
-                  are presenting two different scientific research.
+                  {t("eligibilityItem5")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Only one researcher from the accepted research paper is to
-                  benefit from the grant, given that his/her name must be
-                  included in the acceptance letter.
+                  {t("eligibilityItem6")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("eligibilityItem7")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("eligibilityItem8")}
                 </li>
               </motion.ul>
             </div>
@@ -249,10 +268,10 @@ export default function ScientificMissionsPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Required Documents" />
+              <SectionHead title={t("requiredDocumentsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -262,61 +281,49 @@ export default function ScientificMissionsPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Recent copy of the civil ID through the &quot;Kuwait Mobile
-                  ID&quot; app.
+                  {t("requiredDocItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Updated Curriculum Vitae.
+                  {t("requiredDocItem2")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Acceptance letter stating the mode of presentation — oral or
-                  poster — and indicate whether it will be conducted in-person
-                  or virtually; only postgraduate students or equivalents are
-                  eligible to present a poster presentation.
+                  {t("requiredDocItem3")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  The accepted Abstract in PDF form.
+                  {t("requiredDocItem4")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  The conference program including the accepted participation
-                  (if available).
+                  {t("requiredDocItem5")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Co-authors authorization (if applicable).{" "}
+                    {t("requiredDocItem6Pre")}{" "}
                     <a
                       href="/image/Co-authors Approval Template.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      (Template)
+                      {t("requiredDocItem6LinkText")}
                     </a>
                   </span>
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
-                  <Mark />A letter from the senior management of the employment
-                  addressed to KFAS Director General approving the scientific
-                  mission participation and does not receive any financial
-                  support.
+                  <Mark />
+                  {t("requiredDocItem7")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  For postgraduate students: a letter of recommendation from the
-                  student&apos;s academic supervisor and, if studying abroad, a
-                  To Whom It May Concern letter from the Kuwait Cultural Office
-                  (waived for unemployed recent graduates within one year of
-                  graduation).
+                  {t("requiredDocItem8")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Bank Transfer Certificate: that includes bank name, branch,
-                  account number and IBAN.
+                  {t("requiredDocItem9")}
                 </li>
               </motion.ul>
             </div>
@@ -335,10 +342,10 @@ export default function ScientificMissionsPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="The Financial Grant" />
+              <SectionHead title={t("financialGrantTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.p
                 className="max-w-3xl font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
                 initial={{ opacity: 0, y: 18 }}
@@ -346,11 +353,7 @@ export default function ScientificMissionsPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                Applicants traveling from Kuwait will receive a fixed grant
-                amount based on the destination country (see table below). For
-                applicants based outside Kuwait, the grant will be calculated
-                based on the shortest flight route from their departure location
-                to the conference destination.
+                {t("financialGrantBody")}
               </motion.p>
 
               <motion.div
@@ -360,44 +363,9 @@ export default function ScientificMissionsPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
               >
-                <table className="w-full border-collapse text-left">
+                <table className="w-full border-collapse text-left rtl:text-right">
                   <tbody>
-                    {[
-                      {
-                        group: "Professionals",
-                        rows: [
-                          [
-                            "North and South America, Far East, Australia, Canada, New Zealand, or South Africa (greater than 7 hrs.)",
-                            "KD 2,000",
-                          ],
-                          [
-                            "Europe, South East Asia or North Africa (between 4 hrs and 7 hrs.)",
-                            "KD 1,500",
-                          ],
-                          [
-                            "Egypt, Middle East or GCC countries (less than or equal to 4 hrs.)",
-                            "KD 1,000",
-                          ],
-                        ],
-                      },
-                      {
-                        group: "Postgraduates",
-                        rows: [
-                          [
-                            "North and South America, Far East, Australia, Canada, New Zealand, or South Africa (greater than 7 hrs.)",
-                            "KD 1,000",
-                          ],
-                          [
-                            "Europe, South East Asia or North Africa (between 4 hrs and 7 hrs.)",
-                            "KD 750",
-                          ],
-                          [
-                            "Egypt, Middle East or GCC countries (less than or equal to 4 hrs.)",
-                            "KD 500",
-                          ],
-                        ],
-                      },
-                    ].map((section) => (
+                    {financialTable.map((section) => (
                       <Fragment key={section.group}>
                         <tr className="bg-[#7DC0F1]/[0.16]">
                           <td
@@ -415,7 +383,7 @@ export default function ScientificMissionsPage() {
                             <td className="px-5 py-4 font-poppins text-[14.5px] font-light leading-[1.7] text-[#1D2D44]/70 sm:px-7">
                               {dest}
                             </td>
-                            <td className="whitespace-nowrap px-5 py-4 text-right font-poppins text-[15px] font-semibold text-[#1D2D44] sm:px-7">
+                            <td className="whitespace-nowrap px-5 py-4 text-right rtl:text-left font-poppins text-[15px] font-semibold text-[#1D2D44] sm:px-7">
                               {amount}
                             </td>
                           </tr>
@@ -433,10 +401,10 @@ export default function ScientificMissionsPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Application Submission" />
+              <SectionHead title={t("applicationSubmissionTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -446,29 +414,26 @@ export default function ScientificMissionsPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Applications are open all year-round.
+                  {t("applicationItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Only applications that are submitted through the application
-                    link{" "}
+                    {t("applicationItem2Pre")}{" "}
                     <a
                       href="https://kfas.formstack.com/forms/scientific_mission_application"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      click here
+                      {t("applicationItem2LinkText")}
                     </a>{" "}
-                    will be considered.
+                    {t("applicationItem2Post")}
                   </span>
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  If the applicant does not submit the required documents within
-                  two weeks from the date of notification by KFAS, the
-                  application is considered declined and must be resubmitted.
+                  {t("applicationItem3")}
                 </li>
               </motion.ul>
 
@@ -480,10 +445,11 @@ export default function ScientificMissionsPage() {
                 transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
               >
                 <span className="font-poppins text-[14px] font-light text-[#1D2D44]/60">
-                  For any inquiries, please contact:
+                  {t("contactLabel")}
                 </span>
                 <a
                   href="mailto:research-sm@kfas.org.kw"
+                  dir="ltr"
                   className="group inline-flex items-center gap-2 font-poppins text-[14px] font-semibold text-[#EC601B] transition-colors hover:text-[#1D2D44]"
                 >
                   <span className="underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors group-hover:decoration-[#1D2D44]/40">
