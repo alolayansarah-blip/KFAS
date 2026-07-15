@@ -1907,5 +1907,117 @@
     "applicationItem3LinkText": "click here",
     "applicationItem3Post": ". Only applications that are submitted through the application link will be considered.",
     "contactLabel": "For any inquiries, please contact:"
+  },
+  "ScholarFellowshipPage": {
+    "breadcrumbLearning": "Learning & Development",
+    "breadcrumbResearchers": "Researchers",
+    "heroTitle": "Scholar Fellowship",
+    "leadParagraph": "The Kuwait Foundation for the Advancement of Sciences (KFAS) offers the following grants to support outstanding Kuwaiti researchers:",
+    "grants": [
+      {
+        "title": "Postdoctoral Research",
+        "body": "A grant for those holding a PhD to continue research in their specialized fields under the supervision of experts or academic/research institutions."
+      },
+      {
+        "title": "Research Internship",
+        "body": "A fellowship for conducting research or gaining experience in using advanced research techniques."
+      }
+    ],
+    "eligibilityTitle": "Eligibility Criteria",
+    "eligibilityItem1": "Kuwaiti nationals.",
+    "eligibilityItem2": "No more than 45 years of age at the time of submitting the application.",
+    "eligibilityItem3": "Have obtained their most recent academic degree within three years before the application date.",
+    "eligibilityItem4Pre": "The fellowship must be related to the applicant's academic field and falls within Science, Technology, and Innovation (STI) domains. To view the fields, please",
+    "eligibilityItem4LinkText": "click here",
+    "eligibilityItem5Pre": "The applicant must have received an acceptance letter from a university, research/academic institution or company involved in scientific research and innovation. Provided that the institution is ranked among the top 200 globally according to",
+    "eligibilityItem5LinkText": "Times Higher Education home",
+    "eligibilityItem5Post": "or U.S. News & World Report.",
+    "eligibilityItem6": "If approved, applicant must provide an official leave letter from his/her employer (if applicable).",
+    "eligibilityItem7": "Specific Eligibility Criteria",
+    "eligibilityBlocks": [
+      {
+        "title": "7.1 Postdoctoral Research:",
+        "items": [
+          "The applicant must have obtained a Ph.D. degree or its equivalent.",
+          "The duration must not be less than 6 months and not more than 12 months."
+        ]
+      },
+      {
+        "title": "7.2 Research Internship:",
+        "items": [
+          "Must hold a bachelor's or master's degree.",
+          "The duration must not be less than 3 months and not more than 6 months."
+        ]
+      }
+    ],
+    "requiredDocumentsTitle": "Required Documents",
+    "requiredDocuments": [
+      "Recent copy of the civil ID through the \"Kuwait Mobile ID\" app.",
+      "Updated Curriculum Vitae.",
+      "An acceptance letter from the university or academic/research institution or company, specifying the fellowship duration (start and end date).",
+      "All academic degrees and transcripts must be authenticated by the Ministry of Higher Education.",
+      "Personal Statement – minimum 200 words."
+    ],
+    "financialBenefitsTitle": "Financial Benefits",
+    "monthlyAllowanceIntro": "Monthly Allowance per table below:",
+    "tableFellowshipType": "Fellowship Type",
+    "tableMonthlyAllowance": "Monthly Allowance*",
+    "tableFootnote": "*Only for the grant duration",
+    "financialItems": [
+      "A flight ticket allowance for one round-trip economy-class ticket to the fellowship location.",
+      "Travel insurance.",
+      "Applicants must declare if they receive funding for the same fellowship from another source. KFAS will cover the difference."
+    ],
+    "applicationSubmissionTitle": "Application Submission",
+    "applicationsOpenIntro": "Applications are open twice a year:",
+    "cycles": [
+      {
+        "cycle": "Cycle 1",
+        "window": "April 1 – May 31"
+      },
+      {
+        "cycle": "Cycle 2",
+        "window": "October 1 – November 30"
+      }
+    ],
+    "applicationItem1": "If the applicant does not submit the required documents within two weeks from the date of notification by KFAS, the application is considered declined and must be resubmitted.",
+    "applicationItem2": "Application process will take up to 60 working days after application window closure.",
+    "applicationItem3Pre": "For applying, please",
+    "applicationItem3LinkText": "click here",
+    "applicationItem3Post": ". Only applications that are submitted through the application link will be considered.",
+    "contactLabel": "For any inquiries, please contact:"
+  },
+  "ScholarlyPublicationPage": {
+    "breadcrumbLearning": "Learning & Development",
+    "breadcrumbResearchers": "Researchers",
+    "heroTitle": "Scholarly Publication",
+    "overviewKicker": "Overview",
+    "overviewBody": "A reward of appreciation amounting to Kuwaiti Dinars Five Hundred (KD 500) shall be granted to participants who have received support through any of the following programs: PhD Supplementary Fund, Scientific Mission Grant, Research Fellowship Grant, or Scholarship Bridging Grant, and have subsequently published their research work in international periodicals and journals ranked within the top 50% (Q1 or Q2) according to the Journal Citation Reports (JCR).",
+    "eligibilityTitle": "Eligibility Criteria",
+    "eligibilityItem1": "Kuwaiti Nationals.",
+    "eligibilityItem2": "Received a KFAS-funded grant through Scientific Mission, Research Fellowship, PhD Supplementary Fund or Scholarship Bridging Grant.",
+    "eligibilityItem3Pre": "Published a scientific paper in a Q1 or Q2 journal, according to the",
+    "eligibilityItem3LinkText": "Journal Citation Report (JCR)",
+    "eligibilityItem4": "Ensure that the publication is already published (not under review or in press) and includes an acknowledgment to KFAS.",
+    "eligibilityItem5": "The submission of the request to publish the paper in a scientific journal must have occurred within 3 years from the end of the relevant KFAS grant. (Refer to the \"received date\" on the publication).",
+    "eligibilityItem6": "Submit the reward application within one year from the date of publication.",
+    "requiredDocumentsTitle": "Required Documents",
+    "requiredDocuments": [
+      "Copy of the publication.",
+      "Bank Transfer Certificate: that includes bank name, branch, account number and IBAN."
+    ],
+    "applicationSubmissionTitle": "Application Submission",
+    "applicationItem1": "Applications are open all year round.",
+    "applicationItem2Pre": "Only applications that are submitted through the application link, ",
+    "applicationItem2LinkText": "click here",
+    "applicationItem2Post": " will be considered.",
+    "contactLabel": "For more information, you can contact us via email:",
+    "otherGrantsTitle": "Other Supported Grants",
+    "otherGrants": [
+      "PhD Supplementary Fund",
+      "Scholarship Bridging",
+      "Scientific Mission",
+      "Research Fellowship"
+    ]
   }
 }

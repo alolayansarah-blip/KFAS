@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -38,6 +39,12 @@ function Mark() {
 }
 
 export default function ScholarlyPublicationPage() {
+  const t = useTranslations("ScholarlyPublicationPage");
+  const isArabic = useLocale() === "ar";
+
+  const requiredDocuments = t.raw("requiredDocuments") as string[];
+  const otherGrants = t.raw("otherGrants") as string[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -81,6 +88,14 @@ export default function ScholarlyPublicationPage() {
               }}
               aria-hidden
             />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+              }}
+              aria-hidden
+            />
           </div>
 
           <motion.div
@@ -88,40 +103,64 @@ export default function ScholarlyPublicationPage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-6 flex items-center gap-2.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55"
+              className={`mb-6 flex items-center gap-2.5 font-poppins font-semibold text-white/55 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.34em]"
+              }`}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/30">/</span>
               <Link
                 href="/Learning-and-Development/Researchers"
                 className="text-white/80 transition-colors hover:text-white"
               >
-                Researchers
+                {t("breadcrumbResearchers")}
               </Link>
             </motion.div>
 
-            <div className="overflow-hidden pb-1">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-1"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)]"
+                className={`font-poppins text-4xl font-bold text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-[1.08] tracking-tight"
+                }`}
                 initial={{ y: "108%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                Scholarly Publication
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-7 h-[3px] origin-left rounded-full bg-[#EC601B]"
+              className="mt-7 hidden h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B] md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 76 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -130,7 +169,7 @@ export default function ScholarlyPublicationPage() {
         <section className="relative overflow-hidden bg-white py-20 sm:py-28">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -145,18 +184,17 @@ export default function ScholarlyPublicationPage() {
               transition={{ duration: 0.7, ease: EASE }}
             >
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
-                Overview
+              <p
+                className={`mt-5 font-poppins font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[15px] tracking-normal"
+                    : "text-[12px] uppercase tracking-[0.3em]"
+                }`}
+              >
+                {t("overviewKicker")}
               </p>
               <p className="mt-5 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
-                A reward of appreciation amounting to Kuwaiti Dinars Five
-                Hundred (KD 500) shall be granted to participants who have
-                received support through any of the following programs: PhD
-                Supplementary Fund, Scientific Mission Grant, Research
-                Fellowship Grant, or Scholarship Bridging Grant, and have
-                subsequently published their research work in international
-                periodicals and journals ranked within the top 50% (Q1 or Q2)
-                according to the Journal Citation Reports (JCR).
+                {t("overviewBody")}
               </p>
             </motion.div>
           </div>
@@ -174,10 +212,10 @@ export default function ScholarlyPublicationPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Eligibility Criteria" />
+              <SectionHead title={t("eligibilityTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]"
                 initial={{ opacity: 0, y: 18 }}
@@ -187,46 +225,38 @@ export default function ScholarlyPublicationPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Kuwaiti Nationals.
+                  {t("eligibilityItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Received a KFAS-funded grant through Scientific Mission,
-                  Research Fellowship, PhD Supplementary Fund or Scholarship
-                  Bridging Grant.
+                  {t("eligibilityItem2")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Published a scientific paper in a Q1 or Q2 journal,
-                    according to the{" "}
+                    {t("eligibilityItem3Pre")}{" "}
                     <a
                       href="https://jcr.clarivate.com/jcr/home"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      Journal Citation Report (JCR)
+                      {t("eligibilityItem3LinkText")}
                     </a>
                     .
                   </span>
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Ensure that the publication is already published (not under
-                  review or in press) and includes an acknowledgment to KFAS.
+                  {t("eligibilityItem4")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  The submission of the request to publish the paper in a
-                  scientific journal must have occurred within 3 years from the
-                  end of the relevant KFAS grant. (Refer to the &quot;received
-                  date&quot; on the publication).
+                  {t("eligibilityItem5")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Submit the reward application within one year from the date of
-                  publication.
+                  {t("eligibilityItem6")}
                 </li>
               </motion.ul>
             </div>
@@ -237,10 +267,10 @@ export default function ScholarlyPublicationPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Required Documents" />
+              <SectionHead title={t("requiredDocumentsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]"
                 initial={{ opacity: 0, y: 18 }}
@@ -248,15 +278,15 @@ export default function ScholarlyPublicationPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
-                  <Mark />
-                  Copy of the publication.
-                </li>
-                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
-                  <Mark />
-                  Bank Transfer Certificate: that includes bank name, branch,
-                  account number and IBAN.
-                </li>
+                {requiredDocuments.map((doc) => (
+                  <li
+                    key={doc}
+                    className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
+                  >
+                    <Mark />
+                    {doc}
+                  </li>
+                ))}
               </motion.ul>
             </div>
           </div>
@@ -274,10 +304,10 @@ export default function ScholarlyPublicationPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Application Submission" />
+              <SectionHead title={t("applicationSubmissionTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/[0.08] border-t border-[#1D2D44]/[0.08]"
                 initial={{ opacity: 0, y: 18 }}
@@ -287,22 +317,21 @@ export default function ScholarlyPublicationPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Applications are open all year round.
+                  {t("applicationItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Only applications that are submitted through the application
-                    link,{" "}
+                    {t("applicationItem2Pre")}
                     <a
                       href="https://kfas.formstack.com/forms/scholarly_publication"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[#EC601B] underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors hover:text-[#1D2D44] hover:decoration-[#1D2D44]/40"
                     >
-                      click here
-                    </a>{" "}
-                    will be considered.
+                      {t("applicationItem2LinkText")}
+                    </a>
+                    {t("applicationItem2Post")}
                   </span>
                 </li>
               </motion.ul>
@@ -315,10 +344,11 @@ export default function ScholarlyPublicationPage() {
                 transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
               >
                 <span className="font-poppins text-[14px] font-light text-[#1D2D44]/60">
-                  For more information, you can contact us via email:
+                  {t("contactLabel")}
                 </span>
                 <a
                   href="mailto:rgraduates@kfas.org.kw"
+                  dir="ltr"
                   className="group inline-flex items-center gap-2 font-poppins text-[14px] font-semibold text-[#EC601B] transition-colors hover:text-[#1D2D44]"
                 >
                   <span className="underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors group-hover:decoration-[#1D2D44]/40">
@@ -340,10 +370,10 @@ export default function ScholarlyPublicationPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Other Supported Grants" />
+              <SectionHead title={t("otherGrantsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.div
                 className="grid max-w-3xl grid-cols-1 gap-x-12 sm:grid-cols-2"
                 initial={{ opacity: 0, y: 18 }}
@@ -351,12 +381,7 @@ export default function ScholarlyPublicationPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                {[
-                  "PhD Supplementary Fund",
-                  "Scholarship Bridging",
-                  "Scientific Mission",
-                  "Research Fellowship",
-                ].map((grant) => (
+                {otherGrants.map((grant) => (
                   <div
                     key={grant}
                     className="group/li flex items-center gap-4 border-t border-[#1D2D44]/[0.08] py-5"
