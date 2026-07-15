@@ -666,6 +666,118 @@
       }
     ]
   },
+  "ActivitiesEventsPage": {
+    "breadcrumbResearch": "Research",
+    "heroTitle": "Activities & Events",
+    "jumpToLabel": "Jump To",
+    "jumpSelectPlaceholder": "Select a topic",
+    "jumpLinks": [
+      {
+        "id": "sts",
+        "label": "STS Forum"
+      },
+      {
+        "id": "oes",
+        "label": "Oxford Energy Seminar"
+      },
+      {
+        "id": "renac",
+        "label": "RENAC Training"
+      },
+      {
+        "id": "cern",
+        "label": "CERN Program"
+      },
+      {
+        "id": "aaas",
+        "label": "AAAS Meeting"
+      },
+      {
+        "id": "networking",
+        "label": "Networking Events"
+      },
+      {
+        "id": "organized",
+        "label": "Organized Events"
+      }
+    ],
+    "sts": {
+      "eyebrow": "STS",
+      "heading": "Science and Technology in Society (STS) Forum",
+      "body": [
+        "The Science and Technology in Society (STS) Forum is a leading global platform held annually in Kyoto, Japan, bringing together world leaders from science, industry, and policy to discuss how science and technology can address long‑term global challenges. The forum welcomes over a thousand participants each year, including Nobel laureates, ministers, university presidents, CEOs, and emerging young leaders. It aims to strengthen the positive impact of scientific progress while addressing its risks and societal implications.",
+        "KFAS supports Kuwaiti researchers and professionals to participate in the STS Young Leaders Program, which invites outstanding individuals under 40 to engage directly with global experts. The program offers high‑level dialogue, exposure to international innovation trends, and opportunities to build lasting networks that contribute to Kuwait's scientific and technological development."
+      ]
+    },
+    "oes": {
+      "eyebrow": "OES",
+      "heading": "The Oxford Energy Seminar",
+      "body": [
+        "It is a residential educational conference that brings together government officials, industry leaders, managers, and professionals involved in energy policy and decision-making. Widely recognized as an important international forum on energy, the seminar provides participants with an intensive overview of current developments, challenges, and opportunities shaping the global energy landscape and the energy transition.",
+        "The program features lectures, discussions, and exchanges led by a diverse international panel of experts from governments, the energy industry, financial institutions, academia, and international organizations."
+      ]
+    },
+    "renac": {
+      "eyebrow": "RENAC",
+      "heading": "RENAC Training Programs",
+      "body": [
+        "The Research Capacity Building Directorate collaborates with RENAC (Renewables Academy) to provide both online and in person training opportunities in renewable energy and energy efficiency. The Renewables Academy (RENAC) in Berlin is one of the world's leading institutions for professional training and capacity building in renewable energy and energy efficiency.",
+        "As part of its commitment to developing national expertise in clean energy, KFAS sponsors Kuwaiti students to enrol in RENAC's six month online training program in renewable energy and energy efficiency. The program provides a structured and in depth learning experience covering core technologies, system design, energy policy, and practical applications within the global renewable energy sector.",
+        "Through this sponsorship, participants gain access to high quality online modules, expert instruction, and internationally recognized training materials, equipping them with the skills needed to contribute to Kuwait's transition toward sustainable energy solutions. The program serves as an important stepping stone for emerging engineers, scientists, and energy professionals seeking to build technical competency and advance their careers in the renewable energy field.",
+        " In addition to the online program, selected graduates may be offered the opportunity to participate in advanced in person training at RENAC's training center in Berlin. These specialized courses provide hands on experience in the design, analysis, and evaluation of renewable energy systems using industry standard tools and applications. Building on the knowledge acquired through the online program, the in person training further strengthens participants' technical expertise and professional capabilities in the renewable energy sector"
+      ]
+    },
+    "cern": {
+      "eyebrow": "CERN",
+      "heading": "CERN (The European Organization for Nuclear Research) Summer Student Program",
+      "body": [
+        "KFAS fund students to participate in the prestigious summer training program at the CERN (European Organization for Nuclear Research) headquarters in Geneva, Switzerland. During their 8-week stay at CERN, these students worked alongside world-renowned scientists and researchers in the state-of-the-art research labs and accelerators.",
+        "This hands-on experience allowed them to engage in groundbreaking scientific research and gain valuable insights into the advanced technologies used in particle physics and other related fields. Their time at CERN expanded their academic and practical knowledge and provided them with a unique opportunity to contribute to cutting-edge research in a global scientific community."
+      ]
+    },
+    "aaas": {
+      "eyebrow": "AAAS",
+      "heading": "AAAS Annual Meeting",
+      "body": [
+        "The AAAS American Association for the Advancement of Science Annual Conference is one of the world's leading multidisciplinary science gatherings, bringing together researchers, students, policymakers, and global science leaders to explore emerging discoveries and engage in high-level scientific dialogue. The conference features keynote talks, panel discussions, workshops, exhibitions, and a wide range of poster and e-poster presentations across all scientific fields.",
+        "KFAS participates annually by sponsoring Kuwaiti students and researchers to present their work and represent Kuwait on an international stage. Participants showcase their research through e-poster presentations, attend scientific sessions, and engage with peers and experts from around the world, strengthening their scientific skills, expanding international networks, and contributing to Kuwait's visibility within the global research community.",
+        "In 2025, two KFAS-sponsored students received Honorable Mention recognition from the AAAS organization for the quality and impact of their presentations, an important milestone highlighting the excellence of young Kuwaiti researchers participating in the program.",
+        "Through this annual participation, KFAS continues to build national research capacity and open doors for emerging scientists to engage in international scientific exchange at one of the most prestigious scientific conferences in the world."
+      ]
+    },
+    "networking": {
+      "eyebrow": "Networking Events",
+      "heading": "Research Networking Events",
+      "body": [
+        "Our networking activities aim to strengthen connections within the research community and foster a collaborative environment among researchers supported by the foundation. By bringing together scholars from diverse disciplines and institutions, these activities encourage the exchange of ideas, perspectives, and experiences that can inspire new research directions and partnerships.",
+        "They also support professional development and help build lasting relationships among researchers, contributing to a dynamic research community and enhancing the broader impact of scientific research."
+      ]
+    },
+    "organizedEyebrow": "Organized Events",
+    "organizedHeading": "Organized Events",
+    "organizedEvents": [
+      {
+        "title": "CERN Scientific CV writing workshop",
+        "body": "The CERN (The European Organization for Nuclear Research) CV Workshop is a scientific CV-writing session organized by KFAS to help Kuwaiti students prepare strong, competitive CVs for the CERN Summer Student Training Program. It teaches students how to present their academic, research, and technical experience in a way that meets CERN's strict application requirements, while also guiding them on structure, clarity, and relevance. The workshop is open to eligible Kuwaiti bachelor and master's students in Physics, Computer Science, Mathematics, or Engineering, and often includes practical guidance, post-session CV reviews, and insights from former CERN participants. As part of KFAS's collaboration, the workshop supports national capacity-building by ensuring applicants are well-prepared before applying."
+      },
+      {
+        "title": "Artificial Intelligence Empowering Research Workshop Led by Elsevier",
+        "body": "The Elsevier Workshop was a full-day training session titled \"AI Empowering Research,\" delivered by Elsevier experts and hosted by KFAS. It explored how artificial intelligence was transforming research, publishing, and research management. The workshop covered key topics such as GenAI in research management and its limitations, AI-driven publishing workflows, how leading organizations were using AI, as well as pitfalls, best practices, and research integrity in the context of AI adoption. Participants also received practical, hands-on training with Elsevier's AI tools, applying them in group exercises—including preparing a mock funding proposal. Designed for Kuwaiti researchers, academics, and research administrators, the workshop formed part of KFAS's broader efforts to strengthen national research capacity and promote the responsible use of AI in scientific work."
+      },
+      {
+        "title": "Research & Technology Directorate Networking Day",
+        "body": "The RTD Research Networking Day was an open, full-day event that provided researchers with the opportunity to engage directly with teams, ask questions, explore available programs, and discuss potential collaborations. The day featured open networking sessions, informational booths, and a special lecture titled \"The Art of Crafting a Proposal: From Start to Finish,\" which guided attendees on developing strong research proposals. The event aimed to create a productive space for researchers to exchange ideas, receive guidance, and build connections across the research community."
+      },
+      {
+        "title": "Informative Sessions for the Research Community",
+        "body": "The Research Capacity Building Directorate organizes ongoing informative sessions for the research community, aimed at introducing the research support ecosystem provided by the Kuwait Foundation for the Advancement of Sciences (KFAS), as well as the services and programs available to support researchers and strengthen the research and innovation landscape in Kuwait.\nThese sessions provide an overview of the Foundation's mission and strategic vision, and highlight the scientific and research opportunities offered through the Research and Technology sector, along with the programs and initiatives designed to support researchers across different stages of their academic and professional careers.\nThey also include an introduction to the Research Portal, and demonstrate how it can be used to access research outputs, explore research impact indicators, and identify opportunities for collaboration with researchers and research institutions at both national and international levels.\nIn addition, the sessions highlight specialized programs that support researchers and academics, foster scientific networking, enhance research communication, and encourage participation in research initiatives and opportunities. Overall, these sessions aim to raise awareness of available resources and services, and to enable researchers to effectively utilize them, thereby enhancing the quality of research outputs and expanding opportunities for collaboration and partnerships at both national and international levels."
+      },
+      {
+        "title": "KFASxNASEM Workshops",
+        "body": "KFAS collaborates with the U.S. National Academies of Sciences, Engineering, and Medicine (NASEM) through major bilateral workshop series designed to advance scientific exchange between Kuwait and the United States. The first, \"Promising Practices for Improving the Inclusion of Women in Science, Engineering, and Medicine: Lessons From Kuwait and the United States - Workshop Series\" (2020), brought together experts and leaders to explore strategies for enhancing female participation in STEM fields. The second, \"Precision Medicine: Promoting Knowledge Exchange and Collaboration between Kuwait and the United States - Workshop Series\" (2024-2025), focuses on emerging innovations in personalized medicine, including AI in healthcare, point-of-care technologies, and interdisciplinary approaches. Both collaborations produce published workshop proceedings, ensuring that insights and recommendations are shared with the wider scientific and policy community."
+      }
+    ]
+  },
   "ARGPage": {
     "breadcrumbResearch": "Research",
     "breadcrumbGrants": "Grants",

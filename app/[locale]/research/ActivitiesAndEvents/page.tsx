@@ -16,6 +16,7 @@ import {
   useTransform,
   useInView,
 } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -44,6 +45,10 @@ const MOBILE_CLOSE_DELAY = 320; // ms — let the dropdown finish closing before
 const JUMP_SCROLL_VAR = "--activities-jump-scroll-mt";
 const SECTION_SCROLL_MT = `scroll-mt-[var(${JUMP_SCROLL_VAR},128px)]`;
 
+type JumpLink = { id: string; label: string };
+type SectionCopy = { eyebrow: string; heading: string; body: string[] };
+type OrganizedEvent = { title: string; body: string };
+
 // ─── FadeUp ──────────────────────────────────────────────────────────────────
 function FadeUp({
   children,
@@ -71,6 +76,7 @@ function FadeUp({
 
 // ─── Eyebrow ─────────────────────────────────────────────────────────────────
 function Eyebrow({ label, dark = false }: { label: string; dark?: boolean }) {
+  const isArabic = useLocale() === "ar";
   return (
     <div className="flex items-center gap-3">
       <span
@@ -78,7 +84,11 @@ function Eyebrow({ label, dark = false }: { label: string; dark?: boolean }) {
         style={{ background: dark ? "rgba(255,255,255,0.4)" : BRAND.orange }}
       />
       <span
-        className="font-poppins text-[10px] font-semibold uppercase tracking-[0.35em]"
+        className={`font-poppins font-semibold ${
+          isArabic
+            ? "text-[15px] tracking-normal"
+            : "text-[10px] uppercase tracking-[0.35em]"
+        }`}
         style={{ color: dark ? "rgba(255,255,255,0.55)" : BRAND.orange }}
       >
         {label}
@@ -89,16 +99,17 @@ function Eyebrow({ label, dark = false }: { label: string; dark?: boolean }) {
 
 // ─── AccentLine ──────────────────────────────────────────────────────────────
 function AccentLine({ dark = false }: { dark?: boolean }) {
+  const isArabic = useLocale() === "ar";
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div
       ref={ref}
-      className="h-px origin-left mt-4"
+      className="h-px origin-left rtl:origin-right mt-4"
       style={{
         background: dark
           ? "rgba(255,255,255,0.18)"
-          : `linear-gradient(to right, ${BRAND.orange}, ${BRAND.lightBlue}40, transparent)`,
+          : `linear-gradient(${isArabic ? "to left" : "to right"}, ${BRAND.orange}, ${BRAND.lightBlue}40, transparent)`,
       }}
       initial={{ scaleX: 0, opacity: 0 }}
       animate={inView ? { scaleX: 1, opacity: 1 } : {}}
@@ -141,9 +152,12 @@ function BodyText({
   children: ReactNode;
   dark?: boolean;
 }) {
+  const isArabic = useLocale() === "ar";
   return (
     <p
-      className="font-poppins text-[14.5px] font-light leading-[1.9]"
+      className={`font-poppins font-light leading-[1.9] ${
+        isArabic ? "text-[15px]" : "text-[14.5px]"
+      }`}
       style={{ color: dark ? "rgba(255,255,255,0.72)" : `${BRAND.navy}B0` }}
     >
       {children}
@@ -344,15 +358,24 @@ function StickyImageSection({
 }
 
 // ─── Decorative glow ──────────────────────────────────────────────────────────
+// Clipped to the section's own bounds (rather than the section itself having
+// overflow-hidden) so it doesn't interfere with StickyImageSection's sticky
+// image, and doesn't bleed past the viewport edge in RTL layouts.
 function Glow({ position }: { position: "top-right" | "bottom-left" }) {
   return (
     <div
-      className={`pointer-events-none absolute w-[480px] h-[480px] rounded-full blur-3xl opacity-20 ${
-        position === "top-right" ? "-top-32 -right-32" : "-bottom-32 -left-32"
-      }`}
-      style={{ background: "white" }}
+      className="pointer-events-none absolute inset-0 overflow-hidden"
       aria-hidden
-    />
+    >
+      <div
+        className={`absolute h-[480px] w-[480px] rounded-full blur-3xl opacity-20 ${
+          position === "top-right"
+            ? "-top-32 -end-32"
+            : "-bottom-32 -start-32"
+        }`}
+        style={{ background: "white" }}
+      />
+    </div>
   );
 }
 
@@ -360,17 +383,15 @@ function Glow({ position }: { position: "top-right" | "bottom-left" }) {
 // Sticky in-page nav placed directly after the hero. Horizontal row on desktop,
 // tappable dropdown on mobile. Smooth-scrolls to each topic and highlights the
 // active section on scroll.
-const JUMP_LINKS = [
-  { id: "sts", label: "STS Forum" },
-  { id: "oes", label: "Oxford Energy Seminar" },
-  { id: "renac", label: "RENAC Training" },
-  { id: "cern", label: "CERN Program" },
-  { id: "aaas", label: "AAAS Meeting" },
-  { id: "networking", label: "Networking Events" },
-  { id: "organized", label: "Organized Events" },
-];
-
-function JumpTo() {
+function JumpTo({
+  jumpToLabel,
+  selectPlaceholder,
+  links,
+}: {
+  jumpToLabel: string;
+  selectPlaceholder: string;
+  links: JumpLink[];
+}) {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false); // mobile dropdown
   const [headerH, setHeaderH] = useState(HEADER_H); // measured at runtime
@@ -448,12 +469,12 @@ function JumpTo() {
         document.documentElement.scrollHeight - 4;
 
       if (atBottom) {
-        setActive(JUMP_LINKS[JUMP_LINKS.length - 1].id);
+        setActive(links[links.length - 1].id);
         return;
       }
 
       let current = "";
-      for (const link of JUMP_LINKS) {
+      for (const link of links) {
         const el = document.getElementById(link.id);
         if (el && el.getBoundingClientRect().top <= trigger) {
           current = link.id;
@@ -475,7 +496,7 @@ function JumpTo() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [getJumpOffset]);
+  }, [getJumpOffset, links]);
 
   const handleClick = (id: string) => {
     setActive(id);
@@ -490,7 +511,7 @@ function JumpTo() {
   };
 
   const activeLabel =
-    JUMP_LINKS.find((l) => l.id === active)?.label ?? "Select a topic";
+    links.find((l) => l.id === active)?.label ?? selectPlaceholder;
 
   return (
     <motion.nav
@@ -505,7 +526,7 @@ function JumpTo() {
         {/* ── Desktop: inline horizontal row ──────────────────────────── */}
         <div className="hidden items-stretch lg:flex">
           {/* Label */}
-          <div className="flex items-center gap-2.5 pr-4 shrink-0">
+          <div className="flex items-center gap-2.5 pr-4 rtl:pr-0 rtl:pl-4 shrink-0">
             <span
               className="h-3.5 w-[3px] rounded-full"
               style={{ background: BRAND.orange }}
@@ -514,14 +535,14 @@ function JumpTo() {
               className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em]"
               style={{ color: BRAND.navy }}
             >
-              Jump To
+              {jumpToLabel}
             </span>
             <svg
               width="14"
               height="14"
               viewBox="0 0 24 24"
               fill="none"
-              className="shrink-0"
+              className="shrink-0 rtl:rotate-180"
               aria-hidden
             >
               <path
@@ -536,7 +557,7 @@ function JumpTo() {
 
           {/* Links */}
           <div className="flex items-center gap-1 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {JUMP_LINKS.map((link) => {
+            {links.map((link) => {
               const isActive = active === link.id;
               return (
                 <button
@@ -547,7 +568,7 @@ function JumpTo() {
                 >
                   {link.label}
                   <span
-                    className="absolute bottom-0 left-3 right-3 h-[2px] origin-left rounded-full transition-transform duration-300"
+                    className="absolute bottom-0 left-3 right-3 h-[2px] origin-left rtl:origin-right rounded-full transition-transform duration-300"
                     style={{
                       background: BRAND.orange,
                       transform: isActive ? "scaleX(1)" : "scaleX(0)",
@@ -574,10 +595,10 @@ function JumpTo() {
               className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] shrink-0"
               style={{ color: BRAND.navy }}
             >
-              Jump To
+              {jumpToLabel}
             </span>
             <span
-              className="ml-1 truncate font-poppins text-[13px] font-medium"
+              className="ml-1 rtl:ml-0 rtl:mr-1 truncate font-poppins text-[13px] font-medium"
               style={{ color: active ? BRAND.orange : `${BRAND.navy}80` }}
             >
               {activeLabel}
@@ -587,7 +608,7 @@ function JumpTo() {
               height="16"
               viewBox="0 0 24 24"
               fill="none"
-              className="ml-auto shrink-0"
+              className="ml-auto rtl:ml-0 rtl:mr-auto shrink-0"
               animate={{ rotate: open ? 180 : 0 }}
               transition={{ duration: 0.25, ease: EASE }}
               aria-hidden
@@ -613,13 +634,13 @@ function JumpTo() {
                 transition={{ duration: 0.28, ease: EASE }}
               >
                 <div className="flex flex-col pt-0.5 pb-1">
-                  {JUMP_LINKS.map((link) => {
+                  {links.map((link) => {
                     const isActive = active === link.id;
                     return (
                       <button
                         key={link.id}
                         onClick={() => handleClick(link.id)}
-                        className="flex items-center gap-3 px-1 py-2 text-left font-poppins text-[14px] font-medium transition-colors"
+                        className="flex items-center gap-3 px-1 py-2 text-left rtl:text-right font-poppins text-[14px] font-medium transition-colors"
                         style={{ color: isActive ? BRAND.orange : BRAND.navy }}
                       >
                         <span
@@ -714,8 +735,29 @@ function EventRowWithImage({
   );
 }
 
+// ─── Organized event image data — not locale-specific ─────────────────────────
+const ORGANIZED_EVENT_MEDIA = [
+  { imageSrc: "/image/CERN2.jpg", imageRight: false },
+  { imageSrc: "/image/Artificial.webp", imageRight: true },
+  { imageSrc: "/image/13new.webp", imageRight: false },
+  { imageSrc: "/image/KIMS.png", imageRight: true },
+  { imageSrc: "/image/NASEM.png", imageRight: false },
+];
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ActivitiesAndEventsPage() {
+  const t = useTranslations("ActivitiesEventsPage");
+  const isArabic = useLocale() === "ar";
+
+  const jumpLinks = t.raw("jumpLinks") as JumpLink[];
+  const sts = t.raw("sts") as SectionCopy;
+  const oes = t.raw("oes") as SectionCopy;
+  const renac = t.raw("renac") as SectionCopy;
+  const cern = t.raw("cern") as SectionCopy;
+  const aaas = t.raw("aaas") as SectionCopy;
+  const networking = t.raw("networking") as SectionCopy;
+  const organizedEvents = t.raw("organizedEvents") as OrganizedEvent[];
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -746,7 +788,7 @@ export default function ActivitiesAndEventsPage() {
               sizes="100vw"
               className="scale-105 object-cover object-center"
             />
-            {/* Directional overlay — left heavy for text legibility */}
+            {/* Directional overlay — leading heavy for text legibility */}
             <div
               className="absolute inset-0"
               style={{
@@ -766,51 +808,76 @@ export default function ActivitiesAndEventsPage() {
             />
           </div>
 
-          {/* Content — vertically centered, left-aligned */}
+          {/* Content — vertically centered, leading-aligned */}
           <motion.div
             className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             {/* Breadcrumb */}
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Research</span>
-              {/* <span className="text-white/25">/</span>
-              <span>Activities &amp; Events</span> */}
+              <span>{t("breadcrumbResearch")}</span>
             </motion.div>
 
             {/* Title — clip-path wipe */}
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className={`font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-tight tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Activities &amp; Events
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
-            {/* Orange rule */}
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 hidden h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 72 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           {/* White bleed into body */}
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
         {/* ── Jump To (flush below hero — no extra white band) ─────────── */}
-        <JumpTo />
+        <JumpTo
+          jumpToLabel={t("jumpToLabel")}
+          selectPlaceholder={t("jumpSelectPlaceholder")}
+          links={jumpLinks}
+        />
 
         {/* ── 1. STS ───────────────────────────────────────────────────── */}
         <StandardSection
@@ -819,31 +886,12 @@ export default function ActivitiesAndEventsPage() {
           imageAlt="STS"
           imageFit="contain"
         >
-          <Eyebrow label="STS" />
-          <SectionHeading>
-            Science and Technology in Society (STS) Forum
-          </SectionHeading>
+          <Eyebrow label={sts.eyebrow} />
+          <SectionHeading>{sts.heading}</SectionHeading>
           <div className="flex flex-col gap-4 mt-1">
-            <BodyText>
-              The Science and Technology in Society (STS) Forum is a leading
-              global platform held annually in Kyoto, Japan, bringing together
-              world leaders from science, industry, and policy to discuss how
-              science and technology can address long‑term global challenges.
-              The forum welcomes over a thousand participants each year,
-              including Nobel laureates, ministers, university presidents, CEOs,
-              and emerging young leaders. It aims to strengthen the positive
-              impact of scientific progress while addressing its risks and
-              societal implications.
-            </BodyText>
-            <BodyText>
-              KFAS supports Kuwaiti researchers and professionals to participate
-              in the STS Young Leaders Program, which invites outstanding
-              individuals under 40 to engage directly with global experts. The
-              program offers high‑level dialogue, exposure to international
-              innovation trends, and opportunities to build lasting networks
-              that contribute to Kuwait's scientific and technological
-              development.
-            </BodyText>
+            {sts.body.map((p, i) => (
+              <BodyText key={i}>{p}</BodyText>
+            ))}
           </div>
         </StandardSection>
 
@@ -855,24 +903,12 @@ export default function ActivitiesAndEventsPage() {
           imageSrc="/image/Oxford.png"
           imageAlt="Oxford Energy Seminar"
         >
-          <Eyebrow label="OES" />
-          <SectionHeading>The Oxford Energy Seminar</SectionHeading>
+          <Eyebrow label={oes.eyebrow} />
+          <SectionHeading>{oes.heading}</SectionHeading>
           <div className="flex flex-col gap-4 mt-1">
-            <BodyText>
-              It is a residential educational conference that brings together
-              government officials, industry leaders, managers, and
-              professionals involved in energy policy and decision-making.
-              Widely recognized as an important international forum on energy,
-              the seminar provides participants with an intensive overview of
-              current developments, challenges, and opportunities shaping the
-              global energy landscape and the energy transition.
-            </BodyText>
-            <BodyText>
-              The program features lectures, discussions, and exchanges led by a
-              diverse international panel of experts from governments, the
-              energy industry, financial institutions, academia, and
-              international organizations.
-            </BodyText>
+            {oes.body.map((p, i) => (
+              <BodyText key={i}>{p}</BodyText>
+            ))}
           </div>
         </StandardSection>
 
@@ -884,47 +920,14 @@ export default function ActivitiesAndEventsPage() {
           imageSrc="/image/RENAC.jpg"
           imageAlt="RENAC renewable energy training"
         >
-          <Eyebrow label="RENAC" dark />
-          <SectionHeading dark>RENAC Training Programs</SectionHeading>
+          <Eyebrow label={renac.eyebrow} dark />
+          <SectionHeading dark>{renac.heading}</SectionHeading>
           <div className="flex flex-col gap-4 mt-1">
-            <BodyText dark>
-              The Research Capacity Building Directorate collaborates with RENAC
-              (Renewables Academy) to provide both online and in person training
-              opportunities in renewable energy and energy efficiency. The
-              Renewables Academy (RENAC) in Berlin is one of the world's leading
-              institutions for professional training and capacity building in
-              renewable energy and energy efficiency.
-            </BodyText>
-            <BodyText dark>
-              As part of its commitment to developing national expertise in
-              clean energy, KFAS sponsors Kuwaiti students to enroll in RENAC's
-              six month online training program in renewable energy and energy
-              efficiency. The program provides a structured and in depth
-              learning experience covering core technologies, system design,
-              energy policy, and practical applications within the global
-              renewable energy sector.
-            </BodyText>
-            <BodyText dark>
-              Through this sponsorship, participants gain access to high quality
-              online modules, expert instruction, and internationally recognized
-              training materials, equipping them with the skills needed to
-              contribute to Kuwait's transition toward sustainable energy
-              solutions. The program serves as an important stepping stone for
-              emerging engineers, scientists, and energy professionals seeking
-              to build technical competency and advance their careers in the
-              renewable energy field.
-            </BodyText>
-            <BodyText dark>
-              In addition to the online program, selected graduates may be
-              offered the opportunity to participate in advanced in person
-              training at RENAC's training center in Berlin. These specialized
-              courses provide hands on experience in the design, analysis, and
-              evaluation of renewable energy systems using industry standard
-              tools and applications. Building on the knowledge acquired through
-              the online program, the in person training further strengthens
-              participants' technical expertise and professional capabilities in
-              the renewable energy sector{" "}
-            </BodyText>
+            {renac.body.map((p, i) => (
+              <BodyText key={i} dark>
+                {p}
+              </BodyText>
+            ))}
           </div>
         </StickyImageSection>
 
@@ -936,28 +939,12 @@ export default function ActivitiesAndEventsPage() {
           imageAlt="CERN Summer Student Program"
           imageFit="contain"
         >
-          <Eyebrow label="CERN" />
-          <SectionHeading>
-            CERN (The European Organization for Nuclear Research) Summer Student
-            Program
-          </SectionHeading>
+          <Eyebrow label={cern.eyebrow} />
+          <SectionHeading>{cern.heading}</SectionHeading>
           <div className="flex flex-col gap-4 mt-1">
-            <BodyText>
-              KFAS fund students to participate in the prestigious summer
-              training program at the CERN (European Organization for Nuclear
-              Research) headquarters in Geneva, Switzerland. During their 8-week
-              stay at CERN, these students worked alongside world-renowned
-              scientists and researchers in the state-of-the-art research labs
-              and accelerators.
-            </BodyText>
-            <BodyText>
-              This hands-on experience allowed them to engage in groundbreaking
-              scientific research and gain valuable insights into the advanced
-              technologies used in particle physics and other related fields.
-              Their time at CERN expanded their academic and practical knowledge
-              and provided them with a unique opportunity to contribute to
-              cutting-edge research in a global scientific community.
-            </BodyText>
+            {cern.body.map((p, i) => (
+              <BodyText key={i}>{p}</BodyText>
+            ))}
           </div>
         </StandardSection>
 
@@ -968,42 +955,12 @@ export default function ActivitiesAndEventsPage() {
           imageSrc="/image/AAAS.png"
           imageAlt="AAAS Annual Meeting"
         >
-          <Eyebrow label="AAAS" />
-          <SectionHeading>AAAS Annual Meeting</SectionHeading>
+          <Eyebrow label={aaas.eyebrow} />
+          <SectionHeading>{aaas.heading}</SectionHeading>
           <div className="flex flex-col gap-4 mt-1">
-            <BodyText>
-              The AAAS American Association for the Advancement of Science
-              Annual Conference is one of the world's leading multidisciplinary
-              science gatherings, bringing together researchers, students,
-              policymakers, and global science leaders to explore emerging
-              discoveries and engage in high-level scientific dialogue. The
-              conference features keynote talks, panel discussions, workshops,
-              exhibitions, and a wide range of poster and e-poster presentations
-              across all scientific fields.
-            </BodyText>
-            <BodyText>
-              KFAS participates annually by sponsoring Kuwaiti students and
-              researchers to present their work and represent Kuwait on an
-              international stage. Participants showcase their research through
-              e-poster presentations, attend scientific sessions, and engage
-              with peers and experts from around the world, strengthening their
-              scientific skills, expanding international networks, and
-              contributing to Kuwait's visibility within the global research
-              community.
-            </BodyText>
-            <BodyText>
-              In 2025, two KFAS-sponsored students received Honorable Mention
-              recognition from the AAAS organization for the quality and impact
-              of their presentations, an important milestone highlighting the
-              excellence of young Kuwaiti researchers participating in the
-              program.
-            </BodyText>
-            <BodyText>
-              Through this annual participation, KFAS continues to build
-              national research capacity and open doors for emerging scientists
-              to engage in international scientific exchange at one of the most
-              prestigious scientific conferences in the world.
-            </BodyText>
+            {aaas.body.map((p, i) => (
+              <BodyText key={i}>{p}</BodyText>
+            ))}
           </div>
         </StickyImageSection>
 
@@ -1017,24 +974,14 @@ export default function ActivitiesAndEventsPage() {
           imageSrc="/image/N.E.png"
           imageAlt="Researchers networking"
         >
-          <Eyebrow label="Networking Events" dark />
-          <SectionHeading dark>Networking Events</SectionHeading>
+          <Eyebrow label={networking.eyebrow} dark />
+          <SectionHeading dark>{networking.heading}</SectionHeading>
           <div className="flex flex-col gap-4 mt-1">
-            <BodyText dark>
-              Our networking activities aim to strengthen connections within the
-              research community and foster a collaborative environment among
-              researchers supported by the foundation. By bringing together
-              scholars from diverse disciplines and institutions, these
-              activities encourage the exchange of ideas, perspectives, and
-              experiences that can inspire new research directions and
-              partnerships.
-            </BodyText>
-            <BodyText dark>
-              They also support professional development and help build lasting
-              relationships among researchers, contributing to a dynamic
-              research community and enhancing the broader impact of scientific
-              research.
-            </BodyText>
+            {networking.body.map((p, i) => (
+              <BodyText key={i} dark>
+                {p}
+              </BodyText>
+            ))}
           </div>
         </StandardSection>
 
@@ -1045,54 +992,22 @@ export default function ActivitiesAndEventsPage() {
         >
           <div className={CONTAINER}>
             <FadeUp className="flex flex-col gap-3 mb-16">
-              <Eyebrow label="Organized Events" />
-              <SectionHeading>Organized Events</SectionHeading>
+              <Eyebrow label={t("organizedEyebrow")} />
+              <SectionHeading>{t("organizedHeading")}</SectionHeading>
             </FadeUp>
 
             <div className="flex flex-col gap-5">
-              <EventRowWithImage
-                title="CERN Scientific CV writing workshop"
-                imageSrc="/image/CERN2.jpg"
-                imageAlt="CERN Scientific CV writing workshop"
-                body="The CERN (The European Organization for Nuclear Research) CV Workshop is a scientific CV-writing session organized by KFAS to help Kuwaiti students prepare strong, competitive CVs for the CERN Summer Student Training Program. It teaches students how to present their academic, research, and technical experience in a way that meets CERN's strict application requirements, while also guiding them on structure, clarity, and relevance. The workshop is open to eligible Kuwaiti bachelor and master's students in Physics, Computer Science, Mathematics, or Engineering, and often includes practical guidance, post-session CV reviews, and insights from former CERN participants. As part of KFAS's collaboration, the workshop supports national capacity-building by ensuring applicants are well-prepared before applying."
-                delay={0}
-              />
-
-              <EventRowWithImage
-                title="Artificial Intelligence Empowering Research Workshop Led by Elsevier"
-                imageSrc="/image/Artificial.webp"
-                imageAlt="Artificial Intelligence Empowering Research Workshop Led by Elsevier"
-                imageRight
-                body={`The Elsevier Workshop was a full-day training session titled "AI Empowering Research," delivered by Elsevier experts and hosted by KFAS. It explored how artificial intelligence was transforming research, publishing, and research management. The workshop covered key topics such as GenAI in research management and its limitations, AI-driven publishing workflows, how leading organizations were using AI, as well as pitfalls, best practices, and research integrity in the context of AI adoption. Participants also received practical, hands-on training with Elsevier's AI tools, applying them in group exercises—including preparing a mock funding proposal. Designed for Kuwaiti researchers, academics, and research administrators, the workshop formed part of KFAS's broader efforts to strengthen national research capacity and promote the responsible use of AI in scientific work.`}
-                delay={0.06}
-              />
-
-              <EventRowWithImage
-                title="Research & Technology Directorate Networking Day"
-                imageSrc="/image/13new.webp"
-                imageAlt="Research & Technology Directorate Networking Day"
-                body={`The RTD Research Networking Day was an open, full-day event that provided researchers with the opportunity to engage directly with teams, ask questions, explore available programs, and discuss potential collaborations. The day featured open networking sessions, informational booths, and a special lecture titled "The Art of Crafting a Proposal: From Start to Finish," which guided attendees on developing strong research proposals. The event aimed to create a productive space for researchers to exchange ideas, receive guidance, and build connections across the research community.`}
-                delay={0.12}
-              />
-
-              <EventRowWithImage
-                title="Informative Session for the Research Community"
-                imageSrc="/image/KIMS.png"
-                imageAlt="Informative Session for the Research Community"
-                imageRight
-                body="The Research Capacity Building Directorate delivered an informative session aimed at the scientific community to introduce KFAS’s research support ecosystem and available services.
-The session provided an overview of KFAS’s mission and vision, and highlighted the range of research support offerings available through the Research and Technology Directorate (RTD). It also demonstrated how to use the Pure Portal to access research outputs, track impact, and identify potential collaborators.
-In addition, the session introduced the tools and platforms available to support grants, networking, outreach, and broader research engagement. Overall, the session aimed to strengthen awareness of KFAS resources and enhance researchers’ ability to navigate the national research ecosystem and access opportunities for collaboration at both national and international levels."
-                delay={0.18}
-              />
-
-              <EventRowWithImage
-                title="KFASxNASEM Workshops"
-                imageSrc="/image/NASEM.png"
-                imageAlt="KFASxNASEM workshops"
-                body={`KFAS collaborates with the U.S. National Academies of Sciences, Engineering, and Medicine (NASEM) through two major bilateral workshop series designed to advance scientific exchange between Kuwait and the United States. The first, "Promising Practices for Improving the Inclusion of Women in Science, Engineering, and Medicine: Lessons From Kuwait and the United States - Workshop Series" (2020), brought together experts and leaders to explore strategies for enhancing female participation in STEM fields. The second, "Precision Medicine: Promoting Knowledge Exchange and Collaboration between Kuwait and the United States - Workshop Series" (2024-2025), focuses on emerging innovations in personalized medicine, including AI in healthcare, point-of-care technologies, and interdisciplinary approaches. Both collaborations produce published workshop proceedings, ensuring that insights and recommendations are shared with the wider scientific and policy community.`}
-                delay={0.24}
-              />
+              {organizedEvents.map((event, i) => (
+                <EventRowWithImage
+                  key={event.title}
+                  title={event.title}
+                  body={event.body}
+                  imageSrc={ORGANIZED_EVENT_MEDIA[i].imageSrc}
+                  imageAlt={event.title}
+                  imageRight={ORGANIZED_EVENT_MEDIA[i].imageRight}
+                  delay={i * 0.06}
+                />
+              ))}
             </div>
           </div>
         </section>
