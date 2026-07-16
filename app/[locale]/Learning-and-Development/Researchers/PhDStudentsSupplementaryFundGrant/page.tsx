@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -46,7 +47,7 @@ function SectionHead({ title }: { title: string }) {
 // ─── List marker ───────────────────────────────────────────────────────────────
 function Mark() {
   return (
-    <span className="mt-[13px] h-px w-3.5 shrink-0 bg-[#EC601B] transition-all duration-300 group-hover/li:w-6" />
+    <span className="mt-[13px] h-px w-3.5 shrink-0 bg-[#EC601B] transition-all duration-300 group-hover/li:w-6 rtl:group-hover/li:w-6" />
   );
 }
 
@@ -55,105 +56,102 @@ type EligibilityItem =
   | { text: ReactNode }
   | { label: string; sub: (string | { text: ReactNode })[] };
 
-const ELIGIBILITY: EligibilityItem[] = [
-  "Kuwaiti nationals.",
-  {
-    text: (
-      <>
-        The major must be within the Science, Technology, and Innovation (STI)
-        domains (
-        <a
-          href={STI_DOMAINS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={inlineLink}
-        >
-          View the list
-        </a>
-        )
-      </>
-    ),
-  },
-  "Must be a PhD candidate and have passed the qualification stages for obtaining the PhD.",
-  "Cumulative Bachelor GPA must not be less than 3.5 (4.0 scale) or a minimum of Upper second class, according to the UK system. Or their equivalent in other systems assessed by KFAS.",
-  "For medical specialties, the cumulative Bachelor GPA must not be less than 3.33 (4.0 scale), or Lower second-class according to the UK system. Or their equivalent in other systems assessed by KFAS.",
-  {
-    label: "The applicant must be enrolled full-time:",
-    sub: [
-      "Local public university in Kuwait",
-      {
-        text: (
-          <div>
-            <span>
-              Or; At a university abroad, ranked among the top 200 globally.
-            </span>
-            <p className="mt-2 font-poppins text-[13px] font-light italic leading-[1.7] text-[#1D2D44]/55">
-              according to{" "}
-              <a
-                href="https://www.timeshighereducation.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${inlineLink} not-italic`}
-              >
-                Times Higher Education
-              </a>
-            </p>
-          </div>
-        ),
-      },
-    ],
-  },
-];
-
 type DocumentItem =
   | string
   | { text: ReactNode }
   | { label: string; sub: string[] };
 
-const REQUIRED_DOCUMENTS: DocumentItem[] = [
-  'Recent copy of the civil ID through the "Kuwait Mobile ID" app.',
-  "Updated curriculum vitae.",
-  "All academic certificates and transcripts (Bachelor\u2019s and Master\u2019s) must be certified by the Ministry of Higher Education (MOHE) (if applicable).",
-  "Letter of Intent addressed to KFAS confirming the applicant\u2019s status as a PhD candidate and that their dissertation proposal has been approved. It must be signed by a senior university official, such as the President, Dean of the College, Head of Academic Affairs, or an equivalent authority.",
-  "Research Proposal: Must adhere to the KFAS template and signed by the applicant\u2019s academic supervisor.",
-  {
-    text: (
-      <>
-        Click here for the{" "}
-        <a
-          href={PHD_TEMPLATE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={inlineLink}
-        >
-          KFAS PhD Supplementary Fund Template
-        </a>
-        .
-      </>
-    ),
-  },
-  "A non-disclosure agreement or proof of collaboration with international institutes/researchers. (If applicable)",
-  {
-    label: "For local PhD candidates (studying in Kuwait):",
-    sub: ["The applicant\u2019s acceptance or enrollment documents."],
-  },
-  {
-    label: "For PhD candidates studying abroad:",
-    sub: [
-      "To Whom It May Concern letter from the KCO, confirming the applicant\u2019s current enrolment status in the stated university.",
-      "A letter from the PhD scholarship sponsor, approving the applicant\u2019s application for the fund (if available).",
-    ],
-  },
-];
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function PhDStudentsSupplementaryFundGrantPage() {
+  const t = useTranslations("PhDStudentsSupplementaryFundGrantPage");
+  const isArabic = useLocale() === "ar";
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const ELIGIBILITY: EligibilityItem[] = [
+    t("eligibilityItem1"),
+    {
+      text: (
+        <>
+          {t("eligibilityItem2Pre")}
+          <a
+            href={STI_DOMAINS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={inlineLink}
+          >
+            {t("eligibilityItem2LinkText")}
+          </a>
+          {t("eligibilityItem2Post")}
+        </>
+      ),
+    },
+    t("eligibilityItem3"),
+    t("eligibilityItem4"),
+    t("eligibilityItem5"),
+    {
+      label: t("enrolledLabel"),
+      sub: [
+        t("enrolledSub1"),
+        {
+          text: (
+            <div>
+              <span>{t("enrolledSub2")}</span>
+              <p className="mt-2 font-poppins text-[13px] font-light italic leading-[1.7] text-[#1D2D44]/55">
+                {t("enrolledSub2Note")}{" "}
+                <a
+                  href="https://www.timeshighereducation.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${inlineLink} not-italic`}
+                >
+                  {t("enrolledSub2LinkText")}
+                </a>
+              </p>
+            </div>
+          ),
+        },
+      ],
+    },
+  ];
+
+  const REQUIRED_DOCUMENTS: DocumentItem[] = [
+    t("requiredDocItem1"),
+    t("requiredDocItem2"),
+    t("requiredDocItem3"),
+    t("requiredDocItem4"),
+    t("requiredDocItem5"),
+    {
+      text: (
+        <>
+          {t("requiredDocItem6Pre")}{" "}
+          <a
+            href={PHD_TEMPLATE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={inlineLink}
+          >
+            {t("requiredDocItem6LinkText")}
+          </a>
+          {t("requiredDocItem6Post")}
+        </>
+      ),
+    },
+    t("requiredDocItem7"),
+    {
+      label: t("localLabel"),
+      sub: [t("localSub1")],
+    },
+    {
+      label: t("abroadLabel"),
+      sub: [t("abroadSub1"), t("abroadSub2")],
+    },
+  ];
 
   return (
     <>
@@ -197,48 +195,76 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
           </div>
 
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-32 w-full max-w-7xl mx-auto px-6 py-12 sm:mt-40 sm:px-8 md:mt-44 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-6 flex items-center gap-2.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55"
+              className={`mb-6 flex items-center gap-2.5 font-poppins font-semibold text-white/55 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.34em]"
+              }`}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/30">/</span>
               <Link
                 href="/Learning-and-Development/Researchers"
                 className="text-white/80 transition-colors hover:text-white"
               >
-                Researchers
+                {t("breadcrumbResearchers")}
               </Link>
             </motion.div>
 
-            <div className="overflow-hidden pb-[0.12em]">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-[0.12em]"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-3xl font-bold leading-[1.12] tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)]"
+                className={`font-poppins text-3xl font-bold text-white sm:text-4xl lg:text-5xl xl:text-6xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-[1.12] tracking-tight"
+                }`}
                 initial={{ y: "108%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                PhD Students
+                {t("heroTitleLine1")}
                 <br />
-                Supplementary
-                <br />
-                Fund Grant
+                {t("heroTitleLine2")}
+                {!isArabic && (
+                  <>
+                    <br />
+                    {t("heroTitleLine3")}
+                  </>
+                )}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-7 h-[3px] origin-left rounded-full bg-[#EC601B]"
+              className="mt-7 hidden h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B] md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 76 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -247,7 +273,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
         <section className="relative overflow-hidden bg-white py-20 sm:py-28">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -261,17 +287,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
               viewport={{ once: true, margin: "-70px" }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              This program is designed to support Kuwaiti PhD candidates
-              enrolled at local or internationally recognized universities by
-              providing supplementary funding to help them complete their
-              doctoral research successfully. The Supplementary Grant provides
-              valuable support for research-related expenses, enabling students
-              to focus on delivering high-quality scientific work during their
-              postgraduate studies. The grant covers essential research costs
-              such as tools, equipment, consumables, specialized software,
-              laboratory analysis fees, and other similar needs directly related
-              to the student&rsquo;s PhD research. Please note that the grant
-              does not cover tuition fees, salaries, or personal benefits.
+              {t("overviewBody")}
             </motion.p>
 
             <motion.div
@@ -299,7 +315,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
           className="px-6 py-20 sm:px-8 sm:py-24 lg:px-12"
           style={{ background: "#7DC0F1" }}
         >
-          <div className="mx-auto flex max-w-7xl flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left">
+          <div className="mx-auto flex max-w-7xl flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left rtl:lg:text-right">
             <motion.p
               className="max-w-[42ch] font-poppins text-[1.25rem] font-semibold leading-[1.35] tracking-tight text-white sm:text-[1.5rem]"
               initial={{ opacity: 0, y: 24 }}
@@ -307,8 +323,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.65, ease: EASE }}
             >
-              The grant amount is a maximum of 10,000 KWD or its equivalent
-              amount in other currencies.
+              {t("grantAmountBody")}
             </motion.p>
             <motion.a
               href={ELIGIBLE_ITEMS_URL}
@@ -320,7 +335,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
             >
-              (View the eligible items covered by the grant)
+              {t("eligibleItemsLinkText")}
             </motion.a>
           </div>
         </section>
@@ -329,10 +344,10 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="First: Eligibility Criteria" />
+              <SectionHead title={t("eligibilityTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -368,7 +383,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
                           {item.label}
                         </span>
                       </div>
-                      <ul className="mt-4 flex flex-col gap-3 pl-8">
+                      <ul className="mt-4 flex flex-col gap-3 pl-8 rtl:pl-0 rtl:pr-8">
                         {item.sub.map((sub, j) => (
                           <li
                             key={j}
@@ -399,10 +414,10 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Second: Required Documents" />
+              <SectionHead title={t("requiredDocumentsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -438,7 +453,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
                           {item.label}
                         </span>
                       </div>
-                      <ul className="mt-4 flex flex-col gap-3 pl-8">
+                      <ul className="mt-4 flex flex-col gap-3 pl-8 rtl:pl-0 rtl:pr-8">
                         {item.sub.map((sub) => (
                           <li
                             key={sub}
@@ -461,10 +476,10 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Third: Application Submission" />
+              <SectionHead title={t("applicationSubmissionTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -474,33 +489,29 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Applications are open all year-round.
+                  {t("applicationItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  If the applicant does not submit the required documents within
-                  two weeks from the date of notification by KFAS, the
-                  application is considered declined and must be resubmitted.
+                  {t("applicationItem2")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Application process will take up to 60 working days after
-                  application submission.
+                  {t("applicationItem3")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Only applications that are submitted through the application
-                    link{" "}
+                    {t("applicationItem4Pre")}{" "}
                     <a
                       href={APPLICATION_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={inlineLink}
                     >
-                      click here
+                      {t("applicationItem4LinkText")}
                     </a>{" "}
-                    will be considered.
+                    {t("applicationItem4Post")}
                   </span>
                 </li>
               </motion.ul>
@@ -513,7 +524,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
                 transition={{ duration: 0.6, delay: 0.15, ease: EASE }}
               >
                 <span className="font-poppins text-[14px] font-light text-[#1D2D44]/60">
-                  For any inquiries, please contact:
+                  {t("contactLabel")}
                 </span>
                 <a
                   href="mailto:rgraduates@kfas.org.kw"
@@ -524,7 +535,7 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
                   </span>
                   <span
                     aria-hidden
-                    className="transition-transform duration-300 group-hover:translate-x-1"
+                    className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"
                   >
                     &rarr;
                   </span>
