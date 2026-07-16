@@ -2059,5 +2059,32 @@
     "applicationClosedText": "Only applications that are submitted through the application link will be considered.",
     "applicationClosedBadge": "Closed",
     "contactLabel": "For any inquiries, please reach out via email at:"
+  },
+  "ExtensionOfScholarshipBridgingGrantPage": {
+    "breadcrumbLearning": "Learning & Development",
+    "breadcrumbResearchers": "Researchers",
+    "heroTitleLine1": "Extension of Scholarship",
+    "heroTitleLine2": "Bridging Grant",
+    "overviewBody": "Recipients of the KFAS Scholarship Bridging Grant who require additional time for their studies may submit a request for an extension. The extension period shall not exceed six months and, if approved, will be considered the final extension granted under this award. And the student is responsible to pay the remaining tuition fees beyond the six months.",
+    "eligibilityTitle": "First: Eligibility Criteria",
+    "eligibilityItem1": "Enrolled in a KFAS-sponsored PhD program at the same university and in the same major approved by KFAS.",
+    "eligibilityItem2": "If any, courses taken during the extension must be core and required for graduation.",
+    "eligibilityItem3": "The university must be ranked the top 10 global universities (general or by major) according to the following rankings: Times Higher Education, US News & World Report, QS World University Rankings.",
+    "eligibilityItem4": "However, this requirement is waived for those who have published a scientific paper related to their thesis/dissertation in a journal ranked in the top 25% (Q1) according to the Journal Citation Reports, during the academic year funded by KFAS.",
+    "requiredDocumentsTitle": "Second: Required Documents",
+    "requiredDocItem1": "A letter from the academic supervisor detailing the applicant's academic performance and status, reasons for the extension request, and a study plan for the extension period.",
+    "requiredDocItem2": "If applicable, a letter from the university confirming that courses registered during the extension are core and required for graduation.",
+    "requiredDocItem3": "If applicable, a copy of the published scientific paper in a scholarly journal.",
+    "requiredDocItem4Pre": "Certificate of \"To Whom It May Concern\" from the ",
+    "requiredDocItem4LinkText": "Public Institution for Social Security",
+    "requiredDocItem4Post": " website.",
+    "requiredDocItem5": "If the applicant is employed, an updated study leave must confirm that the applicant is on full leave.",
+    "requiredDocItem6": "Letter \"To Whom it May Concern\" issued by the relevant Kuwait Cultural Office.",
+    "requiredDocItem7": "Must declare if the applicant receives funding for the PhD program from another source.",
+    "applicationSubmissionTitle": "Third: Application Submission",
+    "applicationItem1": "Submit the extension request at least 3 months before the KFAS grant ends.",
+    "applicationItem2Pre": "Only applications that are submitted through the application link: Please ",
+    "applicationItem2LinkText": "click here",
+    "applicationItem2Post": " will be considered."
   }
 }

@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
-import Link from "next/link";
+import { useRef } from "react";
+import { Link } from "@/src/i18n/navigation";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -38,42 +39,11 @@ function Mark() {
   );
 }
 
-const ELIGIBILITY = [
-  "Enrolled in a KFAS-sponsored PhD program at the same university and in the same major approved by KFAS.",
-  "If any, courses taken during the extension must be core and required for graduation.",
-  "The university must be ranked the top 10 global universities (general or by major) according to the following rankings: Times Higher Education, US News & World Report, QS World University Rankings.",
-  "However, this requirement is waived for those who have published a scientific paper related to their thesis/dissertation in a journal ranked in the top 25% (Q1) according to the Journal Citation Reports, during the academic year funded by KFAS.",
-];
-
-type DocumentItem = string | { text: ReactNode };
-
-const REQUIRED_DOCUMENTS: DocumentItem[] = [
-  "A letter from the academic supervisor detailing the applicant\u2019s academic performance and status, reasons for the extension request, and a study plan for the extension period.",
-  "If applicable, a letter from the university confirming that courses registered during the extension are core and required for graduation.",
-  "If applicable, a copy of the published scientific paper in a scholarly journal.",
-  {
-    text: (
-      <>
-        Certificate of &quot;To Whom It May Concern&quot; from the{" "}
-        <a
-          href="https://eservice.pifss.gov.kw/default.aspx?ReturnUrl=%2f"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={inlineLink}
-        >
-          Public Institution for Social Security
-        </a>{" "}
-        website.
-      </>
-    ),
-  },
-  "If the applicant is employed, an updated study leave must confirm that the applicant is on full leave.",
-  'Letter "To Whom it May Concern" issued by the relevant Kuwait Cultural Office.',
-  "Must declare if the applicant receives funding for the PhD program from another source.",
-];
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ExtensionOfScholarshipBridgingGrantPage() {
+  const t = useTranslations("ExtensionOfScholarshipBridgingGrantPage");
+  const isArabic = useLocale() === "ar";
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -120,25 +90,37 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
               }}
               aria-hidden
             />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+              }}
+              aria-hidden
+            />
           </div>
 
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-32 w-full max-w-7xl mx-auto px-6 py-12 sm:mt-40 sm:px-8 md:mt-44 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-6 flex items-center gap-2.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55"
+              className={`mb-6 flex items-center gap-2.5 font-poppins font-semibold text-white/55 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.34em]"
+              }`}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/30">/</span>
               <Link
                 href="/Learning-and-Development/Researchers"
                 className="text-white/80 transition-colors hover:text-white"
               >
-                Researchers
+                {t("breadcrumbResearchers")}
               </Link>
             </motion.div>
 
@@ -149,20 +131,32 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                Extension of Scholarship
+                {t("heroTitleLine1")}
                 <br />
-                Bridging Grant
+                {t("heroTitleLine2")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-7 h-[3px] origin-left rounded-full bg-[#EC601B]"
+              className="mt-7 hidden h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B] md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 76 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -171,7 +165,7 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
         <section className="relative overflow-hidden bg-white py-20 sm:py-28">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -185,12 +179,7 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
               viewport={{ once: true, margin: "-70px" }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              Recipients of the KFAS Scholarship Bridging Grant who require
-              additional time for their studies may submit a request for an
-              extension. The extension period shall not exceed six months and,
-              if approved, will be considered the final extension granted under
-              this award. And the student is responsible to pay the remaining
-              tuition fees beyond the six months.
+              {t("overviewBody")}
             </motion.p>
 
             <motion.div
@@ -225,10 +214,10 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="First: Eligibility Criteria" />
+              <SectionHead title={t("eligibilityTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -236,15 +225,22 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                {ELIGIBILITY.map((item, i) => (
-                  <li
-                    key={i}
-                    className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
-                  >
-                    <Mark />
-                    {item}
-                  </li>
-                ))}
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("eligibilityItem1")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("eligibilityItem2")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("eligibilityItem3")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("eligibilityItem4")}
+                </li>
               </motion.ul>
             </div>
           </div>
@@ -254,10 +250,10 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Second: Required Documents" />
+              <SectionHead title={t("requiredDocumentsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -265,15 +261,45 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                {REQUIRED_DOCUMENTS.map((item, i) => (
-                  <li
-                    key={i}
-                    className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
-                  >
-                    <Mark />
-                    {typeof item === "string" ? item : item.text}
-                  </li>
-                ))}
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem1")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem2")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem3")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>
+                    {t("requiredDocItem4Pre")}
+                    <a
+                      href="https://eservice.pifss.gov.kw/default.aspx?ReturnUrl=%2f"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={inlineLink}
+                    >
+                      {t("requiredDocItem4LinkText")}
+                    </a>
+                    {t("requiredDocItem4Post")}
+                  </span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem5")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem6")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem7")}
+                </li>
               </motion.ul>
             </div>
           </div>
@@ -291,10 +317,10 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Third: Application Submission" />
+              <SectionHead title={t("applicationSubmissionTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -304,23 +330,21 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
               >
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
-                  Submit the extension request at least 3 months before the KFAS
-                  grant ends.
+                  {t("applicationItem1")}
                 </li>
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Only applications that are submitted through the application
-                    link: Please{" "}
+                    {t("applicationItem2Pre")}
                     <a
                       href="https://www.kfas.org/Offerings/Student/Extension-of-Scholarship-Bridging-Grant"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={inlineLink}
                     >
-                      click here
-                    </a>{" "}
-                    will be considered.
+                      {t("applicationItem2LinkText")}
+                    </a>
+                    {t("applicationItem2Post")}
                   </span>
                 </li>
               </motion.ul>

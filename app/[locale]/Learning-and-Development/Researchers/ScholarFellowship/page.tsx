@@ -71,13 +71,13 @@ export default function ScholarFellowshipPage() {
         >
           <div className="absolute inset-0">
             <Image
-              src="/image/ScholarFellowship2.png"
+              src="/image/extensionss.png"
               alt=""
               fill
               priority
               quality={65}
               sizes="100vw"
-              className="object-cover object-center"
+              className="scale-125 object-cover object-[center_18%]"
             />
             {/* navy overlays for text legibility */}
             <div
