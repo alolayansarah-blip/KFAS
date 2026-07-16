@@ -1908,85 +1908,6 @@
     "applicationItem3Post": ". Only applications that are submitted through the application link will be considered.",
     "contactLabel": "For any inquiries, please contact:"
   },
-  "ScholarFellowshipPage": {
-    "breadcrumbLearning": "Learning & Development",
-    "breadcrumbResearchers": "Researchers",
-    "heroTitle": "Scholar Fellowship",
-    "leadParagraph": "The Kuwait Foundation for the Advancement of Sciences (KFAS) offers the following grants to support outstanding Kuwaiti researchers:",
-    "grants": [
-      {
-        "title": "Postdoctoral Research",
-        "body": "A grant for those holding a PhD to continue research in their specialized fields under the supervision of experts or academic/research institutions."
-      },
-      {
-        "title": "Research Internship",
-        "body": "A fellowship for conducting research or gaining experience in using advanced research techniques."
-      }
-    ],
-    "eligibilityTitle": "Eligibility Criteria",
-    "eligibilityItem1": "Kuwaiti nationals.",
-    "eligibilityItem2": "No more than 45 years of age at the time of submitting the application.",
-    "eligibilityItem3": "Have obtained their most recent academic degree within three years before the application date.",
-    "eligibilityItem4Pre": "The fellowship must be related to the applicant's academic field and falls within Science, Technology, and Innovation (STI) domains. To view the fields, please",
-    "eligibilityItem4LinkText": "click here",
-    "eligibilityItem5Pre": "The applicant must have received an acceptance letter from a university, research/academic institution or company involved in scientific research and innovation. Provided that the institution is ranked among the top 200 globally according to",
-    "eligibilityItem5LinkText": "Times Higher Education home",
-    "eligibilityItem5Post": "or U.S. News & World Report.",
-    "eligibilityItem6": "If approved, applicant must provide an official leave letter from his/her employer (if applicable).",
-    "eligibilityItem7": "Specific Eligibility Criteria",
-    "eligibilityBlocks": [
-      {
-        "title": "7.1 Postdoctoral Research:",
-        "items": [
-          "The applicant must have obtained a Ph.D. degree or its equivalent.",
-          "The duration must not be less than 6 months and not more than 12 months."
-        ]
-      },
-      {
-        "title": "7.2 Research Internship:",
-        "items": [
-          "Must hold a bachelor's or master's degree.",
-          "The duration must not be less than 3 months and not more than 6 months."
-        ]
-      }
-    ],
-    "requiredDocumentsTitle": "Required Documents",
-    "requiredDocuments": [
-      "Recent copy of the civil ID through the \"Kuwait Mobile ID\" app.",
-      "Updated Curriculum Vitae.",
-      "An acceptance letter from the university or academic/research institution or company, specifying the fellowship duration (start and end date).",
-      "All academic degrees and transcripts must be authenticated by the Ministry of Higher Education.",
-      "Personal Statement – minimum 200 words."
-    ],
-    "financialBenefitsTitle": "Financial Benefits",
-    "monthlyAllowanceIntro": "Monthly Allowance per table below:",
-    "tableFellowshipType": "Fellowship Type",
-    "tableMonthlyAllowance": "Monthly Allowance*",
-    "tableFootnote": "*Only for the grant duration",
-    "financialItems": [
-      "A flight ticket allowance for one round-trip economy-class ticket to the fellowship location.",
-      "Travel insurance.",
-      "Applicants must declare if they receive funding for the same fellowship from another source. KFAS will cover the difference."
-    ],
-    "applicationSubmissionTitle": "Application Submission",
-    "applicationsOpenIntro": "Applications are open twice a year:",
-    "cycles": [
-      {
-        "cycle": "Cycle 1",
-        "window": "April 1 – May 31"
-      },
-      {
-        "cycle": "Cycle 2",
-        "window": "October 1 – November 30"
-      }
-    ],
-    "applicationItem1": "If the applicant does not submit the required documents within two weeks from the date of notification by KFAS, the application is considered declined and must be resubmitted.",
-    "applicationItem2": "Application process will take up to 60 working days after application window closure.",
-    "applicationItem3Pre": "For applying, please",
-    "applicationItem3LinkText": "click here",
-    "applicationItem3Post": ". Only applications that are submitted through the application link will be considered.",
-    "contactLabel": "For any inquiries, please contact:"
-  },
   "ScholarlyPublicationPage": {
     "breadcrumbLearning": "Learning & Development",
     "breadcrumbResearchers": "Researchers",
@@ -2092,5 +2013,51 @@
     "applicationItem2Post": "will be considered.",
     "applicationItem3": "If the applicant does not submit the required documents within two weeks from the date of notification by KFAS, the application is considered declined and must be resubmitted.",
     "contactLabel": "For any inquiries, please contact:"
+  },
+  "ScholarshipBridgingGrantPage": {
+    "breadcrumbLearning": "Learning & Development",
+    "breadcrumbResearchers": "Researchers",
+    "heroTitleLine1": "Scholarship Bridging",
+    "heroTitleLine2": "Grant",
+    "overviewBody": "This program is designed to provide partial support to outstanding Kuwaitis pursuing master's or PhD degrees. It provides full tuition coverage for one academic year (including summer semester) at prestigious international universities. This support is intended to meet the needs of students who have obtained an unconditional offer to pursue their graduate studies, as well as those currently enrolled, and do not have full financial coverage from other sources. The program targets two groups:",
+    "targetGroups": ["New students.", "Enrolled students."],
+    "eligibilityTitle": "First: Eligibility Criteria",
+    "eligibilityItem1": "Kuwaiti nationals.",
+    "eligibilityItem2": "Under 35 years of age at the time of submitting the application.",
+    "eligibilityItem3": "Have attained an unconditional offer from the university, authenticated by the relevant Kuwaiti Cultural Office. Applicants can apply if the offer includes visa and financial or other non-academic conditions.",
+    "eligibilityItem4": "Does not have the same academic degree as the one being applied for.",
+    "eligibilityItem5Pre": "Field of study must be within the Science, Technology, and Innovation (STI) domains. To view the fields, please",
+    "eligibilityItem5LinkText": "click here",
+    "eligibilityItem6": "The cumulative GPA for the bachelor's degree must not be less than 3.5 (4.0 scale) or Upper second-class, according to the UK system, or their equivalent in other systems as assessed by KFAS.",
+    "eligibilityItem7": "For medical specialties, the cumulative GPA for the bachelor's degree must not be less than 3.33 (4.0 scale) or Lower second-class according to the UK system, or their equivalent in other systems as assessed by KFAS.",
+    "eligibilityItem8": "For enrolled students, the completed years of study must not exceed one academic year for master's students and three academic years for PhD students.",
+    "eligibilityItem9": "The prospective university must be ranked in the top 50 global universities (general) or in the top 20 global universities (by major) according to the following rankings: Times Higher Education, US News & World Report.",
+    "requiredDocumentsTitle": "Second: Required Documents",
+    "requiredDocItem1": "Recent copy of the civil ID through the \"Kuwait Mobile ID\" app.",
+    "requiredDocItem2": "Updated Curriculum Vitae.",
+    "requiredDocItem3": "Unconditional offer from the university, authenticated by the relevant Kuwaiti Cultural Office.",
+    "requiredDocItem4": "All academic degrees and transcripts must be authenticated by the Ministry of Higher Education.",
+    "requiredDocItem5": "Personal Statement Letter - minimum 250 words - explaining their interest in their subject of study.",
+    "enrolledLabel": "For enrolled students:",
+    "enrolledSub1": "Confirmation of enrolment letter issued by the university that includes the expected graduation date, and current academic standing.",
+    "enrolledSub2": "Letter \"To Whom it May Concern\" issued by the relevant Kuwait Cultural Office.",
+    "requiredDocItem7Pre": "A recent certificate of \"To Whom It May Concern\" from the",
+    "requiredDocItem7LinkText": "Public Institution for Social Security",
+    "requiredDocItem8": "Upon acceptance of the grant, employed applicants must provide a study leave from the employer stating that the applicant is on full leave.",
+    "financialBenefitsTitle": "Third: Financial Benefits",
+    "financialItem1": "The grant covers one academic year tuition fees, including the summer semester.",
+    "financialItem2": "Monthly allowance of 1,200 Kuwaiti Dinars for master student and 1,500 Kuwaiti Dinars for PhD students.",
+    "financialItem3": "500 Kuwaiti Dinars to cover the initial expenses of the scholarship.",
+    "financialItem4": "A flight ticket allowance for one round-trip economy-class ticket to the study destination.",
+    "financialItem5": "The applicant is subject to the regulations of the Ministry of Higher Education through its health offices, provided that permanent residence is proven according to the health insurance system.",
+    "financialItem6": "If the applicant receives funding from another source, they may apply to KFAS to cover the difference.",
+    "applicationSubmissionTitle": "Fourth: Application Submission",
+    "applicationWindowLabel": "Application Window",
+    "applicationWindowDates": "March 1 – May 31",
+    "resultsPre": "Results will be announced in",
+    "resultsBold": "August",
+    "applicationClosedText": "Only applications that are submitted through the application link will be considered.",
+    "applicationClosedBadge": "Closed",
+    "contactLabel": "For any inquiries, please reach out via email at:"
   }
 }

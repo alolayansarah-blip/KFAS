@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
-import Link from "next/link";
+import { useRef } from "react";
+import { Link } from "@/src/i18n/navigation";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -38,82 +39,13 @@ function Mark() {
   );
 }
 
-const ELIGIBILITY = [
-  "Kuwaiti nationals.",
-  "Under 35 years of age at the time of submitting the application.",
-  "Have attained an unconditional offer from the university, authenticated by the relevant Kuwaiti Cultural Office. Applicants can apply if the offer includes visa and financial or other non-academic conditions.",
-  "Does not have the same academic degree as the one being applied for.",
-  {
-    text: (
-      <>
-        Field of study must be within the Science, Technology, and Innovation
-        (STI) domains. To view the fields, please{" "}
-        <a
-          href="/image/KFAS strategy 2025-2029 - Priority Areas.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={inlineLink}
-        >
-          click here
-        </a>
-        .
-      </>
-    ),
-  },
-  "The cumulative GPA for the bachelor's degree must not be less than 3.5 (4.0 scale) or Upper second-class, according to the UK system, or their equivalent in other systems as assessed by KFAS.",
-  "For medical specialties, the cumulative GPA for the bachelor's degree must not be less than 3.33 (4.0 scale) or Lower second-class according to the UK system, or their equivalent in other systems as assessed by KFAS.",
-  "For enrolled students, the completed years of study must not exceed one academic year for master's students and three academic years for PhD students.",
-  "The prospective university must be ranked in the top 50 global universities (general) or in the top 20 global universities (by major) according to the following rankings: Times Higher Education, US News & World Report.",
-];
-
-type DocumentItem =
-  | string
-  | { text: ReactNode }
-  | { label: string; sub: string[] };
-
-const REQUIRED_DOCUMENTS: DocumentItem[] = [
-  'Recent copy of the civil ID through the "Kuwait Mobile ID" app.',
-  "Updated Curriculum Vitae.",
-  "Unconditional offer from the university, authenticated by the relevant Kuwaiti Cultural Office.",
-  "All academic degrees and transcripts must be authenticated by the Ministry of Higher Education.",
-  "Personal Statement Letter - minimum 250 words - explaining their interest in their subject of study.",
-  {
-    label: "For enrolled students:",
-    sub: [
-      "Confirmation of enrolment letter issued by the university that includes the expected graduation date, and current academic standing.",
-      'Letter "To Whom it May Concern" issued by the relevant Kuwait Cultural Office.',
-    ],
-  },
-  {
-    text: (
-      <>
-        A recent certificate of &quot;To Whom It May Concern&quot; from the{" "}
-        <a
-          href="https://eservice.pifss.gov.kw/default.aspx?ReturnUrl=%2f"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={inlineLink}
-        >
-          Public Institution for Social Security
-        </a>
-        .
-      </>
-    ),
-  },
-  "Upon acceptance of the grant, employed applicants must provide a study leave from the employer stating that the applicant is on full leave.",
-];
-
-const FINANCIAL_BENEFITS = [
-  "The grant covers one academic year tuition fees, including the summer semester.",
-  "Monthly allowance of 1,200 Kuwaiti Dinars for master student and 1,500 Kuwaiti Dinars for PhD students.",
-  "500 Kuwaiti Dinars to cover the initial expenses of the scholarship.",
-  "A flight ticket allowance for one round-trip economy-class ticket to the study destination.",
-  "The applicant is subject to the regulations of the Ministry of Higher Education through its health offices, provided that permanent residence is proven according to the health insurance system.",
-  "If the applicant receives funding from another source, they may apply to KFAS to cover the difference.",
-];
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ScholarshipBridgingGrantPage() {
+  const t = useTranslations("ScholarshipBridgingGrantPage");
+  const isArabic = useLocale() === "ar";
+
+  const targetGroups = t.raw("targetGroups") as string[];
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -142,7 +74,7 @@ export default function ScholarshipBridgingGrantPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="object-cover object-center"
+              className="object-cover object-[20%_center] sm:object-[35%_center] lg:object-center"
             />
             <div
               className="absolute inset-0"
@@ -160,25 +92,37 @@ export default function ScholarshipBridgingGrantPage() {
               }}
               aria-hidden
             />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+              }}
+              aria-hidden
+            />
           </div>
 
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-32 w-full max-w-7xl mx-auto px-6 py-12 sm:mt-40 sm:px-8 md:mt-44 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-6 flex items-center gap-2.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55"
+              className={`mb-6 flex items-center gap-2.5 font-poppins font-semibold text-white/55 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.34em]"
+              }`}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/30">/</span>
               <Link
                 href="/Learning-and-Development/Researchers"
                 className="text-white/80 transition-colors hover:text-white"
               >
-                Researchers
+                {t("breadcrumbResearchers")}
               </Link>
             </motion.div>
 
@@ -189,20 +133,32 @@ export default function ScholarshipBridgingGrantPage() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                Scholarship Bridging
+                {t("heroTitleLine1")}
                 <br />
-                Grant
+                {t("heroTitleLine2")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-7 h-[3px] origin-left rounded-full bg-[#EC601B]"
+              className="mt-7 hidden h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B] md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 76 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -211,7 +167,7 @@ export default function ScholarshipBridgingGrantPage() {
         <section className="relative overflow-hidden bg-white py-20 sm:py-28">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -226,19 +182,11 @@ export default function ScholarshipBridgingGrantPage() {
                 viewport={{ once: true, margin: "-70px" }}
                 transition={{ duration: 0.7, ease: EASE }}
               >
-                This program is designed to provide partial support to
-                outstanding Kuwaitis pursuing master&rsquo;s or PhD degrees. It
-                provides full tuition coverage for one academic year (including
-                summer semester) at prestigious international universities. This
-                support is intended to meet the needs of students who have
-                obtained an unconditional offer to pursue their graduate
-                studies, as well as those currently enrolled, and do not have
-                full financial coverage from other sources. The program targets
-                two groups:
+                {t("overviewBody")}
               </motion.p>
 
               <ol className="mt-8 flex flex-col gap-4">
-                {["New students.", "Enrolled students."].map((item, i) => (
+                {targetGroups.map((item, i) => (
                   <motion.li
                     key={item}
                     className="flex items-start gap-4"
@@ -294,10 +242,10 @@ export default function ScholarshipBridgingGrantPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="First: Eligibility Criteria" />
+              <SectionHead title={t("eligibilityTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -305,15 +253,53 @@ export default function ScholarshipBridgingGrantPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                {ELIGIBILITY.map((item, i) => (
-                  <li
-                    key={i}
-                    className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
-                  >
-                    <Mark />
-                    <span>{typeof item === "string" ? item : item.text}</span>
-                  </li>
-                ))}
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem1")}</span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem2")}</span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem3")}</span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem4")}</span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>
+                    {t("eligibilityItem5Pre")}{" "}
+                    <a
+                      href="/image/KFAS strategy 2025-2029 - Priority Areas.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={inlineLink}
+                    >
+                      {t("eligibilityItem5LinkText")}
+                    </a>
+                    .
+                  </span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem6")}</span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem7")}</span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem8")}</span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>{t("eligibilityItem9")}</span>
+                </li>
               </motion.ul>
             </div>
           </div>
@@ -323,10 +309,10 @@ export default function ScholarshipBridgingGrantPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Second: Required Documents" />
+              <SectionHead title={t("requiredDocumentsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -334,48 +320,63 @@ export default function ScholarshipBridgingGrantPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                {REQUIRED_DOCUMENTS.map((item, i) =>
-                  typeof item === "string" ? (
-                    <li
-                      key={i}
-                      className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
-                    >
-                      <Mark />
-                      {item}
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem1")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem2")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem3")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem4")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem5")}
+                </li>
+                <li className="py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <div className="group/li flex items-start gap-4">
+                    <Mark />
+                    <span className="font-medium text-[#1D2D44]">
+                      {t("enrolledLabel")}
+                    </span>
+                  </div>
+                  <ul className="mt-4 flex flex-col gap-3 pl-8 rtl:pl-0 rtl:pr-8">
+                    <li className="flex items-start gap-3 text-[#1D2D44]/70">
+                      <span className="mt-[11px] h-1 w-3 shrink-0 rounded-full bg-[#7DC0F1]" />
+                      {t("enrolledSub1")}
                     </li>
-                  ) : "text" in item ? (
-                    <li
-                      key={i}
-                      className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
-                    >
-                      <Mark />
-                      {item.text}
+                    <li className="flex items-start gap-3 text-[#1D2D44]/70">
+                      <span className="mt-[11px] h-1 w-3 shrink-0 rounded-full bg-[#7DC0F1]" />
+                      {t("enrolledSub2")}
                     </li>
-                  ) : (
-                    <li
-                      key={i}
-                      className="py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
+                  </ul>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  <span>
+                    {t("requiredDocItem7Pre")}{" "}
+                    <a
+                      href="https://eservice.pifss.gov.kw/default.aspx?ReturnUrl=%2f"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={inlineLink}
                     >
-                      <div className="group/li flex items-start gap-4">
-                        <Mark />
-                        <span className="font-medium text-[#1D2D44]">
-                          {item.label}
-                        </span>
-                      </div>
-                      <ul className="mt-4 flex flex-col gap-3 pl-8">
-                        {item.sub.map((sub) => (
-                          <li
-                            key={sub}
-                            className="flex items-start gap-3 text-[#1D2D44]/70"
-                          >
-                            <span className="mt-[11px] h-1 w-3 shrink-0 rounded-full bg-[#7DC0F1]" />
-                            {sub}
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ),
-                )}
+                      {t("requiredDocItem7LinkText")}
+                    </a>
+                    .
+                  </span>
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("requiredDocItem8")}
+                </li>
               </motion.ul>
             </div>
           </div>
@@ -393,10 +394,10 @@ export default function ScholarshipBridgingGrantPage() {
           />
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Third: Financial Benefits" />
+              <SectionHead title={t("financialBenefitsTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.ul
                 className="max-w-3xl divide-y divide-[#1D2D44]/8"
                 initial={{ opacity: 0, y: 18 }}
@@ -404,15 +405,30 @@ export default function ScholarshipBridgingGrantPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
               >
-                {FINANCIAL_BENEFITS.map((item, i) => (
-                  <li
-                    key={i}
-                    className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70"
-                  >
-                    <Mark />
-                    {item}
-                  </li>
-                ))}
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("financialItem1")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("financialItem2")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("financialItem3")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("financialItem4")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("financialItem5")}
+                </li>
+                <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  <Mark />
+                  {t("financialItem6")}
+                </li>
               </motion.ul>
             </div>
           </div>
@@ -422,10 +438,10 @@ export default function ScholarshipBridgingGrantPage() {
         <section className="relative bg-white py-20 sm:py-28">
           <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-y-10 px-6 sm:px-8 lg:grid-cols-12 lg:gap-x-12 lg:px-12">
             <div className="lg:col-span-4 xl:col-span-3">
-              <SectionHead title="Fourth: Application Submission" />
+              <SectionHead title={t("applicationSubmissionTitle")} />
             </div>
 
-            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9">
+            <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/40 lg:pl-12 xl:col-span-9 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-12">
               <motion.div
                 className="max-w-3xl"
                 initial={{ opacity: 0, y: 18 }}
@@ -438,18 +454,18 @@ export default function ScholarshipBridgingGrantPage() {
                     <span className="flex items-center gap-2.5">
                       <span className="h-2 w-2 rounded-full bg-[#7DC0F1] transition-colors duration-300 group-hover:bg-[#EC601B]" />
                       <span className="font-poppins text-[11px] font-semibold uppercase tracking-[0.18em] text-[#EC601B]">
-                        Application Window
+                        {t("applicationWindowLabel")}
                       </span>
                     </span>
                     <span className="font-poppins text-[18px] font-semibold text-[#1D2D44]">
-                      March 1 &ndash; May 31
+                      {t("applicationWindowDates")}
                     </span>
                   </div>
                   <div className="border-t border-[#1D2D44]/10 py-5">
                     <span className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
-                      Results will be announced in{" "}
+                      {t("resultsPre")}{" "}
                       <span className="font-semibold text-[#1D2D44]">
-                        August
+                        {t("resultsBold")}
                       </span>
                       .
                     </span>
@@ -467,10 +483,9 @@ export default function ScholarshipBridgingGrantPage() {
                 <li className="group/li flex items-start gap-4 py-4 font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/70">
                   <Mark />
                   <span>
-                    Only applications that are submitted through the application
-                    link will be considered.{" "}
+                    {t("applicationClosedText")}{" "}
                     <span className="inline-flex items-center rounded-full bg-[#1D2D44]/8 px-2.5 py-0.5 font-poppins text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1D2D44]/55">
-                      Closed
+                      {t("applicationClosedBadge")}
                     </span>
                   </span>
                 </li>
@@ -484,10 +499,11 @@ export default function ScholarshipBridgingGrantPage() {
                 transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
               >
                 <span className="font-poppins text-[14px] font-light text-[#1D2D44]/60">
-                  For any inquiries, please reach out via email at:
+                  {t("contactLabel")}
                 </span>
                 <a
                   href="mailto:rgraduates@kfas.org.kw"
+                  dir="ltr"
                   className="group inline-flex items-center gap-2 font-poppins text-[14px] font-semibold text-[#EC601B] transition-colors hover:text-[#1D2D44]"
                 >
                   <span className="underline decoration-[#EC601B]/30 underline-offset-[3px] transition-colors group-hover:decoration-[#1D2D44]/40">
