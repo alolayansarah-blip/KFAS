@@ -9,7 +9,7 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import {
   motion,
   AnimatePresence,
@@ -18,6 +18,7 @@ import {
   useInView,
   type Variants,
 } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -137,7 +138,7 @@ function ChapterHeader({
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.18, ease: EASE }}
         >
-          <div className="relative h-[140px] w-[400px] sm:h-[180px] sm:w-[500px]">
+          <div className="relative h-[90px] w-[240px] sm:h-[180px] sm:w-[500px]">
             <Image
               src={logoSrc}
               alt={logoAlt}
@@ -151,7 +152,7 @@ function ChapterHeader({
       </div>
 
       <motion.div
-        className="mt-10 h-px w-full origin-left bg-[#1D2D44]/10"
+        className="mt-10 h-px w-full origin-left rtl:origin-right bg-[#1D2D44]/10"
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
         transition={{ duration: 0.8, delay: 0.25, ease: EASE }}
@@ -244,7 +245,7 @@ function ApplyLink({
         {label}
       </span>
       <svg
-        className="h-3 w-3 -translate-x-1.5 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0"
+        className="h-3 w-3 -translate-x-1.5 rtl:translate-x-1.5 rtl:rotate-180 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -298,13 +299,15 @@ function Opportunity({
 // tappable dropdown on mobile. Smooth-scrolls to each chapter, highlights the
 // active one, and measures the real Header height so it pins flush on every
 // breakpoint.
-const JUMP_LINKS = [
-  { id: "hks", label: "Harvard Kennedy School" },
-  { id: "ictp", label: "ICTP" },
-  { id: "lse", label: "LSE" },
-];
-
-function JumpTo() {
+function JumpTo({
+  jumpLinks,
+  jumpToLabel,
+  jumpSelectTopic,
+}: {
+  jumpLinks: { id: string; label: string }[];
+  jumpToLabel: string;
+  jumpSelectTopic: string;
+}) {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [headerH, setHeaderH] = useState(HEADER_H);
@@ -375,12 +378,12 @@ function JumpTo() {
         document.documentElement.scrollHeight - 4;
 
       if (atBottom) {
-        setActive(JUMP_LINKS[JUMP_LINKS.length - 1].id);
+        setActive(jumpLinks[jumpLinks.length - 1].id);
         return;
       }
 
       let current = "";
-      for (const link of JUMP_LINKS) {
+      for (const link of jumpLinks) {
         const el = document.getElementById(link.id);
         if (el && el.getBoundingClientRect().top <= trigger) {
           current = link.id;
@@ -402,7 +405,7 @@ function JumpTo() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [getJumpOffset]);
+  }, [getJumpOffset, jumpLinks]);
 
   const handleClick = (id: string) => {
     setActive(id);
@@ -416,7 +419,7 @@ function JumpTo() {
   };
 
   const activeLabel =
-    JUMP_LINKS.find((l) => l.id === active)?.label ?? "Select a topic";
+    jumpLinks.find((l) => l.id === active)?.label ?? jumpSelectTopic;
 
   return (
     <motion.nav
@@ -430,17 +433,17 @@ function JumpTo() {
       <div className={`${JUMP_CONTAINER} px-6 py-1.5 sm:px-8 sm:py-2 lg:px-12`}>
         {/* ── Desktop: inline horizontal row ──────────────────────────── */}
         <div className="hidden items-stretch lg:flex">
-          <div className="flex items-center gap-2.5 pr-4 shrink-0">
+          <div className="flex items-center gap-2.5 pr-4 rtl:pr-0 rtl:pl-4 shrink-0">
             <span className="h-3.5 w-[3px] rounded-full bg-[#EC601B]" />
             <span className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] text-[#1D2D44]">
-              Jump To
+              {jumpToLabel}
             </span>
             <svg
               width="14"
               height="14"
               viewBox="0 0 24 24"
               fill="none"
-              className="shrink-0"
+              className="shrink-0 rtl:rotate-180"
               aria-hidden
             >
               <path
@@ -455,7 +458,7 @@ function JumpTo() {
           </div>
 
           <div className="flex items-center gap-1 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {JUMP_LINKS.map((link) => {
+            {jumpLinks.map((link) => {
               const isActive = active === link.id;
               return (
                 <button
@@ -484,10 +487,10 @@ function JumpTo() {
           >
             <span className="h-3.5 w-[3px] shrink-0 rounded-full bg-[#EC601B]" />
             <span className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] text-[#1D2D44] shrink-0">
-              Jump To
+              {jumpToLabel}
             </span>
             <span
-              className="ml-1 truncate font-poppins text-[13px] font-medium"
+              className="ml-1 rtl:ml-0 rtl:mr-1 truncate font-poppins text-[13px] font-medium"
               style={{ color: active ? "#EC601B" : "#1D2D4480" }}
             >
               {activeLabel}
@@ -497,7 +500,7 @@ function JumpTo() {
               height="16"
               viewBox="0 0 24 24"
               fill="none"
-              className="ml-auto shrink-0"
+              className="ml-auto rtl:ml-0 rtl:mr-auto shrink-0"
               animate={{ rotate: open ? 180 : 0 }}
               transition={{ duration: 0.25, ease: EASE }}
               aria-hidden
@@ -522,13 +525,13 @@ function JumpTo() {
                 transition={{ duration: 0.28, ease: EASE }}
               >
                 <div className="flex flex-col pt-0.5 pb-1">
-                  {JUMP_LINKS.map((link) => {
+                  {jumpLinks.map((link) => {
                     const isActive = active === link.id;
                     return (
                       <button
                         key={link.id}
                         onClick={() => handleClick(link.id)}
-                        className="flex items-center gap-3 px-1 py-2 text-left font-poppins text-[14px] font-medium transition-colors"
+                        className="flex items-center gap-3 px-1 py-2 text-left rtl:text-right font-poppins text-[14px] font-medium transition-colors"
                         style={{ color: isActive ? "#EC601B" : "#1D2D44" }}
                       >
                         <span
@@ -551,12 +554,21 @@ function JumpTo() {
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function InternationalCollaborativeResearchPage() {
+  const t = useTranslations("InternationalCollaborativeResearchPage");
+  const isArabic = useLocale() === "ar";
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
+
+  const JUMP_LINKS = [
+    { id: "hks", label: t("jumpHks") },
+    { id: "ictp", label: t("jumpIctp") },
+    { id: "lse", label: t("jumpLse") },
+  ];
 
   return (
     <>
@@ -597,50 +609,78 @@ export default function InternationalCollaborativeResearchPage() {
           </div>
 
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-32 w-full max-w-7xl mx-auto px-6 py-12 sm:mt-40 sm:px-8 md:mt-44 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-6 flex items-center gap-2.5 font-poppins text-[10px] font-semibold uppercase tracking-[0.34em] text-white/55"
+              className={`mb-6 flex items-center gap-2.5 font-poppins font-semibold text-white/55 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.34em]"
+              }`}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/30">/</span>
               <Link
                 href="/Learning-and-Development/Researchers"
                 className="text-white/80 transition-colors hover:text-white"
               >
-                Researchers
+                {t("breadcrumbResearchers")}
               </Link>
             </motion.div>
 
-            <div className="overflow-hidden pb-1">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-1"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)]"
+                className={`font-poppins text-4xl font-bold text-white sm:text-5xl lg:text-6xl xl:text-7xl [text-shadow:_2px_2px_20px_rgba(0,0,0,0.45)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-[1.08] tracking-tight"
+                }`}
                 initial={{ y: "108%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
               >
-                International Collaborative Research
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-7 h-[3px] origin-left rounded-full bg-[#EC601B]"
+              className="mt-7 hidden h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B] md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 76 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[76px] origin-left rtl:origin-right rounded-full bg-[#EC601B]"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
         {/* ─── Jump To (flush below hero) ─────────────────────────────────── */}
-        <JumpTo />
+        <JumpTo
+          jumpLinks={JUMP_LINKS}
+          jumpToLabel={t("jumpToLabel")}
+          jumpSelectTopic={t("jumpSelectTopic")}
+        />
 
         {/* ─── Harvard Kennedy School ───────────────────────────────────────── */}
         <section
@@ -649,58 +689,37 @@ export default function InternationalCollaborativeResearchPage() {
         >
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
-              title="The Kuwait Program at Harvard Kennedy School (HKS)"
+              title={t("hksTitle")}
               logoSrc="/image/Belfer.png"
               logoAlt="Harvard Kennedy School — Belfer Center for Science and International Affairs"
             />
 
             <Stagger className="mt-12">
-              <Paragraph className="max-w-3xl">
-                Launched during the 2000–2001 academic year, today the Kuwait
-                Program supports: residential fellowships for junior,
-                mid-career, and senior scholars from or based in the State of
-                Kuwait; a Customized Executive Education Program for leaders
-                across Kuwait&apos;s private, public, and nonprofit sectors.
-              </Paragraph>
+              <Paragraph className="max-w-3xl">{t("hksIntro")}</Paragraph>
             </Stagger>
 
             <FadeUp delay={0.08} className="mt-14">
-              <MiniHeading>About the Kuwait Program</MiniHeading>
+              <MiniHeading>{t("hksAboutHeading")}</MiniHeading>
 
               <Stagger className="max-w-3xl space-y-5">
-                <Paragraph>
-                  Launched in 2000 and generously supported by the Kuwait
-                  Foundation for the Advancement of Sciences (KFAS), the Kuwait
-                  Program at the John F. Kennedy School of Government at Harvard
-                  University aims to identify evidence-based, rigorously
-                  scientific solutions to public policy challenges facing the
-                  State of Kuwait, the Gulf region, and the world; provide
-                  professional development and advanced training to current and
-                  future leaders and scholars in Kuwait and the broader region;
-                  and facilitate exchanges of ideas, expertise, and know-how
-                  between Harvard and educational and policy-oriented
-                  institutions in the State of Kuwait and the region.
-                </Paragraph>
-                <Paragraph>
-                  Today, the Kuwait Program comprises the following program
-                  components:
-                </Paragraph>
+                <Paragraph>{t("hksAboutPara1")}</Paragraph>
+                <Paragraph>{t("hksAboutPara2")}</Paragraph>
               </Stagger>
 
               <div className="mt-7 max-w-3xl">
                 <BulletList
                   items={[
-                    "Residential fellowships at the Harvard Kennedy School for junior, mid-career, and senior scholars who are from or based in the State of Kuwait.",
-                    "Customized Executive Education Program for leaders across Kuwait's private, public, and nonprofit sectors.",
-                    "Collaborative research between Kuwait-based scholars and Harvard faculty.",
-                    "Research and internship opportunities, as well as on-campus events, for Harvard students to explore policy-relevant topics related to Kuwait.",
+                    t("hksBullet1"),
+                    t("hksBullet2"),
+                    t("hksBullet3"),
+                    t("hksBullet4"),
                   ]}
                 />
               </div>
 
               <ApplyLink
                 href="https://www.belfercenter.org/programs/middle-east-initiative/kuwait-program"
-                label="For more information"
+                label={t("hksApplyLabel")}
               />
             </FadeUp>
           </div>
@@ -713,122 +732,75 @@ export default function InternationalCollaborativeResearchPage() {
         >
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
-              title="The Kuwait Program at The International Centre for Theoretical Physics (ICTP)"
+              title={t("ictpTitle")}
               logoSrc="/image/ICTP.png"
               logoAlt="The Abdus Salam International Centre for Theoretical Physics (ICTP)"
             />
 
             <Stagger className="mt-12">
-              <Paragraph className="max-w-3xl">
-                The Kuwait Foundation for the Advancement of Sciences (KFAS) and
-                ICTP have extended their longtime partnership for science
-                advancement by creating a new joint programme of support for
-                scientists from Kuwait and other Arab countries to be engaged in
-                ICTP activities.
-              </Paragraph>
+              <Paragraph className="max-w-3xl">{t("ictpIntro")}</Paragraph>
             </Stagger>
 
             <FadeUp delay={0.08} className="mt-12">
               <p className="font-poppins text-[15px] font-semibold text-[#1D2D44]">
-                The Kuwait Programme at ICTP offers the following opportunities:
+                {t("ictpOpportunitiesLabel")}
               </p>
 
               <div className="mt-6 border-b border-[#1D2D44]/10">
-                <Opportunity title="Supporting Scientists from Arab Countries to attend ICTP Scientific Calendar activities">
+                <Opportunity title={t("ictpOpp1Title")}>
                   <p>
-                    ICTP organizes numerous conferences, schools and workshops
-                    every year through its Scientific Calendar of activities.
-                    The Kuwait Programme at ICTP offers support to Arab
-                    scientists who would like to attend an ICTP activity for a
-                    period not exceeding one month of their stay for the
-                    activity. Those who wish to apply for the fellowships should
-                    indicate so when using ICTP&apos;s online application system
-                    for Scientific Calendar activities. Choose an activity by
-                    viewing{" "}
+                    {t("ictpOpp1Body")}
                     <a
                       href="https://www.ictp.it/home/scientific-calendar"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={inlineLink}
                     >
-                      ICTP&apos;s Scientific Calendar
+                      {t("ictpOpp1LinkText")}
                     </a>
-                    .
+                    {t("ictpOpp1Post")}
                   </p>
                 </Opportunity>
 
-                <Opportunity title="Diploma Students Programme">
+                <Opportunity title={t("ictpOpp2Title")}>
                   <p>
-                    ICTP&apos;s Postgraduate Diploma Programme is a 12-month
-                    pre-doctoral education programme for talented young science
-                    students from the Global South who have limited
-                    possibilities to pursue advanced studies in their home
-                    countries. The Kuwait Programme offers support for three
-                    Arab students to attend this intensive educational course
-                    selected on a competitive basis. Visit ICTP&apos;s{" "}
+                    {t("ictpOpp2Body")}
                     <a
                       href="https://www.ictp.it/opportunity/ictp-postgraduate-diploma-programme"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={inlineLink}
                     >
-                      Postgraduate Diploma Programme
-                    </a>{" "}
-                    website for more details. The application deadline for the
-                    Programme is 28 February 2026. Applicants from Arab
-                    countries who are accepted into the Diploma Programme are
-                    considered for a KFAS grant.
+                      {t("ictpOpp2LinkText")}
+                    </a>
+                    {t("ictpOpp2Post")}
                   </p>
                 </Opportunity>
 
-                <Opportunity title="Kuwaiti Post-doctoral Fellowship">
-                  <p>
-                    Awarded to young Kuwaiti scientists who have completed their
-                    PhD and are working in Kuwait or abroad. The fellowship
-                    allows the scientists to continue their research in the
-                    areas of ICTP expertise, under the supervision of a resident
-                    scientist at the Centre. The fellow(s) will be selected by
-                    ICTP in consultation with KFAS. Selected fellows will be
-                    awarded a research fellowship agreement for a period of one
-                    year with the possibility to extend for an additional year.
-                  </p>
+                <Opportunity title={t("ictpOpp3Title")}>
+                  <p>{t("ictpOpp3Body")}</p>
                 </Opportunity>
 
-                <Opportunity title="Kuwait Visiting Scientists Scheme and Training and Research in Italian Laboratories (TRIL) Fellowships">
+                <Opportunity title={t("ictpOpp4Title")}>
+                  <p>{t("ictpOpp4Body1")}</p>
                   <p>
-                    The visiting scientists scheme offers scientists and PhD
-                    students from Kuwait the opportunity to visit and
-                    collaborate with ICTP scientists for a period not exceeding
-                    3 months per year. The purpose of the visits is to perform
-                    studies in ICTP&apos;s areas of expertise in close
-                    interaction with the Sections&apos; resident staff as well
-                    as attending ongoing events (conferences, schools, seminars
-                    and workshops). The visiting scientists will be selected by
-                    ICTP in consultation with KFAS.
-                  </p>
-                  <p>
-                    For longer stays, ICTP will make available its{" "}
+                    {t("ictpOpp4Body2Pre")}
                     <a
                       href="https://www.ictp.it/opportunity/training-and-research-italian-laboratories-tril"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={inlineLink}
                     >
-                      TRIL Programme
+                      {t("ictpOpp4Body2LinkText")}
                     </a>
-                    . The TRIL fellowship aims at allowing PhD students and
-                    scientists from Kuwait to undertake training and research in
-                    an Italian laboratory in different branches of the physical
-                    sciences. The fellows will be selected by ICTP in
-                    consultation with KFAS. The fellowship will be awarded once
-                    a year for a period not exceeding 12 months.
+                    {t("ictpOpp4Body2Post")}
                   </p>
                 </Opportunity>
               </div>
 
               <ApplyLink
                 href="https://www.ictp.it/opportunity/kuwait-programme-ictp"
-                label="For more information about the Kuwait Programme at ICTP"
+                label={t("ictpApplyLabel")}
               />
             </FadeUp>
 
@@ -853,21 +825,18 @@ export default function InternationalCollaborativeResearchPage() {
                     </svg>
                   </span>
                   <p className="font-poppins text-[14.5px] font-light leading-relaxed text-[#1D2D44]/80">
-                    The deadline for applications to the Diploma Programme is{" "}
+                    {t("ictpDeadlinePre")}
                     <span className="font-semibold text-[#EC601B]">
-                      28 February 2026
+                      {t("ictpDeadlineDate")}
                     </span>
-                    .
+                    {t("ictpDeadlinePost")}
                   </p>
                 </div>
 
                 {/* body */}
                 <div className="px-7 py-7 sm:px-9 sm:py-8">
                   <p className="font-poppins text-[14.5px] leading-[1.9] font-light text-[#1D2D44]/70">
-                    According to the agreement between KFAS and ICTP,
-                    postdoctoral fellowships are awarded exclusively to young
-                    Kuwaiti scientists. The only two programmes for which
-                    non-Kuwaiti scientists are eligible to apply are:
+                    {t("ictpEligibilityIntro")}
                   </p>
 
                   <motion.ul
@@ -877,24 +846,23 @@ export default function InternationalCollaborativeResearchPage() {
                     whileInView="show"
                     viewport={{ once: true, margin: "-30px" }}
                   >
-                    {[
-                      "Participation in ICTP Scientific Calendar activities",
-                      "The Diploma Programme",
-                    ].map((item) => (
-                      <motion.li
-                        key={item}
-                        className="flex items-start gap-3 font-poppins text-[13.5px] font-medium text-[#1D2D44]"
-                        variants={fadeItem}
-                      >
-                        <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#EC601B]" />
-                        {item}
-                      </motion.li>
-                    ))}
+                    {[t("ictpEligibilityItem1"), t("ictpEligibilityItem2")].map(
+                      (item) => (
+                        <motion.li
+                          key={item}
+                          className="flex items-start gap-3 font-poppins text-[13.5px] font-medium text-[#1D2D44]"
+                          variants={fadeItem}
+                        >
+                          <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#EC601B]" />
+                          {item}
+                        </motion.li>
+                      ),
+                    )}
                   </motion.ul>
 
                   <div className="mt-7 flex flex-wrap items-center gap-2.5 border-t border-[#1D2D44]/10 pt-6">
                     <span className="font-poppins text-[13.5px] font-light text-[#1D2D44]/60">
-                      For contact:
+                      {t("ictpContactLabel")}
                     </span>
                     <a
                       href="mailto:ictp.kfas@ictp.it"
@@ -916,80 +884,73 @@ export default function InternationalCollaborativeResearchPage() {
         >
           <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
             <ChapterHeader
-              title="The Kuwait Program at the London School of Economics and Political Science (LSE)"
+              title={t("lseTitle")}
               logoSrc="/image/LSE.png"
               logoAlt="The London School of Economics and Political Science (LSE)"
             />
 
             <Stagger className="mt-12">
-              <Paragraph className="max-w-3xl">
-                The Kuwait Programme is a world-leading hub for research and
-                expertise on Kuwait. The Programme is the main conduit through
-                which research on Kuwait at the School is facilitated, expanded
-                and promoted.
-              </Paragraph>
-              <Paragraph className="mt-5 max-w-3xl">
-                The Programme is funded by the Kuwait Foundation for the
-                Advancement of Sciences and directed by Professor Toby Dodge,
-                who is also Kuwait Professor.
-              </Paragraph>
+              <Paragraph className="max-w-3xl">{t("lseIntroPara1")}</Paragraph>
+              <div className="mt-8 max-w-3xl">
+                <MiniHeading>{t("lseIntroPara2")}</MiniHeading>
+              </div>
             </Stagger>
 
             <FadeUp delay={0.08} className="mt-14">
-              <MiniHeading>Aims of the Programme</MiniHeading>
+              <MiniHeading>{t("lseAimsHeading")}</MiniHeading>
               <div className="max-w-3xl">
                 <BulletList
                   items={[
-                    "To establish collaborative research partnerships between LSE and Kuwaiti universities that will deliver high quality research on the challenges facing the country, expand Kuwaiti expertise on these challenges, and produce long-term relationships of value;",
-                    "To conduct time-sensitive, policy-relevant research which will inform evidence-based policymaking in Kuwait and the wider GCC;",
-                    "To produce and publish high quality original academic research on contemporary Kuwait;",
-                    "To organize exchanges between LSE faculty and Kuwaiti academics and policy practitioners to facilitate knowledge exchange, intellectual capacity and career development;",
-                    "To provide for the development of leaders and academics in Kuwaiti research and higher education institutions through the production, management and dissemination of research as well as through longer-term research collaboration activities.",
+                    t("lseAim1"),
+                    t("lseAim2"),
+                    t("lseAim3"),
+                    t("lseAim4"),
+                    t("lseAim5"),
                   ]}
                 />
               </div>
             </FadeUp>
 
             <FadeUp delay={0.1} className="mt-14">
-              <MiniHeading>Research Themes</MiniHeading>
+              <MiniHeading>{t("lseThemesHeading")}</MiniHeading>
               <BulletList
                 columns
                 items={[
-                  "Improving the delivery of healthcare in Kuwait.",
-                  "Enhancing Kuwait's water and food security;",
-                  "Diversifying energy sources in an oil-rich economy;",
-                  "Driving forward Kuwait's digital transformation;",
-                  "Developing public policy to reform the public sector and improve public service delivery in Kuwait;",
-                  "Developing economic and legal perspectives on diversifying the oil-dependent economy of Kuwait;",
-                  "Informing and improving environmental policy in Kuwait;",
-                  "Improving the role of the sovereign wealth fund in driving forward Kuwaiti development;",
-                  "Setting economic vision(s) to diversify the economy;",
-                  "Improving and developing education policies in Kuwait.",
+                  t("lseTheme1"),
+                  t("lseTheme2"),
+                  t("lseTheme3"),
+                  t("lseTheme4"),
+                  t("lseTheme5"),
+                  t("lseTheme6"),
+                  t("lseTheme7"),
+                  t("lseTheme8"),
+                  t("lseTheme9"),
+                  t("lseTheme10"),
                 ]}
               />
             </FadeUp>
 
             <FadeUp delay={0.1} className="mt-14">
               <p className="max-w-3xl font-poppins text-[15px] leading-[1.9] font-light text-[#1D2D44]/65">
-                For more information about the Programme, please contact{" "}
+                {t("lseContactPre")}
                 <a
                   href="https://www.lse.ac.uk/people/mercedes-masters"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={inlineLink}
                 >
-                  Mercedes Masters
+                  {t("lseContactLinkText")}
                 </a>
-                , Programme Coordinator, at{" "}
+                {t("lseContactMid")}
                 <a href="mailto:m.c.masters@lse.ac.uk" className={inlineLink}>
                   m.c.masters@lse.ac.uk
                 </a>
-                .
+                {t("lseContactPost")}
               </p>
 
               <ApplyLink
                 href="https://www.lse.ac.uk/middleeastcentre/research/kuwait-programme"
-                label="For more information"
+                label={t("lseApplyLabel")}
               />
             </FadeUp>
           </div>
