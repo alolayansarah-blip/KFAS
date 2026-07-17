@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -83,7 +84,10 @@ function ImagePlaceholder({
 // ─── Program section ────────────────────────────────────────────────────────────
 function ProgramSection({
   title,
-  body,
+  bodyParagraphs,
+  goalsTitle,
+  goalsItems,
+  closingParagraph,
   imageLabel,
   imageSrc,
   imageAlt,
@@ -91,7 +95,10 @@ function ProgramSection({
   background,
 }: {
   title: string;
-  body: string;
+  bodyParagraphs: string[];
+  goalsTitle?: string;
+  goalsItems?: string[];
+  closingParagraph?: string;
   imageLabel: string;
   imageSrc?: string;
   imageAlt?: string;
@@ -114,18 +121,56 @@ function ProgramSection({
           {title}
         </h3>
         <div
-          className="mt-4 h-px w-full max-w-[360px]"
-          style={{
-            background: `linear-gradient(to right, ${BRAND.orange}, ${BRAND.lightBlue}40, transparent)`,
-          }}
+          className="mt-4 h-px w-full max-w-[360px] bg-gradient-to-r rtl:bg-gradient-to-l from-[#EC601B] via-[#BBDEFB]/40 to-transparent"
         />
       </div>
-      <p
-        className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
-        style={{ color: `${BRAND.navy}B0` }}
-      >
-        {body}
-      </p>
+      <div className="flex flex-col gap-4">
+        {bodyParagraphs.map((paragraph, i) => (
+          <p
+            key={i}
+            className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
+            style={{ color: `${BRAND.navy}B0` }}
+          >
+            {paragraph}
+          </p>
+        ))}
+      </div>
+      {goalsItems && goalsItems.length > 0 && (
+        <div className="flex flex-col gap-4">
+          {goalsTitle && (
+            <p
+              className="font-poppins text-[14.5px] font-semibold"
+              style={{ color: BRAND.navy }}
+            >
+              {goalsTitle}
+            </p>
+          )}
+          <ul className="flex flex-col gap-3">
+            {goalsItems.map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span
+                  className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full"
+                  style={{ background: BRAND.orange }}
+                />
+                <span
+                  className="font-poppins text-[14px] font-light leading-[1.8]"
+                  style={{ color: `${BRAND.navy}B0` }}
+                >
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {closingParagraph && (
+        <p
+          className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
+          style={{ color: `${BRAND.navy}B0` }}
+        >
+          {closingParagraph}
+        </p>
+      )}
     </motion.div>
   );
 
@@ -174,12 +219,55 @@ function ProgramSection({
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function YouthPage() {
+  const t = useTranslations("YouthPage");
+  const isArabic = useLocale() === "ar";
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  // The Arabic source text supplied richer, multi-paragraph copy for these
+  // three programs than the live English page has; only Arabic has the
+  // additional paragraphs beyond the first.
+  const genScienceBody = isArabic
+    ? [t("genScienceBody1"), t("genScienceBody2")]
+    : [t("genScienceBody1")];
+  const scienceMonthBody = isArabic
+    ? [t("scienceMonthBody1"), t("scienceMonthBody2"), t("scienceMonthBody3")]
+    : [t("scienceMonthBody1")];
+  const scienceBusBody = isArabic
+    ? [t("scienceBusBody1"), t("scienceBusBody2"), t("scienceBusBody3")]
+    : [t("scienceBusBody1")];
+
+  const scopeGroups = [
+    {
+      title: t("scopeGroup1Title"),
+      items: [
+        t("scopeGroup1Item1"),
+        t("scopeGroup1Item2"),
+        t("scopeGroup1Item3"),
+      ],
+    },
+    {
+      title: t("scopeGroup2Title"),
+      items: [
+        t("scopeGroup2Item1"),
+        t("scopeGroup2Item2"),
+        t("scopeGroup2Item3"),
+      ],
+    },
+    {
+      title: t("scopeGroup3Title"),
+      items: [
+        t("scopeGroup3Item1"),
+        t("scopeGroup3Item2"),
+        t("scopeGroup3Item3"),
+      ],
+    },
+  ];
 
   return (
     <>
@@ -220,42 +308,72 @@ export default function YouthPage() {
               }}
               aria-hidden
             />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+              }}
+              aria-hidden
+            />
           </div>
 
           <motion.div
-            className="relative z-10 mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-32 w-full max-w-7xl mx-auto px-6 py-12 sm:mt-40 sm:px-8 md:mt-44 lg:px-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Learning &amp; Development</span>
-              {/* <span className="text-white/25">/</span>
-              <span>Youth</span> */}
+              <span>{t("breadcrumbLearning")}</span>
             </motion.div>
 
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="text-left font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                className={`text-left rtl:text-right font-poppins text-4xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-[1.08] tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Youth
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 hidden h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 72 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -263,37 +381,49 @@ export default function YouthPage() {
         {/* ── Overview ─────────────────────────────────────────────────── */}
         <section
           id="overview"
-          className="scroll-mt-28 px-6 py-20 sm:px-8 sm:py-28 lg:px-12"
+          className="relative scroll-mt-28 overflow-hidden bg-white py-20 sm:py-28"
         >
-          <div className={CONTAINER}>
-            <div className="flex w-full flex-col gap-6">
-              <motion.p
-                className="text-justify font-poppins text-[16px] sm:text-[17px] font-light leading-[1.95]"
-                style={{ color: BRAND.navy }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.65, ease: EASE }}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
+            style={{
+              background:
+                "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
+            }}
+          />
+          <div className={`relative ${CONTAINER} px-6 sm:px-8 lg:px-12`}>
+            <motion.div
+              className="w-full"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+              <p
+                className={`mt-5 font-poppins font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[15px] tracking-normal"
+                    : "text-[12px] uppercase tracking-[0.3em]"
+                }`}
               >
-                KFAS provides learning opportunities targeting K-12 students,
-                university undergraduate students, and educators. It emphasizes
-                practical, interactive, and inclusive approaches to foster
-                curiosity, scientific literacy, and innovation.
-              </motion.p>
-              <motion.p
-                className="text-justify font-poppins text-[16px] sm:text-[17px] font-light leading-[1.95]"
-                style={{ color: BRAND.navy }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.65, delay: 0.1, ease: EASE }}
-              >
-                Through STEAM &ldquo;Science, Technology, Engineering, Arts, and
-                Mathematics&rdquo; events and activities, this offering aims to
-                drive and encourage, capacity building and knowledge transfer as
-                well as outreach and networking for innovation ecosystem growth.
-              </motion.p>
-            </div>
+                {t("overviewLabel")}
+              </p>
+              <div className="mt-5 flex flex-col gap-6">
+                <p className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70">
+                  {t("overviewPara1")}
+                </p>
+                <motion.p
+                  className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70"
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+                >
+                  {t("overviewPara2")}
+                </motion.p>
+              </div>
+            </motion.div>
           </div>
         </section>
 
@@ -313,13 +443,10 @@ export default function YouthPage() {
                 className="font-poppins text-[1.55rem] sm:text-[1.8rem] font-semibold leading-[1.3] tracking-tight"
                 style={{ color: BRAND.navy }}
               >
-                Scope
+                {t("scopeTitle")}
               </h2>
               <motion.div
-                className="mt-4 h-px w-full max-w-[420px] origin-left"
-                style={{
-                  background: `linear-gradient(to right, ${BRAND.orange}, ${BRAND.lightBlue}40, transparent)`,
-                }}
+                className="mt-4 h-px w-full max-w-[420px] origin-left rtl:origin-right bg-gradient-to-r rtl:bg-gradient-to-l from-[#EC601B] via-[#BBDEFB]/40 to-transparent"
                 initial={{ scaleX: 0, opacity: 0 }}
                 whileInView={{ scaleX: 1, opacity: 1 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -328,32 +455,7 @@ export default function YouthPage() {
             </motion.div>
 
             <div className="mt-12 grid gap-6 lg:grid-cols-3 lg:gap-8">
-              {[
-                {
-                  title: "STEAM Capacity Building for Students & Educators",
-                  items: [
-                    "Offer local and international learning and development opportunities for students and educators.",
-                    "Train-the-Trainer programs in STEAM.",
-                    "Mentorship and peer-learning platforms.",
-                  ],
-                },
-                {
-                  title: "Science Communication and Outreach",
-                  items: [
-                    "Production of Sci & Tech media (videos, podcasts, and infographics) including collaboration with journalists and influencers to make science engaging and accessible.",
-                    "Offer mobile platform for delivering hands-on STEAM learning across Kuwait.",
-                    "Curation of events and activities under Science Month.",
-                  ],
-                },
-                {
-                  title: "Citizen Science Initiatives",
-                  items: [
-                    "Provide opportunities to engage in projects related to biodiversity, climate change, astronomy, and health.",
-                    "Develop online open-data platforms for public view and contributions.",
-                    "Establish recognition programs including badges, awards, and certificates.",
-                  ],
-                },
-              ].map((group, gi) => (
+              {scopeGroups.map((group, gi) => (
                 <motion.div
                   key={group.title}
                   className="flex h-full flex-col overflow-hidden border"
@@ -405,7 +507,7 @@ export default function YouthPage() {
           style={{ background: "#7DC0F1" }}
         >
           <div
-            className={`${CONTAINER} flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left`}
+            className={`${CONTAINER} flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left rtl:lg:text-right`}
           >
             <motion.h2
               className="max-w-[30ch] font-poppins text-[1.5rem] sm:text-[2rem] font-semibold leading-[1.3] tracking-tight"
@@ -415,7 +517,7 @@ export default function YouthPage() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.65, ease: EASE }}
             >
-              Apply now to participate in KFAS opportunities for the Youth.
+              {t("ctaTitle")}
             </motion.h2>
             <motion.a
               href="#"
@@ -428,36 +530,66 @@ export default function YouthPage() {
               whileHover={{ y: -3, scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
             >
-              Apply Now
+              {t("ctaButton")}
             </motion.a>
           </div>
         </section>
 
         {/* ── Programs ─────────────────────────────────────────────────── */}
         <ProgramSection
-          title="Generation Science"
+          title={t("genScienceTitle")}
           imageLabel="Generation Science"
           imageSrc="/image/Generation.png"
           imageAlt="Students exploring STEM through virtual reality"
-          body="Generation Science summer program empowers students in grades 7 to 12 to become ambassadors of STEM awareness and innovation within their schools and communities. By placing youth at the forefront of science and technology engagement, the program sparks a passion for discovery and motivates students to pursue STEM education and careers, ultimately contributing to building a strong, future-ready workforce. Student leaders represent their schools as the voice of STEM. They join a dynamic national cohort of young changemakers, receiving targeted leadership training, collaborating on STEM initiatives, and providing meaningful input to educators, industry professionals, and decision-makers across educational institutions, industry, and government."
+          bodyParagraphs={genScienceBody}
+          goalsTitle={t("genScienceGoalsTitle")}
+          goalsItems={[
+            t("genScienceGoal1"),
+            t("genScienceGoal2"),
+            t("genScienceGoal3"),
+            t("genScienceGoal4"),
+            t("genScienceGoal5"),
+            t("genScienceGoal6"),
+          ]}
         />
 
         <ProgramSection
-          title="Science Month"
+          title={t("scienceMonthTitle")}
           imageLabel="Science Month"
           imageSrc="/image/ScienceMonth.png"
           imageAlt="Science Month community event with youth activities"
           imageLeft
           background={`${BRAND.lightBlue}20`}
-          body="Science Month is a national initiative that celebrates science, technology, and innovation through a diverse program of events and activities across Kuwait. The initiative brings together students, educators, researchers, and the wider community to explore the role of science in everyday life. Through workshops, exhibitions, talks, and interactive experiences, Science Month aims to inspire curiosity, promote scientific thinking, and encourage youth to pursue STEM fields. By fostering collaboration among local and international partners, the initiative contributes to building a vibrant science culture and supporting Kuwait’s knowledge-based future."
+          bodyParagraphs={scienceMonthBody}
+          goalsTitle={t("scienceMonthGoalsTitle")}
+          goalsItems={[
+            t("scienceMonthGoal1"),
+            t("scienceMonthGoal2"),
+            t("scienceMonthGoal3"),
+            t("scienceMonthGoal4"),
+            t("scienceMonthGoal5"),
+            t("scienceMonthGoal6"),
+          ]}
+          closingParagraph={t("scienceMonthClosing")}
         />
 
         <ProgramSection
-          title="Science Bus"
+          title={t("scienceBusTitle")}
           imageLabel="Science Bus"
           imageSrc="/image/SciencesBus.png"
           imageAlt="Students learning inside the mobile Science Bus laboratory"
-          body="The Science Bus brings interactive science experiences directly to schools and communities across Kuwait. Designed as a mobile learning platform, the Science Bus delivers engaging, hands-on activities that make science accessible, fun, and relevant to everyday life. Through immersive demonstrations and guided experiments, the program aims to spark curiosity, inspire young minds, and promote interest in STEM fields. By reaching diverse audiences nationwide, the Science Bus plays a key role in expanding access to quality science education and fostering a culture of discovery."
+          bodyParagraphs={scienceBusBody}
+          goalsTitle={t("scienceBusGoalsTitle")}
+          goalsItems={[
+            t("scienceBusGoal1"),
+            t("scienceBusGoal2"),
+            t("scienceBusGoal3"),
+            t("scienceBusGoal4"),
+            t("scienceBusGoal5"),
+            t("scienceBusGoal6"),
+            t("scienceBusGoal7"),
+          ]}
+          closingParagraph={t("scienceBusClosing")}
         />
       </main>
       <Footer
