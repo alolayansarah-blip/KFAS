@@ -2322,5 +2322,54 @@
     "scienceBusGoal6": "Support equal access to enjoyable, high-quality science education.",
     "scienceBusGoal7": "Help instill a culture of innovation and discovery among younger generations.",
     "scienceBusClosing": "Through this initiative, the Science Bus brings science closer to the community and turns learning into an inspiring, interactive experience, supporting KFAS's vision of spreading scientific knowledge and nurturing youth interest in innovation."
+  },
+  "ActivitiesEventsSponsorshipPage": {
+    "breadcrumbScienceSociety": "Science & Society",
+    "heroTitle": "Activities & Events Sponsorship",
+    "jumpToLabel": "Jump To",
+    "jumpSelectTopic": "Select a topic",
+    "jumpOverview": "Overview",
+    "jumpObjectives": "Objectives",
+    "jumpCitizenScience": "Citizen Science",
+    "jumpScienceCommunication": "Science Communication",
+    "jumpApply": "Apply",
+    "overviewLabel": "Overview",
+    "overviewParagraphs": [
+      "KFAS provides grants to support impactful events and activities that promote science, technology, and innovation across Kuwait. This offering aims to engage the community, inspire youth, and strengthen the culture of scientific thinking through interactive and educational experiences."
+    ],
+    "objectivesTitle": "Objectives",
+    "objective1Body": "Promote public understanding of science and technology",
+    "objective2Body": "Encourage youth engagement in STEM fields",
+    "objective3Body": "Support knowledge sharing and community outreach",
+    "objective4Body": "Foster collaboration between institutions and experts",
+    "citizenScienceTitle": "Citizen Science Grants",
+    "citizenScienceBody1": "Citizen Science Grant supports initiatives that directly involve the public in scientific research and data collection, with the aim of broadening access to science, strengthening community participation, and enhancing science literacy.",
+    "citizenScienceBody2": "Through participatory research models, citizen science initiatives enable non-specialist participants to contribute meaningfully to scientific inquiry under appropriate scientific guidance. Supported initiatives are expected to generate reliable data, address locally relevant challenges, and contribute to evidence-based knowledge that benefits the State of Kuwait.",
+    "citizenScienceBody3": "Citizen science initiatives may be implemented through field activities, digital platforms, community-based monitoring, or other participatory approaches, provided that scientific rigor, and ethical standards.",
+    "scienceCommTitle": "Science Communication Grants",
+    "scienceCommParagraphs": [
+      "Science Communication Grant supports initiatives that disseminate scientific knowledge, simplify complex scientific concepts, and enhance public understanding and appreciation of science in everyday life. Also initiatives that translate scientific and technological knowledge into accessible, engaging, and meaningful content for non-specialist audiences. This offering aims to strengthen science culture, promote informed public discourse, and increase awareness of scientific and technological developments across society."
+    ],
+    "scopeTitle": "Scope",
+    "scopeIntro": "KFAS supports initiatives that bring science closer to society and create meaningful impact in people's lives. Areas of support include projects and initiatives that help spread scientific knowledge and strengthen the culture of science in Kuwait.",
+    "scopeItem1Title": "Scientific publications",
+    "scopeItem1Body": " (such as books, magazines, journals, and periodicals), provided that the application is submitted by an academic institution, research center, or professional public-benefit association.",
+    "scopeItem2Title": "Media and content production",
+    "scopeItem2Body": " including visual, audio, and digital media (e.g. documentaries, videos, podcasts, digital series, and campaigns) with scientific or technological content aimed at disseminating scientific knowledge and raising public awareness of technological advancements.",
+    "scopeItem3Title": "Public science communication initiatives",
+    "scopeItem3Body": " including exhibitions, festivals, and public awareness activities with scientific and technological content, targeting:",
+    "scopeItem3Sub": [
+      "K–12 students",
+      "Undergraduate and graduate students",
+      "Educators and teachers"
+    ],
+    "eligibilityTitle": "Eligibility",
+    "eligibilityIntro": "Grants are open to:",
+    "eligibilityItem1": "Educational institutions",
+    "eligibilityItem2": "Non-profit organizations and civil society groups",
+    "eligibilityItem3": "Research and scientific entities",
+    "eligibilityItem4": "Relevant public and private sector organizations",
+    "ctaTitle": "Apply now and bring your initiative to life with KFAS support.",
+    "ctaButton": "Apply Now"
   }
 }

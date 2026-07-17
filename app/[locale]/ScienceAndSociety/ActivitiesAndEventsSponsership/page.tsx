@@ -14,6 +14,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -104,7 +105,7 @@ function ImagePlaceholder({
 
       {/* corner accent */}
       <span
-        className="absolute left-0 top-0 h-1 w-10"
+        className="absolute left-0 top-0 h-1 w-10 rtl:left-auto rtl:right-0"
         style={{ background: BRAND.orange }}
         aria-hidden
       />
@@ -116,15 +117,15 @@ function ImagePlaceholder({
 // Sticky in-page nav placed directly after the hero. Horizontal row on desktop,
 // tappable dropdown on mobile. Smooth-scrolls to each topic and highlights the
 // active section on scroll.
-const JUMP_LINKS = [
-  { id: "overview", label: "Overview" },
-  { id: "objectives", label: "Objectives" },
-  { id: "citizen-science", label: "Citizen Science" },
-  { id: "science-communication", label: "Science Communication" },
-  { id: "apply", label: "Apply" },
-];
-
-function JumpTo() {
+function JumpTo({
+  jumpLinks,
+  jumpToLabel,
+  jumpSelectTopic,
+}: {
+  jumpLinks: { id: string; label: string }[];
+  jumpToLabel: string;
+  jumpSelectTopic: string;
+}) {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false); // mobile dropdown
   const [headerH, setHeaderH] = useState(HEADER_H); // measured at runtime
@@ -202,12 +203,12 @@ function JumpTo() {
         document.documentElement.scrollHeight - 4;
 
       if (atBottom) {
-        setActive(JUMP_LINKS[JUMP_LINKS.length - 1].id);
+        setActive(jumpLinks[jumpLinks.length - 1].id);
         return;
       }
 
       let current = "";
-      for (const link of JUMP_LINKS) {
+      for (const link of jumpLinks) {
         const el = document.getElementById(link.id);
         if (el && el.getBoundingClientRect().top <= trigger) {
           current = link.id;
@@ -229,7 +230,7 @@ function JumpTo() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [getJumpOffset]);
+  }, [getJumpOffset, jumpLinks]);
 
   const handleClick = (id: string) => {
     setActive(id);
@@ -244,7 +245,7 @@ function JumpTo() {
   };
 
   const activeLabel =
-    JUMP_LINKS.find((l) => l.id === active)?.label ?? "Select a topic";
+    jumpLinks.find((l) => l.id === active)?.label ?? jumpSelectTopic;
 
   return (
     <motion.nav
@@ -259,7 +260,7 @@ function JumpTo() {
         {/* ── Desktop: inline horizontal row ──────────────────────────── */}
         <div className="hidden items-stretch lg:flex">
           {/* Label */}
-          <div className="flex items-center gap-2.5 pr-4 shrink-0">
+          <div className="flex items-center gap-2.5 pr-4 rtl:pr-0 rtl:pl-4 shrink-0">
             <span
               className="h-3.5 w-[3px] rounded-full"
               style={{ background: BRAND.orange }}
@@ -268,14 +269,14 @@ function JumpTo() {
               className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em]"
               style={{ color: BRAND.navy }}
             >
-              Jump To
+              {jumpToLabel}
             </span>
             <svg
               width="14"
               height="14"
               viewBox="0 0 24 24"
               fill="none"
-              className="shrink-0"
+              className="shrink-0 rtl:rotate-180"
               aria-hidden
             >
               <path
@@ -290,7 +291,7 @@ function JumpTo() {
 
           {/* Links */}
           <div className="flex items-center gap-1 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {JUMP_LINKS.map((link) => {
+            {jumpLinks.map((link) => {
               const isActive = active === link.id;
               return (
                 <button
@@ -328,10 +329,10 @@ function JumpTo() {
               className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em] shrink-0"
               style={{ color: BRAND.navy }}
             >
-              Jump To
+              {jumpToLabel}
             </span>
             <span
-              className="ml-1 truncate font-poppins text-[13px] font-medium"
+              className="ml-1 rtl:ml-0 rtl:mr-1 truncate font-poppins text-[13px] font-medium"
               style={{ color: active ? BRAND.orange : `${BRAND.navy}80` }}
             >
               {activeLabel}
@@ -341,7 +342,7 @@ function JumpTo() {
               height="16"
               viewBox="0 0 24 24"
               fill="none"
-              className="ml-auto shrink-0"
+              className="ml-auto rtl:ml-0 rtl:mr-auto shrink-0"
               animate={{ rotate: open ? 180 : 0 }}
               transition={{ duration: 0.25, ease: EASE }}
               aria-hidden
@@ -367,13 +368,13 @@ function JumpTo() {
                 transition={{ duration: 0.28, ease: EASE }}
               >
                 <div className="flex flex-col pt-0.5 pb-1">
-                  {JUMP_LINKS.map((link) => {
+                  {jumpLinks.map((link) => {
                     const isActive = active === link.id;
                     return (
                       <button
                         key={link.id}
                         onClick={() => handleClick(link.id)}
-                        className="flex items-center gap-3 px-1 py-2 text-left font-poppins text-[14px] font-medium transition-colors"
+                        className="flex items-center gap-3 px-1 py-2 text-left rtl:text-right font-poppins text-[14px] font-medium transition-colors"
                         style={{ color: isActive ? BRAND.orange : BRAND.navy }}
                       >
                         <span
@@ -399,12 +400,71 @@ function JumpTo() {
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ActivitiesAndEventsSponsershipPage() {
+  const t = useTranslations("ActivitiesEventsSponsorshipPage");
+  const isArabic = useLocale() === "ar";
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const JUMP_LINKS = [
+    { id: "overview", label: t("jumpOverview") },
+    { id: "objectives", label: t("jumpObjectives") },
+    { id: "citizen-science", label: t("jumpCitizenScience") },
+    { id: "science-communication", label: t("jumpScienceCommunication") },
+    { id: "apply", label: t("jumpApply") },
+  ];
+
+  const overviewParagraphs = t.raw("overviewParagraphs") as string[];
+  const scienceCommParagraphs = t.raw("scienceCommParagraphs") as string[];
+
+  // English objectives are plain phrases (no title); Arabic pairs a bold
+  // title with a description — the two locales are intentionally different
+  // shapes here, each preserving its own source wording as given.
+  const objectives: { title?: string; body: string }[] = isArabic
+    ? [
+        { title: t("objective1Title"), body: t("objective1Body") },
+        { title: t("objective2Title"), body: t("objective2Body") },
+        { title: t("objective3Title"), body: t("objective3Body") },
+        { title: t("objective4Title"), body: t("objective4Body") },
+      ]
+    : [
+        { body: t("objective1Body") },
+        { body: t("objective2Body") },
+        { body: t("objective3Body") },
+        { body: t("objective4Body") },
+      ];
+
+  // English Scope keeps its original 3-item shape (the third item carries a
+  // nested sub-list of target audiences); Arabic uses a flat 4-item list, as
+  // given in its own source text — the two locales are intentionally
+  // structured differently here.
+  const scopeItems: { title: string; body: string; sub?: string[] }[] = isArabic
+    ? [
+        { title: t("scopeItem1Title"), body: t("scopeItem1Body") },
+        { title: t("scopeItem2Title"), body: t("scopeItem2Body") },
+        { title: t("scopeItem3Title"), body: t("scopeItem3Body") },
+        { title: t("scopeItem4Title"), body: t("scopeItem4Body") },
+      ]
+    : [
+        { title: t("scopeItem1Title"), body: t("scopeItem1Body") },
+        { title: t("scopeItem2Title"), body: t("scopeItem2Body") },
+        {
+          title: t("scopeItem3Title"),
+          body: t("scopeItem3Body"),
+          sub: t.raw("scopeItem3Sub") as string[],
+        },
+      ];
+
+  const eligibilityItems = [
+    t("eligibilityItem1"),
+    t("eligibilityItem2"),
+    t("eligibilityItem3"),
+    t("eligibilityItem4"),
+  ];
 
   return (
     <>
@@ -430,6 +490,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
               // this important for big screens
               className="object-cover object-center lg:object-[center_34%]"
             />
+            {/* Gradient direction is intentionally identical in both locales. */}
             <div
               className="absolute inset-0"
               style={{
@@ -449,45 +510,69 @@ export default function ActivitiesAndEventsSponsershipPage() {
           </div>
 
           <motion.div
-            className="relative z-10 mt-36 md:mt-28 lg:mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
+            className="relative z-10 mt-28 md:mt-28 lg:mt-44 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12"
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold uppercase tracking-[0.35em] text-white/45 ${
+                isArabic ? "text-[17px]" : "text-[10px]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Science &amp; Society</span>
-              {/* <span className="text-white/25">/</span>
-              <span>Activities &amp; Events Sponsorship</span> */}
+              <span>{t("breadcrumbScienceSociety")}</span>
             </motion.div>
 
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="max-w-[18ch] text-left font-poppins text-4xl font-bold leading-[1.08] tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                className={`max-w-[18ch] text-left rtl:text-right font-poppins text-4xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-[1.08] tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Activities &amp; Events Sponsorship
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 hidden h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 72 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
         {/* ── Jump To (flush below hero — no extra white band) ─────────── */}
-        <JumpTo />
+        <JumpTo
+          jumpLinks={JUMP_LINKS}
+          jumpToLabel={t("jumpToLabel")}
+          jumpSelectTopic={t("jumpSelectTopic")}
+        />
 
         {/* ── Overview ─────────────────────────────────────────────────── */}
         <section
@@ -496,7 +581,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -515,21 +600,26 @@ export default function ActivitiesAndEventsSponsershipPage() {
                 style={{ background: BRAND.orange }}
               />
               <p
-                className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em]"
+                className={`mt-5 font-poppins font-semibold ${
+                  isArabic
+                    ? "text-[15px] tracking-normal"
+                    : "text-[12px] uppercase tracking-[0.3em]"
+                }`}
                 style={{ color: BRAND.orange }}
               >
-                Overview
+                {t("overviewLabel")}
               </p>
-              <p
-                className="mt-7 font-poppins text-[15px] font-light leading-[1.95]"
-                style={{ color: `${BRAND.navy}B3` }}
-              >
-                KFAS provides grants to support impactful events and activities
-                that promote science, technology, and innovation across Kuwait.
-                This offering aims to engage the community, inspire youth, and
-                strengthen the culture of scientific thinking through
-                interactive and educational experiences.
-              </p>
+              <div className="mt-7 flex flex-col gap-5">
+                {overviewParagraphs.map((paragraph, i) => (
+                  <p
+                    key={i}
+                    className="font-poppins text-[15px] font-light leading-[1.95]"
+                    style={{ color: `${BRAND.navy}B3` }}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             </motion.div>
           </div>
         </section>
@@ -560,7 +650,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
                     className="object-cover object-[center_72%]"
                   />
                   <span
-                    className="absolute left-0 top-0 h-1 w-10"
+                    className="absolute left-0 top-0 h-1 w-10 rtl:left-auto rtl:right-0"
                     style={{ background: BRAND.orange }}
                     aria-hidden
                   />
@@ -577,10 +667,10 @@ export default function ActivitiesAndEventsSponsershipPage() {
                   className="font-poppins text-[1.55rem] sm:text-[1.8rem] font-semibold leading-[1.3] tracking-tight"
                   style={{ color: BRAND.navy }}
                 >
-                  Objectives
+                  {t("objectivesTitle")}
                 </h2>
                 <motion.div
-                  className="mt-4 h-px w-full max-w-[420px] origin-left"
+                  className="mt-4 h-px w-full max-w-[420px] origin-left rtl:origin-right"
                   style={{
                     background: `linear-gradient(to right, ${BRAND.orange}, ${BRAND.lightBlue}40, transparent)`,
                   }}
@@ -591,14 +681,9 @@ export default function ActivitiesAndEventsSponsershipPage() {
                 />
 
                 <ul className="mt-9 flex flex-col gap-5">
-                  {[
-                    "Promote public understanding of science and technology",
-                    "Encourage youth engagement in STEM fields",
-                    "Support knowledge sharing and community outreach",
-                    "Foster collaboration between institutions and experts",
-                  ].map((objective, i) => (
+                  {objectives.map((objective, i) => (
                     <motion.li
-                      key={objective}
+                      key={i}
                       className="flex items-start gap-4"
                       initial={{ opacity: 0, y: 16 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -617,7 +702,17 @@ export default function ActivitiesAndEventsSponsershipPage() {
                         className="font-poppins text-[15px] font-light leading-[1.8]"
                         style={{ color: `${BRAND.navy}C0` }}
                       >
-                        {objective}
+                        {objective.title && (
+                          <>
+                            <strong
+                              className="font-medium"
+                              style={{ color: BRAND.navy }}
+                            >
+                              {objective.title}:
+                            </strong>{" "}
+                          </>
+                        )}
+                        {objective.body}
                       </span>
                     </motion.li>
                   ))}
@@ -663,7 +758,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
                     className="object-cover object-center"
                   />
                   <span
-                    className="absolute left-0 top-0 h-1 w-10"
+                    className="absolute left-0 top-0 h-1 w-10 rtl:left-auto rtl:right-0"
                     style={{ background: BRAND.orange }}
                     aria-hidden
                   />
@@ -681,7 +776,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
                   className="font-poppins text-[1.4rem] sm:text-[1.65rem] font-semibold leading-[1.3] tracking-tight"
                   style={{ color: BRAND.navy }}
                 >
-                  Citizen Science Grants
+                  {t("citizenScienceTitle")}
                 </h3>
 
                 <div className="flex flex-col gap-4">
@@ -689,32 +784,19 @@ export default function ActivitiesAndEventsSponsershipPage() {
                     className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
                     style={{ color: `${BRAND.navy}B0` }}
                   >
-                    Citizen Science Grant supports initiatives that directly
-                    involve the public in scientific research and data
-                    collection, with the aim of broadening access to science,
-                    strengthening community participation, and enhancing science
-                    literacy.
+                    {t("citizenScienceBody1")}
                   </p>
                   <p
                     className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
                     style={{ color: `${BRAND.navy}B0` }}
                   >
-                    Through participatory research models, citizen science
-                    initiatives enable non-specialist participants to contribute
-                    meaningfully to scientific inquiry under appropriate
-                    scientific guidance. Supported initiatives are expected to
-                    generate reliable data, address locally relevant challenges,
-                    and contribute to evidence-based knowledge that benefits the
-                    State of Kuwait.
+                    {t("citizenScienceBody2")}
                   </p>
                   <p
                     className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
                     style={{ color: `${BRAND.navy}B0` }}
                   >
-                    Citizen science initiatives may be implemented through field
-                    activities, digital platforms, community-based monitoring,
-                    or other participatory approaches, provided that scientific
-                    rigor, and ethical standards.
+                    {t("citizenScienceBody3")}
                   </p>
                 </div>
               </motion.div>
@@ -741,23 +823,20 @@ export default function ActivitiesAndEventsSponsershipPage() {
                   className="font-poppins text-[1.4rem] sm:text-[1.65rem] font-semibold leading-[1.3] tracking-tight"
                   style={{ color: BRAND.navy }}
                 >
-                  Science Communication Grants
+                  {t("scienceCommTitle")}
                 </h3>
 
-                <p
-                  className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
-                  style={{ color: `${BRAND.navy}B0` }}
-                >
-                  Science Communication Grant supports initiatives that
-                  disseminate scientific knowledge, simplify complex scientific
-                  concepts, and enhance public understanding and appreciation of
-                  science in everyday life. Also initiatives that translate
-                  scientific and technological knowledge into accessible,
-                  engaging, and meaningful content for non-specialist audiences.
-                  This offering aims to strengthen science culture, promote
-                  informed public discourse, and increase awareness of
-                  scientific and technological developments across society.
-                </p>
+                <div className="flex flex-col gap-4">
+                  {scienceCommParagraphs.map((paragraph, i) => (
+                    <p
+                      key={i}
+                      className="text-justify font-poppins text-[14.5px] font-light leading-[1.9]"
+                      style={{ color: `${BRAND.navy}B0` }}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
               </motion.div>
 
               <motion.div
@@ -780,7 +859,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
                     className="object-cover object-center"
                   />
                   <span
-                    className="absolute left-0 top-0 h-1 w-10"
+                    className="absolute left-0 top-0 h-1 w-10 rtl:left-auto rtl:right-0"
                     style={{ background: BRAND.orange }}
                     aria-hidden
                   />
@@ -802,93 +881,51 @@ export default function ActivitiesAndEventsSponsershipPage() {
                   className="font-poppins text-[12px] font-semibold uppercase tracking-[0.22em]"
                   style={{ color: BRAND.navy }}
                 >
-                  Scope
+                  {t("scopeTitle")}
                 </h4>
                 <p
                   className="font-poppins text-[14px] font-light leading-[1.9]"
                   style={{ color: `${BRAND.navy}A0` }}
                 >
-                  Eligible initiatives may include, but are not limited to:
+                  {t("scopeIntro")}
                 </p>
                 <ul className="flex flex-col gap-4">
-                  <li className="flex items-start gap-4">
-                    <span
-                      className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: BRAND.orange }}
-                    />
-                    <span
-                      className="font-poppins text-[14.5px] font-light leading-[1.85]"
-                      style={{ color: `${BRAND.navy}B0` }}
-                    >
-                      <strong
-                        className="font-medium"
-                        style={{ color: BRAND.navy }}
+                  {scopeItems.map((item) => (
+                    <li key={item.title} className="flex items-start gap-4">
+                      <span
+                        className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ background: BRAND.orange }}
+                      />
+                      <span
+                        className="font-poppins text-[14.5px] font-light leading-[1.85]"
+                        style={{ color: `${BRAND.navy}B0` }}
                       >
-                        Scientific publications
-                      </strong>{" "}
-                      (such as books, magazines, journals, and periodicals),
-                      provided that the application is submitted by an academic
-                      institution, research center, or professional
-                      public-benefit association.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-4">
-                    <span
-                      className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: BRAND.orange }}
-                    />
-                    <span
-                      className="font-poppins text-[14.5px] font-light leading-[1.85]"
-                      style={{ color: `${BRAND.navy}B0` }}
-                    >
-                      <strong
-                        className="font-medium"
-                        style={{ color: BRAND.navy }}
-                      >
-                        Media and content production
-                      </strong>{" "}
-                      including visual, audio, and digital media (e.g.
-                      documentaries, videos, podcasts, digital series, and
-                      campaigns) with scientific or technological content aimed
-                      at disseminating scientific knowledge and raising public
-                      awareness of technological advancements.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-4">
-                    <span
-                      className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: BRAND.orange }}
-                    />
-                    <span
-                      className="font-poppins text-[14.5px] font-light leading-[1.85]"
-                      style={{ color: `${BRAND.navy}B0` }}
-                    >
-                      <strong
-                        className="font-medium"
-                        style={{ color: BRAND.navy }}
-                      >
-                        Public science communication initiatives
-                      </strong>{" "}
-                      including exhibitions, festivals, and public awareness
-                      activities with scientific and technological content,
-                      targeting:
-                      <span className="mt-3 flex flex-col gap-2 pl-1">
-                        {[
-                          "K–12 students",
-                          "Undergraduate and graduate students",
-                          "Educators and teachers",
-                        ].map((target) => (
-                          <span key={target} className="flex items-start gap-3">
-                            <span
-                              className="mt-[10px] h-1 w-3 shrink-0 rounded-full"
-                              style={{ background: `${BRAND.lightBlue}` }}
-                            />
-                            <span>{target}</span>
+                        <strong
+                          className="font-medium"
+                          style={{ color: BRAND.navy }}
+                        >
+                          {item.title}
+                        </strong>{" "}
+                        {item.body}
+                        {item.sub && (
+                          <span className="mt-3 flex flex-col gap-2 pl-1 rtl:pl-0 rtl:pr-1">
+                            {item.sub.map((target) => (
+                              <span
+                                key={target}
+                                className="flex items-start gap-3"
+                              >
+                                <span
+                                  className="mt-[10px] h-1 w-3 shrink-0 rounded-full"
+                                  style={{ background: BRAND.lightBlue }}
+                                />
+                                <span>{target}</span>
+                              </span>
+                            ))}
                           </span>
-                        ))}
+                        )}
                       </span>
-                    </span>
-                  </li>
+                    </li>
+                  ))}
                 </ul>
               </motion.div>
 
@@ -904,21 +941,16 @@ export default function ActivitiesAndEventsSponsershipPage() {
                   className="font-poppins text-[12px] font-semibold uppercase tracking-[0.22em]"
                   style={{ color: BRAND.navy }}
                 >
-                  Eligibility
+                  {t("eligibilityTitle")}
                 </h4>
                 <p
                   className="font-poppins text-[14px] font-light leading-[1.9]"
                   style={{ color: `${BRAND.navy}A0` }}
                 >
-                  Grants are open to:
+                  {t("eligibilityIntro")}
                 </p>
                 <ul className="flex flex-col gap-3">
-                  {[
-                    "Educational institutions",
-                    "Non-profit organizations and civil society groups",
-                    "Research and scientific entities",
-                    "Relevant public and private sector organizations",
-                  ].map((entity, i) => (
+                  {eligibilityItems.map((entity, i) => (
                     <motion.li
                       key={entity}
                       className="flex items-start gap-4"
@@ -956,7 +988,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
           style={{ background: "#7DC0F1" }}
         >
           <div
-            className={`${CONTAINER} flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left`}
+            className={`${CONTAINER} flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left rtl:lg:text-right`}
           >
             <motion.h2
               className="max-w-[30ch] font-poppins text-[1.5rem] sm:text-[2rem] font-semibold leading-[1.3] tracking-tight"
@@ -966,7 +998,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.65, ease: EASE }}
             >
-              Apply now and bring your initiative to life with KFAS support.
+              {t("ctaTitle")}
             </motion.h2>
             <motion.a
               href="#"
@@ -979,7 +1011,7 @@ export default function ActivitiesAndEventsSponsershipPage() {
               whileHover={{ y: -3, scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
             >
-              Apply Now
+              {t("ctaButton")}
             </motion.a>
           </div>
         </section>
