@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -54,7 +55,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
         {children}
       </motion.h2>
       <motion.div
-        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
+        className="mt-5 h-px origin-left rtl:origin-right bg-gradient-to-r rtl:bg-gradient-to-l from-[#EC601B]/40 via-[#7DC0F1]/20 to-transparent"
         initial={{ scaleX: 0, opacity: 0 }}
         animate={inView ? { scaleX: 1, opacity: 1 } : {}}
         transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
@@ -63,30 +64,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ─── Section Heading Dark (for navy bg) ──────────────────────────────────────
-function SectionHeadingDark({ children }: { children: React.ReactNode }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  return (
-    <div ref={ref} className="mb-12">
-      <motion.h2
-        className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight"
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, ease: EASE }}
-      >
-        {children}
-      </motion.h2>
-      <motion.div
-        className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/70 via-[#7DC0F1]/30 to-transparent"
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-        transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-      />
-    </div>
-  );
-}
-function ApplyLink({ href = "#" }: { href?: string }) {
+function ApplyLink({ href = "#", label }: { href?: string; label: string }) {
   return (
     <a
       href={href}
@@ -96,10 +74,10 @@ function ApplyLink({ href = "#" }: { href?: string }) {
     >
       <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
       <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-        Click here to apply
+        {label}
       </span>
       <svg
-        className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
+        className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:rotate-180 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -121,6 +99,7 @@ function ProgramCard({
   body,
   imageSrc,
   applyHref,
+  applyLabel,
   index = 0,
   titleAsH2 = false,
 }: {
@@ -128,6 +107,7 @@ function ProgramCard({
   body: string;
   imageSrc?: string;
   applyHref?: string;
+  applyLabel: string;
   index?: number;
   titleAsH2?: boolean;
 }) {
@@ -145,7 +125,7 @@ function ProgramCard({
     >
       {/* Orange top bar */}
       <motion.div
-        className="h-[2px] bg-[#EC601B] origin-left"
+        className="h-[2px] bg-[#EC601B] origin-left rtl:origin-right"
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
         transition={{ duration: 0.6, delay: index * 0.12 + 0.25, ease: EASE }}
@@ -175,7 +155,7 @@ function ProgramCard({
         <p className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/60 font-light flex-1">
           {body}
         </p>
-        <ApplyLink href={applyHref} />
+        <ApplyLink href={applyHref} label={applyLabel} />
       </div>
     </motion.article>
   );
@@ -187,12 +167,14 @@ function SubProgramCard({
   body,
   imageSrc,
   applyHref,
+  applyLabel,
   index = 0,
 }: {
   title: string;
   body: string;
   imageSrc?: string;
   applyHref?: string;
+  applyLabel: string;
   index?: number;
 }) {
   const ref = useRef(null);
@@ -207,7 +189,7 @@ function SubProgramCard({
       transition={{ duration: 0.65, delay: index * 0.1, ease: EASE }}
     >
       <motion.div
-        className="h-[2px] bg-[#EC601B] origin-left"
+        className="h-[2px] bg-[#EC601B] origin-left rtl:origin-right"
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
         transition={{ duration: 0.6, delay: index * 0.1 + 0.2, ease: EASE }}
@@ -235,35 +217,29 @@ function SubProgramCard({
         <p className="font-poppins text-[14px] leading-[1.85] text-[#1D2D44]/60 font-light flex-1">
           {body}
         </p>
-        <ApplyLink href={applyHref} />
+        <ApplyLink href={applyHref} label={applyLabel} />
       </div>
     </motion.article>
   );
 }
 
 // ─── Customized Programs ──────────────────────────────────────────────────────
-const SUB_PROGRAMS = [
-  {
-    title: "KFAS Innovation Challenge",
-    imageSrc: "/image/Innovation.webp",
-    body: "One of our standout executive education programs is the annual KFAS Innovation Challenge, in which a small group of selected companies work with prestigious business schools to develop new initiatives and projects that advance a culture of innovation. After a competitive application process, executives and business leaders spend three to four months in structured learning and training, tackling a company-specific challenge.",
-    applyHref: "https://learn.kfas.org.kw/",
-  },
-  {
-    title: "Harvard Kennedy School Program",
-    imageSrc: "/image/Harvard.jpg",
-    body: "A custom executive education program targeting the needs of the Kuwait private sector. Led by Professor Kessely Hong, the Harvard Kennedy School faculty team designed an impactful curriculum tailored to address the challenges and opportunities presented to managers — equipping them with collaborative and innovative tools for today's reality.",
-    applyHref: "https://learn.kfas.org.kw/",
-  },
-  {
-    title: "KFAS High Potential Leadership Program",
-    imageSrc: "/image/HighPotenial.webp",
-    body: "The vitality of every organization is dependent on the strength of its future leaders. By identifying high potential (Hi-Po) leadership candidates early and supporting their development, organizations drive significant returns on their human capital investments — maximizing strategic initiative, market competitiveness, and overall growth.",
-    applyHref: "https://learn.kfas.org.kw/",
-  },
-];
-
-function CustomizedPrograms() {
+function CustomizedPrograms({
+  title,
+  body,
+  applyLabel,
+  subPrograms,
+}: {
+  title: string;
+  body: string;
+  applyLabel: string;
+  subPrograms: {
+    title: string;
+    imageSrc: string;
+    body: string;
+    applyHref: string;
+  }[];
+}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
@@ -276,7 +252,7 @@ function CustomizedPrograms() {
       transition={{ duration: 0.7, ease: EASE }}
     >
       <motion.div
-        className="h-[2px] bg-[#EC601B] origin-left"
+        className="h-[2px] bg-[#EC601B] origin-left rtl:origin-right"
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
         transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
@@ -285,21 +261,23 @@ function CustomizedPrograms() {
       <div className="p-8 sm:p-10 lg:p-12">
         <FadeUp delay={0.1}>
           <h3 className="font-poppins text-xl sm:text-2xl font-semibold text-[#1D2D44] leading-snug mb-4">
-            Customized Programs
+            {title}
           </h3>
-          <div className="mb-6 h-px w-10 bg-gradient-to-r from-[#EC601B]/50 to-transparent" />
+          <div className="mb-6 h-px w-10 bg-gradient-to-r rtl:bg-gradient-to-l from-[#EC601B]/50 to-transparent" />
           <p className="font-poppins text-[15px] leading-[1.9] text-[#1D2D44]/60 font-light max-w-2xl mb-6">
-            KFAS partners with academic institutions to create customized
-            programs specifically for participants from Kuwait, offering blended
-            and experiential learning experiences taught over a period of
-            months.
+            {body}
           </p>
-          <ApplyLink href="https://learn.kfas.org.kw/" />
+          <ApplyLink href="https://learn.kfas.org.kw/" label={applyLabel} />
         </FadeUp>
 
         <div className="mt-12 border-t border-[#1D2D44]/06 pt-12 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-          {SUB_PROGRAMS.map((p, i) => (
-            <SubProgramCard key={p.title} {...p} index={i} />
+          {subPrograms.map((p, i) => (
+            <SubProgramCard
+              key={p.title}
+              {...p}
+              applyLabel={applyLabel}
+              index={i}
+            />
           ))}
         </div>
       </div>
@@ -309,12 +287,39 @@ function CustomizedPrograms() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ProfessionalsPage() {
+  const t = useTranslations("ProfessionalsPage");
+  const isArabic = useLocale() === "ar";
+
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
+
+  const overviewParagraphs = t.raw("overviewParagraphs") as string[];
+  const applyLabel = t("applyLinkLabel");
+
+  const subPrograms = [
+    {
+      title: t("innovationChallengeTitle"),
+      imageSrc: "/image/Innovation.webp",
+      body: t("innovationChallengeBody"),
+      applyHref: "https://learn.kfas.org.kw/",
+    },
+    {
+      title: t("harvardTitle"),
+      imageSrc: "/image/Harvard.jpg",
+      body: t("harvardBody"),
+      applyHref: "https://learn.kfas.org.kw/",
+    },
+    {
+      title: t("highPotentialTitle"),
+      imageSrc: "/image/HighPotenial.webp",
+      body: t("highPotentialBody"),
+      applyHref: "https://learn.kfas.org.kw/",
+    },
+  ];
 
   return (
     <>
@@ -341,6 +346,7 @@ export default function ProfessionalsPage() {
                 background:
                   "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
+              aria-hidden
             />
             <div
               className="absolute inset-0"
@@ -348,6 +354,15 @@ export default function ProfessionalsPage() {
                 background:
                   "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
               }}
+              aria-hidden
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+              }}
+              aria-hidden
             />
           </div>
 
@@ -356,17 +371,29 @@ export default function ProfessionalsPage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Learning & Development</span>
+              <span>{t("breadcrumbLearning")}</span>
               <span className="text-white/25">/</span>
             </motion.div>
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)]"
+                className={`font-poppins text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-tight tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{
@@ -375,11 +402,12 @@ export default function ProfessionalsPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                Professionals
+                {t("heroTitle")}
               </motion.h1>
             </div>
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 hidden h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{
@@ -387,9 +415,24 @@ export default function ProfessionalsPage() {
                 delay: 0.55,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              style={{ width: 72 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.55,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -401,7 +444,7 @@ export default function ProfessionalsPage() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12]"
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
             style={{
               background:
                 "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
@@ -416,33 +459,37 @@ export default function ProfessionalsPage() {
               transition={{ duration: 0.7, ease: EASE }}
             >
               <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-              <p className="mt-5 font-poppins text-[12px] font-semibold uppercase tracking-[0.3em] text-[#EC601B]">
-                Overview
+              <p
+                className={`mt-5 font-poppins font-semibold text-[#EC601B] ${
+                  isArabic
+                    ? "text-[15px] tracking-normal"
+                    : "text-[12px] uppercase tracking-[0.3em]"
+                }`}
+              >
+                {t("overviewLabel")}
               </p>
               <div className="mt-5 flex flex-col gap-6">
-                <p className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70">
-                  KFAS empowers professionals, executives, and emerging leaders
-                  through world-class learning opportunities designed to
-                  strengthen leadership, innovation, and digital transformation
-                  capabilities.
-                </p>
-                <motion.p
-                  className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70"
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
-                >
-                  Through partnerships with leading international universities
-                  and business schools, participants gain access to executive
-                  education, leadership development programs, innovation
-                  challenges, and specialized training in emerging technologies
-                  and strategic management. These opportunities equip
-                  individuals with the knowledge, skills, and global perspectives
-                  needed to drive organizational excellence, foster innovation,
-                  and contribute to Kuwait&rsquo;s transition toward a
-                  knowledge-based economy.
-                </motion.p>
+                {overviewParagraphs.map((paragraph, i) =>
+                  i === 0 ? (
+                    <p
+                      key={i}
+                      className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70"
+                    >
+                      {paragraph}
+                    </p>
+                  ) : (
+                    <motion.p
+                      key={i}
+                      className="text-justify font-poppins text-[15px] sm:text-[16px] leading-[1.9] font-light text-[#1D2D44]/70"
+                      initial={{ opacity: 0, y: 18 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-60px" }}
+                      transition={{ duration: 0.7, delay: i * 0.1, ease: EASE }}
+                    >
+                      {paragraph}
+                    </motion.p>
+                  ),
+                )}
               </div>
             </motion.div>
           </div>
@@ -451,21 +498,25 @@ export default function ProfessionalsPage() {
         {/* ── Professional Development Learning ── */}
         <section className="py-20 sm:py-28 bg-white">
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <SectionHeading>Professional Development Learning</SectionHeading>
+            <SectionHeading>
+              {t("sectionProfessionalDevelopment")}
+            </SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               <ProgramCard
-                title="Open Enrollment Courses"
-                body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in courses by subject matter expert practitioners. This activity would focus on developing specific skills needed for organizational development. Short-courses (up to 5 days) are offered to all employee levels in open enrollment style. Courses are delivered with latest and highest standard of learning delivery. Seats are open to all Kuwaiti citizens, targeting the entire workforce population."
+                title={t("card1Title")}
+                body={t("card1Body")}
                 imageSrc="/image/OE.jpg"
                 applyHref="https://learn.kfas.org.kw/"
+                applyLabel={applyLabel}
                 index={0}
                 titleAsH2
               />
               <ProgramCard
-                title="Professional Certificate Incentive Scheme"
-                body="KFAS offer grants to enhance the capabilities of the Kuwaiti human capital and sharpen their professional skills by a scheme to encourage individuals to obtain their professional credentials. An attractive monetary reward is given upon successfully obtaining the professional certificate. The amount of the reward will be determined based on KFAS policies and procedures for rewards."
+                title={t("card2Title")}
+                body={t("card2Body")}
                 imageSrc="/image/Professional.webp"
                 applyHref="https://kfas.formstack.com/forms/kfas_support_for_professional_certifications_2026"
+                applyLabel={applyLabel}
                 index={1}
               />
             </div>
@@ -475,24 +526,31 @@ export default function ProfessionalsPage() {
         {/* ── Executive Education ── */}
         <section className="py-20 sm:py-28 bg-white">
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <SectionHeading>Executive Education</SectionHeading>
+            <SectionHeading>{t("sectionExecutiveEducation")}</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-10">
               <ProgramCard
-                title="Local Courses"
-                body="KFAS bring executive education short-courses offered by international academic institutions on selected topics (in line with KFAS strategic direction) to Kuwait to offer seats locally and would be available to all Kuwaiti citizens."
+                title={t("localCoursesTitle")}
+                body={t("localCoursesBody")}
                 imageSrc="/image/LocalCourses.webp"
                 applyHref="https://learn.kfas.org.kw/"
+                applyLabel={applyLabel}
                 index={0}
               />
               <ProgramCard
-                title="Abroad Courses"
-                body="KFAS offer seats on selected topics (in line with KFAS strategic direction) in programs already offered by academic institutions. This would allow participants to interact and exchange knowledge with other participants from around the world."
-                imageSrc="/image/Abroad.webp"
+                title={t("abroadCoursesTitle")}
+                body={t("abroadCoursesBody")}
+                imageSrc="/image/Abroad.jpg"
                 applyHref="https://learn.kfas.org.kw/"
+                applyLabel={applyLabel}
                 index={1}
               />
             </div>
-            <CustomizedPrograms />
+            <CustomizedPrograms
+              title={t("customizedTitle")}
+              body={t("customizedBody")}
+              applyLabel={applyLabel}
+              subPrograms={subPrograms}
+            />
           </div>
         </section>
       </main>

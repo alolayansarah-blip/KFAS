@@ -2094,7 +2094,37 @@
     "overviewTitle": "KFAS Research Capacity Building Programs",
     "overviewBody1": "KFAS Research Capacity Building Programs represent a key pillar of the Foundation's strategic direction to strengthen Kuwait's research and innovation ecosystem and advance scientific talent development in alignment with the KFAS Strategy 2025–2029.",
     "overviewBody2": "Through a comprehensive portfolio of initiatives, including Scholarships, Supplementary Funds, Scholarly Publication support, Scientific Missions, and Fellowships, KFAS empowers researchers and students, promotes research excellence, expands international scientific collaboration, and contributes to building a knowledge-based society driven by innovation and sustainable impact.",
-    "learnMore": "Learn more"
+    "learnMore": "Learn more",
+    "programs": {
+      "icr": {
+        "title": "International Collaborative Research",
+        "body": "Funding that enables Kuwaiti researchers to collaborate with leading international institutions on joint research projects, fostering knowledge exchange and global partnerships."
+      },
+      "scholarFellowship": {
+        "title": "Scholar Fellowship",
+        "body": "Fellowship opportunities that support researchers in advancing their academic and scientific careers through dedicated research time and resources."
+      },
+      "scholarlyPublication": {
+        "title": "Scholarly Publication",
+        "body": "Support for publishing high-quality scientific research in reputable journals and outlets, increasing the visibility and impact of Kuwaiti research."
+      },
+      "scientificMissions": {
+        "title": "Scientific Missions",
+        "body": "Grants enabling researchers to participate in scientific missions, conferences, and field activities locally and around the world."
+      },
+      "scholarshipBridging": {
+        "title": "Scholarship Bridging Grant",
+        "body": "Bridging support for scholars transitioning between academic stages or programs, helping ensure continuity in their research journey."
+      },
+      "extensionBridging": {
+        "title": "Extension of Scholarship Bridging Grant",
+        "body": "Extended bridging support for eligible scholars who require additional time to complete their academic and research objectives."
+      },
+      "phdSupplementary": {
+        "title": "PhD Students Supplementary Fund Grant",
+        "body": "Supplementary funding for PhD students to support their research needs, academic activities, and successful completion of their doctoral studies."
+      }
+    }
   },
   "PhDStudentsSupplementaryFundGrantPage": {
     "breadcrumbLearning": "Learning & Development",
@@ -2212,5 +2242,33 @@
     "lseContactMid": ", Programme Coordinator, at ",
     "lseContactPost": ".",
     "lseApplyLabel": "For more information"
+  },
+  "ProfessionalsPage": {
+    "breadcrumbLearning": "Learning & Development",
+    "heroTitle": "Professionals",
+    "overviewLabel": "Overview",
+    "overviewParagraphs": [
+      "KFAS empowers professionals, executives, and emerging leaders through world-class learning opportunities designed to strengthen leadership, innovation, and digital transformation capabilities.",
+      "Through partnerships with leading international universities and business schools, participants gain access to executive education, leadership development programs, innovation challenges, and specialized training in emerging technologies and strategic management. These opportunities equip individuals with the knowledge, skills, and global perspectives needed to drive organizational excellence, foster innovation, and contribute to Kuwait's transition toward a knowledge-based economy."
+    ],
+    "sectionProfessionalDevelopment": "Professional Development",
+    "card1Title": "Open Enrollment",
+    "card1Body": "KFAS offer seats on selected topics (in line with KFAS strategic direction) in courses by subject matter expert practitioners. This activity would focus on developing specific skills needed for organizational development. Short-courses (up to 5 days) are offered to all employee levels in open enrollment style. Courses are delivered with latest and highest standard of learning delivery. Seats are open to all Kuwaiti citizens, targeting the entire workforce population.",
+    "card2Title": "Professional Certificate Incentive Scheme",
+    "card2Body": "KFAS offer grants to enhance the capabilities of the Kuwaiti human capital and sharpen their professional skills by a scheme to encourage individuals to obtain their professional credentials. An attractive monetary reward is given upon successfully obtaining the professional certificate. The amount of the reward will be determined based on KFAS policies and procedures for rewards.",
+    "sectionExecutiveEducation": "Executive Education",
+    "localCoursesTitle": "Local Courses",
+    "localCoursesBody": "KFAS bring executive education short-courses offered by international academic institutions on selected topics (in line with KFAS strategic direction) to Kuwait to offer seats locally and would be available to all Kuwaiti citizens.",
+    "abroadCoursesTitle": "Abroad Courses",
+    "abroadCoursesBody": "KFAS offer seats on selected topics (in line with KFAS strategic direction) in programs already offered by academic institutions. This would allow participants to interact and exchange knowledge with other participants from around the world.",
+    "customizedTitle": "Customized Programs",
+    "customizedBody": "KFAS partners with academic institutions to create customized programs specifically for participants from Kuwait, offering blended and experiential learning experiences taught over a period of months.",
+    "innovationChallengeTitle": "KFAS Innovation Challenge",
+    "innovationChallengeBody": "One of our standout executive education programs is the annual KFAS Innovation Challenge, in which a small group of selected companies work with prestigious business schools to develop new initiatives and projects that advance a culture of innovation. After a competitive application process, executives and business leaders spend three to four months in structured learning and training, tackling a company-specific challenge.",
+    "harvardTitle": "Harvard Kennedy School Program",
+    "harvardBody": "A custom executive education program targeting the needs of the Kuwait private sector. Led by Professor Kessely Hong, the Harvard Kennedy School faculty team designed an impactful curriculum tailored to address the challenges and opportunities presented to managers — equipping them with collaborative and innovative tools for today's reality.",
+    "highPotentialTitle": "KFAS High Potential Leadership Program",
+    "highPotentialBody": "The vitality of every organization is dependent on the strength of its future leaders. By identifying high potential (Hi-Po) leadership candidates early and supporting their development, organizations drive significant returns on their human capital investments — maximizing strategic initiative, market competitiveness, and overall growth.",
+    "applyLinkLabel": "Click here to apply"
   }
 }

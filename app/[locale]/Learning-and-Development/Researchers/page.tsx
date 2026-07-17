@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -85,41 +85,34 @@ function ResearcherCard({
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROGRAMS = [
   {
-    title: "International Collaborative Research",
+    key: "icr",
     href: "/Learning-and-Development/Researchers/International-Collaborative-Research",
-    body: "Funding that enables Kuwaiti researchers to collaborate with leading international institutions on joint research projects, fostering knowledge exchange and global partnerships.",
   },
   {
-    title: "Scholar Fellowship",
+    key: "scholarFellowship",
     href: "/Learning-and-Development/Researchers/ScholarFellowship",
-    body: "Fellowship opportunities that support researchers in advancing their academic and scientific careers through dedicated research time and resources.",
   },
   {
-    title: "Scholarly Publication",
+    key: "scholarlyPublication",
     href: "/Learning-and-Development/Researchers/Scholarly-Publication",
-    body: "Support for publishing high-quality scientific research in reputable journals and outlets, increasing the visibility and impact of Kuwaiti research.",
   },
   {
-    title: "Scientific Missions",
+    key: "scientificMissions",
     href: "/Learning-and-Development/Researchers/ScientificMissions",
-    body: "Grants enabling researchers to participate in scientific missions, conferences, and field activities locally and around the world.",
   },
   {
-    title: "Scholarship Bridging Grant",
+    key: "scholarshipBridging",
     href: "/Learning-and-Development/Researchers/ScholarshipBridgingGrant",
-    body: "Bridging support for scholars transitioning between academic stages or programs, helping ensure continuity in their research journey.",
   },
   {
-    title: "Extension of Scholarship Bridging Grant",
+    key: "extensionBridging",
     href: "/Learning-and-Development/Researchers/ExtensionOfScholarshipBridgingGrant",
-    body: "Extended bridging support for eligible scholars who require additional time to complete their academic and research objectives.",
   },
   {
-    title: "PhD Students Supplementary Fund Grant",
+    key: "phdSupplementary",
     href: "/Learning-and-Development/Researchers/PhDStudentsSupplementaryFundGrant",
-    body: "Supplementary funding for PhD students to support their research needs, academic activities, and successful completion of their doctoral studies.",
   },
-];
+] as const;
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function ResearchersPage() {
@@ -210,14 +203,26 @@ export default function ResearchersPage() {
               </motion.h1>
             </div>
 
+            {/* Orange divider under title — desktop / tablet */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
+              className="mt-5 hidden h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right md:block"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              style={{ width: 72 }}
             />
           </motion.div>
+
+          {/* Orange divider on navy / white border — mobile only */}
+          <div className="pointer-events-none absolute bottom-10 left-0 right-0 z-30 md:hidden">
+            <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+              <motion.div
+                className="h-[3px] w-[72px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              />
+            </div>
+          </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
@@ -265,8 +270,10 @@ export default function ResearchersPage() {
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
               {PROGRAMS.map((program, i) => (
                 <ResearcherCard
-                  key={program.title}
-                  {...program}
+                  key={program.key}
+                  title={t(`programs.${program.key}.title`)}
+                  body={t(`programs.${program.key}.body`)}
+                  href={program.href}
                   learnMore={t("learnMore")}
                   index={i}
                 />
