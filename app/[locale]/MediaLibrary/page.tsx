@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -16,16 +17,6 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true, margin: "-60px" },
   transition: { duration: 0.6, delay, ease: EASE },
 });
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-// PLACEHOLDER downloads — rename each `title` and point `href` at your real file.
-const DOWNLOADS = [
-  { title: "Brand Guidelines", meta: "PDF", href: "#" },
-  { title: "Color Palettes", meta: "PDF", href: "#" },
-  { title: "Logo Usage", meta: "PDF", href: "#" },
-  { title: "Asset Pack", meta: "PDF", href: "#" },
-];
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
@@ -61,13 +52,10 @@ function DownloadRow({
 }) {
   return (
     <a
-      href={
-        href
-      } /* ── REPLACE: path to your PDF, e.g. "/files/your-file.pdf" ── */
+      href={href}
       download
       className="group flex items-center gap-5 py-6 sm:gap-6"
     >
-      {/* file icon */}
       <span className="grid h-12 w-12 shrink-0 place-items-center bg-[#7DC0F1]/[0.12] text-[#EC601B] transition-colors duration-300 group-hover:bg-[#EC601B] group-hover:text-white">
         <svg
           width="20"
@@ -94,7 +82,6 @@ function DownloadRow({
         </span>
       </span>
 
-      {/* download arrow */}
       <span className="shrink-0 text-[#1D2D44]/25 transition-all duration-300 group-hover:translate-y-0.5 group-hover:text-[#EC601B]">
         <svg
           width="18"
@@ -119,12 +106,22 @@ function DownloadRow({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function MediaLibraryPage() {
+  const t = useTranslations("MediaLibraryPage");
+  const isArabic = useLocale() === "ar";
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const DOWNLOADS = [
+    { title: t("download1Title"), meta: "PDF", href: "#" },
+    { title: t("download2Title"), meta: "PDF", href: "#" },
+    { title: t("download3Title"), meta: "PDF", href: "#" },
+    { title: t("download4Title"), meta: "PDF", href: "#" },
+  ];
 
   return (
     <>
@@ -135,7 +132,7 @@ export default function MediaLibraryPage() {
       />
 
       <main className="min-h-screen bg-white font-poppins">
-        {/* ── Hero — full bleed, header overlays on top ── */}
+        {/* Hero */}
         <section
           ref={heroRef}
           className="relative overflow-hidden flex items-center justify-start h-[360px] md:h-[460px] lg:h-[540px] bg-[#1D2D44]"
@@ -154,8 +151,9 @@ export default function MediaLibraryPage() {
               aria-hidden
               className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                background: isArabic
+                  ? "linear-gradient(252deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)"
+                  : "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
             />
             <div
@@ -173,29 +171,41 @@ export default function MediaLibraryPage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>About</span>
+              <span>{t("breadcrumbAbout")}</span>
               <span className="text-white/25">/</span>
-              <span>Media Library</span>
+              <span>{t("breadcrumbMediaLibrary")}</span>
             </motion.div>
 
-            <div className="overflow-hidden">
+            <div
+              className={`overflow-hidden ${
+                isArabic ? "pt-2 pb-4 sm:pb-5" : "pb-0.5"
+              }`}
+            >
               <motion.h1
-                className="text-left font-poppins text-4xl font-bold leading-tight tracking-tight text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl"
+                className={`text-left rtl:text-right font-poppins text-4xl font-bold text-white [text-shadow:_2px_2px_16px_rgba(0,0,0,0.4)] sm:text-5xl lg:text-6xl xl:text-7xl ${
+                  isArabic
+                    ? "leading-[1.55] tracking-normal"
+                    : "leading-tight tracking-tight"
+                }`}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Media Library
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
@@ -206,26 +216,18 @@ export default function MediaLibraryPage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ── Overview (full-width intro) ── */}
+        {/* Overview */}
         <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
             <div className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-12">
               <motion.div className="lg:col-span-7" {...fadeUp(0)}>
                 <p className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
-                  Welcome to the KFAS Media Library. This centralized resource
-                  is designed to ensure consistent and accurate representation
-                  of the Kuwait Foundation for the Advancement of Sciences brand
-                  across all platforms. Here, you will find our official brand
-                  guidelines, primary and secondary color palettes, and specific
-                  rules for correct logo usage. Please review our visual
-                  identity requirements and download the official asset packs
-                  and comprehensive PDF guideline manuals below to ensure your
-                  materials align with our standards.
+                  {t("overviewBody")}
                 </p>
               </motion.div>
 
               <motion.div
-                className="flex justify-center lg:col-span-5 lg:justify-end"
+                className="flex justify-center lg:col-span-5 lg:justify-end rtl:lg:justify-start"
                 {...fadeUp(0.1)}
               >
                 <Image
@@ -240,13 +242,12 @@ export default function MediaLibraryPage() {
           </div>
         </section>
 
-        {/* ── Downloads (two-column rail) ── */}
+        {/* Downloads */}
         <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                {/* placeholder heading — rename to your own */}
-                <SectionHead title="Downloads" />
+                <SectionHead title={t("downloadsTitle")} />
               </div>
 
               <div className="lg:col-span-8">

@@ -11,6 +11,7 @@ import {
   animate,
 } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
@@ -256,7 +257,7 @@ function WhoWeAre() {
               viewport={VIEWPORT}
               transition={{ duration: 0.6, delay: 0.65, ease: EASE }}
             >
-              <a
+              <Link
                 href="/about/AboutKfas"
                 className="group inline-flex items-center gap-3"
               >
@@ -284,7 +285,7 @@ function WhoWeAre() {
                     d="M17 8l4 4m0 0l-4 4m4-4H3"
                   />
                 </svg>
-              </a>
+              </Link>
             </motion.div>
           </div>
 

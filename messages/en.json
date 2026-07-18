@@ -47,6 +47,35 @@
     "readMore": "Read more",
     "imageAlt": "KFAS — Kuwait Foundation for the Advancement of Sciences"
   },
+  "LatestNews": {
+    "sectionTitle": "Recent News",
+    "allNewsLabel": "All News",
+    "readMoreLabel": "Read More",
+    "news1Title": "The ICTP SciFabLab Meets Kuwait",
+    "news1Description": "ICTP and the Kuwait Foundation for the Advancement of Sciences (KFAS) have been working together to support scientific development across the Middle East and Northern Africa since 1981. Their collaboration has recently expanded to include outreach activities in Kuwait.",
+    "news2Title": "KFAS signs a memorandum of understanding with the Mohammed Bin Rashid Space Centre.",
+    "news2Description": "The Kuwait Foundation for the Advancement of Sciences (KFAS) announced a memorandum of understanding with the Mohammed Bin Rashid Space Centre (MBRSC), establishing a strategic framework for cooperation in space sciences and scientific research.",
+    "news3Title": "Innovation Workshop Success",
+    "news3Description": "Over 200 participants joined our recent workshop on fostering innovation and entrepreneurship in the scientific community."
+  },
+  "LogoShowcase": {
+    "eyebrow": "Our Partners",
+    "headingMain": "Building the Future",
+    "headingEmphasis": "Together",
+    "visitPartnerLabel": "Visit Partner",
+    "partner1Title": "The Scientific Center",
+    "partner1Description": "The Scientific Center of Kuwait (TSCK) is a leading national institution dedicated to promoting scientific knowledge and public scientific awareness.",
+    "partner2Title": "Sabah Al-Ahmad Center",
+    "partner2Description": "A center dedicated to nurturing talent and creativity in young individuals under the Kuwait Foundation for the Advancement of Sciences.",
+    "partner3Title": "Advancement of Sciences",
+    "partner3Description": "An advanced research and development center focused on innovation, scientific excellence, and the dissemination of knowledge.",
+    "partner4Title": "Dasman Diabetes Institute",
+    "partner4Description": "Developing research projects, educational programs, and awareness-raising initiatives that improve society and combat diabetes.",
+    "partner5Title": "Kuwait National Space Research Center",
+    "partner5Description": "Kuwait's national center for space research, advancing scientific exploration, technology, and human-capital development under KFAS auspices.",
+    "partner6Title": "Sheikh Abdullah Al Salem Cultural Centre",
+    "partner6Description": "One of the world's largest cultural complexes, housing museums of natural history, science, space, and Arabic Islamic science with over 1,100 exhibits."
+  },
   "RIGPage": {
     "breadcrumbResearch": "Research",
     "breadcrumbGrants": "Grants",
@@ -2371,5 +2400,28 @@
     "eligibilityItem4": "Relevant public and private sector organizations",
     "ctaTitle": "Apply now and bring your initiative to life with KFAS support.",
     "ctaButton": "Apply Now"
+  },
+  "MediaLibraryPage": {
+    "breadcrumbAbout": "About",
+    "breadcrumbMediaLibrary": "Media Library",
+    "heroTitle": "Media Library",
+    "overviewBody": "Welcome to the KFAS Media Library. This centralized resource is designed to ensure consistent and accurate representation of the Kuwait Foundation for the Advancement of Sciences brand across all platforms. Here, you will find our official brand guidelines, primary and secondary color palettes, and specific rules for correct logo usage. Please review our visual identity requirements and download the official asset packs and comprehensive PDF guideline manuals below to ensure your materials align with our standards.",
+    "downloadsTitle": "Downloads",
+    "download1Title": "Brand Guidelines",
+    "download2Title": "Color Palettes",
+    "download3Title": "Logo Usage",
+    "download4Title": "Asset Pack"
+  },
+  "SearchPage": {
+    "heroTitle": "Search",
+    "loading": "Loading…",
+    "placeholder": "Search by keyword",
+    "clearSearch": "Clear search",
+    "all": "All",
+    "emptyHint": "Start typing to search across the site, or explore popular pages below.",
+    "explore": "Explore",
+    "noResultsPre": "No results for",
+    "resultSingular": "result",
+    "resultPlural": "results"
   }
 }

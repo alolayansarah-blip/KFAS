@@ -10,7 +10,8 @@ export type SearchItem = {
 };
 
 // ── Single source of truth: mirror of the header nav ──────────────────────────
-const SEARCH_NAV: NavItem[] = [
+// Kept in sync with components/Header.tsx's DEFAULT_NAV_ITEMS_EN / _AR.
+const SEARCH_NAV_EN: NavItem[] = [
   {
     label: "About",
     href: "/about",
@@ -74,8 +75,78 @@ const SEARCH_NAV: NavItem[] = [
   },
 ];
 
+const SEARCH_NAV_AR: NavItem[] = [
+  {
+    label: "عن المؤسسة",
+    href: "/about",
+    children: [
+      { label: "من نحن", href: "/about/AboutKfas" },
+      { label: "تاريخنا", href: "/about/OurHistory" },
+      { label: "استراتيجيتنا", href: "/about/OurStrategy" },
+      { label: "مجلس الإدارة", href: "/about/BoardOfDirectors" },
+      { label: "فريقنا", href: "/about/our-team" },
+    ],
+  },
+  {
+    label: "البحث العلمي",
+    href: "/Research",
+    children: [
+      { label: "دعم البحوث / المنح", href: "/research/grants" },
+      { label: "الأنشطة والفعاليات", href: "/research/ActivitiesAndEvents" },
+      { label: "الدراسات بالتكليف", href: "/research/AssignedStudies" },
+      { label: "رعاية المؤتمرات العلمية", href: "/research/SCS" },
+      { label: "نشر التكنلوجيـا", href: "/research/TechDeployment" },
+      {
+        label: "البحث والتطوير في القطاع الخاص",
+        href: "/research/RandDPrivate",
+      },
+      { label: "بوابة أبحاث المؤسسة", href: "/research/KFASResearchPortal" },
+    ],
+  },
+  {
+    label: "التعلّم والتطوير",
+    href: "/Learning-and-Development",
+    children: [
+      {
+        label: "الباحثون",
+        href: "/Learning-and-Development/Researchers",
+      },
+      {
+        label: "المهنيون",
+        href: "/Learning-and-Development/Professionals",
+      },
+      { label: "الشباب", href: "/Learning-and-Development/Youth" },
+    ],
+  },
+  {
+    label: "العلوم والمجتمع",
+    href: "/Science-and-Society",
+    children: [
+      {
+        label: "رعاية الأنشطة والفعاليات",
+        href: "/ScienceAndSociety/ActivitiesAndEventsSponsership",
+      },
+      { label: "المنشورات", href: "https://www.aspdkw.com/" },
+      {
+        label: "ذوو الاحتياجات الخاصة",
+        href: "/ScienceAndSociety/SpecialNeeds",
+      },
+    ],
+  },
+  {
+    label: "الجوائز",
+    href: "/prizes",
+    children: [
+      { label: "جائزة الكويت", href: "/prizes/KuwaitPrize" },
+      { label: "جائزة جابر الأحمد", href: "/prizes/Jaber-AlAhmadPrize" },
+      { label: "جائزة السميط", href: "/prizes/AlSumaitPrize" },
+      { label: "الفائزون", href: "/prizes/Laureates" },
+    ],
+  },
+];
+
 // ── Pages NOT in the header nav (Contact, Careers...). NO Home here. ──────────
-const RESEARCHER_PROGRAMS: SearchItem[] = [
+const RESEARCHER_PROGRAMS_EN: SearchItem[] = [
   {
     title: "International Collaborative Research",
     description:
@@ -134,10 +205,67 @@ const RESEARCHER_PROGRAMS: SearchItem[] = [
   },
 ];
 
-const EXTRA_PAGES: SearchItem[] = [...RESEARCHER_PROGRAMS];
+const RESEARCHER_PROGRAMS_AR: SearchItem[] = [
+  {
+    title: "البحوث التعاونية الدولية",
+    description:
+      "تمويل يمكّن الباحثين الكويتيين من التعاون مع مؤسسات عالمية رائدة في مشاريع بحثية مشتركة.",
+    url: "/Learning-and-Development/Researchers/International-Collaborative-Research",
+    category: "الباحثون",
+    keywords: ["دولي", "تعاون", "بحث مشترك", "عالمي"],
+  },
+  {
+    title: "منح الزمالة البحثية",
+    description:
+      "فرص زمالة تدعم الباحثين في تطوير مسيرتهم الأكاديمية والعلمية.",
+    url: "/Learning-and-Development/Researchers/ScholarFellowship",
+    category: "الباحثون",
+    keywords: ["زمالة", "باحث", "منحة", "مسيرة مهنية"],
+  },
+  {
+    title: "دعم النشر العلمي",
+    description:
+      "دعم لنشر الأبحاث العلمية عالية الجودة في مجلات ومنافذ علمية مرموقة.",
+    url: "/Learning-and-Development/Researchers/Scholarly-Publication",
+    category: "الباحثون",
+    keywords: ["نشر", "بحث", "مجلة", "ورقة بحثية"],
+  },
+  {
+    title: "المهمات العلمية",
+    description:
+      "منح تمكّن الباحثين من المشاركة في المهمات العلمية والمؤتمرات والأنشطة الميدانية.",
+    url: "/Learning-and-Development/Researchers/ScientificMissions",
+    category: "الباحثون",
+    keywords: ["مهمات", "مؤتمر", "ميداني", "سفر"],
+  },
+  {
+    title: "المنحة الدراسية الجزئية",
+    description:
+      "دعم جزئي للباحثين المنتقلين بين المراحل أو البرامج الأكاديمية.",
+    url: "/Learning-and-Development/Researchers/ScholarshipBridgingGrant",
+    category: "الباحثون",
+    keywords: ["منحة جزئية", "منحة دراسية", "انتقال أكاديمي"],
+  },
+  {
+    title: "تمديد المنحة الدراسية الجزئية",
+    description:
+      "دعم إضافي للباحثين المؤهلين الذين يحتاجون وقتاً إضافياً لإتمام أهدافهم.",
+    url: "/Learning-and-Development/Researchers/ExtensionOfScholarshipBridgingGrant",
+    category: "الباحثون",
+    keywords: ["تمديد", "منحة جزئية", "منحة دراسية"],
+  },
+  {
+    title: "منحة مكمّلة لطلبة الدكتوراه",
+    description:
+      "تمويل مكمّل لطلبة الدكتوراه لدعم احتياجاتهم البحثية ودراستهم.",
+    url: "/Learning-and-Development/Researchers/PhDStudentsSupplementaryFundGrant",
+    category: "الباحثون",
+    keywords: ["دكتوراه", "منحة مكملة", "طلبة", "تمويل"],
+  },
+];
 
-// ── Extra keywords per URL (synonyms, abbreviations, Arabic terms…) ───────────
-const KEYWORDS: Record<string, string[]> = {
+// ── Extra keywords per URL (synonyms, abbreviations…) ──────────────────────────
+const KEYWORDS_EN: Record<string, string[]> = {
   "/about": ["who we are", "mission", "vision", "values", "foundation", "kfas"],
   "/about/AboutKfas": ["who", "mission", "vision", "values", "foundation"],
   "/about/OurHistory": ["history", "anniversary", "50 years", "founded"],
@@ -172,8 +300,35 @@ const KEYWORDS: Record<string, string[]> = {
   // …add more URLs and terms here anytime
 };
 
+const KEYWORDS_AR: Record<string, string[]> = {
+  "/about": ["من نحن", "الرسالة", "الرؤية", "القيم", "المؤسسة", "كفاس"],
+  "/about/AboutKfas": ["من نحن", "الرسالة", "الرؤية", "القيم"],
+  "/about/OurHistory": ["تاريخ", "الذكرى", "50 عام", "تأسست"],
+  "/about/our-team": ["فريق", "موظفين", "الفريق"],
+  "/research/grants": ["تمويل", "منحة", "مال", "تقديم", "طلب", "منح"],
+  "/research/SCS": ["مؤتمر", "رعاية", "تمويل فعاليات"],
+  "/research/KFASResearchPortal": ["بوابة", "تسجيل دخول", "تقديم الطلب"],
+  "/Learning-and-Development/Youth": ["طلاب", "مدرسة", "شباب", "أطفال"],
+  "/ScienceAndSociety/SpecialNeeds": [
+    "إعاقة",
+    "ذوي الإعاقة",
+    "إمكانية الوصول",
+    "احتياجات خاصة",
+  ],
+  "/ScienceAndSociety/ActivitiesAndEventsSponsership": [
+    "رعاية",
+    "فعاليات",
+    "أنشطة",
+    "تمويل فعالية",
+  ],
+  "https://www.aspdkw.com/": ["منشورات", "مجلة", "كتب", "تقارير"],
+  "/prizes/KuwaitPrize": ["جائزة", "جائزة الكويت"],
+  "/prizes/AlSumaitPrize": ["جائزة", "أفريقيا", "السميط"],
+  "/prizes/Laureates": ["فائزون", "حائزون", "الفائزون"],
+};
+
 // Optional: nicer descriptions per URL. Missing ones fall back to "".
-const DESCRIPTIONS: Record<string, string> = {
+const DESCRIPTIONS_EN: Record<string, string> = {
   "/about": "Learn about KFAS — mission, history, strategy and leadership.",
   "/about/AboutKfas": "Our mission and values.",
   "/about/OurHistory": "50 years of scientific progress.",
@@ -196,35 +351,125 @@ const DESCRIPTIONS: Record<string, string> = {
   "/prizes/Laureates": "Past prize laureates and winners.",
 };
 
+const DESCRIPTIONS_AR: Record<string, string> = {
+  "/about":
+    "تعرّف على مؤسسة الكويت للتقدم العلمي — الرسالة والتاريخ والاستراتيجية والقيادة.",
+  "/about/AboutKfas": "رسالتنا وقيمنا.",
+  "/about/OurHistory": "خمسون عاماً من التقدم العلمي.",
+  "/about/OurStrategy": "الرؤية والأهداف الاستراتيجية.",
+  "/about/BoardOfDirectors": "الحوكمة والقيادة.",
+  "/about/our-team": "تعرّف على فريق المؤسسة.",
+  "/research/grants": "فرص التمويل وبرامج المنح.",
+  "/research/ActivitiesAndEvents": "الأنشطة والفعاليات البحثية.",
+  "/research/AssignedStudies": "الدراسات المكلَّف بها.",
+  "/research/SCS": "رعاية المؤتمرات العلمية.",
+  "/research/TechDeployment": "برامج نشر التكنولوجيا.",
+  "/research/RandDPrivate": "دعم البحث والتطوير في القطاع الخاص.",
+  "/research/KFASResearchPortal": "الوصول إلى بوابة أبحاث المؤسسة.",
+  "/ScienceAndSociety/ActivitiesAndEventsSponsership":
+    "رعاية الأنشطة والفعاليات العلمية.",
+  "/ScienceAndSociety/SpecialNeeds": "برامج دعم ذوي الاحتياجات الخاصة.",
+  "https://www.aspdkw.com/": "منشورات العلوم والمجتمع.",
+  "/prizes/KuwaitPrize": "جائزة الكويت للإنجاز العلمي.",
+  "/prizes/AlSumaitPrize": "جائزة السميط.",
+  "/prizes/Laureates": "الفائزون السابقون بالجوائز.",
+};
+
+// Unicode-aware so Arabic labels split into real words too.
 function keywordsFrom(label: string): string[] {
   return label
     .toLowerCase()
-    .split(/[^a-z0-9]+/)
+    .split(/[^\p{L}\p{N}]+/u)
     .filter((w) => w.length > 1);
 }
 
-function flatten(items: NavItem[], category: string): SearchItem[] {
+function flatten(
+  items: NavItem[],
+  category: string,
+  descriptions: Record<string, string>,
+  extraKeywords: Record<string, string[]>,
+): SearchItem[] {
   const out: SearchItem[] = [];
   for (const item of items) {
     out.push({
       title: item.label,
-      description: DESCRIPTIONS[item.href] ?? "",
+      description: descriptions[item.href] ?? "",
       url: item.href,
       category,
-      keywords: [...keywordsFrom(item.label), ...(KEYWORDS[item.href] ?? [])],
+      keywords: [
+        ...keywordsFrom(item.label),
+        ...(extraKeywords[item.href] ?? []),
+      ],
     });
     if (item.children?.length) {
-      out.push(...flatten(item.children, category));
+      out.push(
+        ...flatten(item.children, category, descriptions, extraKeywords),
+      );
     }
   }
   return out;
 }
 
-export const searchIndex: SearchItem[] = (() => {
-  const derived = SEARCH_NAV.flatMap((top) => flatten([top], top.label));
-  const all = [...EXTRA_PAGES, ...derived];
+function buildIndex(
+  nav: NavItem[],
+  extraPages: SearchItem[],
+  descriptions: Record<string, string>,
+  extraKeywords: Record<string, string[]>,
+): SearchItem[] {
+  const derived = nav.flatMap((top) =>
+    flatten([top], top.label, descriptions, extraKeywords),
+  );
+  const all = [...extraPages, ...derived];
   const seen = new Set<string>();
   return all.filter((it) =>
     seen.has(it.url) ? false : (seen.add(it.url), true),
   );
-})();
+}
+
+const searchIndexEn: SearchItem[] = buildIndex(
+  SEARCH_NAV_EN,
+  RESEARCHER_PROGRAMS_EN,
+  DESCRIPTIONS_EN,
+  KEYWORDS_EN,
+);
+
+const searchIndexAr: SearchItem[] = buildIndex(
+  SEARCH_NAV_AR,
+  RESEARCHER_PROGRAMS_AR,
+  DESCRIPTIONS_AR,
+  KEYWORDS_AR,
+);
+
+// Merge in the other language's title/description/keywords as extra search
+// terms, so typing an Arabic word while browsing the English site (or vice
+// versa) still finds the right page — titles/descriptions shown to the user
+// stay in the current locale, only the match terms are bilingual.
+function withBilingualKeywords(
+  primary: SearchItem[],
+  secondary: SearchItem[],
+): SearchItem[] {
+  const secondaryByUrl = new Map(secondary.map((item) => [item.url, item]));
+  return primary.map((item) => {
+    const other = secondaryByUrl.get(item.url);
+    if (!other) return item;
+    return {
+      ...item,
+      keywords: [
+        ...item.keywords,
+        ...keywordsFrom(other.title),
+        ...keywordsFrom(other.description),
+        ...other.keywords,
+      ],
+    };
+  });
+}
+
+const bilingualIndexEn = withBilingualKeywords(searchIndexEn, searchIndexAr);
+const bilingualIndexAr = withBilingualKeywords(searchIndexAr, searchIndexEn);
+
+export function getSearchIndex(isArabic: boolean): SearchItem[] {
+  return isArabic ? bilingualIndexAr : bilingualIndexEn;
+}
+
+// Backward-compatible default (English) export.
+export const searchIndex: SearchItem[] = searchIndexEn;

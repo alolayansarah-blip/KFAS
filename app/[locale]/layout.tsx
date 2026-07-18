@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { Poppins, Tajawal } from "next/font/google";
+import { Poppins } from "next/font/google";
+import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
 
@@ -10,10 +11,17 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-const tajawal = Tajawal({
-  weight: ["300", "400", "500", "700", "800"],
-  subsets: ["arabic", "latin"],
+// Self-hosted so Arabic does not depend on Google Fonts at build time.
+const tajawal = localFont({
+  src: [
+    { path: "../fonts/tajawal/tajawal-300.ttf", weight: "300", style: "normal" },
+    { path: "../fonts/tajawal/tajawal-400.ttf", weight: "400", style: "normal" },
+    { path: "../fonts/tajawal/tajawal-500.ttf", weight: "500", style: "normal" },
+    { path: "../fonts/tajawal/tajawal-700.ttf", weight: "700", style: "normal" },
+    { path: "../fonts/tajawal/tajawal-800.ttf", weight: "800", style: "normal" },
+  ],
   variable: "--font-arabic",
+  display: "swap",
 });
 
 export function generateStaticParams() {

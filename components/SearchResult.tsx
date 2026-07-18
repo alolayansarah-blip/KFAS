@@ -2,10 +2,13 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { searchIndex, type SearchItem } from "@/lib/searchIndex";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, useRouter } from "@/src/i18n/navigation";
+import { getSearchIndex, type SearchItem } from "@/lib/searchIndex";
+
+const ALL_CAT = "__all__";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -14,20 +17,19 @@ const SAFE_X =
   "pl-[max(1.5rem,env(safe-area-inset-left))] pr-[max(1.5rem,env(safe-area-inset-right))] sm:pl-8 sm:pr-8 lg:pl-12 lg:pr-12";
 const SAFE_BOTTOM = "pb-[max(2rem,env(safe-area-inset-bottom))]";
 
-const CATEGORY_ORDER = Array.from(new Set(searchIndex.map((i) => i.category)));
-
-const FEATURED: SearchItem[] = (() => {
+function featuredFromIndex(index: SearchItem[]): SearchItem[] {
+  const categoryOrder = Array.from(new Set(index.map((i) => i.category)));
   const byCat = new Map<string, SearchItem>();
-  for (const it of searchIndex) {
+  for (const it of index) {
     const existing = byCat.get(it.category);
     if (!existing) byCat.set(it.category, it);
     else if (!existing.description && it.description)
       byCat.set(it.category, it);
   }
-  return CATEGORY_ORDER.map((c) => byCat.get(c)).filter(
-    Boolean,
-  ) as SearchItem[];
-})();
+  return categoryOrder
+    .map((c) => byCat.get(c))
+    .filter(Boolean) as SearchItem[];
+}
 
 function scoreItem(item: SearchItem, terms: string[]) {
   const title = item.title.toLowerCase();
@@ -91,11 +93,23 @@ const ArrowIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({
+  children,
+  isArabic,
+}: {
+  children: React.ReactNode;
+  isArabic: boolean;
+}) {
   return (
     <div className="mb-8 flex items-center gap-3">
       <span className="h-px w-8 shrink-0 bg-[#EC601B]" />
-      <span className="font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
+      <span
+        className={`font-poppins font-semibold text-[#EC601B] ${
+          isArabic
+            ? "text-[15px] tracking-normal"
+            : "text-[10px] uppercase tracking-[0.35em]"
+        }`}
+      >
         {children}
       </span>
     </div>
@@ -125,7 +139,7 @@ function Chip({
     >
       {label}
       <span
-        className={`ml-1.5 ${active ? "text-white/70" : "text-[#1D2D44]/35"}`}
+        className={`ms-1.5 ${active ? "text-white/70" : "text-[#1D2D44]/35"}`}
       >
         {count}
       </span>
@@ -134,11 +148,22 @@ function Chip({
 }
 
 export default function SearchResults() {
+  const t = useTranslations("SearchPage");
   const params = useSearchParams();
   const router = useRouter();
+  const isArabic = useLocale() === "ar";
+  const searchIndex = useMemo(() => getSearchIndex(isArabic), [isArabic]);
+  const categoryOrder = useMemo(
+    () => Array.from(new Set(searchIndex.map((i) => i.category))),
+    [searchIndex],
+  );
+  const featured = useMemo(
+    () => featuredFromIndex(searchIndex),
+    [searchIndex],
+  );
   const initial = params.get("q") ?? "";
   const [query, setQuery] = useState(initial);
-  const [activeCat, setActiveCat] = useState<string>("All");
+  const [activeCat, setActiveCat] = useState<string>(ALL_CAT);
 
   useEffect(() => setQuery(initial), [initial]);
 
@@ -150,26 +175,26 @@ export default function SearchResults() {
       .filter((r) => r.score > 0)
       .sort((a, b) => b.score - a.score)
       .map((r) => r.item);
-  }, [query]);
+  }, [query, searchIndex]);
 
   const cats = useMemo(() => {
     const counts = new Map<string, number>();
     for (const r of results)
       counts.set(r.category, (counts.get(r.category) ?? 0) + 1);
-    return CATEGORY_ORDER.filter((c) => counts.has(c)).map((c) => ({
+    return categoryOrder.filter((c) => counts.has(c)).map((c) => ({
       name: c,
       count: counts.get(c)!,
     }));
-  }, [results]);
+  }, [results, categoryOrder]);
 
   useEffect(() => {
-    if (activeCat !== "All" && !cats.some((c) => c.name === activeCat)) {
-      setActiveCat("All");
+    if (activeCat !== ALL_CAT && !cats.some((c) => c.name === activeCat)) {
+      setActiveCat(ALL_CAT);
     }
   }, [cats, activeCat]);
 
   const filtered =
-    activeCat === "All"
+    activeCat === ALL_CAT
       ? results
       : results.filter((r) => r.category === activeCat);
 
@@ -188,12 +213,12 @@ export default function SearchResults() {
     <>
       {/* ── Search band ── */}
       <section
-        className={`${SAFE_X} py-12 sm:py-14`}
+        className={`${SAFE_X} pb-12 pt-8 sm:pb-14 sm:pt-10`}
         style={{ background: "#7DC0F1" }}
       >
         <div className={`${CONTAINER} relative`}>
           <svg
-            className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-[#1D2D44]/35"
+            className="pointer-events-none absolute start-5 top-1/2 z-10 -translate-y-1/2 text-[#1D2D44]/35"
             width="20"
             height="20"
             viewBox="0 0 24 24"
@@ -211,16 +236,16 @@ export default function SearchResults() {
             autoFocus
             value={query}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="Search by keyword"
-            aria-label="Search by keyword"
-            className="w-full rounded-none border border-white/30 bg-white py-4 pl-12 pr-12 font-poppins text-[15px] font-medium text-[#1D2D44] shadow-[0_8px_32px_-8px_rgba(29,45,68,0.18)] placeholder:font-normal placeholder:text-[#1D2D44]/40 transition-[border-color,box-shadow] focus:border-[#1D2D44]/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+            placeholder={t("placeholder")}
+            aria-label={t("placeholder")}
+            className="w-full rounded-none border border-white/30 bg-white py-4 ps-12 pe-12 font-poppins text-[15px] font-medium text-[#1D2D44] shadow-[0_8px_32px_-8px_rgba(29,45,68,0.18)] placeholder:font-normal placeholder:text-[#1D2D44]/40 transition-[border-color,box-shadow] focus:border-[#1D2D44]/20 focus:outline-none focus:ring-2 focus:ring-white/50"
           />
           {query && (
             <button
               type="button"
               onClick={() => onChange("")}
-              aria-label="Clear search"
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1D2D44]/40 transition-colors hover:text-[#EC601B]"
+              aria-label={t("clearSearch")}
+              className="absolute end-4 top-1/2 -translate-y-1/2 text-[#1D2D44]/40 transition-colors hover:text-[#EC601B]"
             >
               <svg
                 width="20"
@@ -248,10 +273,10 @@ export default function SearchResults() {
           {results.length > 0 && (
             <div className="mb-10 flex flex-wrap gap-2">
               <Chip
-                label="All"
+                label={t("all")}
                 count={results.length}
-                active={activeCat === "All"}
-                onClick={() => setActiveCat("All")}
+                active={activeCat === ALL_CAT}
+                onClick={() => setActiveCat(ALL_CAT)}
               />
               {cats.map((c) => (
                 <Chip
@@ -268,14 +293,13 @@ export default function SearchResults() {
           {trimmed === "" ? (
             <div>
               <p className="max-w-xl font-poppins text-[15px] font-light leading-[1.85] text-[#1D2D44]/55">
-                Start typing to search across the site, or explore popular
-                pages below.
+                {t("emptyHint")}
               </p>
 
               <div className="mt-14">
-                <SectionLabel>Explore</SectionLabel>
+                <SectionLabel isArabic={isArabic}>{t("explore")}</SectionLabel>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {FEATURED.map((item, i) => (
+                  {featured.map((item, i) => (
                     <motion.div
                       key={item.url}
                       initial={{ opacity: 0, y: 12 }}
@@ -290,7 +314,13 @@ export default function SearchResults() {
                         item={item}
                         className="group flex h-full flex-col gap-3 border border-[#1D2D44]/08 bg-[#BBDEFB]/10 p-6 transition-all duration-300 hover:border-[#EC601B]/35 hover:bg-[#BBDEFB]/25 hover:shadow-[0_12px_40px_-16px_rgba(29,45,68,0.12)]"
                       >
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#EC601B]">
+                        <span
+                          className={`font-semibold text-[#EC601B] ${
+                            isArabic
+                              ? "text-[15px] tracking-normal"
+                              : "text-[10px] uppercase tracking-[0.28em]"
+                          }`}
+                        >
                           {item.category}
                         </span>
                         <span className="font-poppins text-[17px] font-semibold leading-snug text-[#1D2D44] transition-colors group-hover:text-[#EC601B]">
@@ -301,7 +331,7 @@ export default function SearchResults() {
                             {item.description}
                           </span>
                         )}
-                        <ArrowIcon className="mt-auto text-[#1D2D44]/20 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#EC601B]" />
+                        <ArrowIcon className="mt-auto text-[#1D2D44]/20 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#EC601B] rtl:group-hover:-translate-x-1" />
                       </SmartLink>
                     </motion.div>
                   ))}
@@ -310,7 +340,7 @@ export default function SearchResults() {
             </div>
           ) : results.length === 0 ? (
             <p className="font-poppins text-[15px] text-[#1D2D44]/60">
-              No results for{" "}
+              {t("noResultsPre")}{" "}
               <span className="font-medium text-[#1D2D44]">
                 &ldquo;{trimmed}&rdquo;
               </span>
@@ -318,9 +348,18 @@ export default function SearchResults() {
             </p>
           ) : (
             <div className="max-w-3xl">
-              <p className="mb-6 font-poppins text-[12px] font-medium uppercase tracking-[0.2em] text-[#1D2D44]/40">
-                {filtered.length} result{filtered.length > 1 ? "s" : ""}
-                {activeCat !== "All" ? ` · ${activeCat}` : ""}
+              <p
+                className={`mb-6 font-poppins font-medium text-[#1D2D44]/40 ${
+                  isArabic
+                    ? "text-[15px] tracking-normal"
+                    : "text-[12px] uppercase tracking-[0.2em]"
+                }`}
+              >
+                {filtered.length}{" "}
+                {filtered.length === 1
+                  ? t("resultSingular")
+                  : t("resultPlural")}
+                {activeCat !== ALL_CAT ? ` · ${activeCat}` : ""}
               </p>
               <div className="divide-y divide-[#1D2D44]/08 border-t border-[#1D2D44]/08">
                 {filtered.map((item, i) => (
@@ -340,7 +379,13 @@ export default function SearchResults() {
                     >
                       <div className="flex items-center justify-between gap-6">
                         <div className="flex min-w-0 flex-col gap-1.5">
-                          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#EC601B]">
+                          <span
+                            className={`font-semibold text-[#EC601B] ${
+                              isArabic
+                                ? "text-[15px] tracking-normal"
+                                : "text-[10px] uppercase tracking-[0.28em]"
+                            }`}
+                          >
                             {item.category}
                           </span>
                           <span className="font-poppins text-[17px] font-semibold text-[#1D2D44] transition-colors group-hover:text-[#EC601B]">
@@ -352,7 +397,7 @@ export default function SearchResults() {
                             </span>
                           )}
                         </div>
-                        <ArrowIcon className="shrink-0 text-[#1D2D44]/20 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#EC601B]" />
+                        <ArrowIcon className="shrink-0 text-[#1D2D44]/20 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#EC601B] rtl:group-hover:-translate-x-1" />
                       </div>
                     </SmartLink>
                   </motion.div>

@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
@@ -22,40 +23,45 @@ const ArrowIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+// `dateISO` drives sorting; the displayed date is formatted per-locale at
+// render time so it shows Arabic month names without breaking the sort.
 const news = [
   {
     image: "/image/news1.jpeg",
-    title: "The ICTP SciFabLab Meets Kuwait",
-    description:
-      "ICTP and the Kuwait Foundation for the Advancement of Sciences (KFAS) have been working together to support scientific development across the Middle East and Northern Africa since 1981. Their collaboration has recently expanded to include outreach activities in Kuwait.",
-    date: "January 10, 2026",
+    titleKey: "news1Title",
+    descriptionKey: "news1Description",
+    dateISO: "2026-01-10",
     link: "#",
   },
   {
     image: "/image/news2.jpeg",
-    title:
-      "KFAS signs a memorandum of understanding with the Mohammed Bin Rashid Space Centre.",
-    description:
-      "The Kuwait Foundation for the Advancement of Sciences (KFAS) announced a memorandum of understanding with the Mohammed Bin Rashid Space Centre (MBRSC), establishing a strategic framework for cooperation in space sciences and scientific research.",
-    date: "December 5, 2024",
+    titleKey: "news2Title",
+    descriptionKey: "news2Description",
+    dateISO: "2024-12-05",
     link: "#",
   },
   {
     image: "/image/news3.jpeg",
-    title: "Innovation Workshop Success",
-    description:
-      "Over 200 participants joined our recent workshop on fostering innovation and entrepreneurship in the scientific community.",
-    date: "November 28, 2024",
+    titleKey: "news3Title",
+    descriptionKey: "news3Description",
+    dateISO: "2024-11-28",
     link: "#",
   },
-];
+] as const;
 
 const sortedNews = [...news].sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  (a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime(),
 );
 
-export default function OurImpactStories() {
+export default function LatestNews() {
+  const t = useTranslations("LatestNews");
+  const isArabic = useLocale() === "ar";
   const sectionRef = useRef<HTMLElement>(null);
+
+  const dateFormatter = new Intl.DateTimeFormat(
+    isArabic ? "ar-u-nu-latn" : "en-US",
+    { year: "numeric", month: "long", day: "numeric" },
+  );
 
   return (
     <section
@@ -75,7 +81,7 @@ export default function OurImpactStories() {
               viewport={VIEWPORT}
               transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
             >
-              Recent News
+              {t("sectionTitle")}
             </motion.h2>
           </div>
 
@@ -90,9 +96,9 @@ export default function OurImpactStories() {
           >
             <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
             <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-              All News
+              {t("allNewsLabel")}
             </span>
-            <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]" />
+            <ArrowIcon className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:rotate-180 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]" />
           </motion.a>
         </div>
 
@@ -105,7 +111,7 @@ export default function OurImpactStories() {
                 <div className="relative overflow-hidden aspect-[16/10] mb-5">
                   <img
                     src={item.image}
-                    alt={item.title}
+                    alt={t(item.titleKey)}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-[#1D2D44]/0 transition-all duration-500 group-hover:bg-[#1D2D44]/10" />
@@ -113,26 +119,26 @@ export default function OurImpactStories() {
 
                 {/* Date */}
                 <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1D2D44]/35">
-                  {item.date}
+                  {dateFormatter.format(new Date(item.dateISO))}
                 </p>
 
                 {/* Title */}
                 <h3 className="font-poppins text-[17px] font-normal text-[#1D2D44] leading-snug mb-3 line-clamp-3 transition-colors duration-300 group-hover:text-[#EC601B]">
-                  {item.title}
+                  {t(item.titleKey)}
                 </h3>
 
                 {/* Description */}
                 <p className="font-poppins text-[14px] font-light text-[#1D2D44]/55 leading-relaxed line-clamp-3 mb-6">
-                  {item.description}
+                  {t(item.descriptionKey)}
                 </p>
 
                 {/* CTA */}
                 <div className="mt-auto flex items-center gap-3">
                   <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
                   <span className="text-[12px] font-medium tracking-[0.08em] text-[#EC601B]">
-                    Read More
+                    {t("readMoreLabel")}
                   </span>
-                  <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0" />
+                  <ArrowIcon className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:rotate-180 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0" />
                 </div>
               </a>
             </article>

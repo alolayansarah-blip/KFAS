@@ -31,7 +31,7 @@ const CARDS_META = [
   },
   {
     href: "/Learning-and-Development",
-    image: "/image/OES.png",
+    image: "/image/youth.webp",
     fallbackImage: FALLBACK_IMAGE,
   },
   {
