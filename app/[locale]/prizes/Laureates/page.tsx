@@ -550,25 +550,16 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                   height: isActive ? 304 : 248,
                 }}
               >
-                {/* gold frame — arched top, soft sheen, fine inner line */}
+                {/* gold frame — one calm gradient, one fine inner line */}
                 <div
                   className="absolute inset-0 overflow-hidden rounded-t-[1.6rem] rounded-b-md"
                   style={{
-                    background: `linear-gradient(168deg, #F7E9BC 0%, ${GOLD} 40%, ${GOLD_DEEP} 100%)`,
+                    background: `linear-gradient(172deg, #F1E0AE 0%, ${GOLD} 50%, ${GOLD_DEEP} 100%)`,
                     boxShadow: isActive
-                      ? `0 30px 55px -18px rgba(70,28,4,0.55), 0 0 46px -10px rgba(247,224,160,0.5)`
+                      ? "0 26px 48px -20px rgba(70,28,4,0.5)"
                       : "0 16px 28px -16px rgba(70,28,4,0.45)",
                   }}
                 >
-                  {/* single diagonal sheen */}
-                  <div
-                    aria-hidden
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(115deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.08) 34%, rgba(255,255,255,0) 55%)",
-                    }}
-                  />
                   {/* fine inner hairline */}
                   <div
                     aria-hidden
@@ -579,62 +570,58 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                   />
                 </div>
 
-                {/* portrait — matted inside the gold frame */}
-                <div className="absolute inset-x-[5.5%] bottom-[4.5%] top-[5.5%] overflow-hidden rounded-t-[1.05rem] rounded-b-[0.2rem]">
-                  {l.image ? (
-                    <Image
-                      src={l.image}
-                      alt={l.name}
-                      fill
-                      sizes="220px"
-                      className="object-cover object-top"
-                      draggable={false}
-                    />
-                  ) : (
-                    <div
-                      className="absolute inset-0 flex items-end justify-center pb-6"
-                      style={{
-                        background:
-                          "linear-gradient(180deg, rgba(255,252,240,0.55) 0%, rgba(255,252,240,0.2) 100%)",
-                      }}
-                    >
-                      <svg
-                        width="72"
-                        height="72"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#7DC0F1"
-                        strokeOpacity="0.55"
-                        strokeWidth="1.25"
+                {/* mat — portrait above, ivory placard below */}
+                <div className="absolute inset-x-[5.5%] bottom-[4.5%] top-[5.5%] flex flex-col overflow-hidden rounded-t-[1.05rem] rounded-b-[0.2rem]">
+                  <div className="relative min-h-0 flex-1 overflow-hidden">
+                    {l.image ? (
+                      <Image
+                        src={l.image}
+                        alt={l.name}
+                        fill
+                        sizes="220px"
+                        className="object-cover object-top"
+                        draggable={false}
+                      />
+                    ) : (
+                      <div
+                        className="absolute inset-0 flex items-end justify-center pb-6"
+                        style={{
+                          background:
+                            "linear-gradient(180deg, rgba(255,252,240,0.55) 0%, rgba(255,252,240,0.2) 100%)",
+                        }}
                       >
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-                      </svg>
-                    </div>
-                  )}
-                  {/* fine edge over the photo so it sits into the mat */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-t-[1.05rem] rounded-b-[0.2rem]"
-                    style={{
-                      boxShadow:
-                        "inset 0 0 0 1px rgba(90,62,18,0.28), inset 0 -14px 22px -14px rgba(90,62,18,0.3)",
-                    }}
-                  />
+                        <svg
+                          width="72"
+                          height="72"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#C9A24A"
+                          strokeOpacity="0.5"
+                          strokeWidth="1.25"
+                        >
+                          <circle cx="12" cy="8" r="4" />
+                          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                        </svg>
+                      </div>
+                    )}
+                    {/* fine edge over the photo so it sits into the mat */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        boxShadow:
+                          "inset 0 0 0 1px rgba(90,62,18,0.28), inset 0 -14px 22px -14px rgba(90,62,18,0.3)",
+                      }}
+                    />
+                  </div>
 
-                  {/* anchored identity panel — keeps every name readable */}
-                  <div
-                    className="absolute inset-x-0 bottom-0 z-10 px-3 pb-3 pt-12 text-center"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(125,192,241,0.98) 0%, rgba(125,192,241,0.88) 52%, transparent 100%)",
-                    }}
-                  >
+                  {/* ivory placard — the museum label; every name readable */}
+                  <div className="shrink-0 border-t border-[#C9A24A]/45 bg-[#FDFAF1] px-2.5 pb-2.5 pt-2 text-center">
                     <div className="font-poppins text-[12px] font-semibold leading-[1.25] tracking-tight text-[#1D2D44] sm:text-[13px]">
                       {l.name}
                     </div>
                     {isActive ? (
-                      <div className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#1D2D44]/75">
+                      <div className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#1D2D44]/60">
                         {PRIZE_LABEL[l.prize]}
                         {l.year ? ` · ${l.year}` : ""}
                       </div>
@@ -744,7 +731,7 @@ function LaureateCard({ l }: { l: Laureate }) {
   return (
     <motion.article
       variants={RISE}
-      className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#1D2D44]/[0.08] bg-white shadow-[0_2px_24px_-16px_rgba(29,45,68,0.20)]"
+      className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#1D2D44]/[0.10] bg-white shadow-[0_2px_24px_-16px_rgba(29,45,68,0.20)]"
       whileHover={{ y: -4, boxShadow: "0 14px 34px -18px rgba(29,45,68,0.28)" }}
       transition={{ duration: 0.3, ease: EASE }}
     >
@@ -915,33 +902,47 @@ function StatsSection() {
   }, []);
 
   return (
-    <section ref={ref} className="bg-white">
+    <section ref={ref} className="bg-[#7DC0F1]/[0.06]">
       <div className="mx-auto max-w-[1280px] px-6 py-24 lg:px-8 lg:py-28">
         <CenterHead kicker="Impact" title="A legacy in numbers" />
 
         <motion.div
-          className="mt-14 grid grid-cols-1 gap-12 sm:grid-cols-3"
+          className="mt-12 overflow-hidden rounded-2xl border border-[#1D2D44]/[0.08] bg-white shadow-[0_2px_24px_-16px_rgba(29,45,68,0.20)]"
           variants={STAGGER}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
         >
-          {stats.map((s) => (
-            <motion.div key={s.label} variants={RISE} className="text-center">
-              <Counter
-                value={s.value}
-                run={inView}
-                className="block text-6xl font-semibold tabular-nums tracking-tight text-[#1D2D44] sm:text-7xl"
-              />
-              <span
-                className="mx-auto mt-4 block h-1 w-10 rounded-full"
-                style={{ backgroundColor: s.color }}
-              />
-              <div className="mt-4 text-base font-semibold text-[#1D2D44]">
-                {s.label}
-              </div>
-              <div className="mt-1 text-sm text-[#1D2D44]/55">{s.note}</div>
-            </motion.div>
-          ))}
+          <div className="grid grid-cols-1 divide-y divide-[#1D2D44]/[0.07] sm:grid-cols-3 sm:divide-x sm:divide-y-0 rtl:sm:divide-x-reverse">
+            {stats.map((s) => (
+              <motion.div
+                key={s.label}
+                variants={RISE}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.3, ease: EASE }}
+                className="px-8 py-10 text-center sm:py-12"
+              >
+                <motion.span
+                  className="mx-auto block h-[3px] w-9 origin-center rounded-full"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #F1E0AE 0%, #C9A24A 100%)",
+                  }}
+                  initial={{ scaleX: 0 }}
+                  animate={inView ? { scaleX: 1 } : {}}
+                  transition={{ duration: 0.6, ease: EASE }}
+                />
+                <Counter
+                  value={s.value}
+                  run={inView}
+                  className="mt-5 block text-6xl font-semibold tabular-nums tracking-tight text-[#1D2D44] sm:text-7xl"
+                />
+                <div className="mt-3 text-base font-semibold text-[#1D2D44]">
+                  {s.label}
+                </div>
+                <div className="mt-1 text-sm text-[#1D2D44]/55">{s.note}</div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
@@ -988,11 +989,8 @@ function WorldSection() {
     [counts, dominant, perPrize],
   );
 
-  const [selected, setSelected] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [litPrize, setLitPrize] = useState<PrizeKey | null>(null);
-
-  const radius = (n: number) => Math.min(16, 4 + Math.sqrt(n) * 1.15);
 
   return (
     <section className="bg-white">
@@ -1000,7 +998,7 @@ function WorldSection() {
         <CenterHead
           kicker="Worldwide"
           title="Laureates around the world"
-          intro="Click a point to see the laureates from that country."
+          intro="Hover a hotspot to see the country and number of winners."
         />
 
         {/* legend — hover a point to light its programme on the map */}
@@ -1070,75 +1068,45 @@ function WorldSection() {
                 }
               </Geographies>
               {markers.map((m, i) => {
-                const active = selected === m.name;
-                const showLabel = active || hovered === m.name;
+                const showPop = hovered === m.name;
                 const inLit = litPrize !== null && m.prizes[litPrize] > 0;
                 const dimmed = litPrize !== null && !inLit;
                 const color =
                   litPrize !== null && inLit
                     ? accentOf(litPrize)
                     : accentOf(m.prize);
-                const opacity = dimmed
-                  ? 0.12
-                  : litPrize !== null && inLit
-                    ? 1
-                    : active
-                      ? 1
-                      : 0.85;
-                const r = radius(m.count) * (inLit ? 1.18 : 1);
+                const opacity = dimmed ? 0.15 : showPop ? 1 : 0.9;
+                const lineH = m.name === "Egypt" ? 56 : 38;
+                const boxH = 20;
+                const padX = 12;
+                const boxW = Math.max(
+                  72,
+                  m.name.length * 6.2 +
+                    String(m.count).length * 6.2 +
+                    14 +
+                    padX * 2,
+                );
+                const labelY = -6 - lineH - boxH;
+                const tipY = labelY + boxH;
+
                 return (
                   <Marker key={m.name} coordinates={m.coords}>
                     <g
                       style={{ cursor: "pointer" }}
-                      onClick={() =>
-                        setSelected((prev) =>
-                          prev === m.name ? null : m.name,
-                        )
-                      }
                       onMouseEnter={() => setHovered(m.name)}
                       onMouseLeave={() => setHovered(null)}
                     >
-                      {/* larger hit area so hover/click work reliably */}
-                      <circle
-                        r={Math.max(r + 10, 14)}
-                        fill="transparent"
-                        stroke="none"
-                      />
-                      {active ? (
-                        <circle
-                          r={r + 5}
-                          fill="none"
-                          stroke="rgba(29,45,68,0.45)"
-                          strokeWidth={1.5}
-                        />
-                      ) : null}
-                      {inLit ? (
-                        <motion.circle
-                          r={r + 6}
-                          fill={accentOf(litPrize!)}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 0.18 }}
-                          transition={{ duration: 0.35, ease: EASE }}
-                          style={{
-                            transformBox: "fill-box",
-                            transformOrigin: "center",
-                          }}
-                        />
-                      ) : null}
+                      <circle r={14} fill="transparent" stroke="none" />
                       <motion.circle
+                        r={showPop ? 5.5 : 4}
                         fill={color}
                         stroke="#FFFFFF"
-                        strokeWidth={1.25}
+                        strokeWidth={1.5}
                         initial={{ opacity: 0, scale: 0 }}
-                        animate={{
-                          opacity,
-                          scale: 1,
-                          r,
-                          fill: color,
-                        }}
+                        animate={{ opacity, scale: showPop ? 1.15 : 1 }}
                         transition={{
-                          duration: 0.4,
-                          delay: litPrize === null ? 0.15 + i * 0.022 : 0,
+                          duration: 0.35,
+                          delay: litPrize === null ? 0.12 + i * 0.018 : 0,
                           ease: EASE,
                         }}
                         style={{
@@ -1147,92 +1115,77 @@ function WorldSection() {
                           pointerEvents: "none",
                         }}
                       />
-                      {showLabel ? (
-                        <g style={{ pointerEvents: "none" }}>
-                          {(() => {
-                            // Longer stem in dense areas (e.g. Egypt) so the label clears neighbours
-                            const lineH = m.name === "Egypt" ? 56 : 38;
-                            const boxH = 20;
-                            const padX = 12;
-                            const nameW = m.name.length * 6.2;
-                            const countW = String(m.count).length * 6.2 + 14;
-                            const boxW = Math.max(72, nameW + countW + padX * 2);
-                            const labelY = -r - lineH - boxH;
-                            const tipY = labelY + boxH;
-                            return (
-                              <>
-                                {/* hairline connector */}
-                                <line
-                                  x1={0}
-                                  y1={-r - 2}
-                                  x2={0}
-                                  y2={tipY}
-                                  stroke={ORANGE}
-                                  strokeWidth={0.9}
-                                  strokeLinecap="round"
-                                />
-                                {/* minimal hotspot */}
-                                <circle
-                                  cx={0}
-                                  cy={-r}
-                                  r={2.25}
-                                  fill={ORANGE}
-                                />
-                                <circle
-                                  cx={0}
-                                  cy={-r}
-                                  r={4.5}
-                                  fill="none"
-                                  stroke={ORANGE}
-                                  strokeOpacity={0.35}
-                                  strokeWidth={1}
-                                />
-                                {/* light pill */}
-                                <rect
-                                  x={-boxW / 2}
-                                  y={labelY}
-                                  width={boxW}
-                                  height={boxH}
-                                  rx={10}
-                                  fill="#FFFFFF"
-                                  stroke={ORANGE}
-                                  strokeOpacity={0.55}
-                                  strokeWidth={0.9}
-                                />
-                                <text
-                                  x={-boxW / 2 + padX}
-                                  y={labelY + 13.5}
-                                  textAnchor="start"
-                                  style={{
-                                    fontSize: 10.5,
-                                    fontWeight: 600,
-                                    letterSpacing: "0.02em",
-                                    fill: "#1D2D44",
-                                    fontFamily:
-                                      "var(--font-poppins), Poppins, sans-serif",
-                                  }}
-                                >
-                                  {m.name}
-                                </text>
-                                <text
-                                  x={boxW / 2 - padX}
-                                  y={labelY + 13.5}
-                                  textAnchor="end"
-                                  style={{
-                                    fontSize: 10.5,
-                                    fontWeight: 500,
-                                    fill: ORANGE,
-                                    fontFamily:
-                                      "var(--font-poppins), Poppins, sans-serif",
-                                  }}
-                                >
-                                  {m.count}
-                                </text>
-                              </>
-                            );
-                          })()}
-                        </g>
-                      ) : null}
+                      <motion.circle
+                        r={9}
+                        fill={color}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: showPop ? 0.22 : 0 }}
+                        transition={{ duration: 0.25, ease: EASE }}
+                        style={{ pointerEvents: "none" }}
+                      />
+                      <AnimatePresence>
+                        {showPop ? (
+                          <motion.g
+                            key={`pop-${m.name}`}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 4 }}
+                            transition={{ duration: 0.22, ease: EASE }}
+                            style={{ pointerEvents: "none" }}
+                          >
+                            <line
+                              x1={0}
+                              y1={-6}
+                              x2={0}
+                              y2={tipY}
+                              stroke={ORANGE}
+                              strokeWidth={0.9}
+                              strokeLinecap="round"
+                            />
+                            <circle cx={0} cy={-6} r={2.25} fill={ORANGE} />
+                            <rect
+                              x={-boxW / 2}
+                              y={labelY}
+                              width={boxW}
+                              height={boxH}
+                              rx={10}
+                              fill="#FFFFFF"
+                              stroke={ORANGE}
+                              strokeOpacity={0.55}
+                              strokeWidth={0.9}
+                            />
+                            <text
+                              x={-boxW / 2 + padX}
+                              y={labelY + 13.5}
+                              textAnchor="start"
+                              style={{
+                                fontSize: 10.5,
+                                fontWeight: 600,
+                                letterSpacing: "0.02em",
+                                fill: "#1D2D44",
+                                fontFamily:
+                                  "var(--font-poppins), Poppins, sans-serif",
+                              }}
+                            >
+                              {m.name}
+                            </text>
+                            <text
+                              x={boxW / 2 - padX}
+                              y={labelY + 13.5}
+                              textAnchor="end"
+                              style={{
+                                fontSize: 10.5,
+                                fontWeight: 500,
+                                fill: ORANGE,
+                                fontFamily:
+                                  "var(--font-poppins), Poppins, sans-serif",
+                              }}
+                            >
+                              {m.count}
+                            </text>
+                          </motion.g>
+                        ) : null}
+                      </AnimatePresence>
                     </g>
                   </Marker>
                 );
@@ -1240,30 +1193,9 @@ function WorldSection() {
             </ComposableMap>
           </div>
 
-          <AnimatePresence mode="wait">
-            {selected ? (
-              <motion.div
-                key={selected}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 4 }}
-                transition={{ duration: 0.3, ease: EASE }}
-                className="mx-auto mt-6 max-w-md rounded-xl bg-[#EC601B] px-5 py-4 text-center text-white"
-              >
-                <p className="font-poppins text-lg font-semibold tracking-tight">
-                  {selected}
-                </p>
-                <p className="mt-1 text-sm text-white/90">
-                  {markers.find((m) => m.name === selected)?.count ?? 0}{" "}
-                  winners
-                </p>
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
-
           <p className="mt-4 text-center text-xs text-[#1D2D44]/45">
-            Hover or click a point to see the country · point size reflects
-            laureate count · {markers.length} countries represented
+            Hover a hotspot for the country and winner count · {markers.length}{" "}
+            countries represented
           </p>
         </motion.div>
       </div>
@@ -1355,16 +1287,16 @@ export default function LaureatesPage() {
               priority
               quality={65}
               sizes="100vw"
-              className="object-cover object-[center_40%] scale-[1.06] brightness-[0.98] contrast-[1.02]"
+              className="object-cover object-[center_40%] scale-[1.06] brightness-[1.04] contrast-[1.02]"
             />
             <div
               className="absolute inset-0 pointer-events-none"
               aria-hidden
               style={{
                 background: [
-                  "linear-gradient(128deg, rgba(72,143,204,0.34) 0%, rgba(72,143,204,0.09) 44%, transparent 70%)",
-                  "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(200,220,250,0.16) 0%, transparent 58%)",
-                  "linear-gradient(to bottom, rgba(18,24,32,0.14) 0%, rgba(29,45,68,0.3) 42%, rgba(10,14,22,0.8) 100%)",
+                  "linear-gradient(128deg, rgba(125,192,241,0.26) 0%, rgba(125,192,241,0.07) 44%, transparent 70%)",
+                  "radial-gradient(ellipse 90% 65% at 10% 6%, rgba(220,235,252,0.2) 0%, transparent 58%)",
+                  "linear-gradient(to bottom, rgba(18,24,32,0.05) 0%, rgba(29,45,68,0.14) 45%, rgba(16,22,32,0.5) 100%)",
                 ].join(", "),
               }}
             />
@@ -1423,7 +1355,13 @@ export default function LaureatesPage() {
           <div className="relative mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] lg:gap-16">
               <FadeUp>
-                <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
+                <motion.span
+                  className="block h-[3px] w-9 origin-left rounded-full bg-[#EC601B]"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: EASE }}
+                />
                 <span className="mt-5 block text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
                   Since 1979
                 </span>
@@ -1487,7 +1425,7 @@ export default function LaureatesPage() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-0 h-[28rem] w-[42rem] -translate-x-1/2 rounded-full opacity-[0.22]"
+            className="pointer-events-none absolute left-1/2 top-0 h-[28rem] w-[42rem] -translate-x-1/2 rounded-full opacity-[0.14]"
             style={{
               background:
                 "radial-gradient(circle, #FFB56B 0%, transparent 68%)",
@@ -1523,7 +1461,7 @@ export default function LaureatesPage() {
         <StatsSection />
 
         {/* ============================== BROWSE ALL — year + prize ============================== */}
-        <section className="bg-[#7DC0F1]/[0.06]">
+        <section className="bg-white">
           <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
               <div className="lg:col-span-4">
@@ -1537,19 +1475,24 @@ export default function LaureatesPage() {
               <div className="lg:col-span-8">
                 {/* toolbar: prize pills + year select */}
                 <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  variants={STAGGER}
+                  initial="hidden"
+                  whileInView="show"
                   viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.5, ease: EASE }}
                   className="border-b border-[#1D2D44]/[0.10] pb-6"
                 >
-                  <div className="flex flex-wrap gap-2">
+                  <motion.div
+                    variants={RISE}
+                    className="flex flex-wrap gap-2"
+                  >
                     {prizePills.map((p) => {
                       const on = prizeFilter === p.key;
                       return (
-                        <button
+                        <motion.button
                           key={p.key}
                           type="button"
+                          whileHover={{ y: -2 }}
+                          whileTap={{ scale: 0.97 }}
                           onClick={() => setPrizeFilter(p.key)}
                           className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
                             on
@@ -1565,12 +1508,15 @@ export default function LaureatesPage() {
                           }}
                         >
                           {p.label}
-                        </button>
+                        </motion.button>
                       );
                     })}
-                  </div>
+                  </motion.div>
 
-                  <div className="mt-4 flex items-center gap-4">
+                  <motion.div
+                    variants={RISE}
+                    className="mt-4 flex items-center gap-4"
+                  >
                     <label className="flex items-center gap-2 text-sm text-[#1D2D44]/70">
                       Year
                       <select
@@ -1592,16 +1538,16 @@ export default function LaureatesPage() {
                         ))}
                       </select>
                     </label>
-                  </div>
+                  </motion.div>
                 </motion.div>
 
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${yearFilter}-${prizeFilter}`}
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, ease: EASE }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.4, ease: EASE }}
                     className="mt-8 space-y-10"
                   >
                     {grouped.groups.length === 0 ? (
@@ -1627,3 +1573,4 @@ export default function LaureatesPage() {
     </>
   );
 }
+
