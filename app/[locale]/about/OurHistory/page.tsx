@@ -109,12 +109,13 @@ export default function OurHistoryPage() {
               sizes="100vw"
               className="object-cover object-[center_28%] -scale-x-100"
             />
-            {/* Directional overlay — same in Arabic and English */}
+            {/* Directional overlay — mirrored in Arabic so text stays on the dark side */}
             <div
               className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                background: isArabic
+                  ? "linear-gradient(252deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)"
+                  : "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
             />
             {/* Bottom fade */}
@@ -125,6 +126,16 @@ export default function OurHistoryPage() {
                   "linear-gradient(to top, rgba(29,45,68,0.60) 0%, transparent 45%)",
               }}
             />
+            {/* Soft blue wash — trailing edge (right in EN, left in AR) */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: isArabic
+                  ? "linear-gradient(to right, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)"
+                  : "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+              }}
+              aria-hidden
+            />
           </motion.div>
 
           <motion.div
@@ -132,7 +143,11 @@ export default function OurHistoryPage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className="mb-5 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/45"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
+              }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}

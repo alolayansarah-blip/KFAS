@@ -180,7 +180,9 @@ export default function PhDStudentsSupplementaryFundGrantPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
+                  isArabic
+                    ? "linear-gradient(252deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)"
+                    : "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
               }}
               aria-hidden
             />

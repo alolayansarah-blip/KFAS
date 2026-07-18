@@ -204,8 +204,9 @@ export default function RigPage() {
             <div
               className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                background: isArabic
+                  ? "linear-gradient(252deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)"
+                  : "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
               aria-hidden
             />
@@ -231,7 +232,7 @@ export default function RigPage() {
             <motion.div
               className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
                 isArabic
-                  ? "text-base tracking-normal"
+                  ? "text-[15px] tracking-normal"
                   : "text-[10px] uppercase tracking-[0.35em]"
               }`}
               initial={{ opacity: 0, y: 16 }}

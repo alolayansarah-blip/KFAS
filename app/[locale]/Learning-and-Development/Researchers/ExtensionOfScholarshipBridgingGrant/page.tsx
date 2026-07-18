@@ -78,7 +78,9 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
+                  isArabic
+                    ? "linear-gradient(252deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)"
+                    : "linear-gradient(108deg, rgba(29,45,68,0.72) 0%, rgba(29,45,68,0.38) 42%, rgba(29,45,68,0.10) 68%, transparent 100%)",
               }}
               aria-hidden
             />
@@ -94,7 +96,9 @@ export default function ExtensionOfScholarshipBridgingGrantPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
+                  isArabic
+                    ? "linear-gradient(to right, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)"
+                    : "linear-gradient(to left, rgba(125,192,241,0.28) 0%, rgba(125,192,241,0.12) 28%, transparent 55%)",
               }}
               aria-hidden
             />

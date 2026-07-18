@@ -290,7 +290,7 @@ export default function KFASResearchPortalPage() {
             <motion.div
               className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
                 isArabic
-                  ? "text-base tracking-normal"
+                  ? "text-[15px] tracking-normal"
                   : "text-[10px] uppercase tracking-[0.35em]"
               }`}
               initial={{ opacity: 0, y: 16 }}

@@ -84,7 +84,9 @@ export default function ScholarFellowshipPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(102deg, rgba(15,24,40,0.85) 0%, rgba(29,45,68,0.55) 46%, rgba(29,45,68,0.20) 76%, transparent 100%)",
+                  isArabic
+                    ? "linear-gradient(258deg, rgba(15,24,40,0.85) 0%, rgba(29,45,68,0.55) 46%, rgba(29,45,68,0.20) 76%, transparent 100%)"
+                    : "linear-gradient(102deg, rgba(15,24,40,0.85) 0%, rgba(29,45,68,0.55) 46%, rgba(29,45,68,0.20) 76%, transparent 100%)",
               }}
             />
             <div

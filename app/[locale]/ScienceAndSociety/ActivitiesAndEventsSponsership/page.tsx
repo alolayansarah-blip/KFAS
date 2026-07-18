@@ -490,12 +490,13 @@ export default function ActivitiesAndEventsSponsershipPage() {
               // this important for big screens
               className="object-cover object-center lg:object-[center_34%]"
             />
-            {/* Gradient direction is intentionally identical in both locales. */}
+            {/* Directional overlay — mirrored in Arabic so text stays on the dark side */}
             <div
               className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
+                background: isArabic
+                  ? "linear-gradient(252deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)"
+                  : "linear-gradient(108deg, rgba(29,45,68,0.80) 0%, rgba(29,45,68,0.50) 42%, rgba(29,45,68,0.18) 68%, transparent 100%)",
               }}
               aria-hidden
             />
@@ -514,8 +515,10 @@ export default function ActivitiesAndEventsSponsershipPage() {
             style={{ opacity: heroOpacity }}
           >
             <motion.div
-              className={`mb-5 flex items-center gap-2 font-semibold uppercase tracking-[0.35em] text-white/45 ${
-                isArabic ? "text-[17px]" : "text-[10px]"
+              className={`mb-5 flex items-center gap-2 font-semibold text-white/45 ${
+                isArabic
+                  ? "text-[15px] tracking-normal"
+                  : "text-[10px] uppercase tracking-[0.35em]"
               }`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}

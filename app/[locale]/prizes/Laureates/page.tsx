@@ -603,8 +603,8 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                         height="72"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="#1D2D44"
-                        strokeOpacity="0.35"
+                        stroke="#7DC0F1"
+                        strokeOpacity="0.55"
                         strokeWidth="1.25"
                       >
                         <circle cx="12" cy="8" r="4" />
@@ -627,14 +627,14 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                     className="absolute inset-x-0 bottom-0 z-10 px-3 pb-3 pt-12 text-center"
                     style={{
                       background:
-                        "linear-gradient(to top, rgba(20,32,49,0.98) 0%, rgba(29,45,68,0.9) 52%, transparent 100%)",
+                        "linear-gradient(to top, rgba(125,192,241,0.98) 0%, rgba(125,192,241,0.88) 52%, transparent 100%)",
                     }}
                   >
-                    <div className="font-poppins text-[12px] font-semibold leading-[1.25] tracking-tight text-white sm:text-[13px]">
+                    <div className="font-poppins text-[12px] font-semibold leading-[1.25] tracking-tight text-[#1D2D44] sm:text-[13px]">
                       {l.name}
                     </div>
                     {isActive ? (
-                      <div className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#F4D994]">
+                      <div className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#1D2D44]/75">
                         {PRIZE_LABEL[l.prize]}
                         {l.year ? ` · ${l.year}` : ""}
                       </div>
@@ -652,7 +652,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
           aria-label="Previous winner"
           disabled={active === 0}
           onClick={() => go(-1)}
-          className="absolute left-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-[#1D2D44]/80 text-white ring-1 ring-white/30 backdrop-blur-sm transition enabled:hover:bg-[#1D2D44] enabled:hover:ring-white/50 disabled:opacity-20 sm:left-2 lg:left-6"
+          className="absolute left-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:left-2 lg:left-6"
         >
           <svg
             width="20"
@@ -675,7 +675,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
           aria-label="Next winner"
           disabled={active === total - 1}
           onClick={() => go(1)}
-          className="absolute right-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-[#1D2D44]/80 text-white ring-1 ring-white/30 backdrop-blur-sm transition enabled:hover:bg-[#1D2D44] enabled:hover:ring-white/50 disabled:opacity-20 sm:right-2 lg:right-6"
+          className="absolute right-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:right-2 lg:right-6"
         >
           <svg
             width="20"
