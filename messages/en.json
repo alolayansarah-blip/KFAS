@@ -58,6 +58,14 @@
     "news3Title": "Innovation Workshop Success",
     "news3Description": "Over 200 participants joined our recent workshop on fostering innovation and entrepreneurship in the scientific community."
   },
+  "AllNewsPage": {
+    "breadcrumb": "News",
+    "heroTitle": "All News",
+    "kicker": "KFAS updates",
+    "intro": "Stories, announcements, and highlights from the Kuwait Foundation for the Advancement of Sciences.",
+    "readMoreLabel": "Read More",
+    "backHome": "Back to home"
+  },
   "LogoShowcase": {
     "eyebrow": "Our Partners",
     "headingMain": "Building the Future",
@@ -2423,5 +2431,66 @@
     "noResultsPre": "No results for",
     "resultSingular": "result",
     "resultPlural": "results"
+  },
+  "LaureatesPage": {
+    "breadcrumbPrizes": "Prizes",
+    "breadcrumbCurrent": "Laureates",
+    "heroTitle": "Laureates",
+    "heroImageAlt": "KFAS laureates",
+    "introKicker": "Since 1979",
+    "introTitle": "Prizes at KFAS",
+    "introBody": "Three programmes recognising scientific excellence across the Arab world and Africa.",
+    "learnMore": "Learn more",
+    "prizes": [
+      {
+        "name": "Kuwait Prize",
+        "tab": "Kuwait Prize",
+        "line": "For distinguished Arab researchers, awarded annually since 1979."
+      },
+      {
+        "name": "Jaber Al-Ahmad Award",
+        "tab": "Jaber Al-Ahmad",
+        "line": "For outstanding young Kuwaiti researchers."
+      },
+      {
+        "name": "Al-Sumait Prize",
+        "tab": "Al-Sumait",
+        "line": "For African development in health, food security, and education."
+      }
+    ],
+    "prizeLabels": {
+      "kuwait": "Kuwait Prize",
+      "jaber": "Jaber Al-Ahmad",
+      "sumait": "Al-Sumait"
+    },
+    "latestKicker": "Most recent",
+    "latestTitle": "Latest winners",
+    "latestIntro": "The most recent laureates from each of the three programmes.",
+    "showWinnerAria": "Show {name}",
+    "previousWinner": "Previous winner",
+    "nextWinner": "Next winner",
+    "worldKicker": "Worldwide",
+    "worldTitle": "Laureates around the world",
+    "worldIntro": "Hover a hotspot to see the country and number of winners.",
+    "highlightPrizeAria": "Highlight {name} on the map",
+    "mapCaption": "Hover a hotspot for the country and winner count · {count} countries represented",
+    "statsKicker": "Impact",
+    "statsTitle": "A legacy in numbers",
+    "statYearsLabel": "Years of giving",
+    "statYearsNote": "since 1979",
+    "statLaureatesLabel": "Laureates",
+    "statLaureatesNote": "across three programmes",
+    "statNationalitiesLabel": "Nationalities",
+    "statNationalitiesNote": "represented worldwide",
+    "browseKicker": "The honour roll",
+    "browseTitle": "Browse by year",
+    "browseIntro": "Every laureate across the three programmes, newest first.",
+    "allPrizes": "All prizes",
+    "yearLabel": "Year",
+    "allYears": "All years",
+    "noMatches": "No laureates match this filter.",
+    "laureateCount": "{count, plural, one {# laureate} other {# laureates}}",
+    "shared": "Shared",
+    "bioPlaceholder": "Biography to follow — details for this laureate are being added."
   }
 }

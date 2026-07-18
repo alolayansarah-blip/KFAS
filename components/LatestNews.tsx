@@ -3,6 +3,8 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
+import { sortedNews } from "@/src/data/news";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
@@ -23,36 +25,6 @@ const ArrowIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// `dateISO` drives sorting; the displayed date is formatted per-locale at
-// render time so it shows Arabic month names without breaking the sort.
-const news = [
-  {
-    image: "/image/news1.jpeg",
-    titleKey: "news1Title",
-    descriptionKey: "news1Description",
-    dateISO: "2026-01-10",
-    link: "#",
-  },
-  {
-    image: "/image/news2.jpeg",
-    titleKey: "news2Title",
-    descriptionKey: "news2Description",
-    dateISO: "2024-12-05",
-    link: "#",
-  },
-  {
-    image: "/image/news3.jpeg",
-    titleKey: "news3Title",
-    descriptionKey: "news3Description",
-    dateISO: "2024-11-28",
-    link: "#",
-  },
-] as const;
-
-const sortedNews = [...news].sort(
-  (a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime(),
-);
-
 export default function LatestNews() {
   const t = useTranslations("LatestNews");
   const isArabic = useLocale() === "ar";
@@ -63,19 +35,19 @@ export default function LatestNews() {
     { year: "numeric", month: "long", day: "numeric" },
   );
 
+  const preview = sortedNews.slice(0, 3);
+
   return (
     <section
       ref={sectionRef}
       id="our-impact-stories"
       className="relative bg-white py-20 lg:py-28"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header */}
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            {/* Heading */}
             <motion.h2
-              className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
+              className="font-poppins text-2xl font-semibold leading-tight tracking-tight text-[#1D2D44] sm:text-3xl lg:text-4xl"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}
@@ -85,30 +57,30 @@ export default function LatestNews() {
             </motion.h2>
           </div>
 
-          {/* All News CTA */}
-          <motion.a
-            href="#"
-            className="group inline-flex items-center gap-3 self-start sm:self-auto shrink-0"
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={VIEWPORT}
             transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
           >
-            <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
-            <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-              {t("allNewsLabel")}
-            </span>
-            <ArrowIcon className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:rotate-180 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]" />
-          </motion.a>
+            <Link
+              href="/news"
+              className="group inline-flex shrink-0 items-center gap-3 self-start sm:self-auto"
+            >
+              <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+              <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
+                {t("allNewsLabel")}
+              </span>
+              <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510] rtl:translate-x-1 rtl:rotate-180" />
+            </Link>
+          </motion.div>
         </div>
 
-        {/* News Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {sortedNews.map((item, index) => (
-            <article key={index} className="group flex flex-col">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {preview.map((item) => (
+            <article key={item.id} className="group flex flex-col">
               <a href={item.link} className="flex h-full flex-col">
-                {/* Image */}
-                <div className="relative overflow-hidden aspect-[16/10] mb-5">
+                <div className="relative mb-5 aspect-[16/10] overflow-hidden">
                   <img
                     src={item.image}
                     alt={t(item.titleKey)}
@@ -117,28 +89,24 @@ export default function LatestNews() {
                   <div className="absolute inset-0 bg-[#1D2D44]/0 transition-all duration-500 group-hover:bg-[#1D2D44]/10" />
                 </div>
 
-                {/* Date */}
                 <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1D2D44]/35">
                   {dateFormatter.format(new Date(item.dateISO))}
                 </p>
 
-                {/* Title */}
-                <h3 className="font-poppins text-[17px] font-normal text-[#1D2D44] leading-snug mb-3 line-clamp-3 transition-colors duration-300 group-hover:text-[#EC601B]">
+                <h3 className="mb-3 font-poppins text-[17px] font-normal leading-snug text-[#1D2D44] transition-colors duration-300 group-hover:text-[#EC601B] line-clamp-3">
                   {t(item.titleKey)}
                 </h3>
 
-                {/* Description */}
-                <p className="font-poppins text-[14px] font-light text-[#1D2D44]/55 leading-relaxed line-clamp-3 mb-6">
+                <p className="mb-6 font-poppins text-[14px] font-light leading-relaxed text-[#1D2D44]/55 line-clamp-3">
                   {t(item.descriptionKey)}
                 </p>
 
-                {/* CTA */}
                 <div className="mt-auto flex items-center gap-3">
                   <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
                   <span className="text-[12px] font-medium tracking-[0.08em] text-[#EC601B]">
                     {t("readMoreLabel")}
                   </span>
-                  <ArrowIcon className="h-3 w-3 -translate-x-1 rtl:translate-x-1 rtl:rotate-180 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0" />
+                  <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 rtl:translate-x-1 rtl:rotate-180" />
                 </div>
               </a>
             </article>

@@ -16,6 +16,7 @@ import {
   Geography,
   Marker,
 } from "react-simple-maps";
+import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
 import { LAUREATES, type Laureate, type PrizeKey } from "@/src/data/laureates";
 import Header from "@/components/Header";
@@ -53,48 +54,25 @@ const ALL_YEARS = [...new Set(LAUREATES.map((l) => l.year))].sort(
 const LATEST_YEAR = ALL_YEARS[0];
 const FIRST_YEAR = ALL_YEARS[ALL_YEARS.length - 1];
 
-const PRIZES: {
-  key: PrizeKey;
-  name: string;
-  tab: string;
-  line: string;
-  image: string;
-  href: string;
-}[] = [
+/* key order must match the "prizes" array in messages/*.json → LaureatesPage */
+const PRIZE_KEYS: PrizeKey[] = ["kuwait", "jaber", "sumait"];
+const PRIZE_META: { key: PrizeKey; image: string; href: string }[] = [
   {
     key: "kuwait",
-    name: "Kuwait Prize",
-    tab: "Kuwait Prize",
-    line: "For distinguished Arab researchers, awarded annually since 1979.",
     image: "/image/KuwaitPrize.webp",
     href: "/prizes/KuwaitPrize",
   },
   {
     key: "jaber",
-    name: "Jaber Al-Ahmad Award",
-    tab: "Jaber Al-Ahmad",
-    line: "For outstanding young Kuwaiti researchers.",
     image: "/image/jaberPrize.webp",
     href: "/prizes/Jaber-AlAhmadPrize",
   },
   {
     key: "sumait",
-    name: "Al-Sumait Prize",
-    tab: "Al-Sumait",
-    line: "For African development in health, food security, and education.",
     image: "/image/alsumaitPrize.webp",
     href: "/prizes/AlSumaitPrize",
   },
 ];
-const PRIZE_LABEL: Record<PrizeKey, string> = {
-  kuwait: "Kuwait Prize",
-  jaber: "Jaber Al-Ahmad",
-  sumait: "Al-Sumait",
-};
-
-/* ---- PLACEHOLDER COPY (replace with your words when ready) -------- */
-const BIO_PLACEHOLDER =
-  "Biography to follow — details for this laureate are being added.";
 
 /* ------------------------------------------------------------------ */
 /*  Country normalisation + coordinates  [lng, lat]                    */
@@ -339,6 +317,7 @@ function FieldTag({ children }: { children: React.ReactNode }) {
 
 /* small coloured prize label */
 function PrizeTag({ prize }: { prize: PrizeKey }) {
+  const t = useTranslations("LaureatesPage");
   return (
     <span
       className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em]"
@@ -348,7 +327,7 @@ function PrizeTag({ prize }: { prize: PrizeKey }) {
         className="h-1.5 w-1.5 rounded-full"
         style={{ backgroundColor: accentOf(prize) }}
       />
-      {PRIZE_LABEL[prize]}
+      {t(`prizeLabels.${prize}`)}
     </span>
   );
 }
@@ -412,6 +391,7 @@ function Medal({
 }
 
 function LaureateRow({ l, showPrize }: { l: Laureate; showPrize?: boolean }) {
+  const t = useTranslations("LaureatesPage");
   return (
     <>
       <div className="min-w-0">
@@ -429,7 +409,7 @@ function LaureateRow({ l, showPrize }: { l: Laureate; showPrize?: boolean }) {
           ) : null}
           {l.status === "shared" ? (
             <span className="rounded-full border border-[#1D2D44]/[0.12] px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-[#1D2D44]/55">
-              Shared
+              {t("shared")}
             </span>
           ) : null}
         </div>
@@ -459,6 +439,7 @@ function winnerBio(l: Laureate) {
 const FEATURED_WINNER_ID = "jaber-2025-380"; // Dr. Aisha Ahmad Mutairan Al-Azmi
 
 function WinnersCarousel({ winners }: { winners: Laureate[] }) {
+  const t = useTranslations("LaureatesPage");
   const featuredIndex = Math.max(
     0,
     winners.findIndex(
@@ -517,7 +498,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
             <motion.button
               key={l.id}
               type="button"
-              aria-label={`Show ${l.name}`}
+              aria-label={t("showWinnerAria", { name: l.name })}
               aria-current={isActive ? "true" : undefined}
               onClick={() => setActive(i)}
               className="absolute origin-center cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:rounded-[1.6rem] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#EC601B]"
@@ -622,7 +603,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                     </div>
                     {isActive ? (
                       <div className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#1D2D44]/60">
-                        {PRIZE_LABEL[l.prize]}
+                        {t(`prizeLabels.${l.prize}`)}
                         {l.year ? ` · ${l.year}` : ""}
                       </div>
                     ) : null}
@@ -636,7 +617,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
         {/* side chevrons */}
         <button
           type="button"
-          aria-label="Previous winner"
+          aria-label={t("previousWinner")}
           disabled={active === 0}
           onClick={() => go(-1)}
           className="absolute left-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:left-2 lg:left-6"
@@ -659,7 +640,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
         </button>
         <button
           type="button"
-          aria-label="Next winner"
+          aria-label={t("nextWinner")}
           disabled={active === total - 1}
           onClick={() => go(1)}
           className="absolute right-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:right-2 lg:right-6"
@@ -688,7 +669,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
           <button
             key={l.id}
             type="button"
-            aria-label={`Show ${l.name}`}
+            aria-label={t("showWinnerAria", { name: l.name })}
             aria-current={i === active ? "true" : undefined}
             onClick={() => setActive(i)}
             className="h-1.5 rounded-full transition-all duration-300"
@@ -726,6 +707,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
 /*  Detailed laureate card — portrait + bio (placeholder when absent)  */
 /* ------------------------------------------------------------------ */
 function LaureateCard({ l }: { l: Laureate }) {
+  const t = useTranslations("LaureatesPage");
   const accent = accentOf(l.prize);
   const hasBio = Boolean(l.brief);
   return (
@@ -756,7 +738,7 @@ function LaureateCard({ l }: { l: Laureate }) {
             ) : null}
             {l.status === "shared" ? (
               <span className="rounded-full border border-[#1D2D44]/[0.12] px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-[#1D2D44]/55">
-                Shared
+                {t("shared")}
               </span>
             ) : null}
           </div>
@@ -791,7 +773,7 @@ function LaureateCard({ l }: { l: Laureate }) {
             ) : null}
             {!l.specializationAr && !l.affiliationAr ? (
               <p className="text-[13px] italic leading-relaxed text-[#1D2D44]/40">
-                {BIO_PLACEHOLDER}
+                {t("bioPlaceholder")}
               </p>
             ) : null}
           </div>
@@ -803,6 +785,7 @@ function LaureateCard({ l }: { l: Laureate }) {
 
 /* a year block of detailed cards (browse) */
 function YearCardGroup({ year, items }: { year: number; items: Laureate[] }) {
+  const t = useTranslations("LaureatesPage");
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   return (
@@ -818,7 +801,7 @@ function YearCardGroup({ year, items }: { year: number; items: Laureate[] }) {
         </motion.span>
         <span className="h-px flex-1 bg-[#1D2D44]/[0.08]" />
         <span className="text-xs font-medium uppercase tracking-[0.12em] text-[#1D2D44]/45">
-          {items.length} {items.length === 1 ? "laureate" : "laureates"}
+          {t("laureateCount", { count: items.length })}
         </span>
       </div>
       <motion.div
@@ -873,6 +856,7 @@ function Counter({
 /*  Stats — image-backed band, centred count-up figures                */
 /* ------------------------------------------------------------------ */
 function StatsSection() {
+  const t = useTranslations("LaureatesPage");
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -882,29 +866,29 @@ function StatsSection() {
     return [
       {
         value: LATEST_YEAR - FIRST_YEAR + 1,
-        label: "Years of giving",
-        note: "since 1979",
+        label: t("statYearsLabel"),
+        note: t("statYearsNote"),
         color: PRIZE_COLOR.kuwait,
       },
       {
         value: LAUREATES.length,
-        label: "Laureates",
-        note: "across three programmes",
+        label: t("statLaureatesLabel"),
+        note: t("statLaureatesNote"),
         color: PRIZE_COLOR.jaber,
       },
       {
         value: nationalities,
-        label: "Nationalities",
-        note: "represented worldwide",
+        label: t("statNationalitiesLabel"),
+        note: t("statNationalitiesNote"),
         color: PRIZE_COLOR.sumait,
       },
     ];
-  }, []);
+  }, [t]);
 
   return (
     <section ref={ref} className="bg-[#7DC0F1]/[0.06]">
       <div className="mx-auto max-w-[1280px] px-6 py-24 lg:px-8 lg:py-28">
-        <CenterHead kicker="Impact" title="A legacy in numbers" />
+        <CenterHead kicker={t("statsKicker")} title={t("statsTitle")} />
 
         <motion.div
           className="mt-12 overflow-hidden rounded-2xl border border-[#1D2D44]/[0.08] bg-white shadow-[0_2px_24px_-16px_rgba(29,45,68,0.20)]"
@@ -953,6 +937,12 @@ function StatsSection() {
 /*  World map — 3 medals control which programme lights up             */
 /* ------------------------------------------------------------------ */
 function WorldSection() {
+  const t = useTranslations("LaureatesPage");
+  const prizeCopy = t.raw("prizes") as {
+    name: string;
+    tab: string;
+    line: string;
+  }[];
   const { counts, dominant, perPrize } = useMemo(() => {
     const counts = new Map<string, number>();
     const perPrize = new Map<string, Record<PrizeKey, number>>();
@@ -996,9 +986,9 @@ function WorldSection() {
     <section className="bg-white">
       <div className="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
         <CenterHead
-          kicker="Worldwide"
-          title="Laureates around the world"
-          intro="Hover a hotspot to see the country and number of winners."
+          kicker={t("worldKicker")}
+          title={t("worldTitle")}
+          intro={t("worldIntro")}
         />
 
         {/* legend — hover a point to light its programme on the map */}
@@ -1009,27 +999,29 @@ function WorldSection() {
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
         >
-          {PRIZES.map((p) => {
-            const dim = litPrize !== null && litPrize !== p.key;
+          {PRIZE_KEYS.map((key, i) => {
+            const dim = litPrize !== null && litPrize !== key;
             return (
               <motion.button
-                key={p.key}
+                key={key}
                 type="button"
                 variants={RISE}
-                onMouseEnter={() => setLitPrize(p.key)}
+                onMouseEnter={() => setLitPrize(key)}
                 onMouseLeave={() => setLitPrize(null)}
-                onFocus={() => setLitPrize(p.key)}
+                onFocus={() => setLitPrize(key)}
                 onBlur={() => setLitPrize(null)}
                 animate={{ opacity: dim ? 0.4 : 1 }}
                 transition={{ duration: 0.3, ease: EASE }}
                 className="flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-[#1D2D44]/75 outline-none transition hover:text-[#1D2D44] focus-visible:ring-2 focus-visible:ring-[#1D2D44]/30"
-                aria-label={`Highlight ${p.name} on the map`}
+                aria-label={t("highlightPrizeAria", {
+                  name: prizeCopy[i].name,
+                })}
               >
                 <span
                   className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: accentOf(p.key) }}
+                  style={{ backgroundColor: accentOf(key) }}
                 />
-                {PRIZE_LABEL[p.key]}
+                {t(`prizeLabels.${key}`)}
               </motion.button>
             );
           })}
@@ -1194,8 +1186,7 @@ function WorldSection() {
           </div>
 
           <p className="mt-4 text-center text-xs text-[#1D2D44]/45">
-            Hover a hotspot for the country and winner count · {markers.length}{" "}
-            countries represented
+            {t("mapCaption", { count: markers.length })}
           </p>
         </motion.div>
       </div>
@@ -1207,6 +1198,15 @@ function WorldSection() {
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 export default function LaureatesPage() {
+  const t = useTranslations("LaureatesPage");
+  const prizeCopy = t.raw("prizes") as {
+    name: string;
+    tab: string;
+    line: string;
+  }[];
+  const prizeLabels = t.raw("prizeLabels") as Record<PrizeKey, string>;
+  const prizes = PRIZE_META.map((meta, i) => ({ ...meta, ...prizeCopy[i] }));
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -1225,7 +1225,7 @@ export default function LaureatesPage() {
 
   const latestWinners = useMemo(
     () =>
-      PRIZES.flatMap((p) => {
+      PRIZE_META.flatMap((p) => {
         const items = LAUREATES.filter((l) => l.prize === p.key);
         const year = Math.max(...items.map((l) => l.year));
         return items.filter((l) => l.year === year).slice(0, 3);
@@ -1260,10 +1260,10 @@ export default function LaureatesPage() {
   }, [yearFilter, prizeFilter]);
 
   const prizePills: { key: "all" | PrizeKey; label: string }[] = [
-    { key: "all", label: "All prizes" },
-    { key: "kuwait", label: PRIZE_LABEL.kuwait },
-    { key: "jaber", label: PRIZE_LABEL.jaber },
-    { key: "sumait", label: PRIZE_LABEL.sumait },
+    { key: "all", label: t("allPrizes") },
+    { key: "kuwait", label: prizeLabels.kuwait },
+    { key: "jaber", label: prizeLabels.jaber },
+    { key: "sumait", label: prizeLabels.sumait },
   ];
 
   return (
@@ -1282,7 +1282,7 @@ export default function LaureatesPage() {
           <div className="absolute inset-0">
             <Image
               src="/image/Prizes1.png"
-              alt="KFAS laureates"
+              alt={t("heroImageAlt")}
               fill
               priority
               quality={65}
@@ -1313,10 +1313,10 @@ export default function LaureatesPage() {
               transition={{ duration: 0.55, ease: EASE }}
             >
               <Link href="/prizes" className="transition hover:text-white/80">
-                Prizes
+                {t("breadcrumbPrizes")}
               </Link>
               <span className="text-white/25">/</span>
-              <span className="text-white/80">Laureates</span>
+              <span className="text-white/80">{t("breadcrumbCurrent")}</span>
             </motion.div>
 
             <div className="overflow-hidden">
@@ -1326,7 +1326,7 @@ export default function LaureatesPage() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
               >
-                Laureates
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
@@ -1363,14 +1363,13 @@ export default function LaureatesPage() {
                   transition={{ duration: 0.7, ease: EASE }}
                 />
                 <span className="mt-5 block text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
-                  Since 1979
+                  {t("introKicker")}
                 </span>
                 <h2 className="mt-3 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem] lg:text-[2.1rem]">
-                  Prizes at KFAS
+                  {t("introTitle")}
                 </h2>
                 <p className="mt-5 max-w-[420px] font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
-                  Three programmes recognising scientific excellence across the
-                  Arab world and Africa.
+                  {t("introBody")}
                 </p>
               </FadeUp>
 
@@ -1380,7 +1379,7 @@ export default function LaureatesPage() {
                 animate={introInView ? "show" : "hidden"}
                 className="grid h-full grid-cols-1 items-stretch gap-8 sm:grid-cols-3 sm:gap-4 lg:gap-6"
               >
-                {PRIZES.map((p) => (
+                {prizes.map((p) => (
                   <motion.div key={p.key} variants={RISE} className="h-full">
                     <Link
                       href={p.href}
@@ -1407,7 +1406,7 @@ export default function LaureatesPage() {
                       <span className="mt-auto inline-flex items-center gap-3 pt-4">
                         <span className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
                         <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-                          Learn more
+                          {t("learnMore")}
                         </span>
                       </span>
                     </Link>
@@ -1434,13 +1433,13 @@ export default function LaureatesPage() {
           <div className="relative mx-auto max-w-[1280px] px-6 py-14 sm:py-16 lg:px-8 lg:py-20">
             <FadeUp className="mb-5 text-center lg:mb-7">
               <span className="block text-[10px] font-semibold uppercase tracking-[0.35em] text-white/80">
-                Most recent
+                {t("latestKicker")}
               </span>
               <h2 className="mt-2 font-poppins text-[2.25rem] font-semibold tracking-tight text-white sm:text-[2.75rem] lg:text-[3.25rem]">
-                Latest winners
+                {t("latestTitle")}
               </h2>
               <p className="mx-auto mt-2 max-w-[440px] font-poppins text-[15px] font-light leading-relaxed text-white/80">
-                The most recent laureates from each of the three programmes.
+                {t("latestIntro")}
               </p>
             </FadeUp>
 
@@ -1466,9 +1465,9 @@ export default function LaureatesPage() {
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
               <div className="lg:col-span-4">
                 <SectionHead
-                  kicker="The honour roll"
-                  title="Browse by year"
-                  intro="Every laureate across the three programmes, newest first."
+                  kicker={t("browseKicker")}
+                  title={t("browseTitle")}
+                  intro={t("browseIntro")}
                 />
               </div>
 
@@ -1481,10 +1480,7 @@ export default function LaureatesPage() {
                   viewport={{ once: true, margin: "-80px" }}
                   className="border-b border-[#1D2D44]/[0.10] pb-6"
                 >
-                  <motion.div
-                    variants={RISE}
-                    className="flex flex-wrap gap-2"
-                  >
+                  <motion.div variants={RISE} className="flex flex-wrap gap-2">
                     {prizePills.map((p) => {
                       const on = prizeFilter === p.key;
                       return (
@@ -1518,7 +1514,7 @@ export default function LaureatesPage() {
                     className="mt-4 flex items-center gap-4"
                   >
                     <label className="flex items-center gap-2 text-sm text-[#1D2D44]/70">
-                      Year
+                      {t("yearLabel")}
                       <select
                         value={String(yearFilter)}
                         onChange={(e) =>
@@ -1530,7 +1526,7 @@ export default function LaureatesPage() {
                         }
                         className="rounded-sm border border-[#1D2D44]/[0.16] bg-white px-3 py-1.5 text-sm font-medium text-[#1D2D44] outline-none transition focus:border-[#EC601B]"
                       >
-                        <option value="all">All years</option>
+                        <option value="all">{t("allYears")}</option>
                         {years.map((y) => (
                           <option key={y} value={y}>
                             {y}
@@ -1552,7 +1548,7 @@ export default function LaureatesPage() {
                   >
                     {grouped.groups.length === 0 ? (
                       <p className="border-t border-[#1D2D44]/[0.08] py-12 text-[#1D2D44]/55">
-                        No laureates match this filter.
+                        {t("noMatches")}
                       </p>
                     ) : (
                       grouped.groups.map(([year, items]) => (
@@ -1573,4 +1569,3 @@ export default function LaureatesPage() {
     </>
   );
 }
-

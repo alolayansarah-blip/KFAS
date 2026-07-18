@@ -264,6 +264,27 @@ const RESEARCHER_PROGRAMS_AR: SearchItem[] = [
   },
 ];
 
+const EXTRA_PAGES_EN: SearchItem[] = [
+  {
+    title: "All News",
+    description:
+      "Stories, announcements, and highlights from the Kuwait Foundation for the Advancement of Sciences.",
+    url: "/news",
+    category: "News",
+    keywords: ["news", "updates", "announcements", "press", "media"],
+  },
+];
+
+const EXTRA_PAGES_AR: SearchItem[] = [
+  {
+    title: "جميع الأخبار",
+    description: "قصص وإعلانات وأبرز مستجدات مؤسسة الكويت للتقدم العلمي.",
+    url: "/news",
+    category: "الأخبار",
+    keywords: ["أخبار", "مستجدات", "إعلانات", "إعلام", "صحافة"],
+  },
+];
+
 // ── Extra keywords per URL (synonyms, abbreviations…) ──────────────────────────
 const KEYWORDS_EN: Record<string, string[]> = {
   "/about": ["who we are", "mission", "vision", "values", "foundation", "kfas"],
@@ -297,6 +318,7 @@ const KEYWORDS_EN: Record<string, string[]> = {
   "/prizes/KuwaitPrize": ["award", "prize", "kuwait prize"],
   "/prizes/AlSumaitPrize": ["award", "prize", "africa", "sumait"],
   "/prizes/Laureates": ["winners", "recipients", "laureates"],
+  "/news": ["news", "updates", "announcements", "press", "media"],
   // …add more URLs and terms here anytime
 };
 
@@ -325,6 +347,7 @@ const KEYWORDS_AR: Record<string, string[]> = {
   "/prizes/KuwaitPrize": ["جائزة", "جائزة الكويت"],
   "/prizes/AlSumaitPrize": ["جائزة", "أفريقيا", "السميط"],
   "/prizes/Laureates": ["فائزون", "حائزون", "الفائزون"],
+  "/news": ["أخبار", "مستجدات", "إعلانات", "إعلام"],
 };
 
 // Optional: nicer descriptions per URL. Missing ones fall back to "".
@@ -349,6 +372,7 @@ const DESCRIPTIONS_EN: Record<string, string> = {
   "/prizes/KuwaitPrize": "The Kuwait Prize for scientific achievement.",
   "/prizes/AlSumaitPrize": "The Al Sumait Prize.",
   "/prizes/Laureates": "Past prize laureates and winners.",
+  "/news": "All KFAS news, announcements, and updates.",
 };
 
 const DESCRIPTIONS_AR: Record<string, string> = {
@@ -373,6 +397,7 @@ const DESCRIPTIONS_AR: Record<string, string> = {
   "/prizes/KuwaitPrize": "جائزة الكويت للإنجاز العلمي.",
   "/prizes/AlSumaitPrize": "جائزة السميط.",
   "/prizes/Laureates": "الفائزون السابقون بالجوائز.",
+  "/news": "جميع أخبار وإعلانات ومستجدات المؤسسة.",
 };
 
 // Unicode-aware so Arabic labels split into real words too.
@@ -428,14 +453,14 @@ function buildIndex(
 
 const searchIndexEn: SearchItem[] = buildIndex(
   SEARCH_NAV_EN,
-  RESEARCHER_PROGRAMS_EN,
+  [...EXTRA_PAGES_EN, ...RESEARCHER_PROGRAMS_EN],
   DESCRIPTIONS_EN,
   KEYWORDS_EN,
 );
 
 const searchIndexAr: SearchItem[] = buildIndex(
   SEARCH_NAV_AR,
-  RESEARCHER_PROGRAMS_AR,
+  [...EXTRA_PAGES_AR, ...RESEARCHER_PROGRAMS_AR],
   DESCRIPTIONS_AR,
   KEYWORDS_AR,
 );
