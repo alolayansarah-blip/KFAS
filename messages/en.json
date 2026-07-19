@@ -2492,5 +2492,37 @@
     "laureateCount": "{count, plural, one {# laureate} other {# laureates}}",
     "shared": "Shared",
     "bioPlaceholder": "Biography to follow — details for this laureate are being added."
+  },
+  "SpecialNeedsPage": {
+    "breadcrumbScienceSociety": "Science & Society",
+    "heroTitle": "Special Needs",
+    "overviewParagraphs": [
+      "KFAS provides grants to support initiatives that empower individuals with special needs through science, education, and technology. The program focuses on promoting inclusion, enhancing accessibility, and improving quality of life.",
+      "KFAS supports projects such as assistive technologies, inclusive educational programs, capacity-building initiatives, and community awareness activities. Through these grants, KFAS aims to enable greater participation, foster independence, and create meaningful impact for individuals with special needs and their communities."
+    ],
+    "ctaTitle": "Apply now and bring your initiative to life with KFAS support.",
+    "ctaButton": "Apply Now"
+  },
+  "SCSPage": {
+    "breadcrumb": "Research",
+    "heroTitle": "Scientific Conference Sponsorship",
+    "overviewKicker": "Overview",
+    "overviewBody": "KFAS provides sponsorship opportunities to support the organization of high-quality scientific conferences, forums, and symposia in Kuwait. This offering aims to strengthen the national research ecosystem by facilitating knowledge exchange, fostering collaboration, and promoting public engagement with science and technology.",
+    "objectivesTitle": "Objectives",
+    "objectives": [
+      "Advance scientific knowledge and dialogue in priority areas",
+      "Encourage knowledge exchange and collaboration between local and international experts",
+      "Enhance the visibility of Kuwait as a regional hub for scientific exchange",
+      "Support outreach activities that engage students and the wider community"
+    ],
+    "eligibilityTitle": "Eligibility",
+    "eligibilityIntro": "Grants are open to:",
+    "eligibility": [
+      "Kuwaiti universities and academic institutions",
+      "Research centers and scientific organizations",
+      "Non-profit entities involved in science and technology"
+    ],
+    "ctaTitle": "Apply now and bring your initiative to life with KFAS support.",
+    "ctaButton": "Apply Now"
   }
 }

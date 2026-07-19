@@ -8,6 +8,12 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for deployment platforms that don't support sharp (e.g. DigitalOcean)
   },
+  // Tree-shake heavy icon/motion imports so route JS stays smaller
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion"],
+  },
+  compress: true,
+  poweredByHeader: false,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -46,6 +46,7 @@ const GALLERY = [
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function SpecialNeedsPage() {
+  const t = useTranslations("SpecialNeedsPage");
   const isArabic = useLocale() === "ar";
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -53,6 +54,8 @@ export default function SpecialNeedsPage() {
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const overviewParagraphs = t.raw("overviewParagraphs") as string[];
 
   return (
     <>
@@ -110,9 +113,7 @@ export default function SpecialNeedsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Science &amp; Society</span>
-              {/* <span className="text-white/25">/</span>
-              <span>Special Needs</span> */}
+              <span>{t("breadcrumbScienceSociety")}</span>
             </motion.div>
 
             <div
@@ -130,7 +131,7 @@ export default function SpecialNeedsPage() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Special Needs
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
@@ -153,34 +154,19 @@ export default function SpecialNeedsPage() {
         >
           <div className={CONTAINER}>
             <div className="flex w-full flex-col gap-6">
-              <motion.p
-                className="text-justify font-poppins text-[16px] sm:text-[17px] font-light leading-[1.95]"
-                style={{ color: BRAND.navy }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.65, ease: EASE }}
-              >
-                KFAS provides grants to support initiatives that empower
-                individuals with special needs through science, education, and
-                technology. The program focuses on promoting inclusion,
-                enhancing accessibility, and improving quality of life.
-              </motion.p>
-              <motion.p
-                className="text-justify font-poppins text-[16px] sm:text-[17px] font-light leading-[1.95]"
-                style={{ color: BRAND.navy }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.65, delay: 0.1, ease: EASE }}
-              >
-                KFAS supports projects such as assistive technologies, inclusive
-                educational programs, capacity-building initiatives, and
-                community awareness activities. Through these grants, KFAS aims
-                to enable greater participation, foster independence, and create
-                meaningful impact for individuals with special needs and their
-                communities.
-              </motion.p>
+              {overviewParagraphs.map((paragraph, i) => (
+                <motion.p
+                  key={i}
+                  className="text-justify font-poppins text-[16px] sm:text-[17px] font-light leading-[1.95]"
+                  style={{ color: BRAND.navy }}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.65, delay: i * 0.1, ease: EASE }}
+                >
+                  {paragraph}
+                </motion.p>
+              ))}
             </div>
           </div>
         </section>
@@ -234,7 +220,7 @@ export default function SpecialNeedsPage() {
           style={{ background: "#7DC0F1" }}
         >
           <div
-            className={`${CONTAINER} flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left`}
+            className={`${CONTAINER} flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:gap-12 lg:text-left rtl:lg:text-right`}
           >
             <motion.h2
               className="max-w-[30ch] font-poppins text-[1.5rem] sm:text-[2rem] font-semibold leading-[1.3] tracking-tight"
@@ -244,7 +230,7 @@ export default function SpecialNeedsPage() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.65, ease: EASE }}
             >
-              Apply now and bring your initiative to life with KFAS support.
+              {t("ctaTitle")}
             </motion.h2>
             <motion.a
               href="#"
@@ -257,7 +243,7 @@ export default function SpecialNeedsPage() {
               whileHover={{ y: -3, scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
             >
-              Apply Now
+              {t("ctaButton")}
             </motion.a>
           </div>
         </section>

@@ -139,7 +139,7 @@ const DEFAULT_NAV_ITEMS_AR: NavItem[] = [
       },
       { label: "المنشورات", href: "https://www.aspdkw.com/" },
       {
-        label: "ذوو الاحتياجات الخاصة",
+        label: "ذوي الاحتياجات الخاصة",
         href: "/ScienceAndSociety/SpecialNeeds",
       },
     ],
@@ -325,7 +325,6 @@ const DropdownLink = ({
 }) => (
   <Link
     href={href}
-    prefetch={false}
     role="menuitem"
     onClick={onClick}
     className={`block px-5 py-2.5 text-[14px] text-white/90 transition-colors duration-150 hover:bg-white/15 hover:text-white whitespace-nowrap ${className}`}

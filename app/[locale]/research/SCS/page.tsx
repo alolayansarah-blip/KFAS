@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -17,21 +17,6 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true, margin: "-60px" },
   transition: { duration: 0.6, delay, ease: EASE },
 });
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-const OBJECTIVES = [
-  "Advance scientific knowledge and dialogue in priority areas",
-  "Encourage knowledge exchange and collaboration between local and international experts",
-  "Enhance the visibility of Kuwait as a regional hub for scientific exchange",
-  "Support outreach activities that engage students and the wider community",
-];
-
-const ELIGIBILITY = [
-  "Kuwaiti universities and academic institutions",
-  "Research centers and scientific organizations",
-  "Non-profit entities involved in science and technology",
-];
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
@@ -64,6 +49,7 @@ function Mark() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ScientificConferenceSponsorshipPage() {
+  const t = useTranslations("SCSPage");
   const isArabic = useLocale() === "ar";
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -71,6 +57,10 @@ export default function ScientificConferenceSponsorshipPage() {
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
+
+  const objectives = t.raw("objectives") as string[];
+  const eligibility = t.raw("eligibility") as string[];
+  const eligibilityIntro = t("eligibilityIntro");
 
   return (
     <>
@@ -133,7 +123,7 @@ export default function ScientificConferenceSponsorshipPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <span>Research</span>
+              <span>{t("breadcrumb")}</span>
             </motion.div>
 
             {/* Title — clip-path wipe */}
@@ -144,13 +134,13 @@ export default function ScientificConferenceSponsorshipPage() {
                 animate={{ y: 0 }}
                 transition={{ duration: 0.75, delay: 0.15, ease: EASE }}
               >
-                Scientific Conference Sponsorship
+                {t("heroTitle")}
               </motion.h1>
             </div>
 
             {/* Orange rule */}
             <motion.div
-              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left"
+              className="mt-5 h-[3px] rounded-full bg-[#EC601B] origin-left rtl:origin-right"
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
@@ -168,17 +158,18 @@ export default function ScientificConferenceSponsorshipPage() {
             <div className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-2">
               <motion.div {...fadeUp(0)}>
                 <span className="block h-[3px] w-9 rounded-full bg-[#EC601B]" />
-                <span className="mt-5 block font-poppins text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
-                  Overview
+                <span
+                  className={`mt-5 block font-poppins font-semibold text-[#EC601B] ${
+                    isArabic
+                      ? "text-[15px] tracking-normal"
+                      : "text-[10px] uppercase tracking-[0.35em]"
+                  }`}
+                >
+                  {t("overviewKicker")}
                 </span>
 
                 <p className="mt-7 font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
-                  KFAS provides sponsorship opportunities to support the
-                  organization of high-quality scientific conferences, forums,
-                  and symposia in Kuwait. This offering aims to strengthen the
-                  national research ecosystem by facilitating knowledge
-                  exchange, fostering collaboration, and promoting public
-                  engagement with science and technology.
+                  {t("overviewBody")}
                 </p>
               </motion.div>
 
@@ -202,12 +193,12 @@ export default function ScientificConferenceSponsorshipPage() {
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <SectionHead title="Objectives" />
+                <SectionHead title={t("objectivesTitle")} />
               </div>
 
               <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
                 <ul className="divide-y divide-[#1D2D44]/10 border-t border-[#1D2D44]/10">
-                  {OBJECTIVES.map((item, i) => (
+                  {objectives.map((item, i) => (
                     <motion.li
                       key={item}
                       {...fadeUp(0.05 + i * 0.06)}
@@ -230,19 +221,21 @@ export default function ScientificConferenceSponsorshipPage() {
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <SectionHead title="Eligibility" />
+                <SectionHead title={t("eligibilityTitle")} />
               </div>
 
               <div className="lg:col-span-8 lg:border-l lg:border-[#7DC0F1]/60 lg:pl-12">
-                <motion.p
-                  {...fadeUp(0)}
-                  className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70"
-                >
-                  Grants are open to:
-                </motion.p>
+                {eligibilityIntro && (
+                  <motion.p
+                    {...fadeUp(0)}
+                    className="font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70"
+                  >
+                    {eligibilityIntro}
+                  </motion.p>
+                )}
 
                 <ul className="mt-2 divide-y divide-[#1D2D44]/10 border-t border-[#1D2D44]/10">
-                  {ELIGIBILITY.map((item, i) => (
+                  {eligibility.map((item, i) => (
                     <motion.li
                       key={item}
                       {...fadeUp(0.05 + i * 0.06)}
@@ -274,7 +267,7 @@ export default function ScientificConferenceSponsorshipPage() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.65, ease: EASE }}
             >
-              Apply now and bring your initiative to life with KFAS support.
+              {t("ctaTitle")}
             </motion.h2>
             <motion.a
               href="#"
@@ -286,7 +279,7 @@ export default function ScientificConferenceSponsorshipPage() {
               whileHover={{ y: -3, scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
             >
-              Apply Now
+              {t("ctaButton")}
             </motion.a>
           </div>
         </section>
