@@ -1,275 +1,272 @@
+// src/components/InstagramFeed.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+/**
+ * InstagramFeed — latest posts from @kfasinfo in the KFAS editorial style.
+ *
+ * Requires:
+ *   1. src/app/api/instagram/route.ts (the API route delivered with this file)
+ *   2. INSTAGRAM_ACCESS_TOKEN in env (.env.local + DigitalOcean encrypted var)
+ *   3. "InstagramFeed" namespace in messages/en.json and messages/ar.json
+ *      (keys provided alongside this file)
+ *
+ * Drop into any page:  <InstagramFeed />
+ */
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-const VIEWPORT = { once: true, amount: 0.15 };
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: VIEWPORT,
-  transition: { duration: 0.7, delay, ease: EASE },
-});
+const EASE = [0.22, 1, 0.36, 1] as const;
 
-interface InstagramPost {
+const NAVY = "#1D2D44";
+const ORANGE = "#EC601B";
+
+const INSTAGRAM_PROFILE_URL = "https://www.instagram.com/kfasinfo/";
+/** Homepage shows only the latest three posts. */
+const POST_COUNT = 3;
+
+type InstagramPost = {
   id: string;
-  media_type: string;
-  media_url: string;
+  caption: string;
+  mediaType: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
+  imageUrl: string;
   permalink: string;
   timestamp: string;
-  caption?: string;
+};
+
+/* ------------------------------------------------------------------ */
+/*  Icons (inline SVG — no extra deps)                                 */
+/* ------------------------------------------------------------------ */
+
+function InstagramGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+      <circle cx="12" cy="12" r="4.25" />
+      <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
 }
 
-const placeholderPosts: InstagramPost[] = [
-  {
-    id: "placeholder-1",
-    media_type: "IMAGE",
-    media_url: "/image/instagram2.webp",
-    permalink: "https://www.instagram.com/kfasinfo/",
-    timestamp: "2025-01-10T00:00:00.000Z",
-    caption:
-      "KFAS continues to support scientific research and innovation in Kuwait. #KFAS #Science #Innovation",
-  },
-  {
-    id: "placeholder-2",
-    media_type: "IMAGE",
-    media_url: "/image/InstagramPost.png",
-    permalink: "https://www.instagram.com/kfasinfo/",
-    timestamp: "2025-01-09T00:00:00.000Z",
-    caption:
-      "Empowering researchers and scientists to tackle national challenges through cutting-edge research programs. #Research #Kuwait",
-  },
-  {
-    id: "placeholder-3",
-    media_type: "IMAGE",
-    media_url: "/image/InstagramPost2.jpg",
-    permalink: "https://www.instagram.com/kfasinfo/",
-    timestamp: "2025-01-08T00:00:00.000Z",
-    caption:
-      "Building a sustainable future through science, technology, and innovation. #Sustainability #Future #KFAS",
-  },
-  {
-    id: "placeholder-4",
-    media_type: "IMAGE",
-    media_url: "/image/InstagramPost.png",
-    permalink: "https://www.instagram.com/kfasinfo/",
-    timestamp: "2025-01-07T00:00:00.000Z",
-    caption:
-      "Science Directors Program 2022 — Empowering the next generation of science leaders in Kuwait. #Leadership #KFAS",
-  },
-];
+function PlayBadge() {
+  return (
+    <span
+      className="absolute top-3 right-3 rtl:right-auto rtl:left-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1D2D44] shadow-sm"
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-3.5 w-3.5 translate-x-[1px] rtl:-translate-x-[1px]"
+      >
+        <path d="M8 5.5v13l11-6.5-11-6.5z" />
+      </svg>
+    </span>
+  );
+}
 
-const InstagramIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-  </svg>
-);
+function CarouselBadge() {
+  return (
+    <span
+      className="absolute top-3 right-3 rtl:right-auto rtl:left-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1D2D44] shadow-sm"
+      aria-hidden="true"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="h-3.5 w-3.5"
+      >
+        <rect x="3" y="7" width="13" height="13" rx="2.5" />
+        <path d="M8 3.5h10A2.5 2.5 0 0 1 20.5 6v10" strokeLinecap="round" />
+      </svg>
+    </span>
+  );
+}
 
-const formatDate = (value: string) =>
-  new Date(value).toLocaleDateString("en-US", {
-    month: "short",
+/* ------------------------------------------------------------------ */
+/*  Tile                                                               */
+/* ------------------------------------------------------------------ */
+
+function PostTile({ post, locale }: { post: InstagramPost; locale: string }) {
+  const date = new Intl.DateTimeFormat(locale === "ar" ? "ar" : "en", {
     day: "numeric",
+    month: "short",
     year: "numeric",
-  });
-
-export default function InstagramFeed() {
-  const [posts, setPosts] = useState<InstagramPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [featured, setFeatured] = useState(0);
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch("/api/instagram");
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        const fetched = data.posts || [];
-        setPosts(fetched.length > 0 ? fetched : placeholderPosts);
-      } catch {
-        setPosts(placeholderPosts);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, []);
-
-  const visiblePosts = posts.slice(0, 4);
+  }).format(new Date(post.timestamp));
 
   return (
-    <section
-      id="instagram-feed"
-      className="relative bg-white py-20 lg:py-28 overflow-hidden"
+    <a
+      href={post.permalink}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group relative block aspect-square overflow-hidden rounded-xl bg-[#1D2D44]/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EC601B]"
     >
-      {/* Subtle ambient glow */}
-      <div className="pointer-events-none absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-[#7DC0F1]/6 blur-[100px]" />
+      {/* eslint-disable-next-line @next/next/no-img-element -- Instagram CDN URLs expire; next/image caching can serve dead optimized URLs */}
+      <img
+        src={post.imageUrl}
+        alt={post.caption ? post.caption.slice(0, 100) : "Instagram post"}
+        loading="lazy"
+        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+      />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      {post.mediaType === "VIDEO" && <PlayBadge />}
+      {post.mediaType === "CAROUSEL_ALBUM" && <CarouselBadge />}
+
+      {/* Navy hover overlay */}
+      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#1D2D44]/90 via-[#1D2D44]/35 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+        {post.caption && (
+          <p className="line-clamp-3 text-[13px] leading-snug text-white/95">
+            {post.caption}
+          </p>
+        )}
+        <div className="mt-2 flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-[#7DC0F1]">
+          <InstagramGlyph className="h-3.5 w-3.5" />
+          <span>{date}</span>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section                                                            */
+/* ------------------------------------------------------------------ */
+
+export default function InstagramFeed() {
+  const t = useTranslations("InstagramFeed");
+  const locale = useLocale();
+  const prefersReducedMotion = useReducedMotion();
+
+  const [posts, setPosts] = useState<InstagramPost[] | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/instagram", { cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json();
+      })
+      .then((json) => {
+        if (!cancelled) {
+          const next = Array.isArray(json.posts) ? json.posts : [];
+          setPosts(next.slice(0, POST_COUNT));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // If Instagram is unreachable, hide the section entirely rather than
+  // showing an error on a marketing page.
+  if (failed || (posts && posts.length === 0)) return null;
+
+  const fadeUp = prefersReducedMotion
+    ? undefined
+    : {
+        hidden: { opacity: 0, y: 24 },
+        visible: (i: number) => ({
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.6, ease: EASE, delay: i * 0.06 },
+        }),
+      };
+
+  return (
+    <section className="bg-white py-32 lg:py-40">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Header row */}
+        <motion.div
+          variants={fadeUp}
+          custom={0}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between"
+        >
           <div>
-            <motion.p
-              className="mb-4 text-[10px] font-semibold uppercase tracking-[0.42em] text-[#EC601B]"
-              {...fadeUp(0)}
-            >
-              Social Media
-            </motion.p>
-            <motion.h2
-              className="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D2D44] leading-tight tracking-tight"
-              {...fadeUp(0.1)}
-            >
-              Join us on{" "}
-              <span className="font-extralight italic text-[#1D2D44]/50">
-                Instagram
+            <div className="mb-3 flex items-center gap-3">
+              <span
+                className="h-[3px] w-10 rounded-full"
+                style={{ backgroundColor: ORANGE }}
+              />
+              <span
+                className="text-xs font-semibold uppercase tracking-[0.18em]"
+                style={{ color: ORANGE }}
+              >
+                {t("kicker")}
               </span>
-            </motion.h2>
-            <motion.div
-              className="mt-5 h-px origin-left bg-gradient-to-r from-[#EC601B]/50 via-[#7DC0F1]/20 to-transparent"
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
-              viewport={VIEWPORT}
-              transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-            />
+            </div>
+            <h2
+              className="text-3xl font-bold leading-tight md:text-4xl"
+              style={{ color: NAVY }}
+            >
+              {t("title")}
+            </h2>
           </div>
 
-          {/* Follow CTA */}
-          <motion.a
-            href="https://www.instagram.com/kfasinfo/"
+          <a
+            href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 self-start sm:self-auto shrink-0"
-            {...fadeUp(0.15)}
+            className="inline-flex items-center gap-2.5 self-start rounded-full border-2 px-6 py-3 text-sm font-semibold transition-colors duration-300 md:self-auto hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EC601B]"
+            style={{ borderColor: ORANGE, color: ORANGE }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = ORANGE;
+              e.currentTarget.style.color = "#FFFFFF";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.style.color = ORANGE;
+            }}
           >
-            <div className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
-            <InstagramIcon className="w-4 h-4 text-[#EC601B]" />
-            <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-              Follow @kfasinfo
-            </span>
-            <svg
-              className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 group-hover:text-[#d45510]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </motion.a>
-        </div>
+            <InstagramGlyph className="h-4.5 w-4.5 h-[18px] w-[18px]" />
+            {t("follow")}
+          </a>
+        </motion.div>
 
-        {/* Loading */}
-        {loading && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {[1, 2, 3, 4].map((i) => (
+        {/* Grid */}
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+          {(posts ?? Array.from({ length: POST_COUNT })).map((post, i) =>
+            post ? (
+              <motion.div
+                key={(post as InstagramPost).id}
+                variants={fadeUp}
+                custom={i + 1}
+                initial={prefersReducedMotion ? false : "hidden"}
+                whileInView="visible"
+                viewport={{ once: true, margin: "-60px" }}
+              >
+                <PostTile post={post as InstagramPost} locale={locale} />
+              </motion.div>
+            ) : (
+              // Skeleton while loading
               <div
-                key={i}
-                className="aspect-square bg-[#1D2D44]/06 animate-pulse"
+                key={`skeleton-${i}`}
+                className="aspect-square animate-pulse rounded-xl bg-[#1D2D44]/[0.06]"
+                aria-hidden="true"
               />
-            ))}
-          </div>
-        )}
-
-        {/* Posts — asymmetric layout: 1 featured large + 3 small */}
-        {!loading && visiblePosts.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Featured post — left */}
-            <motion.a
-              href={visiblePosts[featured]?.permalink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative overflow-hidden aspect-square lg:aspect-auto lg:row-span-1"
-              {...fadeUp(0.1)}
-            >
-              <img
-                src={visiblePosts[featured]?.media_url}
-                alt={visiblePosts[featured]?.caption || "Instagram post"}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-              />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1D2D44]/90 via-[#1D2D44]/20 to-transparent" />
-
-              {/* Badge */}
-              <div className="absolute top-5 left-5 flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-3 py-1.5 border border-white/15">
-                <InstagramIcon className="w-3.5 h-3.5 text-white" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white">
-                  @kfasinfo
-                </span>
-              </div>
-
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/40">
-                  {formatDate(visiblePosts[featured]?.timestamp)}
-                </p>
-                <p className="font-poppins text-[14px] font-light text-white/80 leading-relaxed line-clamp-3 mb-5">
-                  {visiblePosts[featured]?.caption}
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="h-[1.5px] w-5 bg-[#EC601B] transition-all duration-500 group-hover:w-8" />
-                  <span className="text-[12px] font-medium tracking-[0.08em] text-[#EC601B]">
-                    View post
-                  </span>
-                  <svg
-                    className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </motion.a>
-
-            {/* Right — 3 small thumbnails stacked */}
-            <div className="grid grid-cols-1 gap-4">
-              {visiblePosts.slice(1, 4).map((post, index) => (
-                <motion.a
-                  key={post.id}
-                  href={post.permalink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative overflow-hidden flex gap-4 bg-[#1D2D44]/03 border border-[#1D2D44]/08 hover:border-[#EC601B]/30 transition-all duration-300 cursor-pointer"
-                  onMouseEnter={() => setFeatured(index + 1)}
-                  {...fadeUp(0.15 + index * 0.08)}
-                >
-                  {/* Thumbnail */}
-                  <div className="relative shrink-0 w-24 h-24 overflow-hidden">
-                    <img
-                      src={post.media_url}
-                      alt={post.caption || "Instagram post"}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                    />
-                  </div>
-
-                  {/* Text */}
-                  <div className="flex flex-col justify-center py-4 pr-5 min-w-0">
-                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#1D2D44]/35">
-                      {formatDate(post.timestamp)}
-                    </p>
-                    <p className="font-poppins text-[13px] font-light text-[#1D2D44]/60 leading-relaxed line-clamp-2 group-hover:text-[#1D2D44]/85 transition-colors duration-300">
-                      {post.caption}
-                    </p>
-                  </div>
-
-                  {/* Left accent on hover */}
-                  <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#EC601B] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
-                </motion.a>
-              ))}
-            </div>
-          </div>
-        )}
+            ),
+          )}
+        </div>
       </div>
     </section>
   );

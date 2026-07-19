@@ -224,7 +224,7 @@ export default function FlippedCardStack() {
 
   return (
     <motion.section
-      className="w-full bg-white pt-8 pb-12 sm:pt-10 sm:pb-16 lg:pt-12 lg:pb-24"
+      className="w-full bg-white py-32 lg:py-40"
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}

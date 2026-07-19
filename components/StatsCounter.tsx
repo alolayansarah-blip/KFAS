@@ -165,7 +165,7 @@ export default function CounterSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 lg:py-28"
+      className="relative overflow-hidden py-32 lg:py-40"
     >
       <div className="absolute inset-0 bg-[url('/image/benduluim.png')] bg-cover bg-center bg-fixed" />
       <div className="absolute inset-0 bg-[#EC601B]/80" />

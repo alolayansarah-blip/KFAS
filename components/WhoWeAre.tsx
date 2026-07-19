@@ -113,7 +113,7 @@ function WhoWeAre() {
     <section
       ref={sectionRef}
       id="who-we-are"
-      className="relative overflow-hidden bg-white py-20 lg:py-28"
+      className="relative overflow-hidden bg-white py-32 lg:py-40"
     >
       {/* Ghost year watermark */}
       <motion.div

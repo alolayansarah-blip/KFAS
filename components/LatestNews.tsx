@@ -41,7 +41,7 @@ export default function LatestNews() {
     <section
       ref={sectionRef}
       id="our-impact-stories"
-      className="relative bg-white py-20 lg:py-28"
+      className="relative bg-white py-32 lg:py-40"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">

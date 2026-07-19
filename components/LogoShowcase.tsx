@@ -209,7 +209,7 @@ export default function LogoShowcase() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden py-20 lg:py-28"
+      className="relative w-full overflow-hidden py-32 lg:py-40"
       onMouseLeave={() => setHoveredIndex(null)}
     >
       {/* ---------- Background ---------- */}
