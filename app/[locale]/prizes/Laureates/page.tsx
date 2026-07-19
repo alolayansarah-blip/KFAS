@@ -614,13 +614,13 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
           );
         })}
 
-        {/* side chevrons */}
+        {/* side chevrons — start/end so sides mirror in RTL; icons rotate to stay outward */}
         <button
           type="button"
           aria-label={t("previousWinner")}
           disabled={active === 0}
           onClick={() => go(-1)}
-          className="absolute left-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:left-2 lg:left-6"
+          className="absolute start-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:start-2 lg:start-6"
         >
           <svg
             width="20"
@@ -643,7 +643,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
           aria-label={t("nextWinner")}
           disabled={active === total - 1}
           onClick={() => go(1)}
-          className="absolute right-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:right-2 lg:right-6"
+          className="absolute end-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:end-2 lg:end-6"
         >
           <svg
             width="20"
