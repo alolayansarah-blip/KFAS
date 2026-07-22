@@ -30,7 +30,7 @@ const CARDS_META = [
     fallbackImage: FALLBACK_IMAGE,
   },
   {
-    href: "/Learning-and-Development",
+    href: "/Learning-and-Development/Professionals",
     image: "/image/youth.webp",
     fallbackImage: FALLBACK_IMAGE,
   },

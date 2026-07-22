@@ -14,11 +14,11 @@
         "label": "Explore"
       },
       {
-        "title": "Learning & Development",
+        "title": "Learning & Development for Professionals",
         "label": "Discover"
       },
       {
-        "title": "Our Publications",
+        "title": "Our Magazine and Publications",
         "label": "Browse"
       }
     ]
@@ -797,6 +797,7 @@
     },
     "organizedEyebrow": "Organized Events",
     "organizedHeading": "Organized Events",
+    "backToTop": "Back to Top",
     "organizedEvents": [
       {
         "title": "CERN Scientific CV writing workshop",
@@ -1542,7 +1543,8 @@
       "Prepare a concise project concept",
       "Contact the KFAS Research & Technology team for initial guidance"
     ],
-    "contactLabel": "Contact:"
+    "contactLabel": "Contact:",
+    "backToTop": "Back to Top"
   },
   "KuwaitPrizePage": {
     "breadcrumb": "Prizes",
@@ -1700,10 +1702,10 @@
     "objectivesTitle": "Objectives of the Prize",
     "objectivesIntro": "The Al-Sumait Prize aims to:",
     "objectiveItems": [
-      "Encourage young researchers and practitioners across Africa to excel in scientific research and development practice.",
-      "Recognize outstanding achievements in the early stages of a career that advance African development priorities.",
-      "Promote a culture of scientific research and innovation within academic, governmental, and civil society institutions serving the continent.",
-      "Support the development of a generation of leaders capable of advancing scientific knowledge for sustainable progress in Africa."
+      "Recognize outstanding contributions to development in Africa. ",
+      "Encourage innovative initiatives that address key developmental challenges. ",
+      "Highlight successful projects that improve quality of life and promote sustainable development. ",
+      "Support efforts that benefit communities across the African continent. "
     ],
     "fieldsTitle": "Prize Fields",
     "fieldsIntro": "The prize is awarded annually in rotating fields that address key development priorities in Africa:",

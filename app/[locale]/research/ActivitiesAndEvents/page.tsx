@@ -765,6 +765,8 @@ export default function ActivitiesAndEventsPage() {
   });
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
 
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
   return (
     <>
       <Header
@@ -1012,6 +1014,37 @@ export default function ActivitiesAndEventsPage() {
             </div>
           </div>
         </section>
+
+        {/* ── Back to Top ── */}
+        <div className="flex justify-center bg-white py-12">
+          <FadeUp>
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="group inline-flex flex-col items-center gap-2 text-[#1D2D44]/35 transition-colors duration-300 hover:text-[#EC601B]"
+              aria-label={t("backToTop")}
+            >
+              <div className="flex h-9 w-9 items-center justify-center border border-[#1D2D44]/15 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-[#EC601B]/50">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 15l7-7 7 7"
+                  />
+                </svg>
+              </div>
+              <span className="text-[11px] font-medium uppercase tracking-[0.2em]">
+                {t("backToTop")}
+              </span>
+            </button>
+          </FadeUp>
+        </div>
       </main>
       <Footer
         logo="/image/logoFooter.png"
