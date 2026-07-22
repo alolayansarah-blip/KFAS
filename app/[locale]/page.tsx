@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import WhoWeAre from "@/components/WhoWeAre";
+import { localeAlternates } from "@/lib/seo";
 
 export function generateMetadata({
   params: { locale },
@@ -17,13 +18,7 @@ export function generateMetadata({
     description: isArabic
       ? "الموقع الرسمي لمؤسسة الكويت للتقدم العلمي — المنح البحثية، جائزة الكويت، جائزة السميط، جائزة جابر الأحمد، وبرامج التعلم والتطوير."
       : "The official website of the Kuwait Foundation for the Advancement of Sciences — research grants, the Kuwait Prize, Al-Sumait Prize, Jaber Al-Ahmad Prize, and learning and development programs.",
-    alternates: {
-      canonical: isArabic ? "/ar" : "/",
-      languages: {
-        en: "/",
-        ar: "/ar",
-      },
-    },
+    alternates: localeAlternates("/", locale),
   };
 }
 

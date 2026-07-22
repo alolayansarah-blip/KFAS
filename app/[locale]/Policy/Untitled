@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import PolicyContent from "./PolicyContent";
-import { localeAlternates } from "@/lib/seo";
 
 const BASE_URL = "https://monkfish-app-kgans.ondigitalocean.app";
 
@@ -21,7 +20,13 @@ export async function generateMetadata({
     description: isArabic
       ? "سياسة استخدام الموقع الإلكتروني لمؤسسة الكويت للتقدم العلمي، بما في ذلك الخصوصية وجمع البيانات والملكية الفكرية."
       : "Website usage policy of the Kuwait Foundation for the Advancement of Sciences, covering privacy, data collection, and intellectual property.",
-    alternates: localeAlternates("/", locale),
+    alternates: {
+      canonical: isArabic ? `${BASE_URL}/ar/Policy` : `${BASE_URL}/Policy`,
+      languages: {
+        en: `${BASE_URL}/Policy`,
+        ar: `${BASE_URL}/ar/Policy`,
+      },
+    },
   };
 }
 
