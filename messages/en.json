@@ -1551,6 +1551,15 @@
     "heroTitle": "Kuwait Prize",
     "applyLinkText": "Click here to apply",
     "logoAlt": "Kuwait Prize",
+    "jumpToLabel": "Jump To",
+    "jumpSelectPlaceholder": "Select a topic",
+    "jumpLinks": [
+      { "id": "overview", "label": "Overview" },
+      { "id": "objectives", "label": "Objectives" },
+      { "id": "fields", "label": "Prize Fields" },
+      { "id": "eligibility", "label": "Eligibility" },
+      { "id": "components", "label": "Prize Components" }
+    ],
     "overviewTitle": "Overview of the Kuwait Prize",
     "overviewBody1": "The Kuwait Prize is one of the most prestigious scientific awards granted by the Kuwait Foundation for the Advancement of Sciences (KFAS). The prize recognizes distinguished researchers who have made significant and impactful contributions to the advancement of science, knowledge, and innovation in fields that serve humanity and promote scientific progress.",
     "overviewBody2Pre": "Established in ",
@@ -1603,7 +1612,8 @@
         "desc": "A certificate of recognition from KFAS."
       }
     ],
-    "componentsClosing": "The prize may be awarded to one laureate or shared by multiple laureates whose contributions merit recognition."
+    "componentsClosing": "The prize may be awarded to one laureate or shared by multiple laureates whose contributions merit recognition.",
+    "backToTop": "Back to Top"
   },
   "JaberAlAhmadPrizePage": {
     "breadcrumb": "Prizes",
