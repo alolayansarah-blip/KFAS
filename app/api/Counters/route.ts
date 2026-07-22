@@ -1,12 +1,26 @@
 import { NextResponse } from "next/server";
+import { COUNTER_FALLBACKS, fallbackFor } from "@/lib/counterFallbacks";
 
 const PURE_API_URL = "https://pure.kfas.org.kw/ws/api";
-const API_KEY = process.env.PURE_API_KEY || "181b5f03-d95d-47be-9fe8-96342b42deab";
+// SECURITY: the key must come from the environment only.
+// Local: .env.local → PURE_API_KEY=...
+// DigitalOcean: App → Settings → Environment Variables → PURE_API_KEY
+const API_KEY = process.env.PURE_API_KEY;
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET() {
+  if (!API_KEY) {
+    console.error(
+      " PURE_API_KEY is not set — returning snapshot fallbacks. Set it in .env.local / DigitalOcean environment variables.",
+    );
+    return NextResponse.json(COUNTER_FALLBACKS, {
+      status: 200,
+      headers: { "Cache-Control": "no-store, max-age=0", "X-Fallback": "missing-key" },
+    });
+  }
+
   try {
     // Define all endpoints
     const endpoints = [
@@ -38,22 +52,26 @@ export async function GET() {
             response.status,
             errorText.substring(0, 200),
           );
-          return { value: 0, label: endpoint.label };
+          return { value: fallbackFor(endpoint.label), label: endpoint.label };
         }
 
         const data = await response.json();
-        return { value: data?.count ?? 0, label: endpoint.label };
+        return {
+          value: data?.count ?? fallbackFor(endpoint.label),
+          label: endpoint.label,
+        };
       } catch (error) {
         console.error(` Error fetching ${endpoint.label}:`, error);
-        return { value: 0, label: endpoint.label };
+        return { value: fallbackFor(endpoint.label), label: endpoint.label };
       }
     });
 
     const allData = await Promise.all(promises);
 
-    // Build stats array
+    // Build stats array — a zero from PURE is treated as invalid and
+    // replaced by the real snapshot number so visitors never see zeros.
     const stats = allData.map((data) => ({
-      value: Number(data?.value) || 0,
+      value: Number(data?.value) || fallbackFor(data.label),
       label: data.label,
     }));
 
@@ -65,18 +83,8 @@ export async function GET() {
   } catch (error) {
     console.error(" Critical error in API route:", error);
 
-    // Return fallback data
-    const fallbackStats = [
-      { value: 0, label: "Profiles" },
-      { value: 0, label: "Organizations" },
-      { value: 0, label: "Research Outputs" },
-      { value: 0, label: "Projects" },
-      { value: 0, label: "Impacts" },
-      { value: 0, label: "Prizes" },
-      { value: 0, label: "Equipment" },
-    ];
-
-    return NextResponse.json(fallbackStats, {
+    // Return real snapshot numbers, never zeros
+    return NextResponse.json(COUNTER_FALLBACKS, {
       status: 200,
       headers: {
         "X-Error": "true",

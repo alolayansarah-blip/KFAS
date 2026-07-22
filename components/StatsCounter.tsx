@@ -4,21 +4,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useLocale } from "next-intl";
 import SplitText from "./SplitText";
+import { COUNTER_FALLBACKS, fallbackFor } from "@/lib/counterFallbacks";
 
 interface Stat {
   value: number;
   label: string;
 }
 
-const FALLBACK_STATS: Stat[] = [
-  { value: 0, label: "Profiles" },
-  { value: 0, label: "Organizations" },
-  { value: 0, label: "Research Outputs" },
-  { value: 0, label: "Projects" },
-  { value: 0, label: "Impacts" },
-  { value: 0, label: "Prizes" },
-  { value: 0, label: "Equipment" },
-];
+// Real snapshot numbers (lib/counterFallbacks.ts) — visitors must NEVER
+// see zeros; worst case they see slightly stale real numbers.
+const FALLBACK_STATS: Stat[] = [...COUNTER_FALLBACKS];
 
 // The /api/Counters route always returns English labels (they key off the
 // PURE API's own field names), so translation happens client-side by
@@ -78,10 +73,15 @@ export default function CounterSection() {
         const data: unknown = await res.json();
         const arr = Array.isArray(data) ? data : [];
         if (arr.length > 0) {
-          const parsed = arr.map((item: unknown) => ({
-            value: Number((item as { value?: number })?.value) || 0,
-            label: String((item as { label?: string })?.label || ""),
-          }));
+          const parsed = arr.map((item: unknown) => {
+            const label = String((item as { label?: string })?.label || "");
+            return {
+              value:
+                Number((item as { value?: number })?.value) ||
+                fallbackFor(label),
+              label,
+            };
+          });
           hasAnimatedRef.current = false;
           setStats(parsed);
           setCounts(new Array(parsed.length).fill(0));
@@ -186,9 +186,7 @@ export default function CounterSection() {
         <div className="mb-16">
           <motion.p
             className={`mb-4 font-semibold text-white/50 ${
-              isArabic
-                ? "text-[15px] tracking-normal"
-                : "text-[10px] uppercase"
+              isArabic ? "text-[15px] tracking-normal" : "text-[10px] uppercase"
             }`}
             initial={{
               opacity: 0,
