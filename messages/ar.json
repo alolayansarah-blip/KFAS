@@ -1563,7 +1563,7 @@
       { "id": "overview", "label": "نبذة" },
       { "id": "objectives", "label": "الأهداف" },
       { "id": "fields", "label": "مجالات الجائزة" },
-      { "id": "eligibility", "label": "الأهلية والشروط" },
+      { "id": "eligibility", "label": " الشروط" },
       { "id": "components", "label": "مكونات الجائزة" }
     ],
     "overviewTitle": "نبذة عن جائزة الكويت",
@@ -1634,7 +1634,7 @@
       { "id": "overview", "label": "نبذة" },
       { "id": "objectives", "label": "الأهداف" },
       { "id": "fields", "label": "مجالات الجائزة" },
-      { "id": "eligibility", "label": "الأهلية والشروط" },
+      { "id": "eligibility", "label": " الشروط" },
       { "id": "components", "label": "مكونات الجائزة" }
     ],
     "overviewTitle": "نبذة عن جائزة جابر الأحمد",
@@ -1718,6 +1718,15 @@
     "heroSubtitle": "للتنمية الأفريقية",
     "applyLinkText": "اضغط هنا للتقديم",
     "logoAlt": "جائزة السميط للتنمية الأفريقية",
+    "jumpToLabel": "الانتقال إلى",
+    "jumpSelectPlaceholder": "اختر موضوعاً",
+    "jumpLinks": [
+      { "id": "overview", "label": "نبذة" },
+      { "id": "objectives", "label": "الأهداف" },
+      { "id": "fields", "label": "مجالات الجائزة" },
+      { "id": "eligibility", "label": "شروط الترشح" },
+      { "id": "components", "label": "مكونات الجائزة" }
+    ],
     "overviewTitle": "نبذة عن الجائزة",
     "overviewBody1Pre": "جائزة السميط للتنمية الأفريقية هي جائزة دولية تُمنح سنويًا للأفراد أو المؤسسات الذين قدموا إسهامات بارزة في تعزيز التنمية في القارة الأفريقية.",
     "overviewBody1Bold": "",
@@ -1762,7 +1771,8 @@
         "title": "شهادة تقدير",
         "desc": "شهادة تقدير."
       }
-    ]
+    ],
+    "backToTop": "العودة للأعلى"
   },
   "CallforReviewersPage": {
     "breadcrumbResearch": "البحث",

@@ -1712,6 +1712,15 @@
     "heroSubtitle": "for African Development",
     "applyLinkText": "Click here to apply",
     "logoAlt": "Al-Sumait Prize for African Development",
+    "jumpToLabel": "Jump To",
+    "jumpSelectPlaceholder": "Select a topic",
+    "jumpLinks": [
+      { "id": "overview", "label": "Overview" },
+      { "id": "objectives", "label": "Objectives" },
+      { "id": "fields", "label": "Prize Fields" },
+      { "id": "eligibility", "label": "Eligibility" },
+      { "id": "components", "label": "Prize Components" }
+    ],
     "overviewTitle": "Overview of the Al-Sumait Prize",
     "overviewBody1Pre": "The Kuwait Foundation for the Advancement of Sciences (KFAS) awards the ",
     "overviewBody1Bold": "Al-Sumait Prize for African Development",
@@ -1755,7 +1764,8 @@
         "title": "Certificate",
         "desc": "A certificate of recognition."
       }
-    ]
+    ],
+    "backToTop": "Back to Top"
   },
   "KFASPortalPage": {
     "breadcrumbResearch": "Research",

@@ -1,15 +1,42 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  type ReactNode,
+} from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useInView,
+} from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useLocale, useTranslations } from "next-intl";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const BRAND = {
+  orange: "#EC601B",
+  navy: "#1D2D44",
+};
+
+const HEADER_H = 72;
+const BAR_FALLBACK_H = 56;
+const JUMP_TRIGGER_MARGIN = 8;
+const MOBILE_QUERY = "(max-width: 1023px)";
+const MOBILE_CLOSE_DELAY = 320;
+const JUMP_SCROLL_VAR = "--alsumait-prize-jump-scroll-mt";
+const SECTION_SCROLL_MT = `scroll-mt-[var(${JUMP_SCROLL_VAR},128px)]`;
+
 // ─── Types ────────────────────────────────────────────────────────────────────
+type JumpLink = { id: string; label: string };
 type PrizeComponent = { title: string; desc: string };
 
 function FadeUp({
@@ -253,11 +280,284 @@ function PrizeComponentRows({ items }: { items: PrizeComponent[] }) {
   );
 }
 
+// ─── JumpTo nav ───────────────────────────────────────────────────────────────
+function JumpTo({
+  jumpToLabel,
+  selectPlaceholder,
+  links,
+}: {
+  jumpToLabel: string;
+  selectPlaceholder: string;
+  links: JumpLink[];
+}) {
+  const [active, setActive] = useState<string>("");
+  const [open, setOpen] = useState(false);
+  const [headerH, setHeaderH] = useState(HEADER_H);
+  const navRef = useRef<HTMLElement>(null);
+
+  const getJumpOffset = useCallback(
+    () => headerH + (navRef.current?.offsetHeight ?? BAR_FALLBACK_H),
+    [headerH],
+  );
+
+  const scrollToSection = useCallback(
+    (id: string) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const top =
+        el.getBoundingClientRect().top + window.scrollY - getJumpOffset();
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    },
+    [getJumpOffset],
+  );
+
+  useLayoutEffect(() => {
+    const header = document.querySelector("header");
+    if (!header) return;
+
+    const measure = () => {
+      const headerHeight = header.getBoundingClientRect().height;
+      const barHeight = navRef.current?.offsetHeight ?? BAR_FALLBACK_H;
+      setHeaderH(headerHeight);
+      document.documentElement.style.setProperty(
+        JUMP_SCROLL_VAR,
+        `${headerHeight + barHeight}px`,
+      );
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(header);
+    if (navRef.current) ro.observe(navRef.current);
+
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      document.documentElement.style.removeProperty(JUMP_SCROLL_VAR);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [open]);
+
+  useEffect(() => {
+    let frame = 0;
+
+    const update = () => {
+      const trigger = getJumpOffset() + JUMP_TRIGGER_MARGIN;
+
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+
+      if (atBottom) {
+        setActive(links[links.length - 1].id);
+        return;
+      }
+
+      let current = "";
+      for (const link of links) {
+        const el = document.getElementById(link.id);
+        if (el && el.getBoundingClientRect().top <= trigger) {
+          current = link.id;
+        }
+      }
+      setActive(current);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [getJumpOffset, links]);
+
+  const handleClick = (id: string) => {
+    setActive(id);
+    setOpen(false);
+    if (window.matchMedia(MOBILE_QUERY).matches) {
+      setTimeout(() => scrollToSection(id), MOBILE_CLOSE_DELAY);
+    } else {
+      requestAnimationFrame(() => scrollToSection(id));
+    }
+  };
+
+  const activeLabel =
+    links.find((l) => l.id === active)?.label ?? selectPlaceholder;
+
+  return (
+    <motion.nav
+      ref={navRef}
+      className="sticky z-40 border-b bg-white/95 backdrop-blur"
+      style={{ top: headerH, borderColor: `${BRAND.navy}14` }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: EASE }}
+    >
+      <div className="mx-auto max-w-7xl px-6 py-1.5 sm:px-8 sm:py-2 lg:px-12">
+        <div className="hidden items-stretch lg:flex">
+          <div className="flex shrink-0 items-center gap-2.5 pe-4">
+            <span
+              className="h-3.5 w-[3px] rounded-full"
+              style={{ background: BRAND.orange }}
+            />
+            <span
+              className="font-poppins text-[12px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: BRAND.navy }}
+            >
+              {jumpToLabel}
+            </span>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="shrink-0 rtl:rotate-180"
+              aria-hidden
+            >
+              <path
+                d="M9 6l6 6-6 6"
+                stroke={`${BRAND.navy}55`}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div className="flex items-center gap-1 overflow-x-auto py-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {links.map((link) => {
+              const isActive = active === link.id;
+              return (
+                <button
+                  key={link.id}
+                  type="button"
+                  onClick={() => handleClick(link.id)}
+                  className="group relative whitespace-nowrap px-3 py-1.5 font-poppins text-[13px] font-medium transition-colors"
+                  style={{ color: isActive ? BRAND.orange : `${BRAND.navy}B0` }}
+                >
+                  {link.label}
+                  <span
+                    className="absolute bottom-0 left-3 right-3 h-[2px] origin-left rounded-full transition-transform duration-300 rtl:origin-right"
+                    style={{
+                      background: BRAND.orange,
+                      transform: isActive ? "scaleX(1)" : "scaleX(0)",
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="relative lg:hidden">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            className="flex w-full items-center gap-2.5 py-0.5"
+          >
+            <span
+              className="h-3.5 w-[3px] shrink-0 rounded-full"
+              style={{ background: BRAND.orange }}
+            />
+            <span
+              className="shrink-0 font-poppins text-[12px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: BRAND.navy }}
+            >
+              {jumpToLabel}
+            </span>
+            <span
+              className="ms-1 truncate font-poppins text-[13px] font-medium"
+              style={{ color: active ? BRAND.orange : `${BRAND.navy}80` }}
+            >
+              {activeLabel}
+            </span>
+            <motion.svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="ms-auto shrink-0"
+              animate={{ rotate: open ? 180 : 0 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              aria-hidden
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                stroke={BRAND.navy}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+          </button>
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                className="absolute left-0 right-0 top-full z-50 overflow-hidden border bg-white shadow-lg"
+                style={{ borderColor: `${BRAND.navy}14` }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.28, ease: EASE }}
+              >
+                <div className="flex flex-col pb-1 pt-0.5">
+                  {links.map((link) => {
+                    const isActive = active === link.id;
+                    return (
+                      <button
+                        key={link.id}
+                        type="button"
+                        onClick={() => handleClick(link.id)}
+                        className="flex items-center gap-3 px-1 py-2 text-start font-poppins text-[14px] font-medium transition-colors"
+                        style={{ color: isActive ? BRAND.orange : BRAND.navy }}
+                      >
+                        <span
+                          className="h-4 w-[3px] shrink-0 rounded-full transition-opacity"
+                          style={{
+                            background: BRAND.orange,
+                            opacity: isActive ? 1 : 0,
+                          }}
+                        />
+                        {link.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.nav>
+  );
+}
+
 export default function AlSumaitPrizePage() {
   const t = useTranslations("AlSumaitPrizePage");
   const locale = useLocale();
   const isArabic = locale === "ar";
 
+  const jumpLinks = t.raw("jumpLinks") as JumpLink[];
   const objectiveItems = t.raw("objectiveItems") as string[];
   const fieldItems = t.raw("fieldItems") as string[];
   const eligibilityItems = t.raw("eligibilityItems") as string[];
@@ -269,6 +569,8 @@ export default function AlSumaitPrizePage() {
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroScroll, [0, 0.7], [1, 0]);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <>
@@ -375,11 +677,20 @@ export default function AlSumaitPrizePage() {
           <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
+        <JumpTo
+          jumpToLabel={t("jumpToLabel")}
+          selectPlaceholder={t("jumpSelectPlaceholder")}
+          links={jumpLinks}
+        />
+
         {/* ── Overview + Objectives ── */}
         <div className="relative">
           <div className="relative z-10">
-            <section className="py-20 sm:py-28">
-              <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <section
+              id="overview"
+              className={`py-20 sm:py-28 ${SECTION_SCROLL_MT}`}
+            >
+              <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
                 <SectionHeading>{t("overviewTitle")}</SectionHeading>
                 <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10 xl:gap-12">
                   <div className="min-w-0 flex-1 space-y-6">
@@ -448,9 +759,12 @@ export default function AlSumaitPrizePage() {
               </div>
             </section>
 
-            <section className="pb-20 sm:pb-28 pt-0">
-              <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-                <div className="grid lg:grid-cols-[1fr_1.4fr] gap-14 lg:gap-20 items-start">
+            <section
+              id="objectives"
+              className={`pb-20 pt-0 sm:pb-28 ${SECTION_SCROLL_MT}`}
+            >
+              <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
+                <div className="grid items-start gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
                   <div className="lg:sticky lg:top-32">
                     <SectionHeading>{t("objectivesTitle")}</SectionHeading>
                     <FadeUp delay={0.15}>
@@ -467,7 +781,10 @@ export default function AlSumaitPrizePage() {
         </div>
 
         {/* ── Prize Fields — orange ── */}
-        <section className="bg-[#EC601B] py-24 relative">
+        <section
+          id="fields"
+          className={`relative bg-[#EC601B] py-24 ${SECTION_SCROLL_MT}`}
+        >
           <div
             className="absolute inset-0 overflow-hidden pointer-events-none"
             aria-hidden
