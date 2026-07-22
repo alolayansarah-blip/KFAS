@@ -3,6 +3,10 @@
     "research": "Research",
     "Overview": "Overview"
   },
+  "Metadata": {
+    "title": "KFAS - Kuwait Foundation for the Advancement of Sciences",
+    "description": "Kuwait Foundation for the Advancement of Sciences"
+  },
   "HomePage": {
     "heroTitleLine1": "Timeless Legacy",
     "heroTitleLine2": "Innovative Future"
@@ -2561,5 +2565,50 @@
     ],
     "ctaTitle": "Apply now and bring your initiative to life with KFAS support.",
     "ctaButton": "Apply Now"
+  },
+  "PolicyPage": {
+    "breadcrumb": "Home / Website Policy",
+    "heroTitle": "Website Policy",
+    "kicker": "Website Policy",
+    "intro": "[Placeholder — awaiting official content from KFAS. This introductory paragraph will summarize the purpose and scope of this policy.]",
+    "lastUpdated": "Last updated: [pending]",
+    "backToTop": "Back to top",
+    "sections": [
+      {
+        "id": "terms-of-use",
+        "title": "Terms of Use",
+        "paragraphs": ["[Placeholder — awaiting official content from KFAS.]"]
+      },
+      {
+        "id": "privacy-and-data",
+        "title": "Privacy & Data Collection",
+        "paragraphs": ["[Placeholder — awaiting official content from KFAS.]"]
+      },
+      {
+        "id": "cookies",
+        "title": "Cookies",
+        "paragraphs": ["[Placeholder — awaiting official content from KFAS.]"]
+      },
+      {
+        "id": "intellectual-property",
+        "title": "Intellectual Property",
+        "paragraphs": ["[Placeholder — awaiting official content from KFAS.]"]
+      },
+      {
+        "id": "external-links",
+        "title": "External Links",
+        "paragraphs": ["[Placeholder — awaiting official content from KFAS.]"]
+      },
+      {
+        "id": "disclaimer",
+        "title": "Disclaimer",
+        "paragraphs": ["[Placeholder — awaiting official content from KFAS.]"]
+      },
+      {
+        "id": "contact",
+        "title": "Contact",
+        "paragraphs": ["[Placeholder — awaiting official content from KFAS.]"]
+      }
+    ]
   }
 }

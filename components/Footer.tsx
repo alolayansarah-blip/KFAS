@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/src/i18n/navigation";
 import Image from "next/image";
 import { memo } from "react";
 import { motion } from "framer-motion";
@@ -14,18 +14,18 @@ interface FooterProps {
 const SIGNUP_FORM_URL = "https://kfas.formstack.com/forms/subscribe_to_kfas";
 
 const NAVIGATION_LINKS_EN = [
-  { label: "Who We Are", href: "/AboutKfas" },
-  { label: "Our Strategy", href: "/OurStrategy" },
-  { label: "Our History", href: "/OurHistory" },
-  { label: "Board of Directors", href: "/BoardOfDirectors" },
+  { label: "Who We Are", href: "/about/AboutKfas" },
+  { label: "Our Strategy", href: "/about/OurStrategy" },
+  { label: "Our History", href: "/about/OurHistory" },
+  { label: "Board of Directors", href: "/about/BoardOfDirectors" },
   { label: "Media Library", href: "/MediaLibrary" },
 ] as const;
 
 const NAVIGATION_LINKS_AR = [
-  { label: "من نحن", href: "/AboutKfas" },
-  { label: "استراتيجيتنا", href: "/OurStrategy" },
-  { label: "تاريخنا", href: "/OurHistory" },
-  { label: "مجلس الإدارة", href: "/BoardOfDirectors" },
+  { label: "من نحن", href: "/about/AboutKfas" },
+  { label: "استراتيجيتنا", href: "/about/OurStrategy" },
+  { label: "تاريخنا", href: "/about/OurHistory" },
+  { label: "مجلس الإدارة", href: "/about/BoardOfDirectors" },
   { label: "مكتبة الوسائط", href: "/MediaLibrary" },
 ] as const;
 
@@ -54,7 +54,7 @@ const FOOTER_STRINGS = {
     visitUs: "Visit Us",
     viewOnMap: "View on Map",
     copyrightOrg: "Kuwait Foundation for the Advancement of Sciences",
-    websitePolicy: "Website Policy",
+    websitePolicy: "Privacy Statement",
     est: "Est. 1976",
   },
   ar: {
@@ -67,7 +67,7 @@ const FOOTER_STRINGS = {
     visitUs: "زوروا مقرنا",
     viewOnMap: "عرض على الخريطة",
     copyrightOrg: "مؤسسة الكويت للتقدم العلمي",
-    websitePolicy: "سياسة الموقع",
+    websitePolicy: "بيان الخصوصية",
     est: "تأسست عام 1976",
   },
 } as const;

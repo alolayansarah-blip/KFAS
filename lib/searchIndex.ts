@@ -273,6 +273,14 @@ const EXTRA_PAGES_EN: SearchItem[] = [
     category: "News",
     keywords: ["news", "updates", "announcements", "press", "media"],
   },
+  {
+    title: "Website Policy",
+    description:
+      "Terms of use, privacy, cookies, and legal information for the KFAS website.",
+    url: "/Policy",
+    category: "Legal",
+    keywords: ["policy", "privacy", "cookies", "terms", "legal"],
+  },
 ];
 
 const EXTRA_PAGES_AR: SearchItem[] = [
@@ -282,6 +290,14 @@ const EXTRA_PAGES_AR: SearchItem[] = [
     url: "/news",
     category: "الأخبار",
     keywords: ["أخبار", "مستجدات", "إعلانات", "إعلام", "صحافة"],
+  },
+  {
+    title: "سياسة الموقع",
+    description:
+      "شروط الاستخدام والخصوصية وملفات تعريف الارتباط والمعلومات القانونية لموقع المؤسسة.",
+    url: "/Policy",
+    category: "قانوني",
+    keywords: ["سياسة", "خصوصية", "ملفات تعريف", "شروط", "قانوني"],
   },
 ];
 
@@ -319,6 +335,7 @@ const KEYWORDS_EN: Record<string, string[]> = {
   "/prizes/AlSumaitPrize": ["award", "prize", "africa", "sumait"],
   "/prizes/Laureates": ["winners", "recipients", "laureates"],
   "/news": ["news", "updates", "announcements", "press", "media"],
+  "/Policy": ["policy", "privacy", "cookies", "terms", "legal", "website policy"],
   // …add more URLs and terms here anytime
 };
 
@@ -348,6 +365,7 @@ const KEYWORDS_AR: Record<string, string[]> = {
   "/prizes/AlSumaitPrize": ["جائزة", "أفريقيا", "السميط"],
   "/prizes/Laureates": ["فائزون", "حائزون", "الفائزون"],
   "/news": ["أخبار", "مستجدات", "إعلانات", "إعلام"],
+  "/Policy": ["سياسة", "خصوصية", "شروط", "ملفات تعريف", "قانوني"],
 };
 
 // Optional: nicer descriptions per URL. Missing ones fall back to "".
@@ -373,6 +391,7 @@ const DESCRIPTIONS_EN: Record<string, string> = {
   "/prizes/AlSumaitPrize": "The Al Sumait Prize.",
   "/prizes/Laureates": "Past prize laureates and winners.",
   "/news": "All KFAS news, announcements, and updates.",
+  "/Policy": "Website policy, privacy, and terms of use.",
 };
 
 const DESCRIPTIONS_AR: Record<string, string> = {
@@ -398,6 +417,7 @@ const DESCRIPTIONS_AR: Record<string, string> = {
   "/prizes/AlSumaitPrize": "جائزة السميط.",
   "/prizes/Laureates": "الفائزون السابقون بالجوائز.",
   "/news": "جميع أخبار وإعلانات ومستجدات المؤسسة.",
+  "/Policy": "سياسة الموقع والخصوصية وشروط الاستخدام.",
 };
 
 // Unicode-aware so Arabic labels split into real words too.

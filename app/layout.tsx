@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KFastest - Kuwait Foundation for the Advancement of Sciences",
+  title: "KFAS - Kuwait Foundation for the Advancement of Sciences",
   description: "Kuwait Foundation for the Advancement of Sciences",
   icons: {
-    icon: [{ url: "/favicon.ico" }, { url: "/image/KFASLogo.png", type: "image/png" }],
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/image/KFASLogo.png", type: "image/png" },
+    ],
   },
 };
 
