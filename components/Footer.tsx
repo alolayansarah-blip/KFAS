@@ -15,17 +15,14 @@ const SIGNUP_FORM_URL = "https://kfas.formstack.com/forms/subscribe_to_kfas";
 
 const NAVIGATION_LINKS_EN = [
   { label: "Who We Are", href: "/about/AboutKfas" },
-  { label: "Our Strategy", href: "/about/OurStrategy" },
-  { label: "Our History", href: "/about/OurHistory" },
-  { label: "Board of Directors", href: "/about/BoardOfDirectors" },
+  { label: "Work with us", href: "" },
   { label: "Media Library", href: "/MediaLibrary" },
 ] as const;
 
 const NAVIGATION_LINKS_AR = [
   { label: "من نحن", href: "/about/AboutKfas" },
-  { label: "استراتيجيتنا", href: "/about/OurStrategy" },
-  { label: "تاريخنا", href: "/about/OurHistory" },
-  { label: "مجلس الإدارة", href: "/about/BoardOfDirectors" },
+  { label: "انضم الى فريقنا ", href: "" },
+
   { label: "مكتبة الوسائط", href: "/MediaLibrary" },
 ] as const;
 
