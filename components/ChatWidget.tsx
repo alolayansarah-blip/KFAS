@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Fragment } from "react";
 import { useLocale } from "next-intl";
 
 type Message = {
@@ -11,26 +11,88 @@ type Message = {
 const COPY = {
   en: {
     title: "Ask about KFAS",
-    subtitle: "Assistant",
     placeholder: "Type your question…",
     greeting: "Hi! Ask me about KFAS grants, prizes, or programs.",
     error: "Sorry, something went wrong. Please try again.",
     send: "Send",
-    openChat: "Open chat assistant",
-    closeChat: "Close chat",
   },
   ar: {
     title: "اسأل عن مؤسسة الكويت للتقدم العلمي",
-    subtitle: "المساعد",
     placeholder: "اكتب سؤالك…",
     greeting:
       "مرحبًا! اسألني عن منح مؤسسة الكويت للتقدم العلمي أو جوائزها أو برامجها.",
     error: "عذرًا، حدث خطأ ما. حاول مرة أخرى.",
     send: "إرسال",
-    openChat: "فتح مساعد المحادثة",
-    closeChat: "إغلاق المحادثة",
   },
 };
+
+// Matches [text](path) — used to turn the model's markdown links into
+// real clickable anchors. Only relative paths are expected (the model
+// is instructed to only use paths from its known-links list).
+const LINK_PATTERN = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+/**
+ * Renders message text, converting [label](/path) into locale-aware
+ * clickable links. Plain text in between is rendered as-is.
+ */
+function MessageContent({ text, locale }: { text: string; locale: string }) {
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  LINK_PATTERN.lastIndex = 0;
+  while ((match = LINK_PATTERN.exec(text)) !== null) {
+    const [full, label, rawHref] = match;
+    if (match.index > lastIndex) {
+      parts.push(
+        <Fragment key={key++}>{text.slice(lastIndex, match.index)}</Fragment>,
+      );
+    }
+
+    // Internal in-site paths get the locale prefix and open in the same
+    // tab. External links (e.g. the Publications site) are rendered as-is
+    // and open in a new tab. Anything else is shown as plain text so we
+    // never silently link somewhere unintended.
+    if (rawHref.startsWith("/")) {
+      const href = `/${locale}${rawHref}`;
+      parts.push(
+        <a
+          key={key++}
+          href={href}
+          className="underline underline-offset-2 font-medium hover:opacity-80"
+        >
+          {label}
+        </a>,
+      );
+    } else if (
+      rawHref.startsWith("https://") ||
+      rawHref.startsWith("http://")
+    ) {
+      parts.push(
+        <a
+          key={key++}
+          href={rawHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 font-medium hover:opacity-80"
+        >
+          {label}
+        </a>,
+      );
+    } else {
+      parts.push(<Fragment key={key++}>{full}</Fragment>);
+    }
+
+    lastIndex = match.index + full.length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(<Fragment key={key++}>{text.slice(lastIndex)}</Fragment>);
+  }
+
+  return <>{parts}</>;
+}
 
 export default function ChatWidget() {
   const locale = useLocale() as "en" | "ar";
@@ -42,7 +104,6 @@ export default function ChatWidget() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -50,13 +111,6 @@ export default function ChatWidget() {
       behavior: "smooth",
     });
   }, [messages, isLoading]);
-
-  useEffect(() => {
-    if (isOpen) {
-      const id = window.setTimeout(() => inputRef.current?.focus(), 180);
-      return () => window.clearTimeout(id);
-    }
-  }, [isOpen]);
 
   async function handleSend() {
     const text = input.trim();
@@ -77,22 +131,9 @@ export default function ChatWidget() {
         body: JSON.stringify({ messages: nextMessages, locale }),
       });
 
+      if (!res.ok) throw new Error("Request failed");
+
       const data = await res.json();
-
-      if (!res.ok) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content:
-              typeof data.reply === "string" && data.reply.trim()
-                ? data.reply
-                : t.error,
-          },
-        ]);
-        return;
-      }
-
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: data.reply },
@@ -109,64 +150,45 @@ export default function ChatWidget() {
   }
 
   return (
+    // Closed: below sticky bars. Open: above site header so the chat title
+    // stays readable. Panel height is capped so it grows up from the FAB
+    // without spanning the full viewport.
     <div
-      className="fixed bottom-5 end-5 z-50 flex flex-col items-end gap-3 sm:bottom-7 sm:end-7"
+      className={`fixed bottom-5 end-5 flex flex-col items-end sm:bottom-6 sm:end-6 ${
+        isOpen ? "z-[120]" : "z-[35]"
+      }`}
       dir={isRtl ? "rtl" : "ltr"}
     >
-      {/* Panel */}
-      <div
-        className={`origin-bottom transition-all duration-300 ease-out ${
-          isOpen
-            ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
-            : "pointer-events-none translate-y-3 scale-[0.96] opacity-0"
-        }`}
-        aria-hidden={!isOpen}
-      >
-        <div className="flex h-[min(520px,72vh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-[#1D2D44]/10 bg-white shadow-[0_20px_50px_-24px_rgba(29,45,68,0.55)]">
-          {/* Header */}
-          <div className="relative shrink-0 overflow-hidden bg-[#1D2D44] px-5 py-4">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -end-8 -top-10 h-28 w-28 rounded-full bg-[#EC601B]/25 blur-2xl"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -bottom-10 -start-6 h-24 w-24 rounded-full bg-[#7DC0F1]/20 blur-2xl"
-            />
-            <div className="relative flex items-center justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-3">
-                <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15">
-                  <ChatMarkIcon className="h-5 w-5 text-white" />
-                  <span className="absolute -bottom-0.5 -end-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#1D2D44] bg-emerald-400" />
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate font-poppins text-[14px] font-semibold tracking-tight text-white">
-                    {t.title}
-                  </p>
-                  <p className="mt-0.5 flex items-center gap-1.5 font-poppins text-[11px] text-white/55">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    {t.subtitle}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                aria-label={t.closeChat}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white/65 transition-colors hover:bg-white/10 hover:text-white"
+      {isOpen && (
+        <div className="mb-3 flex h-[min(440px,calc(100dvh-11rem))] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-[#1D2D44]/[0.08] bg-white shadow-2xl sm:mb-4">
+          {/* Chat panel title bar */}
+          <div className="relative z-10 flex shrink-0 items-center justify-between bg-[#1D2D44] px-5 py-4">
+            <span className="font-medium text-sm text-white pe-2">{t.title}</span>
+            <button
+              onClick={() => setIsOpen(false)}
+              aria-label="Close chat"
+              className="text-white/70 hover:text-white transition-colors"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
               >
-                <CloseIcon className="h-4 w-4" />
-              </button>
-            </div>
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           {/* Messages */}
           <div
             ref={scrollRef}
-            className="flex-1 space-y-3 overflow-y-auto bg-[linear-gradient(180deg,#f7fbfe_0%,#ffffff_48%)] px-4 py-4"
+            className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-[#7DC0F1]/[0.04]"
           >
-            <div className="flex justify-start">
-              <div className="max-w-[85%] rounded-2xl rounded-ss-md border border-[#1D2D44]/[0.07] bg-white px-3.5 py-2.5 text-[13.5px] leading-relaxed text-[#1D2D44]/85 shadow-sm">
+            <div className="flex">
+              <div className="max-w-[85%] rounded-xl rounded-tl-sm bg-white border border-[#1D2D44]/[0.08] px-3.5 py-2.5 text-sm text-[#1D2D44]">
                 {t.greeting}
               </div>
             </div>
@@ -179,163 +201,99 @@ export default function ChatWidget() {
                 <div
                   className={
                     m.role === "user"
-                      ? "max-w-[85%] rounded-2xl rounded-se-md bg-[#EC601B] px-3.5 py-2.5 text-[13.5px] leading-relaxed text-white shadow-sm"
-                      : "max-w-[85%] rounded-2xl rounded-ss-md border border-[#1D2D44]/[0.07] bg-white px-3.5 py-2.5 text-[13.5px] leading-relaxed text-[#1D2D44]/85 shadow-sm"
+                      ? "max-w-[85%] rounded-xl rounded-tr-sm bg-[#EC601B] px-3.5 py-2.5 text-sm text-white whitespace-pre-wrap"
+                      : "max-w-[85%] rounded-xl rounded-tl-sm bg-white border border-[#1D2D44]/[0.08] px-3.5 py-2.5 text-sm text-[#1D2D44] whitespace-pre-wrap [&_a]:text-[#EC601B]"
                   }
                 >
-                  {m.content}
+                  {m.role === "assistant" ? (
+                    <MessageContent text={m.content} locale={locale} />
+                  ) : (
+                    m.content
+                  )}
                 </div>
               </div>
             ))}
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="rounded-2xl rounded-ss-md border border-[#1D2D44]/[0.07] bg-white px-3.5 py-3 shadow-sm">
-                  <div className="flex gap-1.5">
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#1D2D44]/35 [animation-delay:-0.28s]" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#1D2D44]/35 [animation-delay:-0.14s]" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#1D2D44]/35" />
+                <div className="rounded-xl rounded-tl-sm bg-white border border-[#1D2D44]/[0.08] px-3.5 py-2.5">
+                  <div className="flex gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1D2D44]/30 animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1D2D44]/30 animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1D2D44]/30 animate-bounce" />
                   </div>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Composer */}
-          <div className="shrink-0 border-t border-[#1D2D44]/[0.07] bg-white p-3">
-            <div className="flex items-center gap-2 rounded-xl border border-[#1D2D44]/10 bg-[#F8FAFC] px-2 py-1.5 transition-colors focus-within:border-[#EC601B]/45 focus-within:bg-white focus-within:ring-2 focus-within:ring-[#EC601B]/15">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={t.placeholder}
-                className="min-w-0 flex-1 bg-transparent px-2 py-2 font-poppins text-sm text-[#1D2D44] placeholder:text-[#1D2D44]/38 focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={handleSend}
-                disabled={isLoading || !input.trim()}
-                aria-label={t.send}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EC601B] text-white transition-all hover:bg-[#d45510] disabled:cursor-not-allowed disabled:bg-[#EC601B]/30"
+          {/* Input */}
+          <div className="border-t border-[#1D2D44]/[0.08] px-3 py-3 flex items-center gap-2 shrink-0">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={t.placeholder}
+              className="flex-1 text-sm px-3 py-2 rounded-lg border border-[#1D2D44]/[0.12] focus:outline-none focus:border-[#EC601B]/60 text-[#1D2D44] placeholder:text-[#1D2D44]/40"
+            />
+            <button
+              onClick={handleSend}
+              disabled={isLoading || !input.trim()}
+              aria-label={t.send}
+              className="shrink-0 w-9 h-9 rounded-lg bg-[#EC601B] disabled:bg-[#EC601B]/30 flex items-center justify-center transition-colors"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
               >
-                <SendIcon className="h-4 w-4" mirrored={isRtl} />
-              </button>
-            </div>
+                <path
+                  d={
+                    isRtl
+                      ? "M19 12H5M5 12l6 6M5 12l6-6"
+                      : "M5 12h14M13 6l6 6-6 6"
+                  }
+                />
+              </svg>
+            </button>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* FAB */}
-      <div className="group relative">
-        <span
-          aria-hidden
-          className={`pointer-events-none absolute inset-0 rounded-full bg-[#EC601B]/35 transition-opacity duration-500 ${
-            isOpen ? "opacity-0" : "animate-ping opacity-40"
-          }`}
-        />
-        <button
-          type="button"
-          onClick={() => setIsOpen((open) => !open)}
-          aria-label={isOpen ? t.closeChat : t.openChat}
-          aria-expanded={isOpen}
-          className={`relative flex h-14 w-14 items-center justify-center rounded-full transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EC601B]/50 focus-visible:ring-offset-2 ${
-            isOpen
-              ? "bg-[#1D2D44] shadow-[0_10px_28px_-10px_rgba(29,45,68,0.7)] hover:bg-[#243752]"
-              : "bg-[#EC601B] shadow-[0_12px_32px_-12px_rgba(236,96,27,0.85)] hover:-translate-y-0.5 hover:bg-[#d45510] hover:shadow-[0_16px_36px_-12px_rgba(236,96,27,0.95)]"
-          }`}
-        >
-          <span className="relative h-6 w-6">
-            <span
-              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-                isOpen
-                  ? "rotate-90 scale-75 opacity-0"
-                  : "rotate-0 scale-100 opacity-100"
-              }`}
-            >
-              <ChatMarkIcon className="h-6 w-6 text-white" />
-            </span>
-            <span
-              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-                isOpen
-                  ? "rotate-0 scale-100 opacity-100"
-                  : "-rotate-90 scale-75 opacity-0"
-              }`}
-            >
-              <CloseIcon className="h-5 w-5 text-white" />
-            </span>
-          </span>
-        </button>
-
-        {/* Hover label — desktop only, when closed */}
-        {!isOpen && (
-          <span
-            className={`pointer-events-none absolute top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg bg-[#1D2D44] px-3 py-1.5 font-poppins text-[11px] font-medium tracking-wide text-white opacity-0 shadow-lg transition-all duration-200 group-hover:opacity-100 sm:block ${
-              isRtl
-                ? "end-full me-3 translate-x-1 group-hover:translate-x-0"
-                : "start-full ms-3 -translate-x-1 group-hover:translate-x-0"
-            }`}
+      {/* Toggle button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={t.title}
+        className="w-14 h-14 rounded-full bg-[#EC601B] shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+      >
+        {isOpen ? (
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
           >
-            {t.title}
-          </span>
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+          >
+            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+          </svg>
         )}
-      </div>
+      </button>
     </div>
-  );
-}
-
-function ChatMarkIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M7.5 18.5 4 21V7.8A3.8 3.8 0 0 1 7.8 4h8.4A3.8 3.8 0 0 1 20 7.8v6.4a3.8 3.8 0 0 1-3.8 3.8H7.5Z"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-      />
-      <circle cx="9" cy="11" r="1" fill="currentColor" />
-      <circle cx="12" cy="11" r="1" fill="currentColor" />
-      <circle cx="15" cy="11" r="1" fill="currentColor" />
-    </svg>
-  );
-}
-
-function CloseIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      aria-hidden
-    >
-      <path d="M18 6 6 18M6 6l12 12" />
-    </svg>
-  );
-}
-
-function SendIcon({
-  className,
-  mirrored,
-}: {
-  className?: string;
-  mirrored?: boolean;
-}) {
-  return (
-    <svg
-      className={`${className ?? ""} ${mirrored ? "-scale-x-100" : ""}`}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
   );
 }

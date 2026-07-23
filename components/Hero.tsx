@@ -201,7 +201,7 @@ export default function Hero({
           aria-label={
             isPlaying ? "Pause background video" : "Play background video"
           }
-          className="absolute bottom-6 end-6 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/[0.06] text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EC601B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1D2D44] sm:end-8 lg:end-12"
+          className="absolute bottom-6 start-6 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/[0.06] text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EC601B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1D2D44] sm:start-8 lg:start-12"
         >
           {isPlaying ? (
             <svg

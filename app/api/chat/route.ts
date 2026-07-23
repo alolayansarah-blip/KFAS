@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { kfasKnowledgeEn, kfasKnowledgeAr } from "@/lib/kfasKnowledge";
+import {
+  kfasKnowledgeEn,
+  kfasKnowledgeAr,
+  KNOWN_PATHS,
+  KNOWN_EXTERNAL_LINKS,
+} from "@/lib/kfasKnowledge";
 
 export const runtime = "nodejs";
 
@@ -9,6 +14,26 @@ type ChatMessage = {
 };
 
 const MAX_HISTORY_MESSAGES = 10;
+
+const LINK_PATTERN = /\[([^\]]+)\]\(([^)]+)\)/g;
+const KNOWN_PATH_SET = new Set<string>(KNOWN_PATHS);
+const KNOWN_EXTERNAL_SET = new Set<string>(KNOWN_EXTERNAL_LINKS);
+
+/**
+ * Strips any markdown link whose target isn't in our known-good list,
+ * leaving just the link's label text behind. This is the real safety
+ * net: the system prompt asks the model to only use known paths, but
+ * small models occasionally ignore that and invent a URL anyway (e.g.
+ * guessing "https://kfas.org.kw/prizes" because it "sounds right").
+ * Without this, a hallucinated link would go straight to the visitor.
+ */
+function sanitizeLinks(text: string): string {
+  return text.replace(LINK_PATTERN, (full, label, href) => {
+    const isKnownInternal = KNOWN_PATH_SET.has(href);
+    const isKnownExternal = KNOWN_EXTERNAL_SET.has(href);
+    return isKnownInternal || isKnownExternal ? full : label;
+  });
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -56,26 +81,6 @@ export async function POST(req: NextRequest) {
     if (!response.ok) {
       const errText = await response.text();
       console.error("OpenAI API error:", response.status, errText);
-
-      let code: string | undefined;
-      try {
-        code = JSON.parse(errText)?.error?.code;
-      } catch {
-        /* ignore parse errors */
-      }
-
-      if (response.status === 429 || code === "insufficient_quota") {
-        const quotaMessage =
-          locale === "ar"
-            ? "خدمة المساعد غير متاحة مؤقتًا بسبب تجاوز حصة واجهة OpenAI. يُرجى التحقق من خطة الفوترة والرصيد في حساب OpenAI، ثم المحاولة لاحقًا."
-            : "The assistant is temporarily unavailable because the OpenAI account has no remaining quota. Check billing and credits at platform.openai.com, then try again.";
-
-        return NextResponse.json(
-          { error: "insufficient_quota", reply: quotaMessage },
-          { status: 503 },
-        );
-      }
-
       return NextResponse.json(
         { error: "Chat request failed" },
         { status: 502 },
@@ -83,7 +88,8 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content ?? "";
+    const rawReply = data.choices?.[0]?.message?.content ?? "";
+    const reply = sanitizeLinks(rawReply);
 
     return NextResponse.json({ reply });
   } catch (err) {
