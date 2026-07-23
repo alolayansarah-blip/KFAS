@@ -4937,4 +4937,17 @@ export const LAUREATES: Laureate[] = [
       "Director of Research in Parasitology. The Prize was jointly awarded to three distinguished African scientists for their pioneering contributions to the fight against malaria in Africa. Regional Director of the Institute for Health Sciences Research in Nanoro. Burkina Faso",
     image: "/image/ProfHalidou.png",
   },
+  {
+    id: "sumait-2025-375",
+    prize: "sumait",
+    year: 2025,
+    status: "awarded",
+    name: "CIMMYT",
+    verified: true,
+    country: "Mexico",
+    field: "Food Security",
+    kind: "Organization",
+    brief: "",
+    image: "/image/CIMMYTLogo.jpg",
+  },
 ];

@@ -16,7 +16,7 @@ import {
   Geography,
   Marker,
 } from "react-simple-maps";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
 import { LAUREATES, type Laureate, type PrizeKey } from "@/src/data/laureates";
 import Header from "@/components/Header";
@@ -111,6 +111,7 @@ const COORDS: Record<string, [number, number]> = {
   UK: [-1.5, 52.4],
   USA: [-98.5, 39.8],
   Peru: [-75.0, -9.2],
+  Mexico: [-102.5, 23.6],
 };
 
 /* ------------------------------------------------------------------ */
@@ -249,10 +250,12 @@ function Portrait({
   src,
   name,
   accent,
+  contain,
 }: {
   src?: string;
   name: string;
   accent: string;
+  contain?: boolean;
 }) {
   if (src) {
     return (
@@ -267,7 +270,7 @@ function Portrait({
           fill
           sizes="(min-width:1024px) 28vw, 45vw"
           loading="lazy"
-          className="object-cover"
+          className={contain ? "object-contain bg-white p-1.5" : "object-cover"}
         />
       </motion.div>
     );
@@ -430,12 +433,6 @@ function LaureateRow({ l, showPrize }: { l: Laureate; showPrize?: boolean }) {
 const GOLD = "#E4C57A";
 const GOLD_DEEP = "#C9A24A";
 
-function winnerBio(l: Laureate) {
-  if (l.brief) return l.brief;
-  const bits = [l.field, l.country, String(l.year)].filter(Boolean);
-  return bits.join(" · ");
-}
-
 const FEATURED_WINNER_ID = "jaber-2025-380"; // Dr. Aisha Ahmad Mutairan Al-Azmi
 
 function WinnersCarousel({ winners }: { winners: Laureate[] }) {
@@ -560,7 +557,11 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                         alt={l.name}
                         fill
                         sizes="220px"
-                        className="object-cover object-top"
+                        className={
+                          l.kind === "Organization"
+                            ? "object-contain bg-white p-3"
+                            : "object-cover object-top"
+                        }
                         draggable={false}
                       />
                     ) : (
@@ -693,7 +694,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
               transition={{ duration: 0.35, ease: EASE }}
             >
               <p className="font-poppins text-[13px] font-light leading-relaxed text-white/90 sm:text-[14px]">
-                {winnerBio(current)}
+                {`${t(`prizeLabels.${current.prize}`)} · ${current.field}`}
               </p>
             </motion.div>
           ) : null}
@@ -719,7 +720,12 @@ function LaureateCard({ l }: { l: Laureate }) {
     >
       <div className="flex gap-4 p-5">
         <div className="w-[84px] shrink-0">
-          <Portrait src={l.image} name={l.name} accent={accent} />
+          <Portrait
+            src={l.image}
+            name={l.name}
+            accent={accent}
+            contain={l.kind === "Organization"}
+          />
         </div>
         <div className="min-w-0 flex-1">
           <PrizeTag prize={l.prize} />
@@ -853,10 +859,12 @@ function Counter({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Stats — image-backed band, centred count-up figures                */
+/*  Stats — full-bleed navy band, editorial count-up figures           */
 /* ------------------------------------------------------------------ */
 function StatsSection() {
   const t = useTranslations("LaureatesPage");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -868,65 +876,116 @@ function StatsSection() {
         value: LATEST_YEAR - FIRST_YEAR + 1,
         label: t("statYearsLabel"),
         note: t("statYearsNote"),
-        color: PRIZE_COLOR.kuwait,
+        accent: PRIZE_COLOR.kuwait,
       },
       {
         value: LAUREATES.length,
         label: t("statLaureatesLabel"),
         note: t("statLaureatesNote"),
-        color: PRIZE_COLOR.jaber,
+        accent: PRIZE_COLOR.jaber,
       },
       {
         value: nationalities,
         label: t("statNationalitiesLabel"),
         note: t("statNationalitiesNote"),
-        color: PRIZE_COLOR.sumait,
+        accent: "#7DC0F1",
       },
     ];
   }, [t]);
 
   return (
-    <section ref={ref} className="bg-[#7DC0F1]/[0.06]">
-      <div className="mx-auto max-w-[1280px] px-6 py-24 lg:px-8 lg:py-28">
-        <CenterHead kicker={t("statsKicker")} title={t("statsTitle")} />
+    <section
+      ref={ref}
+      className="relative overflow-hidden bg-[#E8F4FB]"
+      aria-labelledby="laureates-stats-heading"
+    >
+      {/* atmosphere — soft brand glows on light blue */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: isArabic
+            ? "radial-gradient(ellipse 70% 55% at 85% 0%, rgba(236,96,27,0.12) 0%, transparent 55%), radial-gradient(ellipse 55% 50% at 8% 100%, rgba(125,192,241,0.35) 0%, transparent 50%)"
+            : "radial-gradient(ellipse 70% 55% at 15% 0%, rgba(236,96,27,0.12) 0%, transparent 55%), radial-gradient(ellipse 55% 50% at 92% 100%, rgba(125,192,241,0.35) 0%, transparent 50%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(29,45,68,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(29,45,68,0.06) 1px, transparent 1px)",
+          backgroundSize: "72px 72px",
+          maskImage:
+            "radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 75%)",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-[1280px] px-6 py-24 lg:px-8 lg:py-32">
+        <motion.div
+          className="mx-auto max-w-2xl text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: EASE }}
+        >
+          <div className="flex items-center justify-center gap-3">
+            <span className="h-px w-10 bg-[#EC601B]" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#EC601B]">
+              {t("statsKicker")}
+            </span>
+            <span className="h-px w-10 bg-[#EC601B]" />
+          </div>
+          <h2
+            id="laureates-stats-heading"
+            className="mt-5 font-poppins text-[2rem] font-semibold tracking-tight text-[#1D2D44] sm:text-[2.55rem] lg:text-[2.75rem]"
+          >
+            {t("statsTitle")}
+          </h2>
+        </motion.div>
 
         <motion.div
-          className="mt-12 overflow-hidden rounded-2xl border border-[#1D2D44]/[0.08] bg-white shadow-[0_2px_24px_-16px_rgba(29,45,68,0.20)]"
+          className="mt-16 grid grid-cols-1 gap-12 sm:mt-20 sm:grid-cols-3 sm:gap-0"
           variants={STAGGER}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
         >
-          <div className="grid grid-cols-1 divide-y divide-[#1D2D44]/[0.07] sm:grid-cols-3 sm:divide-x sm:divide-y-0 rtl:sm:divide-x-reverse">
-            {stats.map((s) => (
-              <motion.div
-                key={s.label}
-                variants={RISE}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.3, ease: EASE }}
-                className="px-8 py-10 text-center sm:py-12"
+          {stats.map((s, i) => (
+            <motion.div
+              key={s.label}
+              variants={RISE}
+              className={`relative px-4 text-center sm:px-8 ${
+                i > 0 ? "sm:border-s sm:border-[#1D2D44]/15" : ""
+              }`}
+            >
+              <motion.span
+                aria-hidden
+                className="mx-auto mb-6 block h-[3px] w-12 origin-center"
+                style={{ backgroundColor: s.accent }}
+                initial={{ scaleX: 0 }}
+                animate={inView ? { scaleX: 1 } : {}}
+                transition={{ duration: 0.7, delay: 0.15 + i * 0.1, ease: EASE }}
+              />
+              <Counter
+                value={s.value}
+                run={inView}
+                className="block font-poppins text-[4.25rem] font-semibold leading-none tabular-nums tracking-tight text-[#1D2D44] sm:text-[4.75rem] lg:text-[5.25rem]"
+              />
+              <div
+                className={`mt-5 font-poppins text-base font-semibold text-[#1D2D44] sm:text-lg ${
+                  isArabic ? "text-[17px]" : ""
+                }`}
               >
-                <motion.span
-                  className="mx-auto block h-[3px] w-9 origin-center rounded-full"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, #F1E0AE 0%, #C9A24A 100%)",
-                  }}
-                  initial={{ scaleX: 0 }}
-                  animate={inView ? { scaleX: 1 } : {}}
-                  transition={{ duration: 0.6, ease: EASE }}
-                />
-                <Counter
-                  value={s.value}
-                  run={inView}
-                  className="mt-5 block text-6xl font-semibold tabular-nums tracking-tight text-[#1D2D44] sm:text-7xl"
-                />
-                <div className="mt-3 text-base font-semibold text-[#1D2D44]">
-                  {s.label}
-                </div>
-                <div className="mt-1 text-sm text-[#1D2D44]/55">{s.note}</div>
-              </motion.div>
-            ))}
-          </div>
+                {s.label}
+              </div>
+              <div
+                className={`mt-1.5 font-poppins text-sm font-light text-[#1D2D44]/55 ${
+                  isArabic ? "text-[15px]" : ""
+                }`}
+              >
+                {s.note}
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>
@@ -938,11 +997,16 @@ function StatsSection() {
 /* ------------------------------------------------------------------ */
 function WorldSection() {
   const t = useTranslations("LaureatesPage");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
   const prizeCopy = t.raw("prizes") as {
     name: string;
     tab: string;
     line: string;
   }[];
+  const countryNames = t.raw("countryNames") as Record<string, string>;
+  const labelOf = (country: string) => countryNames[country] ?? country;
+
   const { counts, dominant, perPrize } = useMemo(() => {
     const counts = new Map<string, number>();
     const perPrize = new Map<string, Record<PrizeKey, number>>();
@@ -1012,7 +1076,7 @@ function WorldSection() {
                 onBlur={() => setLitPrize(null)}
                 animate={{ opacity: dim ? 0.4 : 1 }}
                 transition={{ duration: 0.3, ease: EASE }}
-                className="flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-[#1D2D44]/75 outline-none transition hover:text-[#1D2D44] focus-visible:ring-2 focus-visible:ring-[#1D2D44]/30"
+                className="flex items-center gap-2 rounded-full px-3 py-1.5 text-[15px] font-medium text-[#1D2D44]/75 outline-none transition hover:text-[#1D2D44] focus-visible:ring-2 focus-visible:ring-[#1D2D44]/30 sm:text-sm"
                 aria-label={t("highlightPrizeAria", {
                   name: prizeCopy[i].name,
                 })}
@@ -1047,12 +1111,12 @@ function WorldSection() {
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
-                      fill="#EAF1F7"
+                      fill="#DCE8F2"
                       stroke="#FFFFFF"
-                      strokeWidth={0.6}
+                      strokeWidth={0.75}
                       style={{
                         default: { outline: "none" },
-                        hover: { outline: "none", fill: "#DEE9F2" },
+                        hover: { outline: "none", fill: "#C9DCEB" },
                         pressed: { outline: "none" },
                       }}
                     />
@@ -1067,35 +1131,49 @@ function WorldSection() {
                   litPrize !== null && inLit
                     ? accentOf(litPrize)
                     : accentOf(m.prize);
-                const opacity = dimmed ? 0.15 : showPop ? 1 : 0.9;
-                const lineH = m.name === "Egypt" ? 56 : 38;
-                const boxH = 20;
-                const padX = 12;
+                const opacity = dimmed ? 0.18 : showPop ? 1 : 0.92;
+                /* size hints density; count shown only on hover */
+                const r = Math.min(11, 5.5 + Math.sqrt(m.count) * 1.15);
+                const countryLabel = labelOf(m.name);
+                const countLabel = t("laureateCount", { count: m.count });
+                const lineH = m.name === "Egypt" ? 52 : 34;
+                const boxH = 44;
+                const padX = 14;
+                const charW = isArabic ? 9.5 : 6.8;
                 const boxW = Math.max(
-                  72,
-                  m.name.length * 6.2 +
-                    String(m.count).length * 6.2 +
-                    14 +
+                  96,
+                  Math.max(countryLabel.length, countLabel.length) * charW +
                     padX * 2,
                 );
-                const labelY = -6 - lineH - boxH;
+                const labelY = -(r + 2) - lineH - boxH;
                 const tipY = labelY + boxH;
 
                 return (
                   <Marker key={m.name} coordinates={m.coords}>
                     <g
+                      role="img"
+                      aria-label={t("mapHotspotAria", {
+                        country: countryLabel,
+                        count: m.count,
+                      })}
                       style={{ cursor: "pointer" }}
                       onMouseEnter={() => setHovered(m.name)}
                       onMouseLeave={() => setHovered(null)}
+                      onFocus={() => setHovered(m.name)}
+                      onBlur={() => setHovered(null)}
+                      onClick={() =>
+                        setHovered(hovered === m.name ? null : m.name)
+                      }
+                      tabIndex={0}
                     >
-                      <circle r={14} fill="transparent" stroke="none" />
+                      <circle r={r + 8} fill="transparent" stroke="none" />
                       <motion.circle
-                        r={showPop ? 5.5 : 4}
+                        r={showPop ? r * 1.12 : r}
                         fill={color}
                         stroke="#FFFFFF"
-                        strokeWidth={1.5}
+                        strokeWidth={1.75}
                         initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity, scale: showPop ? 1.15 : 1 }}
+                        animate={{ opacity, scale: showPop ? 1.2 : 1 }}
                         transition={{
                           duration: 0.35,
                           delay: litPrize === null ? 0.12 + i * 0.018 : 0,
@@ -1108,7 +1186,7 @@ function WorldSection() {
                         }}
                       />
                       <motion.circle
-                        r={9}
+                        r={r + 5}
                         fill={color}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: showPop ? 0.22 : 0 }}
@@ -1127,14 +1205,19 @@ function WorldSection() {
                           >
                             <line
                               x1={0}
-                              y1={-6}
+                              y1={-(r + 1)}
                               x2={0}
                               y2={tipY}
                               stroke={ORANGE}
                               strokeWidth={0.9}
                               strokeLinecap="round"
                             />
-                            <circle cx={0} cy={-6} r={2.25} fill={ORANGE} />
+                            <circle
+                              cx={0}
+                              cy={-(r + 1)}
+                              r={2.25}
+                              fill={ORANGE}
+                            />
                             <rect
                               x={-boxW / 2}
                               y={labelY}
@@ -1147,33 +1230,37 @@ function WorldSection() {
                               strokeWidth={0.9}
                             />
                             <text
-                              x={-boxW / 2 + padX}
-                              y={labelY + 13.5}
-                              textAnchor="start"
+                              x={0}
+                              y={labelY + 17}
+                              textAnchor="middle"
+                              direction={isArabic ? "rtl" : "ltr"}
                               style={{
-                                fontSize: 10.5,
-                                fontWeight: 600,
-                                letterSpacing: "0.02em",
+                                fontSize: isArabic ? 12 : 11,
+                                fontWeight: 700,
+                                letterSpacing: isArabic ? "0" : "0.01em",
                                 fill: "#1D2D44",
-                                fontFamily:
-                                  "var(--font-poppins), Poppins, sans-serif",
+                                fontFamily: isArabic
+                                  ? "var(--font-arabic), sans-serif"
+                                  : "var(--font-poppins), Poppins, sans-serif",
                               }}
                             >
-                              {m.name}
+                              {countryLabel}
                             </text>
                             <text
-                              x={boxW / 2 - padX}
-                              y={labelY + 13.5}
-                              textAnchor="end"
+                              x={0}
+                              y={labelY + 34}
+                              textAnchor="middle"
+                              direction={isArabic ? "rtl" : "ltr"}
                               style={{
-                                fontSize: 10.5,
-                                fontWeight: 500,
+                                fontSize: isArabic ? 11.5 : 10.5,
+                                fontWeight: 600,
                                 fill: ORANGE,
-                                fontFamily:
-                                  "var(--font-poppins), Poppins, sans-serif",
+                                fontFamily: isArabic
+                                  ? "var(--font-arabic), sans-serif"
+                                  : "var(--font-poppins), Poppins, sans-serif",
                               }}
                             >
-                              {m.count}
+                              {countLabel}
                             </text>
                           </motion.g>
                         ) : null}
@@ -1185,7 +1272,7 @@ function WorldSection() {
             </ComposableMap>
           </div>
 
-          <p className="mt-4 text-center text-xs text-[#1D2D44]/45">
+          <p className="mt-4 text-center text-[15px] text-[#1D2D44]/45 sm:text-xs">
             {t("mapCaption", { count: markers.length })}
           </p>
         </motion.div>
@@ -1228,7 +1315,7 @@ export default function LaureatesPage() {
       PRIZE_META.flatMap((p) => {
         const items = LAUREATES.filter((l) => l.prize === p.key);
         const year = Math.max(...items.map((l) => l.year));
-        return items.filter((l) => l.year === year).slice(0, 3);
+        return items.filter((l) => l.year === year);
       }),
     [],
   );
@@ -1338,84 +1425,10 @@ export default function LaureatesPage() {
               style={{ width: 72 }}
             />
           </motion.div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-10 bg-white" />
         </section>
 
-        {/* ============================== INTRODUCTION ============================== */}
-        <section ref={introRef} className="relative overflow-hidden bg-white">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
-            style={{
-              background:
-                "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
-            }}
-          />
-          <div className="relative mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
-            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] lg:gap-16">
-              <FadeUp>
-                <motion.span
-                  className="block h-[3px] w-9 origin-left rounded-full bg-[#EC601B]"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, ease: EASE }}
-                />
-                <span className="mt-5 block text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
-                  {t("introKicker")}
-                </span>
-                <h2 className="mt-3 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem] lg:text-[2.1rem]">
-                  {t("introTitle")}
-                </h2>
-                <p className="mt-5 max-w-[420px] font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
-                  {t("introBody")}
-                </p>
-              </FadeUp>
-
-              <motion.div
-                variants={STAGGER}
-                initial="hidden"
-                animate={introInView ? "show" : "hidden"}
-                className="grid h-full grid-cols-1 items-stretch gap-8 sm:grid-cols-3 sm:gap-4 lg:gap-6"
-              >
-                {prizes.map((p) => (
-                  <motion.div key={p.key} variants={RISE} className="h-full">
-                    <Link
-                      href={p.href}
-                      className="group flex h-full flex-col items-center text-center"
-                    >
-                      <motion.div
-                        whileHover={{ y: -6 }}
-                        transition={{ duration: 0.3, ease: EASE }}
-                      >
-                        <Medal
-                          src={p.image}
-                          alt={p.name}
-                          color={ORANGE}
-                          size={148}
-                          ring={false}
-                        />
-                      </motion.div>
-                      <div className="mt-4 text-sm font-semibold text-[#1D2D44] transition-colors duration-300 group-hover:text-[#EC601B] sm:text-base">
-                        {p.name}
-                      </div>
-                      <p className="mt-1.5 max-w-[200px] flex-1 text-sm font-light leading-relaxed text-[#1D2D44]/65">
-                        {p.line}
-                      </p>
-                      <span className="mt-auto inline-flex items-center gap-3 pt-4">
-                        <span className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
-                        <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
-                          {t("learnMore")}
-                        </span>
-                      </span>
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
+        {/* ============================== STATS ============================== */}
+        <StatsSection />
 
         {/* ============================== LATEST WINNERS ============================== */}
         <section
@@ -1452,12 +1465,6 @@ export default function LaureatesPage() {
             </motion.div>
           </div>
         </section>
-
-        {/* ============================== WORLD MAP ============================== */}
-        <WorldSection />
-
-        {/* ============================== STATS ============================== */}
-        <StatsSection />
 
         {/* ============================== BROWSE ALL — year + prize ============================== */}
         <section className="bg-white">
@@ -1558,6 +1565,83 @@ export default function LaureatesPage() {
                   </motion.div>
                 </AnimatePresence>
               </div>
+            </div>
+          </div>
+        </section>
+        {/* ============================== WORLD MAP ============================== */}
+        <WorldSection />
+
+        {/* ============================== INTRODUCTION ============================== */}
+        <section ref={introRef} className="relative overflow-hidden bg-white">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-40 -top-24 h-[28rem] w-[28rem] rounded-full opacity-[0.12] rtl:right-auto rtl:-left-40"
+            style={{
+              background:
+                "radial-gradient(circle, #7DC0F1 0%, transparent 70%)",
+            }}
+          />
+          <div className="relative mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] lg:gap-16">
+              <FadeUp>
+                <motion.span
+                  className="block h-[3px] w-9 origin-left rounded-full bg-[#EC601B]"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: EASE }}
+                />
+                <span className="mt-5 block text-[10px] font-semibold uppercase tracking-[0.35em] text-[#EC601B]">
+                  {t("introKicker")}
+                </span>
+                <h2 className="mt-3 font-poppins text-[1.55rem] font-semibold leading-[1.18] tracking-tight text-[#1D2D44] sm:text-[1.9rem] lg:text-[2.1rem]">
+                  {t("introTitle")}
+                </h2>
+                <p className="mt-5 max-w-[420px] font-poppins text-[15px] font-light leading-[1.9] text-[#1D2D44]/70">
+                  {t("introBody")}
+                </p>
+              </FadeUp>
+
+              <motion.div
+                variants={STAGGER}
+                initial="hidden"
+                animate={introInView ? "show" : "hidden"}
+                className="grid h-full grid-cols-1 items-stretch gap-8 sm:grid-cols-3 sm:gap-4 lg:gap-6"
+              >
+                {prizes.map((p) => (
+                  <motion.div key={p.key} variants={RISE} className="h-full">
+                    <Link
+                      href={p.href}
+                      className="group flex h-full flex-col items-center text-center"
+                    >
+                      <motion.div
+                        whileHover={{ y: -6 }}
+                        transition={{ duration: 0.3, ease: EASE }}
+                      >
+                        <Medal
+                          src={p.image}
+                          alt={p.name}
+                          color={ORANGE}
+                          size={148}
+                          ring={false}
+                        />
+                      </motion.div>
+                      <div className="mt-4 text-sm font-semibold text-[#1D2D44] transition-colors duration-300 group-hover:text-[#EC601B] sm:text-base">
+                        {p.name}
+                      </div>
+                      <p className="mt-1.5 max-w-[200px] flex-1 text-sm font-light leading-relaxed text-[#1D2D44]/65">
+                        {p.line}
+                      </p>
+                      <span className="mt-auto inline-flex items-center gap-3 pt-4">
+                        <span className="h-[1.5px] w-6 bg-[#EC601B] transition-all duration-500 group-hover:w-10" />
+                        <span className="text-[13px] font-medium tracking-[0.08em] text-[#EC601B] transition-colors duration-300 group-hover:text-[#d45510]">
+                          {t("learnMore")}
+                        </span>
+                      </span>
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
           </div>
         </section>
