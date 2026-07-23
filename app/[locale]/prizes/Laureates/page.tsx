@@ -45,6 +45,11 @@ const PRIZE_COLOR: Record<PrizeKey, string> = {
 };
 const accentOf = (p: PrizeKey) => PRIZE_COLOR[p];
 
+/** Prefer Arabic name on AR locale when available. */
+function laureateDisplayName(l: Laureate, isArabic: boolean) {
+  return isArabic && l.nameAr ? l.nameAr : l.name;
+}
+
 const GEO_URL =
   "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
@@ -111,7 +116,36 @@ const COORDS: Record<string, [number, number]> = {
   UK: [-1.5, 52.4],
   USA: [-98.5, 39.8],
   Peru: [-75.0, -9.2],
-  Mexico: [-102.5, 23.6],
+};
+
+/* Match Natural Earth geography names to our country keys so laureate
+   countries can be tinted on the map. Unmatched names simply stay untinted. */
+const normGeoName = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\u2019']/g, "'");
+
+const GEO_NAME_ALIASES: Record<string, string> = {
+  "united states of america": "USA",
+  "united states": "USA",
+  "united kingdom": "UK",
+  "united republic of tanzania": "Tanzania",
+  "cote d'ivoire": "Côte d’Ivoire",
+  "ivory coast": "Côte d’Ivoire",
+};
+
+const GEO_TO_COUNTRY: Record<string, string> = (() => {
+  const lookup: Record<string, string> = {};
+  for (const c of Object.keys(COORDS)) lookup[normGeoName(c)] = c;
+  for (const [alias, c] of Object.entries(GEO_NAME_ALIASES)) lookup[alias] = c;
+  return lookup;
+})();
+
+const rgba = (hex: string, alpha: number) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
 };
 
 /* ------------------------------------------------------------------ */
@@ -395,6 +429,8 @@ function Medal({
 
 function LaureateRow({ l, showPrize }: { l: Laureate; showPrize?: boolean }) {
   const t = useTranslations("LaureatesPage");
+  const isArabic = useLocale() === "ar";
+  const displayName = laureateDisplayName(l, isArabic);
   return (
     <>
       <div className="min-w-0">
@@ -405,7 +441,7 @@ function LaureateRow({ l, showPrize }: { l: Laureate; showPrize?: boolean }) {
         ) : null}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <span className="text-lg font-semibold tracking-tight text-[#1D2D44]">
-            {l.name}
+            {displayName}
           </span>
           {l.country ? (
             <span className="text-sm text-[#1D2D44]/55">{l.country}</span>
@@ -437,6 +473,7 @@ const FEATURED_WINNER_ID = "jaber-2025-380"; // Dr. Aisha Ahmad Mutairan Al-Azmi
 
 function WinnersCarousel({ winners }: { winners: Laureate[] }) {
   const t = useTranslations("LaureatesPage");
+  const isArabic = useLocale() === "ar";
   const featuredIndex = Math.max(
     0,
     winners.findIndex(
@@ -454,6 +491,13 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
   const go = (dir: -1 | 1) => {
     setActive((i) => Math.min(total - 1, Math.max(0, i + dir)));
   };
+
+  /* In RTL, start/end flip sides and icons rotate — match go() to the
+     visual arrow direction (right chevron advances to the card on the right). */
+  const startDir: -1 | 1 = isArabic ? 1 : -1;
+  const endDir: -1 | 1 = isArabic ? -1 : 1;
+  const startDisabled = isArabic ? active === total - 1 : active === 0;
+  const endDisabled = isArabic ? active === 0 : active === total - 1;
 
   useEffect(() => {
     const syncStep = () => {
@@ -490,12 +534,13 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
           const x = offset * step;
           const y = isActive ? 0 : abs * 18;
           const opacity = isActive ? 1 : abs === 1 ? 0.72 : 0.4;
+          const displayName = laureateDisplayName(l, isArabic);
 
           return (
             <motion.button
               key={l.id}
               type="button"
-              aria-label={t("showWinnerAria", { name: l.name })}
+              aria-label={t("showWinnerAria", { name: displayName })}
               aria-current={isActive ? "true" : undefined}
               onClick={() => setActive(i)}
               className="absolute origin-center cursor-pointer border-0 bg-transparent p-0 text-left outline-none focus-visible:rounded-[1.6rem] focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#EC601B]"
@@ -554,7 +599,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                     {l.image ? (
                       <Image
                         src={l.image}
-                        alt={l.name}
+                        alt={displayName}
                         fill
                         sizes="220px"
                         className={
@@ -600,7 +645,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
                   {/* ivory placard — the museum label; every name readable */}
                   <div className="shrink-0 border-t border-[#C9A24A]/45 bg-[#FDFAF1] px-2.5 pb-2.5 pt-2 text-center">
                     <div className="font-poppins text-[12px] font-semibold leading-[1.25] tracking-tight text-[#1D2D44] sm:text-[13px]">
-                      {l.name}
+                      {displayName}
                     </div>
                     {isActive ? (
                       <div className="mt-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#1D2D44]/60">
@@ -618,9 +663,9 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
         {/* side chevrons — start/end so sides mirror in RTL; icons rotate to stay outward */}
         <button
           type="button"
-          aria-label={t("previousWinner")}
-          disabled={active === 0}
-          onClick={() => go(-1)}
+          aria-label={isArabic ? t("nextWinner") : t("previousWinner")}
+          disabled={startDisabled}
+          onClick={() => go(startDir)}
           className="absolute start-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:start-2 lg:start-6"
         >
           <svg
@@ -641,9 +686,9 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
         </button>
         <button
           type="button"
-          aria-label={t("nextWinner")}
-          disabled={active === total - 1}
-          onClick={() => go(1)}
+          aria-label={isArabic ? t("previousWinner") : t("nextWinner")}
+          disabled={endDisabled}
+          onClick={() => go(endDir)}
           className="absolute end-0 top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white text-[#EC601B] ring-1 ring-white/70 shadow-sm transition enabled:hover:bg-[#EC601B] enabled:hover:text-white enabled:hover:ring-[#EC601B] disabled:opacity-20 sm:end-2 lg:end-6"
         >
           <svg
@@ -670,7 +715,9 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
           <button
             key={l.id}
             type="button"
-            aria-label={t("showWinnerAria", { name: l.name })}
+            aria-label={t("showWinnerAria", {
+              name: laureateDisplayName(l, isArabic),
+            })}
             aria-current={i === active ? "true" : undefined}
             onClick={() => setActive(i)}
             className="h-1.5 rounded-full transition-all duration-300"
@@ -694,7 +741,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
               transition={{ duration: 0.35, ease: EASE }}
             >
               <p className="font-poppins text-[13px] font-light leading-relaxed text-white/90 sm:text-[14px]">
-                {`${t(`prizeLabels.${current.prize}`)} · ${current.field}`}
+                {`${t(`prizeLabels.${current.prize}`)} · ${current.year}`}
               </p>
             </motion.div>
           ) : null}
@@ -709,6 +756,8 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
 /* ------------------------------------------------------------------ */
 function LaureateCard({ l }: { l: Laureate }) {
   const t = useTranslations("LaureatesPage");
+  const isArabic = useLocale() === "ar";
+  const displayName = laureateDisplayName(l, isArabic);
   const accent = accentOf(l.prize);
   const hasBio = Boolean(l.brief);
   return (
@@ -722,7 +771,7 @@ function LaureateCard({ l }: { l: Laureate }) {
         <div className="w-[84px] shrink-0">
           <Portrait
             src={l.image}
-            name={l.name}
+            name={displayName}
             accent={accent}
             contain={l.kind === "Organization"}
           />
@@ -730,7 +779,7 @@ function LaureateCard({ l }: { l: Laureate }) {
         <div className="min-w-0 flex-1">
           <PrizeTag prize={l.prize} />
           <h3 className="mt-1.5 text-[15px] font-semibold leading-snug tracking-tight text-[#1D2D44]">
-            {l.name}
+            {displayName}
           </h3>
           <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#1D2D44]/55">
             <span className="font-semibold tabular-nums text-[#1D2D44]/75">
@@ -859,12 +908,11 @@ function Counter({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Stats — full-bleed navy band, editorial count-up figures           */
+/*  Stats — "Legacy in Numbers": open ivory band, gold hairlines,      */
+/*  museum-label typography matching the winners' gold cards           */
 /* ------------------------------------------------------------------ */
 function StatsSection() {
   const t = useTranslations("LaureatesPage");
-  const locale = useLocale();
-  const isArabic = locale === "ar";
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -876,75 +924,40 @@ function StatsSection() {
         value: LATEST_YEAR - FIRST_YEAR + 1,
         label: t("statYearsLabel"),
         note: t("statYearsNote"),
-        accent: PRIZE_COLOR.kuwait,
       },
       {
         value: LAUREATES.length,
         label: t("statLaureatesLabel"),
         note: t("statLaureatesNote"),
-        accent: PRIZE_COLOR.jaber,
       },
       {
         value: nationalities,
         label: t("statNationalitiesLabel"),
         note: t("statNationalitiesNote"),
-        accent: "#7DC0F1",
       },
     ];
   }, [t]);
 
   return (
-    <section
-      ref={ref}
-      className="relative overflow-hidden bg-[#E8F4FB]"
-      aria-labelledby="laureates-stats-heading"
-    >
-      {/* atmosphere — soft brand glows on light blue */}
+    <section ref={ref} className="relative overflow-hidden bg-[#FCF9F1]">
+      {/* soft gold aura behind the figures */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[30rem] w-[54rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{
-          background: isArabic
-            ? "radial-gradient(ellipse 70% 55% at 85% 0%, rgba(236,96,27,0.12) 0%, transparent 55%), radial-gradient(ellipse 55% 50% at 8% 100%, rgba(125,192,241,0.35) 0%, transparent 50%)"
-            : "radial-gradient(ellipse 70% 55% at 15% 0%, rgba(236,96,27,0.12) 0%, transparent 55%), radial-gradient(ellipse 55% 50% at 92% 100%, rgba(125,192,241,0.35) 0%, transparent 50%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.35]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(29,45,68,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(29,45,68,0.06) 1px, transparent 1px)",
-          backgroundSize: "72px 72px",
-          maskImage:
-            "radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 75%)",
+          background:
+            "radial-gradient(closest-side, rgba(228,197,122,0.20) 0%, transparent 72%)",
         }}
       />
 
-      <div className="relative mx-auto max-w-[1280px] px-6 py-24 lg:px-8 lg:py-32">
-        <motion.div
-          className="mx-auto max-w-2xl text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: EASE }}
-        >
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-[#EC601B]" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#EC601B]">
-              {t("statsKicker")}
-            </span>
-            <span className="h-px w-10 bg-[#EC601B]" />
-          </div>
-          <h2
-            id="laureates-stats-heading"
-            className="mt-5 font-poppins text-[2rem] font-semibold tracking-tight text-[#1D2D44] sm:text-[2.55rem] lg:text-[2.75rem]"
-          >
-            {t("statsTitle")}
-          </h2>
-        </motion.div>
+      <div className="relative mx-auto max-w-[1280px] px-6 py-24 lg:px-8 lg:py-28">
+        <CenterHead kicker={t("statsKicker")} title={t("statsTitle")} />
+
+        {/* open composition — fine gold frame lines instead of a card */}
+        <div className="mx-auto mt-14 h-px max-w-4xl bg-gradient-to-r from-transparent via-[#C9A24A]/45 to-transparent" />
 
         <motion.div
-          className="mt-16 grid grid-cols-1 gap-12 sm:mt-20 sm:grid-cols-3 sm:gap-0"
+          className="mx-auto grid max-w-4xl grid-cols-1 sm:grid-cols-3"
           variants={STAGGER}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
@@ -953,40 +966,42 @@ function StatsSection() {
             <motion.div
               key={s.label}
               variants={RISE}
-              className={`relative px-4 text-center sm:px-8 ${
-                i > 0 ? "sm:border-s sm:border-[#1D2D44]/15" : ""
+              className={`px-8 py-12 text-center sm:py-14 ${
+                i > 0
+                  ? "border-t border-[#C9A24A]/[0.25] sm:border-s sm:border-t-0"
+                  : ""
               }`}
             >
               <motion.span
-                aria-hidden
-                className="mx-auto mb-6 block h-[3px] w-12 origin-center"
-                style={{ backgroundColor: s.accent }}
+                className="mx-auto block h-[3px] w-9 origin-center rounded-full"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #F1E0AE 0%, #C9A24A 100%)",
+                }}
                 initial={{ scaleX: 0 }}
                 animate={inView ? { scaleX: 1 } : {}}
-                transition={{ duration: 0.7, delay: 0.15 + i * 0.1, ease: EASE }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.1 + i * 0.08,
+                  ease: EASE,
+                }}
               />
               <Counter
                 value={s.value}
                 run={inView}
-                className="block font-poppins text-[4.25rem] font-semibold leading-none tabular-nums tracking-tight text-[#1D2D44] sm:text-[4.75rem] lg:text-[5.25rem]"
+                className="mt-7 block font-poppins text-[4.25rem] font-light leading-none tabular-nums tracking-tight text-[#1D2D44] sm:text-[5rem]"
               />
-              <div
-                className={`mt-5 font-poppins text-base font-semibold text-[#1D2D44] sm:text-lg ${
-                  isArabic ? "text-[17px]" : ""
-                }`}
-              >
+              <div className="mt-5 text-[15px] font-semibold text-[#1D2D44]">
                 {s.label}
               </div>
-              <div
-                className={`mt-1.5 font-poppins text-sm font-light text-[#1D2D44]/55 ${
-                  isArabic ? "text-[15px]" : ""
-                }`}
-              >
+              <div className="mt-1.5 text-sm font-light text-[#1D2D44]/50">
                 {s.note}
               </div>
             </motion.div>
           ))}
         </motion.div>
+
+        <div className="mx-auto h-px max-w-4xl bg-gradient-to-r from-transparent via-[#C9A24A]/45 to-transparent" />
       </div>
     </section>
   );
@@ -1041,6 +1056,11 @@ function WorldSection() {
         }))
         .sort((a, b) => b.count - a.count),
     [counts, dominant, perPrize],
+  );
+
+  const markerByName = useMemo(
+    () => new Map(markers.map((m) => [m.name, m])),
+    [markers],
   );
 
   const [hovered, setHovered] = useState<string | null>(null);
@@ -1099,7 +1119,7 @@ function WorldSection() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease: EASE }}
         >
-          <div className="-mx-6 lg:mx-0">
+          <div className="-mx-6 lg:mx-0" dir="ltr">
             <ComposableMap
               projection="geoEqualEarth"
               projectionConfig={{ scale: 178, center: [10, 11] }}
@@ -1107,20 +1127,54 @@ function WorldSection() {
             >
               <Geographies geography={GEO_URL}>
                 {({ geographies }) =>
-                  geographies.map((geo) => (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill="#DCE8F2"
-                      stroke="#FFFFFF"
-                      strokeWidth={0.75}
-                      style={{
-                        default: { outline: "none" },
-                        hover: { outline: "none", fill: "#C9DCEB" },
-                        pressed: { outline: "none" },
-                      }}
-                    />
-                  ))
+                  geographies.map((geo) => {
+                    const country =
+                      GEO_TO_COUNTRY[
+                        normGeoName(String(geo.properties?.name ?? ""))
+                      ];
+                    const m = country ? markerByName.get(country) : undefined;
+                    const inLit =
+                      m && litPrize !== null && m.prizes[litPrize] > 0;
+                    const accent = m
+                      ? inLit && litPrize !== null
+                        ? accentOf(litPrize)
+                        : accentOf(m.prize)
+                      : null;
+                    const fill = !m
+                      ? "#EEF3F7"
+                      : litPrize !== null && !inLit
+                        ? "#F3F6F9"
+                        : rgba(accent!, 0.16);
+                    const hoverFill = !m
+                      ? "#E6EDF3"
+                      : litPrize !== null && !inLit
+                        ? "#F3F6F9"
+                        : rgba(accent!, 0.28);
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        fill={fill}
+                        stroke="#FFFFFF"
+                        strokeWidth={0.7}
+                        onMouseEnter={m ? () => setHovered(m.name) : undefined}
+                        onMouseLeave={m ? () => setHovered(null) : undefined}
+                        style={{
+                          default: {
+                            outline: "none",
+                            transition: "fill 0.35s ease",
+                          },
+                          hover: {
+                            outline: "none",
+                            fill: hoverFill,
+                            cursor: m ? "pointer" : "default",
+                            transition: "fill 0.2s ease",
+                          },
+                          pressed: { outline: "none" },
+                        }}
+                      />
+                    );
+                  })
                 }
               </Geographies>
               {markers.map((m, i) => {
@@ -1131,20 +1185,21 @@ function WorldSection() {
                   litPrize !== null && inLit
                     ? accentOf(litPrize)
                     : accentOf(m.prize);
-                const opacity = dimmed ? 0.18 : showPop ? 1 : 0.92;
-                /* size hints density; count shown only on hover */
+                const opacity = dimmed ? 0.15 : showPop ? 1 : 0.9;
                 const r = Math.min(11, 5.5 + Math.sqrt(m.count) * 1.15);
                 const countryLabel = labelOf(m.name);
-                const countLabel = t("laureateCount", { count: m.count });
-                const lineH = m.name === "Egypt" ? 52 : 34;
-                const boxH = 44;
-                const padX = 14;
-                const charW = isArabic ? 9.5 : 6.8;
-                const boxW = Math.max(
-                  96,
-                  Math.max(countryLabel.length, countLabel.length) * charW +
-                    padX * 2,
+                const countLabel = String(m.count);
+                /* Arabic glyphs are wider — size the HTML chip from the live label */
+                const charW = isArabic ? 11 : 6.6;
+                const boxW = Math.min(
+                  280,
+                  Math.max(
+                    96,
+                    countryLabel.length * charW + countLabel.length * 7 + 44,
+                  ),
                 );
+                const boxH = 34;
+                const lineH = m.name === "Egypt" ? 52 : 34;
                 const labelY = -(r + 2) - lineH - boxH;
                 const tipY = labelY + boxH;
 
@@ -1183,6 +1238,7 @@ function WorldSection() {
                           transformBox: "fill-box",
                           transformOrigin: "center",
                           pointerEvents: "none",
+                          filter: "drop-shadow(0 2px 5px rgba(29,45,68,0.28))",
                         }}
                       />
                       <motion.circle
@@ -1218,50 +1274,62 @@ function WorldSection() {
                               r={2.25}
                               fill={ORANGE}
                             />
-                            <rect
+                            {/* HTML chip — avoids SVG textAnchor flipping under page RTL */}
+                            <foreignObject
                               x={-boxW / 2}
                               y={labelY}
                               width={boxW}
                               height={boxH}
-                              rx={10}
-                              fill="#FFFFFF"
-                              stroke={ORANGE}
-                              strokeOpacity={0.55}
-                              strokeWidth={0.9}
-                            />
-                            <text
-                              x={0}
-                              y={labelY + 17}
-                              textAnchor="middle"
-                              direction={isArabic ? "rtl" : "ltr"}
-                              style={{
-                                fontSize: isArabic ? 12 : 11,
-                                fontWeight: 700,
-                                letterSpacing: isArabic ? "0" : "0.01em",
-                                fill: "#1D2D44",
-                                fontFamily: isArabic
-                                  ? "var(--font-arabic), sans-serif"
-                                  : "var(--font-poppins), Poppins, sans-serif",
-                              }}
+                              style={{ overflow: "visible" }}
                             >
-                              {countryLabel}
-                            </text>
-                            <text
-                              x={0}
-                              y={labelY + 34}
-                              textAnchor="middle"
-                              direction={isArabic ? "rtl" : "ltr"}
-                              style={{
-                                fontSize: isArabic ? 11.5 : 10.5,
-                                fontWeight: 600,
-                                fill: ORANGE,
-                                fontFamily: isArabic
-                                  ? "var(--font-arabic), sans-serif"
-                                  : "var(--font-poppins), Poppins, sans-serif",
-                              }}
-                            >
-                              {countLabel}
-                            </text>
+                              <div
+                                // @ts-expect-error xmlns needed for SVG foreignObject
+                                xmlns="http://www.w3.org/1999/xhtml"
+                                dir={isArabic ? "rtl" : "ltr"}
+                                style={{
+                                  boxSizing: "border-box",
+                                  height: "100%",
+                                  width: "100%",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                  gap: 10,
+                                  padding: "0 12px",
+                                  background: "#FFFFFF",
+                                  border: "1px solid rgba(236,96,27,0.55)",
+                                  borderRadius: 10,
+                                  color: "#1D2D44",
+                                  fontSize: isArabic ? 12 : 10.5,
+                                  fontWeight: 600,
+                                  fontFamily: isArabic
+                                    ? "var(--font-arabic), sans-serif"
+                                    : "var(--font-poppins), Poppins, sans-serif",
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    minWidth: 0,
+                                  }}
+                                >
+                                  {countryLabel}
+                                </span>
+                                <span
+                                  style={{
+                                    flexShrink: 0,
+                                    color: ORANGE,
+                                    fontWeight: 600,
+                                    fontVariantNumeric: "tabular-nums",
+                                  }}
+                                >
+                                  {countLabel}
+                                </span>
+                              </div>
+                            </foreignObject>
                           </motion.g>
                         ) : null}
                       </AnimatePresence>
@@ -1399,9 +1467,7 @@ export default function LaureatesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE }}
             >
-              <Link href="/prizes" className="transition hover:text-white/80">
-                {t("breadcrumbPrizes")}
-              </Link>
+              <span>{t("breadcrumbPrizes")}</span>
               <span className="text-white/25">/</span>
               <span className="text-white/80">{t("breadcrumbCurrent")}</span>
             </motion.div>

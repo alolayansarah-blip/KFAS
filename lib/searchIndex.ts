@@ -335,7 +335,14 @@ const KEYWORDS_EN: Record<string, string[]> = {
   "/prizes/AlSumaitPrize": ["award", "prize", "africa", "sumait"],
   "/prizes/Laureates": ["winners", "recipients", "laureates"],
   "/news": ["news", "updates", "announcements", "press", "media"],
-  "/Policy": ["policy", "privacy", "cookies", "terms", "legal", "website policy"],
+  "/Policy": [
+    "policy",
+    "privacy",
+    "cookies",
+    "terms",
+    "legal",
+    "website policy",
+  ],
   // …add more URLs and terms here anytime
 };
 
@@ -436,20 +443,24 @@ function flatten(
 ): SearchItem[] {
   const out: SearchItem[] = [];
   for (const item of items) {
-    out.push({
-      title: item.label,
-      description: descriptions[item.href] ?? "",
-      url: item.href,
-      category,
-      keywords: [
-        ...keywordsFrom(item.label),
-        ...(extraKeywords[item.href] ?? []),
-      ],
-    });
     if (item.children?.length) {
+      // Section parents (/about, /Research, ...) have no pages of their own —
+      // they only open dropdowns in the header. Index their children, never
+      // the parent itself, so search can't surface a dead route.
       out.push(
         ...flatten(item.children, category, descriptions, extraKeywords),
       );
+    } else {
+      out.push({
+        title: item.label,
+        description: descriptions[item.href] ?? "",
+        url: item.href,
+        category,
+        keywords: [
+          ...keywordsFrom(item.label),
+          ...(extraKeywords[item.href] ?? []),
+        ],
+      });
     }
   }
   return out;
