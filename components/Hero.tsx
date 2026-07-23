@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
   useReducedMotion,
@@ -16,8 +16,6 @@ interface HeroProps {
   videoPoster?: string;
   className?: string;
 }
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 function splitLines(text: string): string[] {
   return text.split(/\||\n/).filter((line) => line.trim());
@@ -54,11 +52,6 @@ export default function Hero({
   const reduce = useReducedMotion();
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -87,6 +80,15 @@ export default function Hero({
     >
       {/* Background */}
       <div className="absolute inset-0 z-0">
+        {/* Poster underlay — paints with the HTML, independent of the video */}
+        {videoPoster && (
+          <img
+            src={videoPoster}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
         {video ? (
           <video
             ref={videoRef}
@@ -112,23 +114,40 @@ export default function Hero({
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-[#1D2D44]/[0.55] to-transparent" />
       </div>
 
+      {/* Entrance animation in pure CSS: runs at first paint, before any JS.
+          Same timing/ease as the previous framer-motion config. */}
+      <style>{`
+        @keyframes kfasHeroRise {
+          from { opacity: 0; transform: translateY(var(--rise-y, 16px)); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .kfas-hero-rise {
+          animation: kfasHeroRise var(--rise-duration, 0.7s) cubic-bezier(0.22, 1, 0.36, 1) var(--rise-delay, 0s) both;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .kfas-hero-rise { animation: none; }
+        }
+      `}</style>
+
       {/* Content — anchored to the lower portion */}
       <motion.div
-        className={`relative z-20 w-full pb-[clamp(4.5rem,10vh,7rem)] pt-24 ${
-          hydrated ? "" : "invisible"
-        }`}
+        className="relative z-20 w-full pb-[clamp(4.5rem,10vh,7rem)] pt-24"
         style={{ opacity: contentOpacity, y: contentY }}
       >
         <div className="mx-auto w-full max-w-[1280px] px-6 text-start sm:px-8 lg:px-12">
           {subtitle && (
-            <motion.p
-              className="mb-5 text-[11px] font-semibold uppercase tracking-[0.35em] text-white/70"
-              initial={reduce ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+            <p
+              className="kfas-hero-rise mb-5 text-[11px] font-semibold uppercase tracking-[0.35em] text-white/70"
+              style={
+                {
+                  "--rise-duration": "0.7s",
+                  "--rise-delay": "0.1s",
+                  "--rise-y": "12px",
+                } as React.CSSProperties
+              }
             >
               {subtitle}
-            </motion.p>
+            </p>
           )}
 
           {lines.length > 0 && (
@@ -140,32 +159,36 @@ export default function Hero({
               }}
             >
               {lines.map((line, index) => (
-                <motion.span
+                <span
                   key={`${line}-${index}`}
-                  className="block"
-                  initial={reduce ? false : { opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.9,
-                    delay: 0.2 + index * 0.1,
-                    ease: EASE,
-                  }}
+                  className="kfas-hero-rise block"
+                  style={
+                    {
+                      "--rise-duration": "0.9s",
+                      "--rise-delay": `${0.2 + index * 0.1}s`,
+                      "--rise-y": "20px",
+                    } as React.CSSProperties
+                  }
                 >
                   {renderAccented(line)}
-                </motion.span>
+                </span>
               ))}
             </h1>
           )}
 
           {description && (
-            <motion.p
-              className="max-w-[48ch] font-poppins text-[14px] font-light leading-[1.9] text-white/80 sm:text-[15px]"
-              initial={reduce ? false : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
+            <p
+              className="kfas-hero-rise max-w-[48ch] font-poppins text-[14px] font-light leading-[1.9] text-white/80 sm:text-[15px]"
+              style={
+                {
+                  "--rise-duration": "0.7s",
+                  "--rise-delay": "0.55s",
+                  "--rise-y": "10px",
+                } as React.CSSProperties
+              }
             >
               {description}
-            </motion.p>
+            </p>
           )}
         </div>
       </motion.div>

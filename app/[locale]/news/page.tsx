@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
-import { sortedNews } from "@/src/data/news";
+import { sortedNews, hasLink, isInternalLink } from "@/src/data/news";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -173,13 +173,11 @@ export default function AllNewsPage() {
               whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
             >
-              {sortedNews.map((item) => (
-                <motion.article
-                  key={item.id}
-                  variants={RISE}
-                  className="group flex flex-col"
-                >
-                  <a href={item.link} className="flex h-full flex-col">
+              {sortedNews.map((item) => {
+                const linked = hasLink(item.link);
+
+                const cardContent = (
+                  <>
                     <div className="relative mb-5 aspect-[16/10] overflow-hidden">
                       <Image
                         src={item.image}
@@ -210,9 +208,34 @@ export default function AllNewsPage() {
                       </span>
                       <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 rtl:translate-x-1 rtl:rotate-180" />
                     </div>
-                  </a>
-                </motion.article>
-              ))}
+                  </>
+                );
+
+                return (
+                  <motion.article
+                    key={item.id}
+                    variants={RISE}
+                    className="group flex flex-col"
+                  >
+                    {!linked ? (
+                      <div className="flex h-full flex-col">{cardContent}</div>
+                    ) : isInternalLink(item.link) ? (
+                      <Link href={item.link} className="flex h-full flex-col">
+                        {cardContent}
+                      </Link>
+                    ) : (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex h-full flex-col"
+                      >
+                        {cardContent}
+                      </a>
+                    )}
+                  </motion.article>
+                );
+              })}
             </motion.div>
 
             <motion.div

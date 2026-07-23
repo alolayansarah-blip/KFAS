@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
-import { sortedNews } from "@/src/data/news";
+import { sortedNews, hasLink, isInternalLink } from "@/src/data/news";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const VIEWPORT = { once: true, amount: 0.15 };
@@ -77,9 +77,11 @@ export default function LatestNews() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {preview.map((item) => (
-            <article key={item.id} className="group flex flex-col">
-              <a href={item.link} className="flex h-full flex-col">
+          {preview.map((item) => {
+            const linked = hasLink(item.link);
+
+            const cardContent = (
+              <>
                 <div className="relative mb-5 aspect-[16/10] overflow-hidden">
                   <img
                     src={item.image}
@@ -108,9 +110,30 @@ export default function LatestNews() {
                   </span>
                   <ArrowIcon className="h-3 w-3 -translate-x-1 text-[#EC601B] transition-all duration-300 group-hover:translate-x-0 rtl:translate-x-1 rtl:rotate-180" />
                 </div>
-              </a>
-            </article>
-          ))}
+              </>
+            );
+
+            return (
+              <article key={item.id} className="group flex flex-col">
+                {!linked ? (
+                  <div className="flex h-full flex-col">{cardContent}</div>
+                ) : isInternalLink(item.link) ? (
+                  <Link href={item.link} className="flex h-full flex-col">
+                    {cardContent}
+                  </Link>
+                ) : (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-full flex-col"
+                  >
+                    {cardContent}
+                  </a>
+                )}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

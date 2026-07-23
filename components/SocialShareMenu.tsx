@@ -2,30 +2,18 @@
 
 import { motion } from "framer-motion";
 
+// KFAS official accounts — kept identical to the Footer's links.
+const SOCIAL_URLS = {
+  instagram: "https://www.instagram.com/kfasinfo/",
+  x: "https://twitter.com/kfasinfo",
+  linkedin: "https://linkedin.com/company/kfasinfo",
+  youtube: "https://www.youtube.com/@KFASinfo",
+} as const;
+
 export default function SocialShareMenu() {
-  const shareOnInstagram = () => {
-    window.open(
-      `https://www.instagram.com/kfasinfo/?hl=en`,
-      "_blank",
-      "width=600,height=400"
-    );
-  };
-
-  const shareOnX = () => {
-    window.open(`https://x.com/kfasinfo`, "_blank", "width=600,height=400");
-  };
-
-  const shareOnLinkedIn = () => {
-    window.open(
-      `https://kw.linkedin.com/company/kuwait-foundation-for-the-advancement-of-sciences`,
-      "_blank",
-      "width=600,height=400"
-    );
-  };
-
   return (
     <motion.nav
-      aria-label="Social Media Share"
+      aria-label="KFAS social media accounts"
       className="social_menu_side hidden md:block desktop_only"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
@@ -34,11 +22,9 @@ export default function SocialShareMenu() {
       <ul className="social_menu social_share_menu flex flex-col gap-0">
         <li className="instagram first:rounded-t-sm">
           <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              shareOnInstagram();
-            }}
+            href={SOCIAL_URLS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
             title="Visit Instagram"
             className="block w-10 h-10 bg-white flex items-center justify-center hover:opacity-80 transition-opacity border-t border-l border-r border-gray-300"
           >
@@ -55,11 +41,9 @@ export default function SocialShareMenu() {
         </li>
         <li className="x">
           <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              shareOnX();
-            }}
+            href={SOCIAL_URLS.x}
+            target="_blank"
+            rel="noopener noreferrer"
             title="Visit X"
             className="block w-10 h-10 bg-white flex items-center justify-center hover:opacity-80 transition-opacity border-l border-r border-b border-gray-300"
           >
@@ -76,12 +60,10 @@ export default function SocialShareMenu() {
         </li>
         <li className="linkedin last:rounded-b-sm">
           <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              shareOnLinkedIn();
-            }}
-            title="Share on LinkedIn"
+            href={SOCIAL_URLS.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Visit LinkedIn"
             className="block w-10 h-10 bg-white flex items-center justify-center hover:opacity-80 transition-opacity border-b border-l border-r border-gray-300"
           >
             <span className="sr-only">linkedin</span>
@@ -92,6 +74,25 @@ export default function SocialShareMenu() {
               aria-hidden="true"
             >
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+            </svg>
+          </a>
+        </li>
+        <li className="youtube last:rounded-b-sm">
+          <a
+            href={SOCIAL_URLS.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Visit YouTube"
+            className="block w-10 h-10 bg-white flex items-center justify-center hover:opacity-80 transition-opacity border-b border-l border-r border-gray-300"
+          >
+            <span className="sr-only">youtube</span>
+            <svg
+              className="w-5 h-5"
+              fill="#EC601B"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
             </svg>
           </a>
         </li>
