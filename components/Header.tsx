@@ -41,6 +41,10 @@ const DEFAULT_NAV_ITEMS_EN: NavItem[] = [
       { label: "Scientific Conference Sponsorship", href: "/research/SCS" },
       { label: "Technology Deployment", href: "/research/TechDeployment" },
       { label: "R&D in Private Sector", href: "/research/RandDPrivate" },
+      {
+        label: "Success Stories and Impact",
+        href: "/research/SuccessStories",
+      },
       { label: "KFAS Research Portal", href: "/research/KFASResearchPortal" },
     ],
   },
@@ -110,6 +114,10 @@ const DEFAULT_NAV_ITEMS_AR: NavItem[] = [
       {
         label: "البحث والتطوير في القطاع الخاص",
         href: "/research/RandDPrivate",
+      },
+      {
+        label: "قصص النجاح والأثر",
+        href: "/research/SuccessStories",
       },
       { label: "بوابة الكويت للأبحاث", href: "/research/KFASResearchPortal" },
     ],

@@ -1510,7 +1510,24 @@
     "partnerBody2Pre": "Companies interested in applying are encouraged to review the grant guidelines and eligibility criteria and contact ",
     "partnerBody2Mid": " with a project concept. For any inquiries, contact ",
     "partnerBody2Post": " for guidance.",
-    "successStoriesTitle": "Success Stories & Impact",
+    "readyToStartTitle": "Ready to Start?",
+    "readyToStartIntro": "Companies interested in applying are encouraged to:",
+    "readyToStartItems": [
+      "Review the grant guidelines and eligibility criteria",
+      "Prepare a concise project concept",
+      "Contact the KFAS Research & Technology team for initial guidance"
+    ],
+    "contactLabel": "Contact:",
+    "backToTop": "Back to Top"
+  },
+  "SuccessStoriesPage": {
+    "breadcrumb": "Research",
+    "heroTitle": "Success Stories and Impact",
+    "heroTitleLine1": "Success Stories",
+    "heroTitleLine2": "and Impact",
+    "heroAlt": "KFAS research and development success stories",
+    "storiesTitle": "Featured Stories",
+    "intro": "Explore selected KFAS-supported projects that demonstrate real-world impact across industry, sustainability, food security, infrastructure, and innovation.",
     "impactStories": [
       {
         "title": "KDD-No Sugar Added:",
@@ -1540,14 +1557,6 @@
         "body": "The EQUATE Group developed an innovative Mobile Non-Destructive Testing inspection robot designed to enhance safety, efficiency, and quality in industrial maintenance operations by enabling remote inspection of confined and hazardous environments without human intervention. Internationally patented through the United States Patent and Trademark Office, the solution was developed by a team of EQUATE engineers in collaboration with KFAS and the Sabah Al-Ahmad Center for Giftedness and Creativity and delivered through the KFAS Innovation Challenge program. Through this initiative, KFAS played a pivotal role in fostering innovation and empowering local talent, supporting the transformation of advanced engineering concepts into globally recognized industrial solutions that strengthen Kuwait’s innovation ecosystem and industrial competitiveness."
       }
     ],
-    "readyToStartTitle": "Ready to Start?",
-    "readyToStartIntro": "Companies interested in applying are encouraged to:",
-    "readyToStartItems": [
-      "Review the grant guidelines and eligibility criteria",
-      "Prepare a concise project concept",
-      "Contact the KFAS Research & Technology team for initial guidance"
-    ],
-    "contactLabel": "Contact:",
     "backToTop": "Back to Top"
   },
   "KuwaitPrizePage": {

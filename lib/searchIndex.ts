@@ -33,6 +33,10 @@ const SEARCH_NAV_EN: NavItem[] = [
       { label: "Scientific Conference Sponsorship", href: "/research/SCS" },
       { label: "Technology Deployment", href: "/research/TechDeployment" },
       { label: "R&D in Private Sector", href: "/research/RandDPrivate" },
+      {
+        label: "Success Stories and Impact",
+        href: "/research/SuccessStories",
+      },
       { label: "KFAS Research Portal", href: "/research/KFASResearchPortal" },
     ],
   },
@@ -99,6 +103,10 @@ const SEARCH_NAV_AR: NavItem[] = [
       {
         label: "البحث والتطوير في القطاع الخاص",
         href: "/research/RandDPrivate",
+      },
+      {
+        label: "قصص النجاح والأثر",
+        href: "/research/SuccessStories",
       },
       { label: "بوابة أبحاث المؤسسة", href: "/research/KFASResearchPortal" },
     ],
@@ -316,6 +324,14 @@ const KEYWORDS_EN: Record<string, string[]> = {
     "grant",
   ],
   "/research/SCS": ["conference", "sponsorship", "scs", "event funding"],
+  "/research/SuccessStories": [
+    "success stories",
+    "impact",
+    "case studies",
+    "kdd",
+    "soof",
+    "innovation",
+  ],
   "/research/KFASResearchPortal": ["portal", "login", "submit", "apply online"],
   "/Learning-and-Development/Youth": ["students", "school", "young", "kids"],
   "/ScienceAndSociety/SpecialNeeds": [
@@ -353,6 +369,13 @@ const KEYWORDS_AR: Record<string, string[]> = {
   "/about/our-team": ["فريق", "موظفين", "الفريق"],
   "/research/grants": ["تمويل", "منحة", "مال", "تقديم", "طلب", "منح"],
   "/research/SCS": ["مؤتمر", "رعاية", "تمويل فعاليات"],
+  "/research/SuccessStories": [
+    "قصص النجاح",
+    "أثر",
+    "نماذج",
+    "ابتكار",
+    "سوف",
+  ],
   "/research/KFASResearchPortal": ["بوابة", "تسجيل دخول", "تقديم الطلب"],
   "/Learning-and-Development/Youth": ["طلاب", "مدرسة", "شباب", "أطفال"],
   "/ScienceAndSociety/SpecialNeeds": [
@@ -389,6 +412,8 @@ const DESCRIPTIONS_EN: Record<string, string> = {
   "/research/SCS": "Scientific conference sponsorship.",
   "/research/TechDeployment": "Technology deployment programs.",
   "/research/RandDPrivate": "R&D support in the private sector.",
+  "/research/SuccessStories":
+    "KFAS success stories and real-world impact projects.",
   "/research/KFASResearchPortal": "Access the KFAS research portal.",
   "/ScienceAndSociety/ActivitiesAndEventsSponsership":
     "Sponsorship for scientific activities and events.",
@@ -415,6 +440,7 @@ const DESCRIPTIONS_AR: Record<string, string> = {
   "/research/SCS": "رعاية المؤتمرات العلمية.",
   "/research/TechDeployment": "برامج نشر التكنولوجيا.",
   "/research/RandDPrivate": "دعم البحث والتطوير في القطاع الخاص.",
+  "/research/SuccessStories": "قصص النجاح ومشاريع الأثر لمؤسسة الكويت للتقدم العلمي.",
   "/research/KFASResearchPortal": "الوصول إلى بوابة أبحاث المؤسسة.",
   "/ScienceAndSociety/ActivitiesAndEventsSponsership":
     "رعاية الأنشطة والفعاليات العلمية.",

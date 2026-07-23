@@ -33,22 +33,7 @@ type ApplicationStep = {
   bullets: string[];
 };
 
-type ImpactStoryText = {
-  title: string;
-  body: string;
-  alt?: string;
-};
-
 // ─── Data (non-translatable: image paths / layout only) ──────────────────────
-
-const IMPACT_STORIES_META = [
-  { id: "kdd", image: "/image/randD3.png", imageFit: "contain" as const },
-  { id: "soof", image: "/image/tech3.jpg", imageFit: "cover" as const },
-  { id: "beorganic", image: "/image/randD4.jpg", imageFit: "cover" as const },
-  { id: "al-hamra", image: "/image/al-hamra-monitoring.png", imageFit: "cover" as const },
-  { id: "quantum", image: "/image/Quantum.jpg", imageFit: "cover" as const },
-  { id: "ndt-robot", image: "/image/NDT.jpg", imageFit: "cover" as const },
-] as const;
 
 const OVERVIEW_IMAGE_SRC = "/image/randD1.jpg";
 const GRANT_SECTION_IMAGE_SRC = "/image/randD2.jpg";
@@ -145,14 +130,8 @@ export default function RandDPrivatePage() {
   const duringProjectItems = t.raw("duringProjectItems") as string[];
   const afterProjectItems = t.raw("afterProjectItems") as string[];
   const partnerItems = t.raw("partnerItems") as string[];
-  const impactStoriesText = t.raw("impactStories") as ImpactStoryText[];
   const readyToStartItems = t.raw("readyToStartItems") as string[];
   const partnerBody2Mid = t("partnerBody2Mid");
-
-  const impactStories = IMPACT_STORIES_META.map((meta, i) => ({
-    ...meta,
-    ...impactStoriesText[i],
-  }));
 
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -589,63 +568,8 @@ export default function RandDPrivatePage() {
           </div>
         </section>
 
-        {/* ── Success Stories (rail · tint) ─────────────────────────────── */}
-        <section className="border-t border-[#1D2D44]/10 bg-[#7DC0F1]/[0.06] px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
-          <div className="mx-auto max-w-[1280px]">
-            <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
-              <div className="lg:col-span-4">
-                <SectionHead title={t("successStoriesTitle")} bodyTextSize={bodyTextSize} />
-              </div>
-
-              <div className="lg:col-span-8 lg:border-s lg:border-[#7DC0F1]/60 lg:ps-12">
-                <div className="divide-y divide-[#1D2D44]/10">
-                  {impactStories.map((story, i) => (
-                    <motion.article
-                      key={story.id}
-                      {...fadeUp(0.08 + i * 0.08)}
-                      className={i === 0 ? "pb-10" : "py-10"}
-                    >
-                      <h3 className="font-poppins text-[1.15rem] font-semibold leading-snug text-[#1D2D44]">
-                        {story.title}
-                      </h3>
-                      <p
-                        className={`mt-3 font-poppins ${bodyTextSize} font-light leading-[1.9] text-[#1D2D44]/65`}
-                      >
-                        {story.body}
-                      </p>
-
-                      {"image" in story && story.image && (
-                        <div className="mt-8 max-w-md">
-                          <div className="relative aspect-[4/3] w-full overflow-hidden border border-[#1D2D44]/[0.08] bg-white">
-                            <Image
-                              src={story.image}
-                              alt={story.alt ?? story.title}
-                              fill
-                              sizes="(max-width: 640px) 100vw, 28rem"
-                              className={
-                                "imageFit" in story &&
-                                story.imageFit === "contain"
-                                  ? "object-contain object-center p-4"
-                                  : "object-cover object-center"
-                              }
-                            />
-                            <span
-                              className="absolute top-0 start-0 h-1 w-10 bg-[#EC601B]"
-                              aria-hidden
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </motion.article>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ── Ready to Start (rail · white) ─────────────────────────────── */}
-        <section className="bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
+        <section className="border-t border-[#1D2D44]/10 bg-white px-6 py-20 sm:px-8 sm:py-28 lg:px-12">
           <div className="mx-auto max-w-[1280px]">
             <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
