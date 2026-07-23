@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/navigation";
 
 function useHoverCapable() {
   const [hoverCapable, setHoverCapable] = useState(false);
@@ -31,12 +31,12 @@ const CARDS_META = [
   },
   {
     href: "/Learning-and-Development/Professionals",
-    image: "/image/youth.webp",
+    image: "/image/Grants.jpg",
     fallbackImage: FALLBACK_IMAGE,
   },
   {
     href: "https://www.aspdkw.com/",
-    image: "/image/Publication.webp",
+    image: "/image/aspd.png",
     fallbackImage: FALLBACK_IMAGE,
   },
 ];
