@@ -5,6 +5,7 @@ import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
+import ChatWidget from "@/components/ChatWidget";
 
 const poppins = Poppins({
   weight: ["300", "400", "600", "700"],
@@ -97,6 +98,7 @@ export default async function LocaleLayout({
       <body className={isArabic ? "font-arabic" : "font-poppins"}>
         <NextIntlClientProvider messages={messages}>
           {children}
+          <ChatWidget />
         </NextIntlClientProvider>
       </body>
     </html>
