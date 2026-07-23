@@ -16,7 +16,8 @@ export interface Laureate {
   country?: string;
   field: string;
   kind?: string; // Al-Sumait: Individual | Organization
-  brief?: string; // Al-Sumait citation
+  brief?: string; // English biography / Al-Sumait citation
+  briefAr?: string; // Arabic biography
   specializationAr?: string;
   affiliationAr?: string;
   image?: string; // optional portrait path
@@ -1920,7 +1921,7 @@ export const LAUREATES: Laureate[] = [
     affiliationAr: "Turkish Society of History of Science",
     image: "/image/Prof.-Ekmeleddin-İhsanoğlu.jpg",
   },
-  {
+    {
     id: "kuwait-2021-143",
     prize: "kuwait",
     year: 2021,
@@ -1933,41 +1934,53 @@ export const LAUREATES: Laureate[] = [
     specializationAr: "الفيزياء",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
     image: "/image/DrOsamaBakr.jpg",
+    brief:
+      "He received his Ph.D. in Applied Physics from Harvard University, USA, 2009. He is currently a Professor of Materials Science and Engineering, Department of Physical Science and Engineering, King Abdullah University of Science and Technology, Saudi Arabia. Dr. Bakr has published 257 scientific papers in refereed scientific journals. His research focused on the chemical and physical aspects of nanomaterials, especially nanoclusters and quantum dots, and their applications in optoelectronics. Through the Scopus database, his research was cited 27,745 times, and he received an average of 81 in the H-Index ranking.",
+    briefAr:
+      "حصل على درجة الدكتوراه في الفيزياء التطبيقية من جامعة هارفارد، الولايات المتحدة، 2009. يشغل حالياً أستاذ هندسة وعلوم المواد قسم العلوم والهندسة الفيزيائية – جامعة الملك عبد الله للعلوم والتقنية – المملكة العربية السعودية. نشر الدكتور بكر 257 بحثاً علمياً في دوريات علمية محكمة. تركزت أبحاثه بالجوانب الكيميائية والفيزيائية لمواد النانو وخاصة العناقيد النانوية والنقاط الكمومية وتطبيقاتها في الإلكترونيات الضوئية. وعن طريق قاعدة بيانات سكوبس، تم الاستشهاد بأبحاثه 27745 مرة، وحصل على معدل 81 في تصنيف مؤشر (h-index).",
   },
-  {
+    {
     id: "kuwait-2021-144",
     prize: "kuwait",
     year: 2021,
     status: "shared",
-    name: "Dr. Omar Fraghali Mohammad Abdulsbour",
+    name: "Dr. Omar Farghaly Abdelsaboor",
     nameAr: "أ.د عمر فرغلي محمد عبد الصبور",
-    verified: false,
+    verified: true,
     field: "Basic Sciences",
     country: "Egypt",
     specializationAr: "الفيزياء",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
     image: "/image/Prof.OmarFarghalyAbdelsaboor.jpg",
+    brief:
+      "He received his PhD in Natural Chemistry from Humboldt University in Berlin, Germany in 2006. He is currently a professor of materials engineering and science in the Department of Physical Science and Engineering at King Abdullah University of Science and Technology. Dr. Omar has published 268 scientific papers in refereed scientific journals. His research focused on a fundamental understanding of the dynamics of diverse groups of solar cell systems, based on materials and structures as diverse as semiconductors, quantum dots, polymers and perovskites. Using the Scopus database his research was cited 24,000 times, and he received an H-index score of 75.",
+    briefAr:
+      "حصل على درجة الدكتوراه في الكيمياء الطبيعية من جامعة هومبولدت (Humboldt Univ.) في برلين - المانيا عام 2006. يشغل حالياً أستاذ في هندسة وعلوم المواد في قسم العلوم والهندسة الفيزيائية بجامعة الملك عبد الله للعلوم والتقنية. نشر الدكتور عمر 268 بحثاً علمياً في دوريات علمية محكمة. تركزت ابحاثه على فهم أساسي لديناميكيات مجموعات متنوعة من أنظمة الخلايا الشمسية، بناءً على مواد وهياكل متنوعة مثل أشباه الموصلات، النقاط الكمومية والبوليمرات والبيروفسكايت. وعن طريق قاعدة بيانات سكوبس، تم الاستشهاد بأبحاثه 24000 مرة، وحصل على معدل 75 في تصنيف مؤشر (h-index).",
   },
-  {
+    {
     id: "kuwait-2021-145",
     prize: "kuwait",
     year: 2021,
     status: "shared",
-    name: "Dr. Nabil George Sidh",
+    name: "Dr. Nabil G. Seidah",
     nameAr: "أ.د نبيل جورج سيده",
-    verified: false,
+    verified: true,
     field: "Applied Sciences",
     country: "Egypt",
     specializationAr: "العلوم التطبيقية عن موضوع العلوم الطبية التطبيقية",
     affiliationAr: "Clinical Research Institute of Montreal (IRCM)",
     image: "/image/DrNabilSeidah.jpg",
+    brief:
+      "He received his Ph.D. in chemistry in 1973 from Georgetown University in Washington. He is currently the Director of the Biochemical Neuroendocrinology Laboratory at the Institute of Clinical Research in Montreal – Canada and Professor Emeritus at the Department of Biochemistry at the University of Montreal – Canada. Dr. Seidah has published 658 scientific papers in refereed scientific journals. His research focused on the discovery of new types of hormones, which in turn contributed to the discovery of new and effective drugs for the treatment of high cholesterol and others. Through the Scopus database, his research has been cited 40,913 times, and he received an H-index score of 100.",
+    briefAr:
+      "حصل على درجة الدكتوراه في الكيمياء عام 1973 من جامعة جورج تاون في واشنطن. يشغل حاليا منصب مديرا لمختبر الغدد الصماء العصبية البيوكيميائية في معهد البحوث السريرية في مونتريال – كندا وأستاذ متفرغ في قسم الكيمياء الحيوية بجامعة مونتريال – كندا. نشر الدكتور سيده 658 بحثاً علمياً في دوريات علمية محكمة. تركزت أبحاثه في اكتشاف انواع جديده من الهرمونات التي بدورها ساهمت في اكتشاف ادويه جديده وفعاله لعلاج ارتفاع الكولسترول وغيرها. وعن طريق قاعدة بيانات سكوبس، تم الاستشهاد بأبحاثه 40913 مرة، وحصل على معدل 100 في تصنيف مؤشر (h-index).",
   },
-  {
+    {
     id: "kuwait-2021-146",
     prize: "kuwait",
     year: 2021,
     status: "shared",
-    name: "Dr. Ali Taher Taher",
+    name: "Dr. Ali Taher",
     nameAr: "أ.د علي طاهر طاهر",
     verified: true,
     field: "Applied Sciences",
@@ -1975,13 +1988,17 @@ export const LAUREATES: Laureate[] = [
     specializationAr: "العلوم التطبيقية عن موضوع العلوم الطبية التطبيقية",
     affiliationAr: "الجامعة الأميركية في بيروت",
     image: "/image/Prof.AliTaher.jpg",
+    brief:
+      "He received his PhD in Hematology and Oncology from Leiden University in the Netherlands in 2012. He is currently a Professor in the Hematology and Oncology Unit in the Department of Internal Medicine and Director of the Nayef Bassil Institute at the American University of Beirut. Dr. Taher has published 480 scientific papers in refereed journals, 14 books written by him and book chapters. His research focused on hematology, especially thalassemia. Through the Scopus database, his research was cited 12,204 times, and he received an H-index score of 54.",
+    briefAr:
+      "حصل على درجة الدكتوراه تخصص أمراض الدم والأورام من جامعة ليدن في هولندا عام 2012. يشغل حالياً أستاذاً في وحدة أمراض الدم والأورام في قسم الطب الباطني ومدير معهد نايف باسيل في الجامعة الأمريكية في بيروت. نشر الدكتور طاهر 480 بحثا علمياً في دوريات محكمة و14 كتاباً من تأليف وفصولاً في كتب. تركزت أبحاثه في أمراض الدم خاصة مرض الثلاسيميا. وعن طريق قاعدة بيانات سكوبس، تم الاستشهاد بأبحاثه 12204 مرة، وحصل على معدل 54 في تصنيف مؤشر (h-index).",
   },
-  {
+    {
     id: "kuwait-2021-147",
     prize: "kuwait",
     year: 2021,
     status: "awarded",
-    name: "Dr. Fouad Sami Abdulkhaleq",
+    name: "Dr. Fouad Abd El-Khalick",
     nameAr: "أ.د فؤاد سامي عبد الخالق",
     verified: true,
     field: "Economics & Social Sciences",
@@ -1989,34 +2006,46 @@ export const LAUREATES: Laureate[] = [
     specializationAr: "العلوم التربوية",
     affiliationAr: "University of North Carolina - Chapel Hill",
     image: "/image/Prof.FouadABDELKhalick.jpg",
+    brief:
+      "He received a Ph.D. from Oregon State University in the field of education Science in 1998. He is currently the Dean of the College of Education at the University of North Carolina - Chapel Hill in the United States of America. Professor Fouad Abd El-Khalick has completed 93 research publications, including 62 articles in peer-reviewed journals, 30 chapters in a book, and one book edited. His research has focused on many topics related mainly to the field of science education and learning. It is an important field because it is related to the concept of STEM (science, technology, engineering, and mathematics). And through the Scopus database, his research was cited 5,768 times, and he received a rate of 30 in the H-index.",
+    briefAr:
+      "حصل على شهادة الدكتوراه من جامعة ولاية أوريغون الأمريكية في مجال تعليم العلوم عام 1998. يشغل حالياً منصب عميد كلية التعليم في جامعة نورث كارولينا – تشابل هيل في الولايات المتحدة الأمريكية. أنجز أ.د فؤاد عبد الخالق 93 منشوراً بحثياً، منها 62 مقالاً في مجلات محكمة، 30 فصلاً في كتاب، وكتاب واحد محرراً. تركزت أبحاثه في العديد من المواضيع تخص بالأساس مجال تعليم العلوم وتعلمها وهو مجال مهم نظراً لارتباطه بمفهوم STEM (علوم، تكنولوجيا، هندسة، رياضيات). وعن طريق قاعدة بيانات سكوبس، تم الاستشهاد بأبحاثه 5768 مرة، وحصل على معدل 30 في مؤشر الـ (h-index).",
   },
-  {
+    {
     id: "kuwait-2021-148",
     prize: "kuwait",
     year: 2021,
     status: "awarded",
-    name: "Dr. Ramzi Mnir Balbaki",
+    name: "Dr. Ramzi Mounir Baalbaki",
     nameAr: "أ.د رمزي منير بعلبكي",
-    verified: false,
+    verified: true,
     field: "Arts & Literature",
     country: "Lebanon",
     specializationAr: "علم اللغويات",
     affiliationAr: "الجامعة الأميركية في بيروت",
     image: "/image/DrRamziBaalbaki.jpg",
+    brief:
+      "He received his Ph.D. from the School of Oriental and African Studies, University of London in 1978 in Arabic and Comparative Semitic Linguistics. He is currently the Jowett Chair Professor of Arabic Studies for Arabic Studies and Near Eastern Languages at the American University of Beirut. Prof. Mounir has completed many research publications, edited books and dictionaries during the past twenty years, including 41 published researches, 10 authored books, 9 edited books and 5 dictionaries approved by the Arab and international as documented linguistic references (Arabic - English / English - Arabic).",
+    briefAr:
+      "حصل على شهادة الدكتوراه من كلية الدراسات الشرقية والأفريقية من جامعة لندن عام 1978 في مجال اللغة العربية واللسانيات السامية المقارنة. يشغل حالياً أستاذ كرسي جويت للدراسات العربية للدراسات العربية ولغات الشرق الأدنى بالجامعة الأمريكية في بيروت. انجز أ.د منير العديد من المنشورات البحثية والكتب المحررة والقواميس خلال السنوات العشرين الماضية، منها 41 بحثاً منشوراً و10 كتب مؤلفة و9 كتب محررة و5 قواميس معتمدة عربياً وعالميا كمراجع لغوية موثقة (عربي – انجليزي / انجليزي - عربي).",
   },
   {
     id: "kuwait-2022-149",
     prize: "kuwait",
     year: 2022,
     status: "awarded",
-    name: "Dr. Fouzan Sami Al-Kria",
+    name: "Dr. Fowzan S. Alkuraya",
     nameAr: "أ.د فوزان سامي الكريع",
-    verified: false,
+    verified: true,
     field: "Basic Sciences",
     country: "Saudi Arabia",
     specializationAr: "العلوم الطبية الأساسية - علم الجينات البشرية",
     affiliationAr: "جامعة الفيصل",
     image: "/image/Dr.FawzanAlkhraya.jpg",
+    brief:
+      "Fowzan S. Alkuraya is Professor of Human Genetics at the College of Medicine, Al Faisal University and Founding Chairman of the Department of Translational Genomics at King Faisal Specialist Hospital and Research Center. He obtained his PhD in Medical Genetics from Harvard University in 2005 and holds the American Medical Board in three specialties: Pediatrics, Clinical Genetics, and Molecular Genetics. His research is focused on understanding the role of genes in health and disease with emphasis on developmental defects especially those common to Arabia. His work has benefited thousands of families in Saudi Arabia and around the world in diagnosing genetic diseases. Under his leadership, the Developmental Genetics Laboratory at the King Faisal Specialist Hospital in Riyadh, Saudi Arabia; families have come to diagnose genetic disorders in children and adults. This clinic is one of the world's premier Preimplantation Genetics Diagnosis Centers for Mendelian diseases and the region's largest center for prenatal genetic services. His efforts have greatly contributed to the prevention of these disorders.",
+    briefAr:
+      "فوزان الكريع هو أستاذ علم الوراثة البشرية في كلية الطب بجامعة الفيصل، ورئيس قسم علم الجينوم التطبيقي في مستشفى الملك فيصل التخصصي ومركز الأبحاث، حصل على درجة الدكتوراه في علم الوراثة الطبية من جامعة هارفارد عام 2005، وهو حاصل على البورد الطبي الأمريكي في ثلاثة تخصصات: طب الأطفال، وعلم الوراثة السريرية، وعلم الوراثة الجزيئية. تتركز أبحاثه على فهم دور الجينات في الصحة والمرض مع التركيز على عيوب النمو خاصةً تلك الشائعة في الجزيرة العربية. وقد استفاد من عمله آلاف العائلات في المملكة العربية السعودية والعالم في تشخيص الأمراض والاضطرابات الوراثية لدى الأطفال والبالغين، حيث يرأس مختبر علم الوراثة النمائية في مستشفى الملك فيصل التخصصي في الرياض. وتُعد هذه العيادة أحد المراكز الرائدة في العالم في مجال التشخيص الوراثي قبل الزرع للأمراض الوراثية المندلية وأكبر مركز في المنطقة للخدمات الوراثية قبل الولادة. وقد ساهمت جهوده بشكل كبير في الوقاية من هذه الاضطرابات.",
   },
   {
     id: "kuwait-2022-150",
@@ -2032,35 +2061,47 @@ export const LAUREATES: Laureate[] = [
       "تكنولوجيا الطاقة النظيفة والمستدامة -  تكنولوجيا البطاريات",
     affiliationAr: "مختبر أرجون الوطني التابع لوزارة الطاقة الأمريكية",
     image: "/image/Drkhaleelhaj.jpg",
+    brief:
+      "Professor Dr. Khalil Amine is a world leader in the field of energy storage technology and has made significant contributions in the field of applied sciences related to sustainable and clean energy technology. He obtained his Ph.D. degree in France in 1987 and is now the leader of the advanced battery technology team at Argonne National Laboratory which is under the US Department of Energy. Throughout a remarkable career spanning more than two decades, he has enabled many discoveries in electrical energy storage. These include high-energy and high-power cathode materials planned for next-generation batteries with the potential to power advanced electric vehicles globally.",
+    briefAr:
+      "يعد الأستاذ الدكتور خليل أمين من الرواد العالميين في مجال تكنولوجيا تخزين الطاقة، وله إسهامات كبيرة في مجال العلوم التطبيقية المتعلقة بتكنولوجيا الطاقة المستدامة والنظيفة. حصل على درجة الدكتوراه في فرنسا عام 1987، وهو الآن رئيس فريق تكنولوجيا البطاريات المتقدمة في مختبر أرجون الوطني التابع لوزارة الطاقة الأمريكية. وعلى مدار مسيرته المهنية التي امتدت لأكثر من عقدين من الزمن، تمكن الدكتور خليل أمين من تحقيق العديد من الاكتشافات في مجال تخزين الطاقة الكهربائية، ومنها مواد الكاثود عالية الطاقة لبطاريات الجيل التالي مع إمكانية تشغيل السيارات الكهربائية المتقدمة على مستوى العالم.",
   },
   {
     id: "kuwait-2022-151",
     prize: "kuwait",
     year: 2022,
     status: "awarded",
-    name: "Dr. Iili Tamer Tamer",
+    name: "Dr. Elie Tamer",
     nameAr: "أ.د إيلي تامر تامر",
-    verified: false,
+    verified: true,
     field: "Economics & Social Sciences",
     country: "Lebanon",
     specializationAr:
       "الاقتصاد والعلوم المالية والمصرفية - تخصص الاقتصاد القياسي",
     affiliationAr: "جامعة هارفارد",
     image: "/image/Dr.ElieTamer.jpg",
+    brief:
+      "Dr. Elie Tamer is the Lewis Berkman Professor in Economics at Harvard University and is considered one of the most prominent academics in the field of economics. His research focuses on econometric theory and partial identification, with applications to empirical industrial organization. He was awarded the Kuwait Prize for his significant contributions to econometric theory (dynamic discrete models, duration models, discrete response models and censored models), economic theory (theory of auctions and models of oligopoly entry) and game theory. He obtained his doctorate in economics from Northwestern University. He has published in top tier publications frequently, and he is a member of elite economic forums – he has achieved all of this in a relatively short time having received his PhD in 1999.",
+    briefAr:
+      "يشغل الدكتور إيلي تامر منصب أستاذ الاقتصاد في جامعة هارفارد، ويعتبر أحد أبرز الأكاديميين في مجال الاقتصاد. تركز أبحاثه على نظرية الاقتصاد القياسي والتحديد الجزئي للهوية مع تطبيقات على التنظيم الصناعي التجريبي. حصل على جائزة الكويت لإسهاماته الكبيرة في نظرية الاقتصاد القياسي (النماذج الديناميكية المنفصلة ونماذج المدة الزمنية ونماذج الاستجابة المنفصلة والنماذج المستعرضة) والنظرية الاقتصادية (نظرية المزادات ونماذج دخول احتكار القلة) ونظرية الألعاب. حصل الدكتور إيلي على درجة الدكتوراه في الاقتصاد من جامعة نورث وسترن الأمريكية، وله العديد من المنشورات المتميزة، وهو عضو في نخبة من المنتديات الاقتصادية، وقد حقق كل ذلك في وقت قصير نسبياً بعد حصوله على درجة الدكتوراه في عام 1999.",
   },
   {
     id: "kuwait-2022-152",
     prize: "kuwait",
     year: 2022,
     status: "awarded",
-    name: "Dr. Saeed Abdulqader Iqtin",
+    name: "Dr. Said Yaktine",
     nameAr: "أ.د سعيد عبد القادر يقطين",
-    verified: false,
+    verified: true,
     field: "Humanities, Arts & Literature",
     country: "Morocco",
     specializationAr: "الأدب والفن في العالم العربي - تخصص علم السرديات",
     affiliationAr: "كلية الآداب والعلوم الإنسانية بالرباط.",
     image: "/image/drSayesYaktine.jpg",
+    brief:
+      "Professor Dr. Said Yaktine is noted narratologist and critic; currently is a professor of higher education at the Faculty of Arts and Human Sciences at Mohammed V University in Rabat. He obtained a doctorate in Arabic literature from Mohammed V University in 1997. He has published many research and books in narratology, literary theory and literary criticism, the Arab-Islamic narrative heritage, popular culture, and Hypertext.",
+    briefAr:
+      "الأستاذ الدكتور سعيد يقطين عالم متخصص في السرديات وناقد معروف، يعمل حاليًا أستاذًا للتعليم العالي في كلية الآداب والعلوم الإنسانية بجامعة محمد الخامس بالرباط. حصل على شهادة الدكتوراه في الأدب العربي من جامعة محمد الخامس عام 1997، وله العديد من الأبحاث والكتب المنشورة في السرديات، ونظرية الأدب والنقد الأدبي، والتراث السردي العربي الإسلامي، والثقافة الشعبية، والنص المترابط.",
   },
   {
     id: "kuwait-2022-153",
@@ -2076,6 +2117,10 @@ export const LAUREATES: Laureate[] = [
       "دراسة وتحليل الظواهر الفيزيائية والكيميائية على المستوى النانوي",
     affiliationAr: "بجامعة فلوريد",
     image: "/image/DrMohammadMattousi.jpg",
+    brief:
+      "Professor Mattoussi is currently a Distinguished Research Professor at the Florida State University, Department of Chemistry and Biochemistry, Tallahassee, FL, USA. He obtained his Ph.D. in Condensed Matter Physics from Sorbonne University, Paris, France in 1987. He has been awarded the Kuwait Prize for his work in fundamental and applied aspects of semiconductor quantum dots, metal nanoparticles and nanoclusters, with an emphasis on their engineered interfaces to biological systems for sensing and imaging.",
+    briefAr:
+      "يشغل البروفيسور ماتوسي حاليًا منصب أستاذ باحث متميز في جامعة ولاية فلوريدا، قسم الكيمياء والكيمياء الحيوية، تالاهاسي، فلوريدا، الولايات المتحدة الأمريكية. حصل على درجة الدكتوراه في فيزياء المادة المكثفة من جامعة السوربون، باريس، فرنسا عام 1987. حصل الدكتور محمد الهادي على جائزة الكويت تقديرا لأبحاثه في فهم ومراقبة وتصميم الواجهات بين البلورات النانوية غير العضوية والأنظمة البيولوجية وغير البيولوجية والجوانب الأساسية والتطبيقية للنقاط الكمومية لأشباه الموصلات والجسيمات النانوية المعدنية والعناقيد النانوية.",
   },
   {
     id: "kuwait-2023-154",
@@ -2090,6 +2135,10 @@ export const LAUREATES: Laureate[] = [
     specializationAr: "الكيمياء",
     affiliationAr: "جامعة Calgary في كندا",
     image: "/image/DrNashat.jpg",
+    brief:
+      "Professor Nassar has been awarded due to his expertise in environmental science and energy; He has been awarded the Kuwait Prize due to noteworthy contributions to the design and synthesis of nanoparticles with a focus on environmental sustainability, specifically for applications in hydrocarbon solid waste conversion, waste-water treatment, and CO2 capture. Earned his PhD in chemical engineering from the University of Calgary in Canada in 2008 - where he is a professor in the Department of Chemical and Petroleum Engineering. He is internationally recognized as a leader in nanoparticle technology for energy and environmental applications. His primary research goal is to enhance oil quality, reduce gaseous emissions, improve natural gas transportation, and advance water recyclability through innovative nanoparticle technologies.",
+    briefAr:
+      "حصل البروفيسور نصار على جائزة الكويت نظراً لخبرته في مجال العلوم البيئية والطاقة، وإسهاماته في تصميم وتركيب الجسيمات النانوية مع التركيز على الاستدامة البيئية، وتحديداً التطبيقات في تحويل النفايات الصلبة الهيدروكربونية، ومعالجة مياه الصرف، والتقاط ثاني أكسيد الكربون. حاصل على درجة الدكتوراه في الهندسة الكيميائية من جامعة كالجاري، كندا عام 2008. يعمل أستاذاً في قسم الهندسة الكيميائية وهندسة البترول. وهو معروف دوليًا كرائد في مجال تكنولوجيا الجسيمات النانوية لتطبيقات الطاقة والبيئة. وتهدف أبحاثه الأساسية إلى تحسين جودة النفط، وتقليل الانبعاثات الغازية، وتحسين نقل الغاز الطبيعي، وتعزيز قابلية إعادة تدوير المياه من خلال تقنيات الجسيمات النانوية المبتكرة.",
   },
   {
     id: "kuwait-2023-155",
@@ -2104,6 +2153,8 @@ export const LAUREATES: Laureate[] = [
     specializationAr: "الكيمياء",
     affiliationAr: "جامعة الملك عبدالله للعلوم والتقنية",
     image: "/image/Dr.MohammadEddaodi.jpg",
+    brief:
+      "He obtained his PhD in chemistry from Denis Diderot University in Paris, France, in 1996. Professor Eddaoudi has been awarded the Kuwait Prize for his advanced research in the field of Metal-Organic Frameworks and separation technologies, for applications including hydrogen storage, methane storage, and CO2 capture and storage, as well as sorbents and membranes for energy efficient gas separations. His use of computational tools and machine learning methods to identify prospective membrane candidates with desired properties for applications demonstrates an innovative and multidisciplinary approach. Currently, he serves as a professor of chemistry and the director of the Advanced Membranes and Porous Materials Research Center in the Department of Physical Sciences and Engineering at King Abdullah University of Science and Technology in Saudi Arabia.",
   },
   {
     id: "kuwait-2023-156",
@@ -2118,20 +2169,10 @@ export const LAUREATES: Laureate[] = [
     specializationAr: "علوم المياه",
     affiliationAr: "جامعة غرب ميشيغان",
     image: "/image/DrMuhammadSultan.jpg",
-  },
-  {
-    id: "kuwait-2023-157",
-    prize: "kuwait",
-    year: 2023,
-    status: "awarded",
-    name: "Dr. Dina Ghazi Al-Qtabi",
-    nameAr: "أ.د دينا غازي القتابي",
-    verified: true,
-    field: "Emerging Specialized Sciences — AI & Robotics",
-    country: "Syria",
-    specializationAr: "الذكاء الاصطناعي وعلم الروبوتات",
-    affiliationAr: "معهد ماساتشوستس للتكنولوجيا",
-    image: "/image/Dr.DinaKatabi.jpg",
+    brief:
+      "He has been awarded the Kuwait Prize for his ground-breaking and impactful in that he is generating new understanding of complex hydrological systems in environments vulnerable to climatic variability and change. He is noted for combining a range of state-of-the-art monitoring and modelling approaches to investigate the hydrology of arid and semi-arid regions around the world. These regions are some of the most critical areas due to the combination of significant population and societal growth. His publications have a strong focus on understanding the hydrogeological functioning of aquifers in Egypt, the Sahara/wider Africa, and Middle East countries. Currently, he is a Remote Sensing and Environmental Sciences Professor and the Earth Science Remote Sensing (ESRS) Facility Director at Western Michigan Uni., Kalamazoo, Michigan. Ph.D. in Earth and Planetary Sciences at Washington Univ in 1984. His work addresses hydrological, environmental, and geologic issues in the Middle East.",
+    briefAr:
+      "حصل الدكتور محمد سلطان على جائزة الكويت تقديراً لريادته وتأثيره في ابتكار فهم جديد للنظم الهيدرولوجية المعقدة في البيئات المعرضة للتقلبات والتغيرات المناخية. وقد اشتهر بالجمع بين أحدث مناهج الرصد والنمذجة الحديثة لدراسة هيدرولوجيا المناطق القاحلة وشبه القاحلة حول العالم، التي تعد من أصعب المناطق في العالم بسبب النمو السكاني والمجتمعي الكبير. تشمل أعماله القضايا الهيدرولوجية والبيئية والجيولوجية في الشرق الأوسط، وتركز منشوراته بشكل كبير على فهم الأداء الهيدروجيولوجي لطبقات المياه الجوفية في مصر والصحراء الكبرى/إفريقيا والشرق الأوسط. يشغل حاليًا منصب أستاذ الاستشعار عن بُعد والعلوم البيئية ومدير مركز الاستشعار عن بُعد لعلوم الأرض في جامعة ويسترن ميشيغان في كالامازو، ميشيغان. وهو حاصل على درجة دكتوراه في علوم الأرض والكواكب من جامعة واشنطن عام 1984.",
   },
   {
     id: "kuwait-2024-158",

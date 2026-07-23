@@ -2562,7 +2562,9 @@
     "noMatches": "No laureates match this filter.",
     "laureateCount": "{count, plural, one {# laureate} other {# laureates}}",
     "shared": "Shared",
-    "bioPlaceholder": "Biography to follow — details for this laureate are being added."
+    "bioPlaceholder": "Biography to follow — details for this laureate are being added.",
+    "showBio": "Show biography",
+    "hideBio": "Hide biography"
   },
   "SpecialNeedsPage": {
     "breadcrumbScienceSociety": "Science & Society",

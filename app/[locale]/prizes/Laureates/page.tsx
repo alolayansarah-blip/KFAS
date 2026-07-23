@@ -752,7 +752,7 @@ function WinnersCarousel({ winners }: { winners: Laureate[] }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Detailed laureate card — portrait + bio (placeholder when absent)  */
+/*  Detailed laureate card — bio expands when the name is pressed      */
 /* ------------------------------------------------------------------ */
 function LaureateCard({ l }: { l: Laureate }) {
   const t = useTranslations("LaureatesPage");
@@ -760,6 +760,66 @@ function LaureateCard({ l }: { l: Laureate }) {
   const displayName = laureateDisplayName(l, isArabic);
   const accent = accentOf(l.prize);
   const hasBio = Boolean(l.brief);
+  const hasBioAr = Boolean(l.briefAr);
+  const hasArDetails = Boolean(l.specializationAr || l.affiliationAr);
+  const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
+
+  const bioContent = (() => {
+    if (isArabic) {
+      if (hasBioAr) {
+        return (
+          <p
+            dir="rtl"
+            className="text-[13.5px] leading-relaxed text-[#1D2D44]/70"
+          >
+            {l.briefAr}
+          </p>
+        );
+      }
+      if (hasArDetails) {
+        return (
+          <div className="space-y-1.5">
+            {l.specializationAr ? (
+              <p
+                dir="rtl"
+                className="text-[13.5px] leading-relaxed text-[#1D2D44]/70"
+              >
+                {l.specializationAr}
+              </p>
+            ) : null}
+            {l.affiliationAr ? (
+              <p
+                dir="rtl"
+                className="whitespace-pre-line text-[12.5px] leading-relaxed text-[#1D2D44]/50"
+              >
+                {l.affiliationAr}
+              </p>
+            ) : null}
+          </div>
+        );
+      }
+      if (hasBio) {
+        return (
+          <p className="text-[13.5px] leading-relaxed text-[#1D2D44]/70">
+            {l.brief}
+          </p>
+        );
+      }
+    } else if (hasBio) {
+      return (
+        <p className="text-[13.5px] leading-relaxed text-[#1D2D44]/70">
+          {l.brief}
+        </p>
+      );
+    }
+    return (
+      <p className="text-[13px] italic leading-relaxed text-[#1D2D44]/40">
+        {t("bioPlaceholder")}
+      </p>
+    );
+  })();
+
   return (
     <motion.article
       variants={RISE}
@@ -778,9 +838,37 @@ function LaureateCard({ l }: { l: Laureate }) {
         </div>
         <div className="min-w-0 flex-1">
           <PrizeTag prize={l.prize} />
-          <h3 className="mt-1.5 text-[15px] font-semibold leading-snug tracking-tight text-[#1D2D44]">
-            {displayName}
-          </h3>
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-label={open ? t("hideBio") : t("showBio")}
+            onClick={() => setOpen((v) => !v)}
+            className="mt-1.5 group flex w-full items-start gap-2 rounded-sm text-start outline-none transition focus-visible:ring-2 focus-visible:ring-[#EC601B]/40"
+          >
+            <h3 className="min-w-0 flex-1 text-[15px] font-semibold leading-snug tracking-tight text-[#1D2D44] transition group-hover:text-[#EC601B]">
+              {displayName}
+            </h3>
+            <span
+              aria-hidden
+              className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#1D2D44]/[0.06] text-[#1D2D44]/55 transition group-hover:bg-[#EC601B]/15 group-hover:text-[#EC601B]"
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.25"
+                className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
           <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#1D2D44]/55">
             <span className="font-semibold tabular-nums text-[#1D2D44]/75">
               {l.year}
@@ -797,43 +885,28 @@ function LaureateCard({ l }: { l: Laureate }) {
               </span>
             ) : null}
           </div>
+          <div className="mt-3">
+            <FieldTag>{l.field}</FieldTag>
+          </div>
         </div>
       </div>
 
-      <div className="mt-auto border-t border-[#1D2D44]/[0.07] px-5 py-4">
-        <div className="mb-2">
-          <FieldTag>{l.field}</FieldTag>
-        </div>
-        {hasBio ? (
-          <p className="text-[13.5px] leading-relaxed text-[#1D2D44]/70">
-            {l.brief}
-          </p>
-        ) : (
-          <div className="space-y-1.5">
-            {l.specializationAr ? (
-              <p
-                dir="rtl"
-                className="text-[13.5px] leading-relaxed text-[#1D2D44]/70"
-              >
-                {l.specializationAr}
-              </p>
-            ) : null}
-            {l.affiliationAr ? (
-              <p
-                dir="rtl"
-                className="whitespace-pre-line text-[12.5px] leading-relaxed text-[#1D2D44]/50"
-              >
-                {l.affiliationAr}
-              </p>
-            ) : null}
-            {!l.specializationAr && !l.affiliationAr ? (
-              <p className="text-[13px] italic leading-relaxed text-[#1D2D44]/40">
-                {t("bioPlaceholder")}
-              </p>
-            ) : null}
-          </div>
-        )}
-      </div>
+      <AnimatePresence initial={false}>
+        {open ? (
+          <motion.div
+            key="bio"
+            initial={reduce ? false : { height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={reduce ? undefined : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+            className="overflow-hidden"
+          >
+            <div className="border-t border-[#1D2D44]/[0.07] px-5 py-4">
+              {bioContent}
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </motion.article>
   );
 }
