@@ -73,8 +73,12 @@ export async function POST(req: NextRequest) {
           { role: "system", content: systemPrompt },
           ...trimmedHistory,
         ],
-        temperature: 0.3,
-        max_tokens: 500,
+        // 0.3 made replies stiff and repetitive. 0.65 sounds more like a
+        // person while the knowledge base (not creativity) still keeps
+        // facts, amounts, and dates accurate — temperature doesn't affect
+        // whether it invents information, only phrasing variety.
+        temperature: 0.65,
+        max_tokens: 400,
       }),
     });
 
